@@ -1,0 +1,14 @@
+# vscode
+.vscode/
+
+# directories
+**/bin
+**/debug
+**/tmp
+**/lib
+
+# binary files
+miniRT
+*.out
+*.o
+*.a
