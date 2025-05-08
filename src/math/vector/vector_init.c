@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   math.h                                             :+:    :+:            */
+/*   vector_init.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/05/08 18:51:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/08 19:50:13 by jboon         ########   odam.nl         */
+/*   Created: 2025/05/08 19:35:46 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/08 19:37:17 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MATH_H
-# define MATH_H
+#include "vector.h"
 
-# include <math.h>
+inline t_v2f	init_v2f(float x, float y)
+{
+	return ((t_v2f){x, y});
+}
 
-# include "vector.h"
-
-# define PI 3.14159265358979323846f
-# define RADTODEG 57.2957795131f
-# define DEGTORAD 0.01745329251
-
-#endif
+inline t_v3f	init_v3f(float x, float y, float z)
+{
+	return ((t_v3f){x, y, z});
+}

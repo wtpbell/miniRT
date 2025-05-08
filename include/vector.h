@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/08 19:31:01 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/08 19:56:02 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,12 @@ typedef union s_vector3
 
 t_v2f	init_v2f(float x, float y);
 t_v3f	init_v3f(float x, float y, float z);
-
-t_v3f	v3f_add(t_v3f v1, t_v3f v2);
-t_v3f	v3f_sub(t_v3f v1, t_v3f v2);
-t_v3f	v3f_scale(t_v3f v1, float f);
-t_v3f	v3f_dot(t_v3f v1, t_v3f v2);
-t_v3f	v3f_cross(t_v3f v1, t_v3f v2);
+t_v3f	v3f_add(t_v3f a, t_v3f b);
+t_v3f	v3f_sub(t_v3f a, t_v3f b);
+t_v3f	v3f_scale(t_v3f v, float f);
+t_v3f	v3f_cross(t_v3f a, t_v3f b);
 t_v3f	v3f_norm(t_v3f v);
+float	v3f_dot(t_v3f a, t_v3f b);
 float	v3f_mag(t_v3f v);
 float	v3f_sqr_mag(t_v3f v);
 
