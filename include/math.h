@@ -1,19 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
+/*   math.h                                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/05/08 18:21:05 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/08 19:32:03 by jboon         ########   odam.nl         */
+/*   Created: 2025/05/08 18:51:03 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/08 18:52:15 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#ifndef MATH_H
+# define MATH_H
 
-int	main(void)
-{
-	printf("Hello, World!\n");
-	return (0);
-}
+# include "vector.h"
+
+# define PI 3.14159265358979323846f
+# define RADTODEG 57.2957795131f
+# define DEGTORAD 0.01745329251
+
+#endif
