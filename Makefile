@@ -43,10 +43,12 @@ $(LIBFT): $(LIBFT_DIR)
 $(MLX42): $(MLX42_DIR)
 	@cmake -S $(MLX42_DIR) -B $(MLX42_DIR)/build && make -C $(MLX42_DIR)/build -j4
 
-$(LIBFT_DIR): $(LIB_DIR)
+$(LIBFT_DIR):
+	@make $(LIB_DIR)
 	@git clone git@github.com:JoseJBoon/libft.git $(LIBFT_DIR)
 
-$(MLX42_DIR): $(LIB_DIR)
+$(MLX42_DIR):
+	@make $(LIB_DIR)
 	@git clone --branch v2.4.1 https://github.com/codam-coding-college/MLX42.git $(MLX42_DIR)
 
 # === DIRECTORIES/GIT SUBMODULE ===

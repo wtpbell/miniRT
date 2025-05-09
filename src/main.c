@@ -6,43 +6,70 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:21:05 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/09 11:57:52 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/09 18:02:01 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+#include <stdio.h>
+#include <unistd.h>
 
+#include "MLX42/MLX42.h"
 #include "libft.h"
-#include "container.h"
+#include "color.h"
 
-void my_free(void *item)
+#define WIDTH 256
+#define HEIGHT 256
+
+// Exit the program as failure.
+static void ft_error(void)
 {
-	(void)item;
+	fprintf(stderr, "%s", mlx_strerror(mlx_errno));
+	exit(EXIT_FAILURE);
+}
+
+// Print the window width and height.
+static void ft_hook(void* param)
+{
+	const mlx_t* mlx = param;
+
+	printf("WIDTH: %d | HEIGHT: %d\n", mlx->width, mlx->height);
+}
+
+void	ray_trace(mlx_image_t *viewport)
+{
+	(void)viewport;
 }
 
 int	main(void)
 {
-	t_vector	vec;
+	// parse scene
+	// raytrace
+	// display
+	// wait_until_exit
 
-	vector_init(&vec, 10);
-	vector_add(&vec, ft_strdup("Hello"));
-	vector_add(&vec, ft_strdup("BYE"));
-	vector_add(&vec, ft_strdup("Hello"));
+	// MLX allows you to define its core behaviour before startup.
+	// mlx_set_setting(MLX_MAXIMIZED, true);
+	mlx_t* mlx = mlx_init(WIDTH, HEIGHT, "42Balls", true);
+	if (!mlx)
+		ft_error();
 
-	for (int i = 0; i < vec.size; ++i)
-	{
-		printf("%s", (char *)vector_get(&vec, i));
-	}
-	printf("\n");
-	vector_rm(&vec, 1, free);
+	/* Do stuff */
 
-	for (int i = 0; i < vec.size; ++i)
-	{
-		printf("%s", (char *)vector_get(&vec, i));
-	}
+	// Create and display the image.
+	mlx_image_t* img = mlx_new_image(mlx, WIDTH, HEIGHT);
+	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
+		ft_error();
 
-	vector_free(&vec, free);
-	return (0);
+	t_col32 col = init_col32(255, 0, 0, 255);
+	// Even after the image is being displayed, we can still modify the buffer.
+	ft_memset(img->pixels, col, img->width * img->height * sizeof(int32_t));
+	// mlx_put_pixel(img, 0, 0, 0xFF0000FF);
+
+	// Register a hook and pass mlx as an optional param.
+	// NOTE: Do this before calling mlx_loop!
+	mlx_loop_hook(mlx, ft_hook, mlx);
+	mlx_loop(mlx);
+	mlx_terminate(mlx);
+	return (EXIT_SUCCESS);
 }
