@@ -24,6 +24,10 @@ OBJS		:= $(SRCS:%.c=$(BIN_DIR)%.o)
 
 all: $(LIBFT) $(MLX42) $(NAME)
 
+val: C_FLAGS += -g3
+val: clean all
+	@valgrind --leak-check=full --track-origins=yes --suppressions=mlx42.supp ./$(NAME) $(ARG)
+
 bonus: all
 
 $(NAME): $(BIN_DIR) $(OBJS)
