@@ -1,40 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   vector_operation.c                                 :+:    :+:            */
+/*   color.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/05/08 19:38:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/09 11:53:42 by jboon         ########   odam.nl         */
+/*   Created: 2025/05/09 16:17:13 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/09 16:19:43 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vector.h"
+#include "color.h"
 
-inline t_v3f	v3f_add(t_v3f a, t_v3f b)
+inline t_col32	init_col32(uint32_t r, uint32_t g, uint32_t b, uint32_t a)
 {
-	return ((t_v3f){
-		.x = a.x + b.x,
-		.y = a.y + b.y,
-		.z = a.z + b.z
-	});
+	return ((r << 24) | (g << 16) | (b << 8) | a);
 }
 
-inline t_v3f	v3f_sub(t_v3f a, t_v3f b)
+inline int	get_r(t_col32 color)
 {
-	return ((t_v3f){
-		.x = a.x - b.x,
-		.y = a.y - b.y,
-		.z = a.z - b.z
-	});
+	return ((color >> 24) & 0xFF);
 }
 
-inline t_v3f	v3f_scale(t_v3f v, float f)
+inline int	get_g(t_col32 color)
 {
-	return ((t_v3f){
-		.x = v.x * f,
-		.y = v.y * f,
-		.z = v.z * f
-	});
+	return ((color >> 16) & 0xFF);
+}
+
+inline int	get_b(t_col32 color)
+{
+	return ((color >> 8) & 0xFF);
+}
+
+inline int	get_a(t_col32 color)
+{
+	return (color & 0xFF);
 }

@@ -1,11 +1,11 @@
-vpath %.c src:src/parser:src/math:src/math/vector
+vpath %.c src:src/parser:src/math:src/math/vector:src/container:src/math:src/math/vector:src/raytracer
 
 # === VARIABLES ===
 
 NAME		:= miniRT
 CC			:= cc
 C_FLAGS		:= -Werror -Wall -Wextra
-#C_FLAGS		+= -ldl -lglfw -pthread -lm -Ofast
+C_LINK		:= -ldl -lglfw -pthread -lm -Ofast
 
 BIN_DIR		:= bin/
 LIB_DIR		:= lib/
@@ -15,18 +15,23 @@ LIBFT_DIR	:= $(LIB_DIR)libft
 MLX42		:= $(addprefix $(MLX42_DIR)/build/, libmlx42.a)
 LIBFT		:= $(addprefix $(LIBFT_DIR)/, libft.a)
 
-INC			:= -I $(MLX42_DIR)/include -I $(LIBFT_DIR)/include -I ./include
-SRCS		:= main.c parser_error.c parser.c
+INC			:= -I ./include -I $(MLX42_DIR)/include -I $(LIBFT_DIR)/include
+SRCS		:= main.c vector_init.c vector_helper.c vector_operation.c\
+				vec_container.c vec_container_utils.c color.c parser_error.c parser.c
 OBJS		:= $(SRCS:%.c=$(BIN_DIR)%.o)
 
 # === COMPILE RULES ===
 
 all: $(LIBFT) $(MLX42) $(NAME)
 
+val: C_FLAGS += -g3
+val: clean all
+	@valgrind --leak-check=full --track-origins=yes --suppressions=mlx42.supp ./$(NAME) $(ARG)
+
 bonus: all
 
 $(NAME): $(BIN_DIR) $(OBJS)
-	@$(CC) $(OBJS) $(LIBFT) $(MLX42) $(INC) -o $(NAME) 
+	@$(CC) $(OBJS) $(LIBFT) $(MLX42) $(C_LINK) $(INC) -o $(NAME)
 	@echo Build complete!
 
 $(BIN_DIR)%.o: %.c

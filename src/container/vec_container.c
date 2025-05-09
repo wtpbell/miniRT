@@ -1,0 +1,86 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   vec_container.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/09 10:26:09 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/09 15:30:18 by jboon         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <stdlib.h>
+
+#include "libft.h"
+#include "container.h"
+
+bool	vector_init(t_vector *vec, int capacity)
+{
+	if (capacity <= 0)
+		capacity = COL_INIT_CAPACITY;
+	vec->size = 0;
+	vec->capacity = capacity;
+	vec->items = ft_calloc(capacity, sizeof(void *));
+	return (vec->items != NULL);
+}
+
+static bool	vector_resize(t_vector *vec, int capacity)
+{
+	void	**items;
+
+	items = vec->items;
+	if (!vector_init(vec, capacity))
+	{
+		vec->items = items;
+		return (false);
+	}
+	while (*items)
+	{
+		vector_add(vec, *items);
+		++items;
+	}
+	return (free(items), true);
+}
+
+bool	vector_add(t_vector *vec, void *item)
+{
+	if (vec->size == vec->capacity
+		&& !vector_resize(vec, vec->capacity * 2))
+		return (false);
+	vec->items[vec->size++] = item;
+	return (true);
+}
+
+bool	vector_rm(t_vector *vec, int i, void (*del)(void *))
+{
+	if (i < 0 || i >= vec->size)
+		return (false);
+	del(vec->items[i]);
+	while (i < (vec->size - 1))
+	{
+		vec->items[i] = vec->items[i + 1];
+		++i;
+	}
+	vec->items[i] = NULL;
+	--vec->size;
+	if (vec->size > 0 && vec->size == vec->capacity / 4)
+		return (vector_resize(vec, vec->capacity / 2));
+	return (true);
+}
+
+void	vector_free(t_vector *vec, void (*del)(void *))
+{
+	int	i;
+
+	i = 0;
+	while (i < vec->size)
+	{
+		del(vec->items[i]);
+		++i;
+	}
+	free(vec->items);
+	vec->items = NULL;
+	vec->capacity = 0;
+	vec->size = 0;
+}
