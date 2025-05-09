@@ -1,32 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   color.h                                            :+:    :+:            */
+/*   color.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/05/08 19:16:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/09 16:19:53 by jboon         ########   odam.nl         */
+/*   Created: 2025/05/09 16:17:13 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/09 16:19:43 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COLOR_H
-# define COLOR_H
+#include "color.h"
 
-# include <stdint.h>
+inline t_col32	init_col32(uint32_t r, uint32_t g, uint32_t b, uint32_t a)
+{
+	return ((r << 24) | (g << 16) | (b << 8) | a);
+}
 
-# define C_RED		0xFF0000FF
-# define C_GREEN	0x00FF00FF
-# define C_BLUE		0x0000FFFF
-# define C_WHITE	0xFFFFFFFF
-# define C_BLACK	0x000000FF
+inline int	get_r(t_col32 color)
+{
+	return ((color >> 24) & 0xFF);
+}
 
-typedef uint32_t	t_col32;
+inline int	get_g(t_col32 color)
+{
+	return ((color >> 16) & 0xFF);
+}
 
-t_col32	init_col32(uint32_t r, uint32_t g, uint32_t b, uint32_t a);
-int		get_r(t_col32 color);
-int		get_g(t_col32 color);
-int		get_b(t_col32 color);
-int		get_a(t_col32 color);
+inline int	get_b(t_col32 color)
+{
+	return ((color >> 8) & 0xFF);
+}
 
-#endif
+inline int	get_a(t_col32 color)
+{
+	return (color & 0xFF);
+}

@@ -1,4 +1,4 @@
-vpath %.c src:src/container:src/math:src/math/vector
+vpath %.c src:src/container:src/math:src/math/vector:src/raytracer
 
 # === VARIABLES ===
 
@@ -17,7 +17,7 @@ LIBFT		:= $(addprefix $(LIBFT_DIR)/, libft.a)
 
 INC			:= -I ./include -I $(MLX42_DIR)/include -I $(LIBFT_DIR)/include
 SRCS		:= main.c vector_init.c vector_helper.c vector_operation.c\
-				vec_container.c vec_container_utils.c
+				vec_container.c vec_container_utils.c color.c
 OBJS		:= $(SRCS:%.c=$(BIN_DIR)%.o)
 
 # === COMPILE RULES ===
