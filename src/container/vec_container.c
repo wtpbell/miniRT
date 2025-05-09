@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/09 10:26:09 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/09 12:01:25 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/09 15:30:18 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ bool	vector_init(t_vector *vec, int capacity)
 	if (capacity <= 0)
 		capacity = COL_INIT_CAPACITY;
 	vec->size = 0;
-	vec->capacity = 0;
+	vec->capacity = capacity;
 	vec->items = ft_calloc(capacity, sizeof(void *));
 	return (vec->items != NULL);
 }
@@ -59,7 +59,7 @@ bool	vector_rm(t_vector *vec, int i, void (*del)(void *))
 	del(vec->items[i]);
 	while (i < (vec->size - 1))
 	{
-		vec->items[i] = vec->items[i + i];
+		vec->items[i] = vec->items[i + 1];
 		++i;
 	}
 	vec->items[i] = NULL;
@@ -80,4 +80,7 @@ void	vector_free(t_vector *vec, void (*del)(void *))
 		++i;
 	}
 	free(vec->items);
+	vec->items = NULL;
+	vec->capacity = 0;
+	vec->size = 0;
 }
