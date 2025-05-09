@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/09 10:53:30 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/09 17:42:43 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "vector.h"
 # include "color.h"
 # include "libft.h"
+# include "get_next_line.h"
 
 typedef enum e_light_type
 {

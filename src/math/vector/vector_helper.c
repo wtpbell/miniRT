@@ -6,12 +6,12 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:41:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/09 17:38:46 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/09 17:41:40 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vector.h"
-
+#include <math.h>
 /**
  * @brief cosine of the angle between two vectors.
  *  0 means the vectors are orthogonal (perpendicular) to each other.

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/09 09:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/09 14:57:12 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/09 18:23:31 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ void	print_err(const char *msg)
 		[ERR_RANGE] = "The input number is out of range",
 		[ERR_MEM] = "Memory allocation fail",
 		[ERR_FILE_READ] = "File cannot be read",
-		[ERR_UNKNOWN_TOKEN] = "Unknown token is found"
+		[ERR_UNKNOWN_TOKEN] = "Unknown token is found",
+		[ERR_FILE_NONEXIST] = "File is non-exist"
 	};
 	write_err(err_msg, msg);
 }

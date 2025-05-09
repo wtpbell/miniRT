@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "scene.h"
+#include "container.h"
 
 typedef enum e_error
 {
@@ -29,6 +30,7 @@ typedef enum e_error
 	ERR_MEM,
 	ERR_FILE_READ,
 	ERR_UNKNOWN_TOKEN,
+	ERR_FILE_NONEXIST,
 	ERR_COUNT
 }	t_error;
 
@@ -37,10 +39,14 @@ typedef struct s_scene
 	t_vector	objects;
 	t_vector	lights;
 	t_camera	camera;
-	t_light		ambient;
 }	t_scene;
 
 
+bool		parse_map(t_scene *scene, const char *file);
+
+bool		parse_camera(char **tokens, t_camera *camera);
+bool		parse_ambient(char **tokens, t_vector *lights);
+void		free_tokens(char **tokens);
 
 void		exit_err(t_error type, const char *msg);
 void		print_err(const char *msg);
