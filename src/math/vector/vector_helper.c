@@ -6,11 +6,9 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:41:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/08 19:54:48 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/09 11:50:58 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include <math.h>
 
 #include "vector.h"
 
@@ -35,9 +33,9 @@ inline float	v3f_dot(t_v3f a, t_v3f b)
 inline t_v3f	v3f_cross(t_v3f a, t_v3f b)
 {
 	return ((t_v3f){
-		a.y * b.z - a.z * b.y,
-		a.z * b.x - a.x * b.z,
-		a.x * b.y - a.y * b.x
+		.x = a.y * b.z - a.z * b.y,
+		.y = a.z * b.x - a.x * b.z,
+		.z = a.x * b.y - a.y * b.x
 	});
 }
 
@@ -48,6 +46,7 @@ inline float	v3f_sqr_mag(t_v3f v)
 
 inline float	v3f_mag(t_v3f v)
 {
+	
 	return (sqrtf(v3f_sqr_mag(v)));
 }
 

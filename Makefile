@@ -1,4 +1,4 @@
-vpath %.c src
+vpath %.c src:src/parser:src/math:src/math/vector
 
 # === VARIABLES ===
 
@@ -15,8 +15,8 @@ LIBFT_DIR	:= $(LIB_DIR)libft
 MLX42		:= $(addprefix $(MLX42_DIR)/build/, libmlx42.a)
 LIBFT		:= $(addprefix $(LIBFT_DIR)/, libft.a)
 
-INC			:= -I $(MLX42_DIR)/include -I $(LIBFT_DIR)/include
-SRCS		:= main.c
+INC			:= -I $(MLX42_DIR)/include -I $(LIBFT_DIR)/include -I ./include
+SRCS		:= main.c parser_error.c parser.c
 OBJS		:= $(SRCS:%.c=$(BIN_DIR)%.o)
 
 # === COMPILE RULES ===
@@ -26,7 +26,7 @@ all: $(LIBFT) $(MLX42) $(NAME)
 bonus: all
 
 $(NAME): $(BIN_DIR) $(OBJS)
-	@$(CC) $(OBJS) $(LIBFT) $(MLX42) $(INC) -o $(NAME)
+	@$(CC) $(OBJS) $(LIBFT) $(MLX42) $(INC) -o $(NAME) 
 	@echo Build complete!
 
 $(BIN_DIR)%.o: %.c
