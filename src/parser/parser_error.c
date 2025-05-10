@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   parser_error.c                                     :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/09 09:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/09 18:23:31 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   parser_error.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/09 09:45:51 by bewong            #+#    #+#             */
+/*   Updated: 2025/05/10 17:11:06 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ void	print_err(const char *msg)
 		[ERR_MEM] = "Memory allocation fail",
 		[ERR_FILE_READ] = "File cannot be read",
 		[ERR_UNKNOWN_TOKEN] = "Unknown token is found",
-		[ERR_FILE_NONEXIST] = "File is non-exist"
+		[ERR_FILE_NONEXIST] = "File is non-exist",
+		[ERR_STOI] = "String to int conversion fail",
+		[ERR_STOF] = "String to float conversion fail",
+		[ERR_SPHERE_ARGS] = "Sphere must have 4 args"
 	};
 	write_err(err_msg, msg);
 }
