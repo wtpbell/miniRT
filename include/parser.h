@@ -50,6 +50,11 @@ typedef struct s_scene
 //* *************************************************************************** //
 //                              Core Parser                                      
 
+// Token utilities
+bool	validate_tokens(const char *first_token, const char *line);
+char	*get_first_token(const char *str);
+size_t	get_expected_token_count(const char *type);
+
 // Sphere parsing
 bool	parse_sphere(char **tokens, t_scene *scene);
 // *************************************************************************** //
