@@ -1,25 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   rt_math.h                                          :+:    :+:            */
+/*   minirt.h                                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/05/08 18:51:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/10 17:37:02 by jboon         ########   odam.nl         */
+/*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/11 11:38:47 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MATH_H
-# define MATH_H
+#ifndef MINIRT_H
+# define MINIRT_H
 
-# include <float.h>
-# include <math.h>
+# include "MLX42/MLX42.h"
+# include "color.h"
 
-# include "vector.h"
-
-# define PI 3.14159265358979323846f
-# define RADTODEG 57.2957795131f
-# define DEGTORAD 0.01745329251
+void	render(mlx_image_t *img, t_col32 bg_col);
 
 #endif

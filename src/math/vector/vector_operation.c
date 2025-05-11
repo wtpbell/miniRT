@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:38:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/09 11:53:42 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/10 23:16:35 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,9 @@ inline t_v3f	v3f_scale(t_v3f v, float f)
 		.y = v.y * f,
 		.z = v.z * f
 	});
+}
+
+float	v3f_dist(t_v3f a, t_v3f b)
+{
+	return (v3f_mag(v3f_sub(a, b)));
 }
