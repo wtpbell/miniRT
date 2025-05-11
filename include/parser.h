@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 22:20:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/08 22:20:50 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/11 17:39:48 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 typedef enum e_error
 {
-	ERR_NO,
+	ERR_NONE,
 	ERR_NUM_ARGS,
 	ERR_FILE_FORMAT,
 	ERR_RANGE,
@@ -34,6 +34,9 @@ typedef enum e_error
 	ERR_STOI,
 	ERR_STOF,
 	ERR_SPHERE_ARGS,
+	ERR_TOKEN_COUNT,
+	ERR_DUPLICATE,
+	ERR_INVALID_VALUE,
 	ERR_COUNT
 }	t_error;
 
@@ -45,41 +48,63 @@ typedef struct s_scene
 }	t_scene;
 
 //* *************************************************************************** //
-//                              parser                                      
+//                              Core Parser                                      
+
+// Sphere parsing
+bool	parse_sphere(char **tokens, t_scene *scene);
 // *************************************************************************** //
 
-// parser.c
-bool		parse_map(t_scene *scene, const char *file);
+// core/parser.c
+bool	parse_line(t_scene *scene, char *line);
 
-// camera.c
-bool		parse_camera(char **tokens, t_camera *camera);
+// core/file_parser.c
+bool	parse_map(t_scene *scene, const char *file);
 
-// light.c
-bool		parse_ambient(char **tokens, t_vector *lights);
-bool		parse_sphere(char **tokens, t_vector *objects);
-void		free_tokens(char **tokens);
+// core/element_parser.c
+bool	parse_scene_element(const char *type, char **tokens, t_scene *scene);
+bool	has_duplicate_identifier(const char *type, t_scene *scene);
 
-// sphere.c
-bool		parse_sphere(char **tokens, t_vector *objects);
+//* *************************************************************************** //
+//                              Objects                                      
+// *************************************************************************** //
 
-// parser_error.c
-void		exit_err(t_error type, const char *msg);
-void		print_err(const char *msg);
-t_error		*error(void);
-void		cleanup_gnl(char *line, int fd);
-void		del_objects(void *obj);
-void		del_lights(void *obj);
+// objects/sphere.c
+bool	parse_sphere_object(char **tokens, t_object **objects);
+t_sphere	*create_sphere(t_v3f pos, float diameter, t_col32 color);
 
-// type_conversion.c
-bool		ft_stoi(const char *s, int *i);
-bool		ft_stof(const char *s, float *f);
+//* *************************************************************************** //
+//                              Utils                                      
+// *************************************************************************** //
 
-// utils.c
-size_t		token_count(char **tokens);
-bool		parse_v3f(t_v3f *v3f, const char *str);
-bool		parse_float(float *f, const char *str);
-bool		parse_col(t_col32 *col, const char *str);
-bool		ft_isspace(int c);
+// utils/string_utils.c
+char	*trim_whitespace(const char *str);
+char	*clean_spaces(const char *str);
+size_t	count_tokens_in_str(const char *str);
+// size_t	get_expected_token_count(const char *type);
+
+// utils/vector_utils.c
+size_t	count_vector_components(const char *str);
+bool	parse_v3f(t_v3f *v3f, const char *str);
+bool	parse_col(t_col32 *col, const char *str);
+bool	parse_float(const char *str, float *out);
+
+// utils/string_to_num.c
+bool	ft_stof(const char *s, float *f);
+bool	ft_stoi(const char *s, int *i);
+
+// utils/error.c
+t_error	*error(void);
+void	set_error(t_error err);
+const char	*get_error_message(t_error err);
+void	exit_err(t_error type, const char *msg);
+void	print_err(const char *msg);
+void	cleanup_gnl(char *line, int fd);
+
+// Common utils
+void	free_tokens(char **tokens);
+
+// utils/cleanup.c
+void	del_objects(void *obj);
+void	del_lights(void *light);
 
 #endif
-

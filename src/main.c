@@ -41,10 +41,26 @@ static bool	valid_input(int argc, char **argv)
 int	main(int argc, char **argv)
 {
 	t_scene	scene;
+	int		return_code;
 	
 	if (!valid_input(argc, argv))
+	{
 		printf("Error\n");
+		print_err(NULL);
+		return (1);
+	}
 	if (!parse_map(&scene, argv[1]))
-		exit_err(*error(), "Parsing error");
-	return (0);
+	{
+		printf("Error\n");
+		print_err(NULL);
+		return (1);
+	}
+
+	// Do your rendering or other operations here
+	return_code = 0;
+
+	// Cleanup
+	vector_free(&scene.objects, del_objects);
+	vector_free(&scene.lights, del_lights);
+	return (return_code);
 }

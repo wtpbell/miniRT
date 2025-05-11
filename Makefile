@@ -1,4 +1,4 @@
-vpath %.c src:src/parser:src/math:src/math/vector:src/container:src/math:src/math/vector:src/raytracer
+vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/raytracer
 
 # === VARIABLES ===
 
@@ -16,9 +16,20 @@ MLX42		:= $(addprefix $(MLX42_DIR)/build/, libmlx42.a)
 LIBFT		:= $(addprefix $(LIBFT_DIR)/, libft.a)
 
 INC			:= -I ./include -I $(MLX42_DIR)/include -I $(LIBFT_DIR)/include
-SRCS		:= main.c vector_init.c vector_helper.c vector_operation.c\
-				vec_container.c vec_container_utils.c color.c parser_error.c\
-				parser.c light.c camera.c cleanup.c sphere.c utils.c type_conversion.c
+
+# Parser source files
+PARSER_CORE		:= parser.c element_parser.c file_parser.c
+PARSER_OBJS		:= sphere.c
+PARSER_UTILS	:= string_utils.c vector_utils.c error.c cleanup.c string_to_num.c identifier_utils.c
+
+# Main source files
+MAIN_SRCS	:= main.c vector_init.c vector_helper.c vector_operation.c\
+				vec_container.c vec_container_utils.c color.c
+
+SRCS		:= $(MAIN_SRCS)\
+				$(addprefix parser/core/, $(PARSER_CORE))\
+				$(addprefix parser/objects/, $(PARSER_OBJS))\
+				$(addprefix parser/utils/, $(PARSER_UTILS))
 OBJS		:= $(SRCS:%.c=$(BIN_DIR)%.o)
 
 # === COMPILE RULES ===
@@ -52,28 +63,28 @@ $(MLX42_DIR): $(LIB_DIR)
 
 # === DIRECTORIES/GIT SUBMODULE ===
 
-$(BIN_DIR):
-	@mkdir $(BIN_DIR)
+BIN_SUBDIRS := $(BIN_DIR)parser/core $(BIN_DIR)parser/objects $(BIN_DIR)parser/utils
 
-$(DB_DIR):
-	@mkdir $(DB_DIR)
+$(BIN_DIR):
+	@mkdir -p $(BIN_DIR)
+	@mkdir -p $(BIN_SUBDIRS)
 
 $(LIB_DIR):
-	@mkdir $(LIB_DIR)
+	@mkdir -p $(LIB_DIR)
 
-# === DIRECTORIES/GIT SUBMODULE ===
+# === CLEAN RULES ===
 
 clean:
 	@make -C $(LIBFT_DIR) clean
 	@$(RM) $(OBJS)
 	@$(RM) $(NAME)
-	@echo Clean complete!
+	@echo "Clean complete!"
 
 fclean: clean
 	@make -C $(LIBFT_DIR) fclean
 	@$(RM) -r $(MLX42_DIR)/build
 	@$(RM) -r $(BIN_DIR)
-	@echo Fclean complete!
+	@echo "Fclean complete!"
 
 re: fclean all
 
