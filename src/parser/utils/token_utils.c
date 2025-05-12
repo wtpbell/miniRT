@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   token_utils.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 18:31:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/11 18:37:17 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   token_utils.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 18:31:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/05/12 16:07:17 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,15 @@
 
 size_t	get_expected_token_count(const char *type)
 {
-	if (ft_strcmp(type, "sp") == 0)
-		return (4);
-	if (ft_strcmp(type, "pl") == 0)
+	if (ft_strcmp(type, "sp") == 0 || \
+		ft_strcmp(type, "pl") == 0 || \
+		ft_strcmp(type, "C") == 0 || \
+		ft_strcmp(type, "L") == 0)
 		return (4);
 	if (ft_strcmp(type, "cy") == 0)
 		return (6);
 	if (ft_strcmp(type, "A") == 0)
 		return (3);
-	if (ft_strcmp(type, "C") == 0)
-		return (4);
-	if (ft_strcmp(type, "L") == 0)
-		return (4);
 	return (0);
 }
 
@@ -35,8 +32,6 @@ char *get_first_token(const char *str)
 	const char	*end;
 	char		*token;
 
-	while (*str == ' ' || *str == '\t')
-		str++;
 	start = str;
 	while (*str && *str != ' ' && *str != '\t')
 		str++;

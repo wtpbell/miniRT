@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   file_parser.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:34:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/11 18:13:17 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   file_parser.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:34:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/05/12 18:10:39 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ bool	parse_map(t_scene *scene, const char *file)
 	int		fd;
 	bool	result;
 
-	if (!vector_init(&scene->objects, sizeof(t_sphere)) ||
-		!vector_init(&scene->lights, sizeof(t_light)))
+	if (!vector_init(&scene->objects, 8)
+		|| !vector_init(&scene->lights, 8))
 	{
 		*error() = ERR_MEM;
 		return (false);

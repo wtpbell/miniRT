@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   vector_utils.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/11 18:11:24 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   vector_utils.c                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/05/12 18:56:56 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,22 +27,28 @@ static size_t	token_count(char **tokens)
 size_t	count_vector_components(const char *str)
 {
 	size_t	count;
-	size_t	i;
 
 	count = 1;
-	i = 0;
-	while (str[i])
+	while (*str)
 	{
-		if (str[i] == ',')
-			count++;
-		i++;
+		if (*str != ',')
+			++count;
+		++str;
 	}
 	return (count);
 }
 
+
 bool	parse_float(const char *str, float *out)
 {
-	return (ft_stof(str, out));
+	float	value;
+
+	if (!ft_stof(str, &value))
+		return (*error() = ERR_STOF, false);
+	if (value < MIN_RADIUS || value > MAX_RADIUS)
+		return (*error() = ERR_RANGE, false);
+	*out = value;
+	return (true);
 }
 
 bool	parse_v3f(t_v3f *v3f, const char *str)
@@ -50,23 +56,29 @@ bool	parse_v3f(t_v3f *v3f, const char *str)
 	char	**tokens;
 	bool	result;
 
-	if (!str || !v3f)
-		return (false);
 	printf("Parsing v3f from: '%s'\n", str);
 	tokens = ft_split(str, ',');
+	printf("tokens, %s\n", *tokens);
 	if (!tokens)
 		return (false);
 	result = true;
 	if (token_count(tokens) == 3)
 	{
+		ft_bzero(v3f, sizeof(float) * 3);
 		result = (
 			ft_stof(tokens[0], &v3f->x) &&
 			ft_stof(tokens[1], &v3f->y) &&
 			ft_stof(tokens[2], &v3f->z)
 			);
+		printf("v3f->x: %f\n", v3f->x);
+		printf("v3f->y: %f\n", v3f->y);
+		printf("v3f->z: %f\n", v3f->z);
 	}
 	else
+	{
+		*error() = ERR_V3F;
 		result = false;
+	}
 	free_tokens(tokens);
 	return (result);
 }
@@ -78,8 +90,6 @@ bool	parse_col(t_col32 *col, const char *str)
 	int		i;
 
 	printf("Parsing color from: '%s'\n", str);
-	if (!str || !col)
-		return (false);
 	tokens = ft_split(str, ',');
 	if (!tokens)
 		return (false);

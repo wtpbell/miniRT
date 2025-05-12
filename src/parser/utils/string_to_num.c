@@ -1,17 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   string_to_num.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:49:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/11 16:50:52 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   string_to_num.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:49:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/05/12 19:06:29 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
+/*
+
+// TODO check this or cap the addition
+#include <stdbool.h>
+#include <math.h>
+
+isnan(f);
+isinf(f);
+*/
 bool	ft_stof(const char *s, float *f)
 {
 	float	fact;
@@ -20,11 +29,14 @@ bool	ft_stof(const char *s, float *f)
 	fact = 1;
 	decimal = 0;
 	*f = 0;
-	if (*s == '-')
+	if (*s == '-' || *s == '+')
 	{
+		if (*s == '-')
+			fact = -1;
 		s++;
-		fact = -1;
 	}
+	if (!*s)
+		return (*error() = ERR_STOF, false);
 	while (*s)
 	{
 		if (*s >= '0' && *s <= '9')
@@ -36,10 +48,7 @@ bool	ft_stof(const char *s, float *f)
 		else if (*s == '.' && !decimal)
 			decimal = 1;
 		else
-		{
-			*error() = ERR_INVALID_VALUE;
-			return (false);
-		}
+			return (*error() = ERR_STOF, false);
 		s++;
 	}
 	*f *= fact;
@@ -52,10 +61,11 @@ bool	ft_stoi(const char *s, int *i)
 
 	fact = 1;
 	*i = 0;
-	if (*s == '-')
+	if (*s == '-' || *s == '+')
 	{
+		if (*s == '-')
+			fact = -1;
 		s++;
-		fact = -1;
 	}
 	while (*s)
 	{
@@ -63,7 +73,7 @@ bool	ft_stoi(const char *s, int *i)
 			*i = *i * 10 + (*s - '0');
 		else
 		{
-			*error() = ERR_INVALID_VALUE;
+			*error() = ERR_STOI;
 			return (false);
 		}
 		s++;

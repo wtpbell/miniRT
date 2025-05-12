@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:23:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/11 18:36:54 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   parser.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/05/12 15:52:55 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static char *preprocess_line(char *line)
 	char	*trimmed;
 	char	*processed;
 
+	printf("Before trim: '%s'\n", line);
 	trimmed = trim_whitespace(line);
 	if (!trimmed)
 		return (NULL);
@@ -24,16 +25,14 @@ static char *preprocess_line(char *line)
 	processed = clean_spaces(trimmed);
 	printf("After clean: '%s'\n", processed);
 	free(trimmed);
-	if (processed)
-		printf("After preprocessing: '%s'\n", processed);
 	return (processed);
 }
 
 
 static bool	check_duplicates(const char *type, t_scene *scene)
 {
-	if ((ft_strcmp(type, "sp") == 0 || ft_strcmp(type, "pl") == 0 ||
-		ft_strcmp(type, "cy") == 0) && has_duplicate_identifier(type, scene))
+	if ((ft_strcmp(type, "A") == 0 || ft_strcmp(type, "C") == 0 ||
+		ft_strcmp(type, "L") == 0) && has_duplicate_identifier(type, scene))
 	{
 		*error() = ERR_DUPLICATE;
 		return (false);
@@ -46,7 +45,8 @@ static bool	get_type_and_validate(char *processed, char **out_type, t_scene *sce
 	char	*first;
 
 	first = get_first_token(processed);
-	if (!first || !(*out_type = ft_strdup(first)))
+	*out_type = ft_strdup(first);
+	if (!first || !(*out_type))
 	{
 		free(first);
 		return (false);
@@ -62,6 +62,7 @@ static bool	get_type_and_validate(char *processed, char **out_type, t_scene *sce
 	return (true);
 }
 
+
 bool	parse_line(t_scene *scene, char *line)
 {
 	char	**tokens;
@@ -69,6 +70,10 @@ bool	parse_line(t_scene *scene, char *line)
 	char	*type;
 	bool	result;
 
+	while (*line && ft_strchr(" \f\n\r\t\v", *line))
+		++line;
+	if (*line == '\0')
+		return (true);
 	processed = preprocess_line(line);
 	if (!processed)
 		return (false);
@@ -84,7 +89,5 @@ bool	parse_line(t_scene *scene, char *line)
 		return (false);
 	}
 	result = parse_scene_element(type, tokens, scene);
-	free(type);
-	free_tokens(tokens);
-	return (result);
+	return (free(type), free_tokens(tokens),result);
 }

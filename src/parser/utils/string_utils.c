@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   string_utils.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:23:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/11 18:23:09 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   string_utils.c                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/05/12 15:32:11 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 char	*trim_whitespace(const char *line)
 {
 	char	*trimmed;
-	char	*result;
 
 	trimmed = ft_strtrim(line, " \t\n\r");
 	if (!trimmed)
@@ -23,23 +22,14 @@ char	*trim_whitespace(const char *line)
 		*error() = ERR_MEM;
 		return (NULL);
 	}
-	result = ft_strdup(trimmed);
-	free(trimmed);
-	if (!result)
-		*error() = ERR_MEM;
-	return (result);
+	return (trimmed);
 }
 
+
 static void	process_char(const char *str, char *result, int *i, int *write,
-		bool *prev_space, bool *in_quotes)
+		bool *prev_space)
 {
-	if (str[*i] == '\'')
-	{
-		*in_quotes = !*in_quotes;
-		(*i)++;
-		return ;
-	}
-	if (!*in_quotes && (str[*i] == ' ' || str[*i] == '\t'))
+	if ((str[*i] == ' ' || str[*i] == '\t'))
 	{
 		while (str[*i + 1] && (str[*i + 1] == ' ' || str[*i + 1] == '\t'))
 			(*i)++;
@@ -60,7 +50,6 @@ char	*clean_spaces(const char *str)
 	int		i;
 	int		write;
 	bool	prev_space;
-	bool	in_quotes;
 
 	result = ft_strdup(str);
 	if (!result)
@@ -68,9 +57,8 @@ char	*clean_spaces(const char *str)
 	i = 0;
 	write = 0;
 	prev_space = true;
-	in_quotes = false;
 	while (str[i])
-		process_char(str, result, &i, &write, &prev_space, &in_quotes);
+		process_char(str, result, &i, &write, &prev_space);
 	result[write] = '\0';
 	return (result);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   sphere.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/11 18:08:44 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   sphere.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/05/12 19:05:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,33 +27,6 @@ t_sphere	*create_sphere(t_v3f pos, float diameter, t_col32 color)
 	return (sphere);
 }
 
-bool	parse_sphere_object(char **tokens, t_object **objects)
-{
-	t_v3f		pos;
-	float		diameter;
-	t_col32		color;
-	t_sphere	*sphere;
-	t_object	*node;
-
-	printf("Parsing sphere\n");
-	if (!parse_v3f(&pos, tokens[1]))
-		return (false);
-	if (!parse_float(tokens[2], &diameter))
-		return (false);
-	if (!parse_col(&color, tokens[3]))
-		return (false);
-	sphere = create_sphere(pos, diameter, color);
-	if (!sphere)
-		return (false);
-	node = malloc(sizeof(t_object));
-	if (!node)
-		return (free(sphere), false);
-	node->obj = sphere;
-	node->ray_intersect = NULL;
-	*objects = node;
-	return (true);
-}
-
 bool	parse_sphere(char **tokens, t_scene *scene)
 {
 	t_sphere	*sphere;
@@ -61,12 +34,12 @@ bool	parse_sphere(char **tokens, t_scene *scene)
 	float		diameter;
 	t_col32		color;
 	t_object	*obj;
-
+	
 	printf("Parsing sphere with tokens: \"%s\" \"%s\" \"%s\" \"%s\"\n", 
 		tokens[0], tokens[1], tokens[2], tokens[3]);
 	if (!parse_v3f(&pos, tokens[1]) || !parse_float(tokens[2], &diameter)
 		|| !parse_col(&color, tokens[3]))
-		return (false);
+			return (false);
 	sphere = create_sphere(pos, diameter, color);
 	if (!sphere)
 		return (false);

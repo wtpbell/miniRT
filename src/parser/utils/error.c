@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/11 18:01:29 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   error.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/05/12 14:29:17 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,31 @@
 
 t_error	*error(void)
 {
-	static t_error err = ERR_NONE;
-	return (&err);
+	static t_error error = ERR_NONE;
+	
+	return (&error);
 }
 
-void	set_error(t_error err)
+static void	write_err(const char *err_msg[], const char *msg)
 {
-	*error() = err;
+	if (*error() == ERR_NONE)
+	{
+		if (msg)
+			printf("%s\n", msg);
+	}
+	else
+	{
+		if (msg)
+			printf("%s: %s\n", msg, err_msg[*error()]);
+		else
+			printf("%s\n", err_msg[*error()]);
+	}
 }
 
-const char	*get_error_message(t_error err)
+
+bool	print_err(const char *msg)
 {
-	static const char *messages[] = {
+	const char *err_msg[ERR_COUNT] = {
 		[ERR_NONE] = "No error",
 		[ERR_NUM_ARGS] = "Invalid number of arguments",
 		[ERR_FILE_FORMAT] = "Invalid file format",
@@ -39,20 +52,20 @@ const char	*get_error_message(t_error err)
 		[ERR_SPHERE_ARGS] = "Invalid sphere arguments",
 		[ERR_TOKEN_COUNT] = "Invalid number of tokens",
 		[ERR_DUPLICATE] = "Duplicate identifier",
-		[ERR_INVALID_VALUE] = "Invalid value"
+		[ERR_INVALID_VALUE] = "Invalid value",
+		[ERR_V3F] = "Error v3f parsing",
+		[ERR_POSITIVE_VALUE] = "Value must be positive"
 	};
-	return (messages[err]);
+	write_err(err_msg, msg);
+	return (false);
 }
 
 void	exit_err(t_error type, const char *msg)
 {
-	if (msg)
-		ft_putendl_fd((char *)msg, 2);
+	*error() = type;
+	print_err(msg);
 	exit(type);
 }
 
-void	print_err(const char *msg)
-{
-	if (msg)
-		ft_putendl_fd((char *)msg, 2);
-}
+
+

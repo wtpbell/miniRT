@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 22:20:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/11 17:39:48 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   parser.h                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
+/*   Updated: 2025/05/12 17:20:25 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@
 #include <stdlib.h>
 #include "scene.h"
 #include "container.h"
+
+#define MAX_POS			10000.0f
+#define MAX_RADIUS		1000.0f
+#define MAX_BRIGHTNESS	1000.0f
+#define MIN_RADIUS		0.0f
+
+// typedef bool (*t_parser)(char **, t_scene *);
 
 typedef enum e_error
 {
@@ -37,6 +44,8 @@ typedef enum e_error
 	ERR_TOKEN_COUNT,
 	ERR_DUPLICATE,
 	ERR_INVALID_VALUE,
+	ERR_V3F,
+	ERR_POSITIVE_VALUE,
 	ERR_COUNT
 }	t_error;
 
@@ -99,10 +108,8 @@ bool	ft_stoi(const char *s, int *i);
 
 // utils/error.c
 t_error	*error(void);
-void	set_error(t_error err);
-const char	*get_error_message(t_error err);
 void	exit_err(t_error type, const char *msg);
-void	print_err(const char *msg);
+bool	print_err(const char *msg);
 void	cleanup_gnl(char *line, int fd);
 
 // Common utils

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 18:21:05 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/11 18:29:20 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 18:21:05 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/12 18:09:54 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,15 @@ int	main(int argc, char **argv)
 {
 	t_scene	scene;
 	int		return_code;
-	
+
 	if (!valid_input(argc, argv))
 	{
-		printf("Error\n");
-		print_err(NULL);
+		printf("Error");
 		return (1);
 	}
 	if (!parse_map(&scene, argv[1]))
-	{
-		printf("Error\n");
-		print_err(NULL);
-		return (1);
-	}
-
-	// Do your rendering or other operations here
+		exit_err(*error(), "Parsing map");
 	return_code = 0;
-
-	// Cleanup
 	vector_free(&scene.objects, del_objects);
 	vector_free(&scene.lights, del_lights);
 	return (return_code);
