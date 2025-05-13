@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:21:05 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/11 11:40:48 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/13 14:02:16 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,8 @@
 #include "color.h"
 #include "minirt.h"
 
-#define WIDTH 256
-#define HEIGHT 256
-
-// Print the window width and height.
-static void ft_hook(void* param)
-{
-	const mlx_t* mlx = param;
-	printf("WIDTH: %d | HEIGHT: %d\n", mlx->width, mlx->height);
-}
-
-void	ray_trace(mlx_image_t *viewport)
-{
-	(void)viewport;
-}
+#define WIDTH 1024
+#define HEIGHT 1024
 
 void	clear_image(mlx_image_t *img, t_col32 col)
 {
@@ -66,10 +54,8 @@ int	main(void)
 		mlx_terminate(mlx);
 		return (EXIT_FAILURE);
 	}
-	
+
 	render(img_plane, bg_col);
-	
-	mlx_loop_hook(mlx, ft_hook, mlx);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 	return (EXIT_SUCCESS);

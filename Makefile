@@ -17,12 +17,16 @@ LIBFT		:= $(addprefix $(LIBFT_DIR)/, libft.a)
 
 INC			:= -I ./include -I $(MLX42_DIR)/include -I $(LIBFT_DIR)/include
 SRCS		:= main.c vector_init.c vector_helper.c vector_operation.c\
-				vec_container.c vec_container_utils.c color.c
+				vec_container.c vec_container_utils.c color.c raytracer.c\
+				rt_math.c
 OBJS		:= $(SRCS:%.c=$(BIN_DIR)%.o)
 
 # === COMPILE RULES ===
 
 all: $(LIBFT) $(MLX42) $(NAME)
+
+debug: C_FLAGS += -g3
+debug: all
 
 val: C_FLAGS += -g3
 val: clean all

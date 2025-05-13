@@ -6,13 +6,14 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/10 11:11:23 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/12 14:31:05 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SCENE_H
 # define SCENE_H
 
+# include "MLX42/MLX42.h"
 # include "vector.h"
 # include "color.h"
 
@@ -38,6 +39,8 @@ typedef struct s_camera
 {
 	t_transform	t;
 	float		fov;
+	mlx_image_t	*img_plane;
+	float		aspect_ratio;
 }	t_camera;
 
 typedef struct s_material

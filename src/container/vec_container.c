@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/09 10:26:09 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/09 15:30:18 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/13 13:21:40 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ bool	vector_init(t_vector *vec, int capacity)
 		capacity = COL_INIT_CAPACITY;
 	vec->size = 0;
 	vec->capacity = capacity;
-	vec->items = ft_calloc(capacity, sizeof(void *));
+	vec->items = ft_calloc(capacity + 1, sizeof(void *));
 	return (vec->items != NULL);
 }
 

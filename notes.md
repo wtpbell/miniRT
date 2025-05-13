@@ -26,6 +26,8 @@
 
 **primary ray**, **visibility ray**, or **camera ray**
 
+**secondary ray:** shadow ray, reflection ray, refraction ray
+
 **shadow ray**: The ray from the point of contact onto the surface to the light source
 
 >The technique of initiating rays either from the light source or from the eye is encapsulated by the term **path tracing** in computer graphics. While ray-tracing is a synonymous term, path tracing emphasizes the methodological essence of generating computer-generated imagery by tracing the journey of light from its source to the camera, or vice versa.
@@ -45,3 +47,5 @@
 >an imaginary canvas, a process known as **perspective projection**
 
 **z or perspective divide**
+
+advanced light-transport algorithms: the **path-tracing**, the **bidirectional path-tracing** and **Metropolis light transport**

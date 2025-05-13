@@ -6,11 +6,11 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/11 21:29:21 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/13 18:15:48 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-
+#include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -32,11 +32,88 @@ typedef struct s_ray_hit
 	t_v3f		hit;
 	t_v3f		normal;
 	float		distance;
-	t_sphere	*sphere;
 }	t_ray_hit;
 
-void	compute_prime_ray(uint32_t x, uint32_t y, t_ray *ray);
-bool	intersect(t_sphere *sp, t_ray *ray, t_ray_hit *result);
+
+bool	geo_intersect(t_sphere *sp, t_ray *ray, t_ray_hit *hitinfo)
+{
+	t_v3f	L;
+	float	tca;
+	float	d;
+	float	thc;
+	float	t0;
+	float	t1;
+
+	L = v3f_sub(sp->t.pos, ray->origin);
+	tca = v3f_dot(L, ray->direction);
+	if (tca < 0)
+		return (false);
+	d = v3f_dot(L, L) - tca * tca;
+	if (d > sp->radius * sp->radius)
+		return (false);
+	thc = sqrtf(sp->radius * sp->radius - d);
+	t0 = tca - thc;
+	t1 = tca + thc;
+	if (t0 < t1)
+		ft_swapf(&t0, &t1);
+	if (t0 < 0)
+	{
+		if (t1 < 0)
+			return (false);
+		t0 = t1;
+	}
+	hitinfo->hit = v3f_add(ray->origin, v3f_scale(ray->direction, t0));
+	hitinfo->distance = v3f_mag(hitinfo->hit);
+	return (true);
+}
+
+bool	solve_quadratic(t_v3f *abc, float *x0, float *x1)
+{
+	float	dis;
+	float	q;
+
+	dis = abc->y * abc->y - 4 * abc->x * abc->z;
+	if (dis < 0)
+		return (false);
+	else if (dis == 0)
+	{
+		*x0 = -0.5f * abc->y * abc->x;
+		*x1 = *x0;
+	}
+	else
+	{
+		q = -0.5f * (abc->y + ft_signf(abc->y) * sqrtf(dis));
+		*x0 = q / abc->x;
+		*x1 = abc->z / q;
+	}
+	if (*x0 > *x1)
+		ft_swapf(x0, x1);
+	return (true);
+}
+
+bool	intersect(t_sphere *sp, t_ray *ray, t_ray_hit *hitinfo)
+{
+	t_v3f	L;
+	t_v3f	abc;
+	float	t0;
+	float	t1;
+
+	L = v3f_sub(ray->origin, sp->t.pos);
+	abc.x = v3f_dot(ray->direction, ray->direction);
+	abc.y = 2.0f * v3f_dot(ray->direction, L);
+	abc.z = v3f_dot(L, L) - sp->radius * sp->radius;
+	if (!solve_quadratic(&abc, &t0, &t1))
+		return (false);
+	if (t0 < 0)
+	{
+		if (t1 < 0)
+			return (false);
+		t0 = t1;
+	}
+	hitinfo->hit = v3f_add(ray->origin, v3f_scale(ray->direction, t0));
+	hitinfo->distance = v3f_mag(hitinfo->hit);
+	return (true);
+}
 
 inline t_ray_hit	init_ray_hit(void)
 {
@@ -44,28 +121,51 @@ inline t_ray_hit	init_ray_hit(void)
 		.hit = {0},
 		.normal = {0},
 		.distance = FLT_MAX,
-		.sphere = NULL
 	});
+}
+
+void	v3f_print(t_v3f v)
+{
+	printf("v3f <%.4f, %.4f, %.4f>\n", v.x, v.y, v.z);
+}
+
+void	col32_print(t_col32 c)
+{
+	printf("col32 <%i, %i, %i, %i>\n", get_r(c), get_g(c), get_b(c), get_a(c));
 }
 
 t_col32	trace(t_ray *ray, t_vector *objects, t_light *light, t_col32 bg_col, uint32_t depth)
 {
-	uint32_t	i;
+	int			i;
 	t_ray		shadow_ray;
-	t_ray_hit	closest_hit;
+	float		min_dist;
+	t_sphere	*hit;
 	t_ray_hit	curr_hit;
 
 	(void)depth;
 	i = 0;
-	closest_hit = init_ray_hit();
+	hit = NULL;
+	min_dist = FLT_MAX;
 	while (i < objects->size)
 	{
-		if (intersect(objects->items + i, ray, &curr_hit)
-			&& curr_hit.distance < closest_hit.distance)
-			closest_hit = curr_hit;
+		if (intersect(objects->items[i], ray, &curr_hit)
+			&& curr_hit.distance < min_dist)
+			{
+				min_dist = curr_hit.distance;
+				hit = objects->items[i];
+			}
+		++i;
 	}
-	if (closest_hit.sphere == NULL)
-		return (bg_col);
+	if (hit == NULL)
+	{
+		t_v3f	hitcolor = v3f_scale(v3f_add(ray->direction, (t_v3f){.x = 1, .y = 1, .z = 1}), .5f);
+		hitcolor = v3f_scale(hitcolor, 255);
+		return (init_col32(hitcolor.x, hitcolor.y, hitcolor.z, 255));
+	}
+	else
+	{
+		return (hit->r.col);
+	}
 	// IF GLASS && DEPTH < MAX_DEPTH
 	// Calc reflection, refraction
 	// Call trace(refraction_ray, depth + 1)
@@ -75,12 +175,13 @@ t_col32	trace(t_ray *ray, t_vector *objects, t_light *light, t_col32 bg_col, uin
 	// Calc shadow_ray
 	// END IF
 	i = 0;
-	shadow_ray.origin = v3f_add(closest_hit.hit, closest_hit.normal);
-	shadow_ray.direction = v3f_norm(v3f_sub(light->pos, closest_hit.hit));
+	shadow_ray.origin = v3f_add(ray->origin, v3f_scale(ray->direction, min_dist));
+	shadow_ray.direction = v3f_sub(light->pos, ray->origin);
 	while (i < objects->size)
 	{
-		if (intersect(objects->items + i, &shadow_ray, NULL))
+		if (intersect(objects->items[i], &shadow_ray, NULL))
 			return (((t_sphere *)(objects->items + i))->r.col * light->intensity);
+		++i;
 	}
 	return (bg_col);
 }
@@ -88,39 +189,51 @@ t_col32	trace(t_ray *ray, t_vector *objects, t_light *light, t_col32 bg_col, uin
 void	create_objects(t_vector *objects)
 {
 	t_sphere	*ptr_sp;
-	t_sphere	sp = (t_sphere){
-		.t = {
-			.pos = {0},
-			.dir = {0}
-		},
-		.r = {
-			.mat = {0},
-			.col = {0}
-		},
-		.radius = 50
-	};
+	t_sphere	sp;
+
+	ft_bzero(&sp, sizeof(t_sphere));
 
 	vector_init(objects, 3);
 
-	sp.t.pos = init_v3f(0, 0, 20);
+	sp.t.pos = init_v3f(0, 0, -50);
 	sp.r.col = C_RED;
+	sp.radius = 10;
 	ptr_sp = malloc(sizeof(t_sphere));
 	*ptr_sp = sp;
 	vector_add(objects, ptr_sp);
 
-	sp.t.pos = init_v3f(5, 0, 5);
+	sp.t.pos = init_v3f(3, 0, -5);
 	sp.r.col = C_GREEN;
-	sp.radius = 15;
+	sp.radius = 2;
 	ptr_sp = malloc(sizeof(t_sphere));
 	*ptr_sp = sp;
 	vector_add(objects, ptr_sp);
 
-	sp.t.pos = init_v3f(-5, 0, 10);
+	sp.t.pos = init_v3f(-3, 0, -4);
 	sp.r.col = C_BLUE;
-	sp.radius = 25;
+	sp.radius = 1;
 	ptr_sp = malloc(sizeof(t_sphere));
 	*ptr_sp = sp;
 	vector_add(objects, ptr_sp);
+}
+
+// TODO: Take the position and direction of the camera into account
+void	compute_ray(uint32_t x, uint32_t y, t_camera *cam, t_ray *ray)
+{
+	t_v3f	camera_space;
+	float	view;
+
+	view = tanf(cam->fov / 2.0f * DEGTORAD);
+	camera_space.x = (x + .5f) / cam->img_plane->width;
+	camera_space.y = (y + .5f) / cam->img_plane->height;
+
+	camera_space.x = (2 * camera_space.x - 1) * cam->aspect_ratio * view;
+	camera_space.y = (1 - (2 * camera_space.y)) * view;
+	camera_space.z = -1;
+
+	// Camera-to-world transform matrix should be applied.
+	ray->origin = cam->t.pos;
+	ray->direction = v3f_norm(camera_space);
 }
 
 void	render(mlx_image_t *img, t_col32 bg_col)
@@ -130,6 +243,17 @@ void	render(mlx_image_t *img, t_col32 bg_col)
 	t_ray		ray;
 	t_vector	objects;
 	t_light		light;
+	t_camera	cam;
+
+	cam = (t_camera){
+		.t = {
+			.pos = {.x = 0, .y = 0, .z = 0},
+			.dir = {.x = 0, .y = 0, .z = -1}
+		},
+		.fov = 70,
+		.img_plane = img,
+		.aspect_ratio = img->width / img->height
+	};
 
 	y = 0;
 	light.intensity = .75f;
@@ -140,9 +264,11 @@ void	render(mlx_image_t *img, t_col32 bg_col)
 		x = 0;
 		while (x < img->width)
 		{
-			compute_prime_ray(x, y, &ray);
+			compute_ray(x, y, &cam, &ray);
 			mlx_put_pixel(img, x, y, trace(&ray, &objects, &light, bg_col, 0));
+			++x;
 		}
+		++y;
 	}
 	vector_free(&objects, free);
 }
