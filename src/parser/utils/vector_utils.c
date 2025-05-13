@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/12 18:56:56 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/13 17:37:17 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,20 @@ size_t	count_vector_components(const char *str)
 	return (count);
 }
 
-
-bool	parse_float(const char *str, float *out)
+bool	parse_diameter(const char *str, float *out)
 {
 	float	value;
 
 	if (!ft_stof(str, &value))
-		return (*error() = ERR_STOF, false);
+	{
+		print_error(ERR_STOF, "parse diameter", str);
+		return (false);
+	}
 	if (value < MIN_RADIUS || value > MAX_RADIUS)
-		return (*error() = ERR_RANGE, false);
+	{
+		print_error(ERR_RANGE, "parse diameter", str);
+		return (false);
+	}
 	*out = value;
 	return (true);
 }
@@ -56,27 +61,22 @@ bool	parse_v3f(t_v3f *v3f, const char *str)
 	char	**tokens;
 	bool	result;
 
-	printf("Parsing v3f from: '%s'\n", str);
 	tokens = ft_split(str, ',');
-	printf("tokens, %s\n", *tokens);
 	if (!tokens)
-		return (false);
+		return (perror("Parse_v3f memory failed"), false);
 	result = true;
 	if (token_count(tokens) == 3)
 	{
 		ft_bzero(v3f, sizeof(float) * 3);
 		result = (
-			ft_stof(tokens[0], &v3f->x) &&
-			ft_stof(tokens[1], &v3f->y) &&
-			ft_stof(tokens[2], &v3f->z)
-			);
-		printf("v3f->x: %f\n", v3f->x);
-		printf("v3f->y: %f\n", v3f->y);
-		printf("v3f->z: %f\n", v3f->z);
+				ft_stof(tokens[0], &v3f->x)
+				&& ft_stof(tokens[1], &v3f->y)
+				&& ft_stof(tokens[2], &v3f->z)
+				);
 	}
 	else
 	{
-		*error() = ERR_V3F;
+		print_error(ERR_V3F, "parse v3f", *tokens);
 		result = false;
 	}
 	free_tokens(tokens);
@@ -89,29 +89,23 @@ bool	parse_col(t_col32 *col, const char *str)
 	int		rgb[3];
 	int		i;
 
-	printf("Parsing color from: '%s'\n", str);
 	tokens = ft_split(str, ',');
 	if (!tokens)
 		return (false);
-	printf("Token count: %zu\n", token_count(tokens));
 	if (token_count(tokens) != 3)
 		return (free_tokens(tokens), false);
 	i = 0;
 	while (i < 3)
 	{
-		printf("Parsing token %d: '%s'\n", i, tokens[i]);
 		if (!ft_stoi(tokens[i], &rgb[i]))
-			return (free_tokens(tokens), false);
-		printf("Value for token %d: %d\n", i, rgb[i]);
-		if (rgb[i] < 0 || rgb[i] > 255)
-		{
-			*error() = ERR_RANGE;
-			return (free_tokens(tokens), false);
-		}
+			return (print_error(ERR_STOI, "parse color", tokens[i]),
+				free_tokens(tokens), false);
+		if (rgb[i] < MIN_COLOR || rgb[i] > MAX_COLOR)
+			return (print_error(ERR_RANGE, "color range 0-255", tokens[i]),
+				free_tokens(tokens), false);
 		i++;
 	}
-	*col = (rgb[0] << 24) | (rgb[1] << 16) | (rgb[2] << 8) | 0xFF;
+	*col = init_col32(rgb[0], rgb[1], rgb[2], 0xFF);
 	free_tokens(tokens);
 	return (true);
 }
-

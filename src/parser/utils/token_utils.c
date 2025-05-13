@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 18:31:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/12 16:07:17 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/13 17:09:20 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 size_t	get_expected_token_count(const char *type)
 {
-	if (ft_strcmp(type, "sp") == 0 || \
-		ft_strcmp(type, "pl") == 0 || \
-		ft_strcmp(type, "C") == 0 || \
-		ft_strcmp(type, "L") == 0)
+	if (ft_strcmp(type, "sp") == 0
+		|| ft_strcmp(type, "pl") == 0
+		|| ft_strcmp(type, "C") == 0
+		|| ft_strcmp(type, "L") == 0)
 		return (4);
 	if (ft_strcmp(type, "cy") == 0)
 		return (6);
@@ -26,7 +26,7 @@ size_t	get_expected_token_count(const char *type)
 	return (0);
 }
 
-char *get_first_token(const char *str)
+char	*get_first_token(const char *str)
 {
 	const char	*start;
 	const char	*end;
@@ -48,13 +48,13 @@ bool	validate_tokens(const char *first_token, const char *line)
 	expected = get_expected_token_count(first_token);
 	if (expected == 0)
 	{
-		*error() = ERR_UNKNOWN_TOKEN;
+		print_error(ERR_UNKNOWN_TOKEN, "token", first_token);
 		return (false);
 	}
-	count = count_tokens_in_str(line);
+	count = token_count_in_str(line);
 	if (count != expected)
 	{
-		*error() = ERR_TOKEN_COUNT;
+		print_error(ERR_TOKEN_COUNT, "token", line);
 		return (false);
 	}
 	return (true);

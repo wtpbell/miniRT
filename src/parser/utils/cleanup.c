@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:44:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/12 17:43:21 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/13 10:23:40 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ void	free_tokens(char **tokens)
 {
 	size_t	i;
 
-	if (!tokens)
-		return;
 	i = 0;
 	while (tokens[i])
 	{
@@ -45,11 +43,16 @@ void	free_tokens(char **tokens)
 	free(tokens);
 }
 
-
 void	cleanup_gnl(char *line, int fd)
 {
 	if (line)
 		free(line);
 	close(fd);
 	get_next_line(-1);
+}
+
+void	cleanup_vector(t_scene *scene)
+{
+	vector_free(&scene->objects, del_objects);
+	vector_free(&scene->lights, del_lights);
 }

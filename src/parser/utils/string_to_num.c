@@ -6,29 +6,43 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:49:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/12 19:06:29 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/13 17:39:07 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-/*
-
-// TODO check this or cap the addition
-#include <stdbool.h>
 #include <math.h>
 
-isnan(f);
-isinf(f);
-*/
+static bool	parse_number(const char *s, float *f, float *fact)
+{
+	int		decimal;
+
+	decimal = 0;
+	while (*s)
+	{
+		if (*s >= '0' && *s <= '9')
+		{
+			if (decimal)
+				*fact /= 10;
+			*f = *f * 10 + (*s - '0');
+		}
+		else if (*s == '.' && !decimal)
+			decimal = 1;
+		else
+			return (false);
+		s++;
+	}
+	return (true);
+}
+
 bool	ft_stof(const char *s, float *f)
 {
 	float	fact;
-	int		decimal;
 
 	fact = 1;
-	decimal = 0;
 	*f = 0;
+	if (ft_strstr(s, "inf") || ft_strstr(s, "nan") || ft_strchr(s, 'e'))
+		return (false);
 	if (*s == '-' || *s == '+')
 	{
 		if (*s == '-')
@@ -36,22 +50,12 @@ bool	ft_stof(const char *s, float *f)
 		s++;
 	}
 	if (!*s)
-		return (*error() = ERR_STOF, false);
-	while (*s)
-	{
-		if (*s >= '0' && *s <= '9')
-		{
-			if (decimal)
-				fact /= 10;
-			*f = *f * 10 + (*s - '0');
-		}
-		else if (*s == '.' && !decimal)
-			decimal = 1;
-		else
-			return (*error() = ERR_STOF, false);
-		s++;
-	}
+		return (false);
+	if (!parse_number(s, f, &fact))
+		return (print_error(ERR_INVALID_VALUE, "stof", s), false);
 	*f *= fact;
+	if (isinf(*f) || isnan(*f))
+		return (print_error(ERR_INF, "stof", s), false);
 	return (true);
 }
 
@@ -72,10 +76,7 @@ bool	ft_stoi(const char *s, int *i)
 		if (*s >= '0' && *s <= '9')
 			*i = *i * 10 + (*s - '0');
 		else
-		{
-			*error() = ERR_STOI;
 			return (false);
-		}
 		s++;
 	}
 	*i *= fact;

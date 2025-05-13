@@ -6,13 +6,13 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/12 17:20:12 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/13 17:48:03 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static bool (*get_parser(const char *type))(char **a, t_scene *n)
+static t_parser	get_parser(const char *type)
 {
 	if (!type)
 		return (NULL);
@@ -29,45 +29,15 @@ static bool (*get_parser(const char *type))(char **a, t_scene *n)
 	return (NULL);
 }
 
-
 bool	parse_scene_element(const char *type, char **tokens, t_scene *scene)
 {
-	bool	(*parser)(char **, t_scene *);
+	t_parser	parser;
+
 	parser = get_parser(type);
 	if (!parser)
 	{
-		*error() = ERR_UNKNOWN_TOKEN;
+		print_error(ERR_UNKNOWN_TOKEN, "token", *tokens);
 		return (false);
 	}
 	return (parser(tokens, scene));
 }
-
-
-
-// static bool parse_plane(char **tokens, t_scene *scene)
-// {
-// 	(void)tokens;
-// 	(void)scene;
-// 	return (false);
-// }
-
-// static bool parse_cylinder(char **tokens, t_scene *scene)
-// {
-// 	(void)tokens;
-// 	(void)scene;
-// 	return (false);
-// }
-
-// static bool parse_light(char **tokens, t_scene *scene)
-// {
-// 	(void)tokens;
-// 	(void)scene;
-// 	return (false);
-// }
-
-// static bool parse_camera(char **tokens, t_scene *scene)
-// {
-// 	(void)tokens;
-// 	(void)scene;
-// 	return (false);
-// }

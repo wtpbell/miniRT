@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/09 17:42:43 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/13 17:52:52 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,5 @@ typedef struct s_light
 	t_light_type	type;
 	float			intensity;
 }	t_light;
-
-
 
 #endif

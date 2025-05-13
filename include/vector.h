@@ -6,13 +6,12 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/09 17:41:37 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/13 17:50:22 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_H
 # define VECTOR_H
-
 
 typedef union s_vector2
 {

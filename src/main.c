@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:21:05 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/12 18:09:54 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/13 17:15:04 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ static bool	valid_input(int argc, char **argv)
 {
 	if (argc != 2)
 	{
-		*error() = ERR_NUM_ARGS;
+		print_error(ERR_NUM_ARGS, "input", NULL);
 		return (false);
 	}
 	if (!valid_file_format(argv[1]))
 	{
-		*error() = ERR_FILE_FORMAT;
+		print_error(ERR_FILE_FORMAT, "format", argv[1]);
 		return (false);
 	}
 	return (true);
@@ -41,17 +41,11 @@ static bool	valid_input(int argc, char **argv)
 int	main(int argc, char **argv)
 {
 	t_scene	scene;
-	int		return_code;
 
 	if (!valid_input(argc, argv))
-	{
-		printf("Error");
-		return (1);
-	}
+		ft_putstr_fd("Error\n", STDERR_FILENO);
 	if (!parse_map(&scene, argv[1]))
-		exit_err(*error(), "Parsing map");
-	return_code = 0;
-	vector_free(&scene.objects, del_objects);
-	vector_free(&scene.lights, del_lights);
-	return (return_code);
+		print_error(ERR_PARSE_FAIL, "map", argv[1]);
+	cleanup_vector(&scene);
+	exit(EXIT_FAILURE);
 }
