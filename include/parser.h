@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 22:20:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/14 10:46:33 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/14 15:31:56 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdlib.h>
 # include "scene.h"
 # include "container.h"
+# include "vector.h"
 
 # define MAX_POS		10000.0f
 # define MAX_RADIUS		1000.0f
@@ -27,6 +28,10 @@
 # define MAX_BRIGHTNESS	1000.0f
 # define MAX_COLOR		255
 # define MIN_COLOR		0
+# define MAX_FOV		180.0f
+# define MIN_FOV		0.0f
+
+
 # define RED 			"\033[31m"
 # define GREEN 			"\033[32m"
 # define YELLOW 		"\033[33m"
@@ -64,6 +69,9 @@ typedef struct s_scene
 	t_vector	objects;
 	t_vector	lights;
 	t_camera	camera;
+	bool		ambient_light_set;
+	bool		camera_set;
+	bool		light_set;
 }	t_scene;
 
 // Token utilities
@@ -71,43 +79,53 @@ bool		validate_tokens(const char *first_token, const char *line);
 char		*get_first_token(const char *str);
 size_t		get_expected_token_count(const char *type);
 
-// Sphere parsing
-bool		parse_sphere(char **tokens, t_scene *scene);
-
-// core/parser.c
+/* ---------------------Core--------------------- */
+// parser.c
 bool		parse_line(t_scene *scene, char *line);
 
-// core/file_parser.c
+// file_parser.c
 bool		parse_map(t_scene *scene, const char *file);
 
-// core/element_parser.c
+// element_parser.c
 bool		parse_scene_element(const char *type,
-				char **tokens, t_scene *scene);
-bool		has_duplicate_identifier(const char *type, t_scene *scene);
+								char **tokens, t_scene *scene);
+	
+/* ---------------------Elements--------------------- */
+// camera.c
+bool		parse_camera(char **tokens, t_scene *scene);
+// light.c
+// bool		parse_light(char **tokens, t_scene *scene);
 
-// objects/sphere.c
-t_sphere	*create_sphere(t_v3f pos, float diameter, t_col32 color);
+/* ---------------------Objects--------------------- */
+// // sphere.c
+bool		parse_sphere(char **tokens, t_scene *scene);
+// // plane.c
+// bool		parse_plane(char **tokens, t_scene *scene);
+// // cylinder.c
+// bool		parse_cylinder(char **tokens, t_scene *scene);
 
-// utils/string_utils.c
+/* ---------------------Utils--------------------- */
+// string_utils.c
 char		*trim_whitespace(const char *str);
 void		clean_spaces(char *str);
 size_t		token_count_in_str(const char *str);
 
-// utils/vector_utils.c
-size_t		count_vector_components(const char *str);
+// vector_utils.c
 bool		parse_v3f(t_v3f *v3f, const char *str);
 bool		parse_col(t_col32 *col, const char *str);
 bool		parse_diameter(const char *str, float *out);
+bool		parse_dir(t_v3f *dir, const char *str);
+size_t		count_vector_components(const char *str);
 
-// utils/string_to_num.c
+// string_to_num.c
 bool		ft_stof(const char *s, float *f);
 bool		ft_stoi(const char *s, int *i);
 
-// utils/error.c
+// error.c
 void		print_error(t_error type, const char *ctx, const char *value);
 void		exit_err(t_error type, const char *ctx, const char *value);
 
-// utils/cleanup.c
+// cleanup.c
 void		del_objects(void *obj);
 void		del_lights(void *light);
 void		free_tokens(char **tokens);

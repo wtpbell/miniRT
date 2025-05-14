@@ -6,39 +6,16 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 16:23:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/14 11:33:55 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/14 15:34:00 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static bool	check_duplicates(const char *type, t_scene *scene)
+static bool	get_type_and_validate(char *processed, char **out_type)
 {
-	if ((ft_strcmp(type, "A") == 0 || ft_strcmp(type, "C") == 0
-			|| ft_strcmp(type, "L") == 0)
-		&& has_duplicate_identifier(type, scene))
-	{
-		print_error(ERR_DUPLICATE, "parse", type);
+	if (!validate_tokens(*out_type, processed))
 		return (false);
-	}
-	return (true);
-}
-
-static bool	get_type_and_validate(char *processed,
-	char **out_type, t_scene *scene)
-{
-	char	*first;
-
-	*out_type = NULL;
-	first = get_first_token(processed);
-	if (!first)
-		return (false);
-	*out_type = first;
-	if (!check_duplicates(first, scene) || !validate_tokens(first, processed))
-	{
-		free(first);
-		return (false);
-	}
 	return (true);
 }
 
@@ -55,13 +32,11 @@ bool	parse_line(t_scene *scene, char *line)
 	clean_spaces(line);
 	tokens = ft_split(line, ' ');
 	if (!tokens)
-	{
-		perror("Split failed");
-		return (false);
-	}
+		return (perror("Split failed"), false);
 	type = tokens[0];
-	if (!get_type_and_validate(line, &type, scene))
+	if (!get_type_and_validate(line, &type))
 		return (free_tokens(tokens), false);
 	result = parse_scene_element(type, tokens, scene);
-	return (free(type), free_tokens(tokens), result);
+	free_tokens(tokens);
+	return (result);
 }

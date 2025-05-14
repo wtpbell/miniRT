@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:21:05 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/14 10:27:51 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/14 15:29:34 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	main(int argc, char **argv)
 {
 	t_scene	scene;
 
+	ft_bzero(&scene, sizeof(t_scene));
 	if (!valid_input(argc, argv))
 	{
 		ft_putstr_fd("Error\n", STDERR_FILENO);

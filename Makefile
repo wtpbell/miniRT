@@ -20,7 +20,7 @@ INC			:= -I ./include -I $(MLX42_DIR)/include -I $(LIBFT_DIR)/include
 # Parser source files
 PARSER_CORE		:= parser.c element_parser.c file_parser.c
 PARSER_OBJS		:= sphere.c
-PARSER_UTILS	:= string_utils.c vector_utils.c error.c cleanup.c string_to_num.c identifier_utils.c token_utils.c
+PARSER_UTILS	:= string_utils.c vector_utils.c error.c cleanup.c string_to_num.c token_utils.c
 
 # Main source files
 MAIN_SRCS	:= main.c vector_init.c vector_helper.c vector_operation.c\
