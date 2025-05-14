@@ -18,7 +18,7 @@ LIBFT		:= $(addprefix $(LIBFT_DIR)/, libft.a)
 INC			:= -I ./include -I $(MLX42_DIR)/include -I $(LIBFT_DIR)/include
 SRCS		:= main.c vector_init.c vector_helper.c vector_operation.c\
 				vec_container.c vec_container_utils.c color.c raytracer.c\
-				rt_math.c
+				rt_math.c matrix.c
 OBJS		:= $(SRCS:%.c=$(BIN_DIR)%.o)
 
 # === COMPILE RULES ===

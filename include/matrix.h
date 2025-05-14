@@ -1,35 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   minirt.h                                           :+:    :+:            */
+/*   matrix.h                                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/14 09:37:34 by jboon         ########   odam.nl         */
+/*   Created: 2025/05/14 08:51:07 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/14 23:58:48 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIRT_H
-# define MINIRT_H
+#ifndef MATRIX_H
+# define MATRIX_H
 
-# include "MLX42/MLX42.h"
-# include "color.h"
 # include "vector.h"
 
-typedef struct s_ray
-{
-	t_v3f	origin;
-	t_v3f	direction;
-}	t_ray;
+# define M4X4_SIZE	16
 
-typedef struct s_ray_hit
-{
-	t_v3f		hit;
-	t_v3f		normal;
-	float		distance;
-}	t_ray_hit;
+typedef float	t_mat4x4[16];
 
-void	render(mlx_image_t *img, t_col32 bg_col);
+void	id_m4x4(t_mat4x4 mat);
+void	trans_m4x4(t_mat4x4 mat, t_v3f trans);
+void	scale_m4x4(t_mat4x4 mat, t_v3f scale);
+t_v3f	mul_v3_m4x4(t_v3f v, t_mat4x4 mat);
+void	mul_mat4x4(t_mat4x4 dst, t_mat4x4 a, t_mat4x4 b);
 
 #endif

@@ -6,17 +6,18 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:51:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/13 17:36:30 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/15 00:00:40 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MATH_H
-# define MATH_H
+#ifndef RT_MATH_H
+# define RT_MATH_H
 
 # include <float.h>
 # include <math.h>
 
 # include "vector.h"
+# include "matrix.h"
 
 # define PI 3.14159265358979323846f
 # define RADTODEG 57.2957795131f
