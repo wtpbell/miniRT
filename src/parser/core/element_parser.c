@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   element_parser.c                                   :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/13 17:48:03 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   element_parser.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 16:23:01 by bewong            #+#    #+#             */
+/*   Updated: 2025/05/14 14:48:05 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,14 @@ static t_parser	get_parser(const char *type)
 		return (NULL);
 	if (ft_strcmp(type, "sp") == 0)
 		return (parse_sphere);
-	// else if (ft_strcmp(type, "pl") == 0)
-	// 	return (parse_plane);
-	// else if (ft_strcmp(type, "cy") == 0)
-	// 	return (parse_cylinder);
-	// else if (ft_strcmp(type, "l") == 0)
-	// 	return (parse_light);
-	// else if (ft_strcmp(type, "c") == 0)
-	// 	return (parse_camera);
+	else if (ft_strcmp(type, "pl") == 0)
+		return (parse_plane);
+	else if (ft_strcmp(type, "cy") == 0)
+		return (parse_cylinder);
+	else if (ft_strcmp(type, "L") == 0)
+		return (parse_light);
+	else if (ft_strcmp(type, "C") == 0)
+		return (parse_camera);
 	return (NULL);
 }
 

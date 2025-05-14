@@ -6,13 +6,13 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/14 10:00:37 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/14 13:47:41 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-t_sphere	*create_sphere(t_v3f pos, float diameter, t_col32 color)
+static t_sphere	*create_sphere(t_v3f pos, float diameter, t_col32 color)
 {
 	t_sphere	*sphere;
 
