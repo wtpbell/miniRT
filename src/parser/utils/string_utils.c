@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 16:23:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/14 10:30:15 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/14 11:34:10 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@ void	clean_spaces(char *str)
 	prev_space = true;
 	while (str[i])
 	{
-		if (str[i] == ' ' || str[i] == '\t')
+		if (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || str[i] == '\r')
 		{
-			while (str[i + 1] && (str[i + 1] == ' ' || str[i + 1] == '\t'))
+			while (str[i + 1] && (str[i + 1] == ' ' || str[i + 1] == '\t'
+					|| str[i + 1] == '\n' || str[i + 1] == '\r'))
 				i++;
 			if (!prev_space && str[i + 1] && str[i + 1] != ',')
 				str[pos++] = ' ';
@@ -64,12 +65,12 @@ size_t	token_count_in_str(const char *str)
 	in_token = false;
 	while (*str)
 	{
-		if (*str == ' ' || *str == '\t' || *str == '\n')
+		if (*str == ' ' || *str == '\t' || *str == '\n' || *str == '\r')
 			in_token = false;
 		else if (!in_token)
 		{
-			in_token = true;
 			count++;
+			in_token = true;
 		}
 		str++;
 	}

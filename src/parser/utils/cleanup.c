@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 16:44:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/14 10:27:51 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/14 11:13:57 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ void	cleanup_gnl(char *line, int fd)
 
 void	cleanup_scene(t_scene *scene)
 {
-	if (scene->objects.data != NULL)
+	if (scene->objects.items != NULL)
 		vector_free(&scene->objects, del_objects);
-	if (scene->lights.data != NULL)
+	if (scene->lights.items != NULL)
 		vector_free(&scene->lights, del_lights);
 }

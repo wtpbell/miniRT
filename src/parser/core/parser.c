@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 16:23:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/14 10:42:14 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/14 11:33:55 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static bool	check_duplicates(const char *type, t_scene *scene)
 }
 
 static bool	get_type_and_validate(char *processed,
-			char **out_type, t_scene *scene)
+	char **out_type, t_scene *scene)
 {
 	char	*first;
 
@@ -39,7 +39,6 @@ static bool	get_type_and_validate(char *processed,
 		free(first);
 		return (false);
 	}
-	*out_type = first;
 	return (true);
 }
 
@@ -53,6 +52,7 @@ bool	parse_line(t_scene *scene, char *line)
 		++line;
 	if (*line == '\0' || *line == '#')
 		return (true);
+	clean_spaces(line);
 	tokens = ft_split(line, ' ');
 	if (!tokens)
 	{
@@ -60,7 +60,7 @@ bool	parse_line(t_scene *scene, char *line)
 		return (false);
 	}
 	type = tokens[0];
-	if (!get_type_and_validate(type, &type, scene))
+	if (!get_type_and_validate(line, &type, scene))
 		return (free_tokens(tokens), false);
 	result = parse_scene_element(type, tokens, scene);
 	return (free(type), free_tokens(tokens), result);
