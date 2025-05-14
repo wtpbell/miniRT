@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/13 18:15:48 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/14 17:09:34 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,11 @@
 
 #include "MLX42/MLX42.h"
 #include "libft.h"
+#include "minirt.h"
 #include "scene.h"
 #include "color.h"
 #include "rt_math.h"
 #include "container.h"
-
-typedef struct s_ray
-{
-	t_v3f	origin;
-	t_v3f	direction;
-}	t_ray;
-
-typedef struct s_ray_hit
-{
-	t_v3f		hit;
-	t_v3f		normal;
-	float		distance;
-}	t_ray_hit;
-
 
 bool	geo_intersect(t_sphere *sp, t_ray *ray, t_ray_hit *hitinfo)
 {
@@ -115,23 +102,28 @@ bool	intersect(t_sphere *sp, t_ray *ray, t_ray_hit *hitinfo)
 	return (true);
 }
 
-inline t_ray_hit	init_ray_hit(void)
+void	cam_to_world_mat(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up)
 {
-	return ((t_ray_hit){
-		.hit = {0},
-		.normal = {0},
-		.distance = FLT_MAX,
-	});
-}
+	t_v3f	x_axis;
+	t_v3f	y_axis;
 
-void	v3f_print(t_v3f v)
-{
-	printf("v3f <%.4f, %.4f, %.4f>\n", v.x, v.y, v.z);
-}
+	id_m4x4(mat);
+	trans_m4x4(mat, pos);
 
-void	col32_print(t_col32 c)
-{
-	printf("col32 <%i, %i, %i, %i>\n", get_r(c), get_g(c), get_b(c), get_a(c));
+	x_axis = v3f_norm(v3f_cross(up, dir));
+	y_axis = v3f_norm(v3f_cross(dir, x_axis));
+
+	mat[0] = x_axis.x;
+	mat[1] = y_axis.x;
+	mat[2] = dir.x;
+
+	mat[4] = x_axis.y;
+	mat[5] = y_axis.y;
+	mat[6] = dir.y;
+
+	mat[8] = x_axis.z;
+	mat[9] = y_axis.z;
+	mat[10] = dir.z;
 }
 
 t_col32	trace(t_ray *ray, t_vector *objects, t_light *light, t_col32 bg_col, uint32_t depth)
@@ -244,7 +236,9 @@ void	render(mlx_image_t *img, t_col32 bg_col)
 	t_vector	objects;
 	t_light		light;
 	t_camera	cam;
+	t_mat4x4	mat;
 
+	// https://stackoverflow.com/questions/18558910/direction-vector-to-rotation-matrix
 	cam = (t_camera){
 		.t = {
 			.pos = {.x = 0, .y = 0, .z = 0},
@@ -252,8 +246,9 @@ void	render(mlx_image_t *img, t_col32 bg_col)
 		},
 		.fov = 70,
 		.img_plane = img,
-		.aspect_ratio = img->width / img->height
+		.aspect_ratio = (float)img->width / (float)img->height
 	};
+	cam_to_world_mat(mat, cam.t.pos, cam.t.dir, init_v3f(0, 1, 0));
 
 	y = 0;
 	light.intensity = .75f;
