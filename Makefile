@@ -26,11 +26,11 @@ PARSER_UTILS	:= string_utils.c vector_utils.c error.c cleanup.c string_to_num.c 
 MAIN_SRCS	:= main.c vector_init.c vector_helper.c vector_operation.c\
 				vec_container.c vec_container_utils.c color.c
 
-SRCS		:= $(MAIN_SRCS)\
-				$(addprefix parser/core/, $(PARSER_CORE))\
-				$(addprefix parser/objects/, $(PARSER_OBJS))\
-				$(addprefix parser/utils/, $(PARSER_UTILS))
-OBJS		:= $(SRCS:%.c=$(BIN_DIR)%.o)
+SRCS := $(MAIN_SRCS) \
+        $(PARSER_CORE) \
+        $(PARSER_OBJS) \
+        $(PARSER_UTILS)
+OBJS := $(SRCS:%.c=$(BIN_DIR)%.o)
 
 # === COMPILE RULES ===
 

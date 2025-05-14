@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   sphere.c                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/13 17:46:39 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   sphere.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
+/*   Updated: 2025/05/14 10:00:37 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ t_sphere	*create_sphere(t_v3f pos, float diameter, t_col32 color)
 	sphere->t.pos = pos;
 	sphere->radius = diameter / 2.0f;
 	sphere->r.col = color;
-	sphere->type = OBJ_SPHERE;
 	sphere->t.dir = (t_v3f){{0, 0, 0}};
 	return (sphere);
 }

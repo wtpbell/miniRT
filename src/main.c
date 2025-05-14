@@ -1,16 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 18:21:05 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/13 17:15:04 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 18:21:05 by jboon             #+#    #+#             */
+/*   Updated: 2025/05/14 10:27:51 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "parser.h"
 
 static bool	valid_file_format(const char *file)
@@ -43,9 +42,12 @@ int	main(int argc, char **argv)
 	t_scene	scene;
 
 	if (!valid_input(argc, argv))
+	{
 		ft_putstr_fd("Error\n", STDERR_FILENO);
+		exit(EXIT_FAILURE);
+	}
 	if (!parse_map(&scene, argv[1]))
 		print_error(ERR_PARSE_FAIL, "map", argv[1]);
-	cleanup_vector(&scene);
+	cleanup_scene(&scene);
 	exit(EXIT_FAILURE);
 }

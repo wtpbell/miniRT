@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   parser.h                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/13 17:52:44 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   parser.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 22:20:50 by bewong            #+#    #+#             */
+/*   Updated: 2025/05/14 10:46:33 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,17 @@
 # include "scene.h"
 # include "container.h"
 
-# define MAX_POS			10000.0f
+# define MAX_POS		10000.0f
 # define MAX_RADIUS		1000.0f
 # define MIN_RADIUS		0.0f
 # define MAX_BRIGHTNESS	1000.0f
 # define MAX_COLOR		255
 # define MIN_COLOR		0
-# define RED "\033[31m"
-# define GREEN "\033[32m"
-# define YELLOW "\033[33m"
-# define BLUE "\033[34m"
-# define RESET "\033[0m"
+# define RED 			"\033[31m"
+# define GREEN 			"\033[32m"
+# define YELLOW 		"\033[33m"
+# define BLUE 			"\033[34m"
+# define RESET 			"\033[0m"
 
 typedef struct s_scene	t_scene;
 typedef bool			(*t_parser)(char **, t_scene *);
@@ -112,5 +112,5 @@ void		del_objects(void *obj);
 void		del_lights(void *light);
 void		free_tokens(char **tokens);
 void		cleanup_gnl(char *line, int fd);
-void		cleanup_vector(t_scene *scene);
+void		cleanup_scene(t_scene *scene);
 #endif

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   vector_utils.c                                     :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/13 17:37:17 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   vector_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
+/*   Updated: 2025/05/14 10:43:10 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ bool	parse_v3f(t_v3f *v3f, const char *str)
 	result = true;
 	if (token_count(tokens) == 3)
 	{
-		ft_bzero(v3f, sizeof(float) * 3);
+		ft_bzero(v3f, sizeof(t_v3f));
 		result = (
 				ft_stof(tokens[0], &v3f->x)
 				&& ft_stof(tokens[1], &v3f->y)

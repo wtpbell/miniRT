@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   string_utils.c                                     :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/13 17:09:03 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   string_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 16:23:01 by bewong            #+#    #+#             */
+/*   Updated: 2025/05/14 10:30:15 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-char	*trim_whitespace(const char *line)
-{
-	char	*trimmed;
+// char	*trim_whitespace(const char *line)
+// {
+// 	char	*trimmed;
 
-	trimmed = ft_strtrim(line, " \t\n\r");
-	if (!trimmed)
-	{
-		perror("Trimmed memory allocation failed");
-		return (NULL);
-	}
-	return (trimmed);
-}
+// 	trimmed = ft_strtrim(line, " \t\n\r");
+// 	if (!trimmed)
+// 	{
+// 		perror("Trimmed memory allocation failed");
+// 		return (NULL);
+// 	}
+// 	return (trimmed);
+// }
 
 void	clean_spaces(char *str)
 {

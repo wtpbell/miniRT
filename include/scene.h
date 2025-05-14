@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   scene.h                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/13 17:52:52 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   scene.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 18:55:45 by jboon             #+#    #+#             */
+/*   Updated: 2025/05/14 10:01:40 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,26 +52,16 @@ typedef struct s_render
 	t_col32		col;
 }	t_render;
 
-typedef enum e_obj_type
-{
-	OBJ_NONE,
-	OBJ_PLANE,
-	OBJ_SPHERE,
-	OBJ_CYLINDER
-}	t_obj_type;
-
 typedef struct s_plane
 {
 	t_transform	t;
 	t_render	r;
-	t_obj_type	type;
 }	t_plane;
 
 typedef struct s_sphere
 {
 	t_transform	t;
 	t_render	r;
-	t_obj_type	type;
 	float		radius;
 }	t_sphere;
 
@@ -79,7 +69,6 @@ typedef struct s_cylinder
 {
 	t_transform	t;
 	t_render	r;
-	t_obj_type	type;
 	float		radius;
 	float		height;
 }	t_cylinder;

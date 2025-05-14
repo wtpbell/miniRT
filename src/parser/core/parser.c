@@ -1,30 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   parser.c                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/13 17:23:07 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 16:23:01 by bewong            #+#    #+#             */
+/*   Updated: 2025/05/14 10:42:14 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-static char	*preprocess_line(char *line)
-{
-	char	*trimmed;
-
-	trimmed = trim_whitespace(line);
-	if (!trimmed)
-	{
-		perror("Trimmed whitespace memory failed");
-		return (NULL);
-	}
-	clean_spaces(trimmed);
-	return (trimmed);
-}
 
 static bool	check_duplicates(const char *type, t_scene *scene)
 {
@@ -39,51 +25,43 @@ static bool	check_duplicates(const char *type, t_scene *scene)
 }
 
 static bool	get_type_and_validate(char *processed,
-									char **out_type, t_scene *scene)
+			char **out_type, t_scene *scene)
 {
 	char	*first;
 
+	*out_type = NULL;
 	first = get_first_token(processed);
-	*out_type = ft_strdup(first);
-	if (!first || !(*out_type))
-	{
-		free(first);
+	if (!first)
 		return (false);
-	}
+	*out_type = first;
 	if (!check_duplicates(first, scene) || !validate_tokens(first, processed))
 	{
 		free(first);
-		free(*out_type);
-		*out_type = NULL;
 		return (false);
 	}
-	free(first);
+	*out_type = first;
 	return (true);
 }
 
 bool	parse_line(t_scene *scene, char *line)
 {
 	char	**tokens;
-	char	*processed;
 	char	*type;
 	bool	result;
 
 	while (*line && ft_strchr(" \f\n\r\t\v", *line))
 		++line;
-	if (*line == '\0')
+	if (*line == '\0' || *line == '#')
 		return (true);
-	processed = preprocess_line(line);
-	if (!processed)
-		return (false);
-	if (!get_type_and_validate(processed, &type, scene))
-		return (free(processed), false);
-	tokens = ft_split(processed, ' ');
-	free(processed);
+	tokens = ft_split(line, ' ');
 	if (!tokens)
 	{
-		free(type);
+		perror("Split failed");
 		return (false);
 	}
+	type = tokens[0];
+	if (!get_type_and_validate(type, &type, scene))
+		return (free_tokens(tokens), false);
 	result = parse_scene_element(type, tokens, scene);
 	return (free(type), free_tokens(tokens), result);
 }

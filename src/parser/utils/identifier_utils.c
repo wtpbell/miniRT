@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   identifier_utils.c                                 :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/11 18:00:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/13 15:41:14 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   identifier_utils.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 18:00:01 by bewong            #+#    #+#             */
+/*   Updated: 2025/05/14 10:06:22 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ bool	has_duplicate_identifier(const char *type, t_scene *scene)
 {
 	int			i;
 	t_object	*obj;
-	t_sphere	*sphere;
 
 	i = 0;
 	while (i < scene->objects.size)
@@ -24,8 +23,7 @@ bool	has_duplicate_identifier(const char *type, t_scene *scene)
 		obj = vector_get(&scene->objects, i);
 		if (obj && obj->obj)
 		{
-			sphere = (t_sphere *)obj->obj;
-			if (sphere->type == OBJ_SPHERE && ft_strcmp(type, "sp") == 0)
+			if (ft_strcmp(type, "sp") == 0)
 				return (true);
 		}
 		i++;

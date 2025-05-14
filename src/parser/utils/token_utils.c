@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   token_utils.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/11 18:31:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/13 17:09:20 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   token_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 18:31:01 by bewong            #+#    #+#             */
+/*   Updated: 2025/05/14 10:33:07 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,7 @@ size_t	get_expected_token_count(const char *type)
 
 char	*get_first_token(const char *str)
 {
-	const char	*start;
-	const char	*end;
-	char		*token;
-
-	start = str;
-	while (*str && *str != ' ' && *str != '\t')
-		str++;
-	end = str;
-	token = ft_substr(start, 0, end - start);
-	return (token);
+	return (ft_substr(str, 0, ft_strchrnul(str, ' ') - str));
 }
 
 bool	validate_tokens(const char *first_token, const char *line)

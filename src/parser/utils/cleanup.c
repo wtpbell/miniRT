@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   cleanup.c                                          :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/11 16:44:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/13 10:23:40 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 16:44:01 by bewong            #+#    #+#             */
+/*   Updated: 2025/05/14 10:27:51 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,10 @@ void	cleanup_gnl(char *line, int fd)
 	get_next_line(-1);
 }
 
-void	cleanup_vector(t_scene *scene)
+void	cleanup_scene(t_scene *scene)
 {
-	vector_free(&scene->objects, del_objects);
-	vector_free(&scene->lights, del_lights);
+	if (scene->objects.data != NULL)
+		vector_free(&scene->objects, del_objects);
+	if (scene->lights.data != NULL)
+		vector_free(&scene->lights, del_lights);
 }
