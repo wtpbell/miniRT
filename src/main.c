@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:21:05 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/14 15:13:22 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/14 19:32:35 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,32 @@ static bool	valid_input(int argc, char **argv)
 	return (true);
 }
 
+static void	init_scene_and_vector(t_scene *scene)
+{
+	ft_bzero(scene, sizeof(t_scene));
+	if (!vector_init(&scene->objects, 8))
+	{
+		perror("Vector initialization failed");
+		vector_free(&scene->objects, del_objects);
+		return ;
+	}
+	scene->lights = NULL;
+	scene->ambient_light_set = false;
+	scene->light_set = false;
+}
+
 int	main(int argc, char **argv)
 {
 	t_scene	scene;
 
-	ft_bzero(&scene, sizeof(t_scene));
 	if (!valid_input(argc, argv))
 	{
 		ft_putstr_fd("Error\n", STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
+	init_scene_and_vector(&scene);
 	if (!parse_map(&scene, argv[1]))
 		print_error(ERR_PARSE_FAIL, "map", argv[1]);
 	cleanup_scene(&scene);
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 }

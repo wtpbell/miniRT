@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 16:23:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/14 14:48:05 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/14 17:55:59 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static t_parser	get_parser(const char *type)
 		return (parse_plane);
 	else if (ft_strcmp(type, "cy") == 0)
 		return (parse_cylinder);
-	else if (ft_strcmp(type, "L") == 0)
+	else if (ft_strcmp(type, "L") == 0 || ft_strcmp(type, "A") == 0)
 		return (parse_light);
 	else if (ft_strcmp(type, "C") == 0)
 		return (parse_camera);

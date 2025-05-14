@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 22:20:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/14 15:15:27 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/14 19:19:54 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,16 @@
 # include "container.h"
 # include "vector.h"
 
-# define MAX_POS		10000.0f
-# define MAX_RADIUS		1000.0f
-# define MIN_RADIUS		0.0f
-# define MAX_BRIGHTNESS	1000.0f
-# define MAX_COLOR		255
-# define MIN_COLOR		0
-# define MAX_FOV		180.0f
-# define MIN_FOV		0.0f
+# define MAX_POS			10000.0f
+# define MAX_RADIUS			1000.0f
+# define MIN_RADIUS			0.0f
+# define MAX_BRIGHTNESS		1000.0f
+# define MAX_COLOR			255
+# define MIN_COLOR			0
+# define MAX_FOV			180.0f
+# define MIN_FOV			0.0f
+# define MAX_LIGHT_RATIO	1.0f
+# define MIN_LIGHT_RATIO	0.0f
 
 
 # define RED 			"\033[31m"
@@ -67,7 +69,7 @@ typedef enum e_error
 typedef struct s_scene
 {
 	t_vector	objects;
-	t_vector	lights;
+	t_light		*lights;
 	t_camera	camera;
 	bool		ambient_light_set;
 	bool		camera_set;
@@ -89,7 +91,6 @@ bool		parse_map(t_scene *scene, const char *file);
 // element_parser.c
 bool		parse_scene_element(const char *type,
 								char **tokens, t_scene *scene);
-// bool		has_duplicate_identifier(const char *type, t_scene *scene);
 	
 /* ---------------------Elements--------------------- */
 // camera.c
@@ -114,8 +115,9 @@ size_t		token_count_in_str(const char *str);
 // vector_utils.c
 bool		parse_v3f(t_v3f *v3f, const char *str);
 bool		parse_col(t_col32 *col, const char *str);
-bool		parse_diameter(const char *str, float *out);
+bool		parse_diameter(float *out,const char *str);
 bool		parse_dir(t_v3f *dir, const char *str);
+bool		parse_light_ratio(float *ratio, const char *str);
 
 // general_utils.c
 size_t		token_count(char **tokens);
@@ -124,6 +126,9 @@ size_t		count_vector_components(const char *str);
 // string_to_num.c
 bool		ft_stof(const char *s, float *f);
 bool		ft_stoi(const char *s, int *i);
+
+// validate_utils.c
+bool		validate_and_norm_dir(t_v3f *dir, const char *str);
 
 // error.c
 void		print_error(t_error type, const char *ctx, const char *value);

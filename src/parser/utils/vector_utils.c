@@ -6,13 +6,13 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/14 13:51:40 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/14 19:21:10 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-bool	parse_diameter(const char *str, float *out)
+bool	parse_diameter(float *out, const char *str)
 {
 	float	value;
 
@@ -78,17 +78,6 @@ bool	parse_col(t_col32 *col, const char *str)
 	return (true);
 }
 
-static bool	validate_and_norm_dir(t_v3f *dir, const char *str)
-{
-	if (!v3f_dir_valid(dir))
-	{
-		print_error(ERR_RANGE, "direction range -1.0f - 1.0f", str);
-		return (false);
-	}
-	*dir = v3f_norm(*dir);
-	return (true);
-}
-
 bool	parse_dir(t_v3f *dir, const char *str)
 {
 	char	**tokens;
@@ -107,5 +96,17 @@ bool	parse_dir(t_v3f *dir, const char *str)
 		|| !ft_stof(tokens[2], &dir->z) || !validate_and_norm_dir(dir, str))
 		return (free_tokens(tokens), false);
 	free_tokens(tokens);
+	return (true);
+}
+
+bool	parse_light_ratio(float *ratio, const char *str)
+{
+	float	value;
+
+	if (!ft_stof(str, &value))
+		return (print_error(ERR_STOF, "parse light ratio", str), false);
+	if (value < MIN_LIGHT_RATIO || value > MAX_LIGHT_RATIO)
+		return (print_error(ERR_RANGE, "light ratio range 0-1", str), false);
+	*ratio = value;
 	return (true);
 }

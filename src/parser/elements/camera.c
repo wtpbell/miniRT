@@ -50,9 +50,7 @@ bool	parse_camera(char **tokens, t_scene *scene)
 	camera = malloc(sizeof(t_camera));
 	if (!camera)
 		return (perror("Camera allocation failed"), false);
-	camera = create_camera(camera, pos, dir, fov);
-	if (!camera)
-		return (false);
+	create_camera(camera, pos, dir, fov);
 	scene->camera = *camera;
 	scene->camera_set = true;
 	free(camera);

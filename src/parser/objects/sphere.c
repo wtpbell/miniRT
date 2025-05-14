@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/14 13:47:41 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/14 18:43:06 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ bool	parse_sphere(char **tokens, t_scene *scene)
 	t_col32		color;
 	t_object	*obj;
 
-	if (!parse_v3f(&pos, tokens[1]) || !parse_diameter(tokens[2], &diameter)
+	if (!parse_v3f(&pos, tokens[1]) || !parse_diameter(&diameter, tokens[2])
 		|| !parse_col(&color, tokens[3]))
 		return (false);
 	sphere = create_sphere(pos, diameter, color);

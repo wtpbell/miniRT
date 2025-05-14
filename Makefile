@@ -19,7 +19,7 @@ PARSER_CORE		:= parser.c element_parser.c file_parser.c
 PARSER_ELEMENTS	:= camera.c light.c 
 PARSER_OBJS		:= sphere.c plane.c cylinder.c
 PARSER_UTILS	:= string_utils.c vector_utils.c error.c cleanup.c string_to_num.c \
-					identifier_utils.c token_utils.c general_utils.c
+					identifier_utils.c token_utils.c general_utils.c validate_utils.c
 
 MAIN_SRCS	:= main.c vector_init.c vector_helper.c vector_operation.c\
 				vec_container.c vec_container_utils.c color.c
