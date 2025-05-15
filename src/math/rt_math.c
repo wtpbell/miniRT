@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/13 13:40:09 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/13 17:37:20 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/15 15:09:34 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,11 @@ void	ft_swapf(float *a, float *b)
 	tmp = *a;
 	*a = *b;
 	*b = tmp;
+}
+
+float	ft_absf(float a)
+{
+	if (a < 0)
+		return (-a);
+	return (a);
 }

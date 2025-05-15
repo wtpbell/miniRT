@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 08:51:07 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/14 23:58:48 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/15 11:20:24 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	id_m4x4(t_mat4x4 mat);
 void	trans_m4x4(t_mat4x4 mat, t_v3f trans);
 void	scale_m4x4(t_mat4x4 mat, t_v3f scale);
 t_v3f	mul_v3_m4x4(t_v3f v, t_mat4x4 mat);
+t_v3f	mul_dir_m4x4(t_v3f dir, t_mat4x4 mat);
 void	mul_mat4x4(t_mat4x4 dst, t_mat4x4 a, t_mat4x4 b);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 08:55:34 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/14 23:56:33 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/15 11:19:50 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,16 @@ t_v3f	mul_v3_m4x4(t_v3f v, t_mat4x4 mat)
 		t.y *= w;
 		t.z *= w;
 	}
+	return (t);
+}
+
+t_v3f	mul_dir_m4x4(t_v3f dir, t_mat4x4 mat)
+{
+	t_v3f	t;
+
+	t.x = dir.x * mat[0] + dir.y * mat[4] + dir.z * mat[8];
+	t.y = dir.x * mat[1] + dir.y * mat[5] + dir.z * mat[9];
+	t.z = dir.x * mat[2] + dir.y * mat[6] + dir.z * mat[10];
 	return (t);
 }
 

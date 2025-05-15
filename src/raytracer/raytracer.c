@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/14 17:09:34 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/15 15:28:58 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 #include "color.h"
 #include "rt_math.h"
 #include "container.h"
+
+#include "debug/rt_debug.h"
 
 bool	geo_intersect(t_sphere *sp, t_ray *ray, t_ray_hit *hitinfo)
 {
@@ -78,7 +80,7 @@ bool	solve_quadratic(t_v3f *abc, float *x0, float *x1)
 	return (true);
 }
 
-bool	intersect(t_sphere *sp, t_ray *ray, t_ray_hit *hitinfo)
+bool	intersect(t_sphere *sp, t_ray *ray, float *dst)
 {
 	t_v3f	L;
 	t_v3f	abc;
@@ -97,11 +99,11 @@ bool	intersect(t_sphere *sp, t_ray *ray, t_ray_hit *hitinfo)
 			return (false);
 		t0 = t1;
 	}
-	hitinfo->hit = v3f_add(ray->origin, v3f_scale(ray->direction, t0));
-	hitinfo->distance = v3f_mag(hitinfo->hit);
+	*dst = v3f_mag(v3f_add(ray->origin, v3f_scale(ray->direction, t0)));
 	return (true);
 }
 
+// https://stackoverflow.com/questions/18558910/direction-vector-to-rotation-matrix (column major, right-handed)
 void	cam_to_world_mat(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up)
 {
 	t_v3f	x_axis;
@@ -109,28 +111,27 @@ void	cam_to_world_mat(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up)
 
 	id_m4x4(mat);
 	trans_m4x4(mat, pos);
-
 	x_axis = v3f_norm(v3f_cross(up, dir));
 	y_axis = v3f_norm(v3f_cross(dir, x_axis));
-
-	mat[0] = x_axis.x;
-	mat[1] = y_axis.x;
-	mat[2] = dir.x;
-
-	mat[4] = x_axis.y;
+	mat[0] = -x_axis.x;
+	mat[1] = x_axis.y;
+	mat[2] = x_axis.z;
+	mat[4] = y_axis.x;
 	mat[5] = y_axis.y;
-	mat[6] = dir.y;
-
-	mat[8] = x_axis.z;
-	mat[9] = y_axis.z;
+	mat[6] = y_axis.z;
+	mat[8] = dir.x;
+	mat[9] = dir.y;
 	mat[10] = dir.z;
 }
+
+bool	t = true;
 
 t_col32	trace(t_ray *ray, t_vector *objects, t_light *light, t_col32 bg_col, uint32_t depth)
 {
 	int			i;
 	t_ray		shadow_ray;
 	float		min_dist;
+	float		curr_dst;
 	t_sphere	*hit;
 	t_ray_hit	curr_hit;
 
@@ -140,23 +141,27 @@ t_col32	trace(t_ray *ray, t_vector *objects, t_light *light, t_col32 bg_col, uin
 	min_dist = FLT_MAX;
 	while (i < objects->size)
 	{
-		if (intersect(objects->items[i], ray, &curr_hit)
-			&& curr_hit.distance < min_dist)
+		if (intersect(objects->items[i], ray, &curr_dst)
+			&& curr_dst < min_dist)
 			{
-				min_dist = curr_hit.distance;
+				min_dist = curr_dst;
 				hit = objects->items[i];
 			}
 		++i;
 	}
 	if (hit == NULL)
 	{
-		t_v3f	hitcolor = v3f_scale(v3f_add(ray->direction, (t_v3f){.x = 1, .y = 1, .z = 1}), .5f);
-		hitcolor = v3f_scale(hitcolor, 255);
+		t_v3f	hitcolor = v3f_scale(v3f_add(ray->direction, (t_v3f){.x = 1, .y = 1, .z = 1}), 255 >> 1);
 		return (init_col32(hitcolor.x, hitcolor.y, hitcolor.z, 255));
 	}
 	else
 	{
-		return (hit->r.col);
+		curr_hit.hit = v3f_add(ray->origin, v3f_scale(ray->direction, min_dist));
+
+		curr_hit.normal = v3f_norm(v3f_sub(curr_hit.hit, hit->t.pos));
+		curr_hit.normal = v3f_scale(v3f_add(curr_hit.normal, init_v3f(1, 1, 1)), 255>>1);
+
+		return (init_col32(curr_hit.normal.x, curr_hit.normal.y, curr_hit.normal.z, 255));
 	}
 	// IF GLASS && DEPTH < MAX_DEPTH
 	// Calc reflection, refraction
@@ -185,25 +190,32 @@ void	create_objects(t_vector *objects)
 
 	ft_bzero(&sp, sizeof(t_sphere));
 
-	vector_init(objects, 3);
+	vector_init(objects, 4);
 
-	sp.t.pos = init_v3f(0, 0, -50);
+	sp.t.pos = init_v3f(0, 0, 0);
 	sp.r.col = C_RED;
-	sp.radius = 10;
+	sp.radius = 3;
 	ptr_sp = malloc(sizeof(t_sphere));
 	*ptr_sp = sp;
 	vector_add(objects, ptr_sp);
 
-	sp.t.pos = init_v3f(3, 0, -5);
+	sp.t.pos = init_v3f(6, 0, 0);
 	sp.r.col = C_GREEN;
 	sp.radius = 2;
 	ptr_sp = malloc(sizeof(t_sphere));
 	*ptr_sp = sp;
 	vector_add(objects, ptr_sp);
 
-	sp.t.pos = init_v3f(-3, 0, -4);
+	sp.t.pos = init_v3f(-5, 0, 0);
 	sp.r.col = C_BLUE;
 	sp.radius = 1;
+	ptr_sp = malloc(sizeof(t_sphere));
+	*ptr_sp = sp;
+	vector_add(objects, ptr_sp);
+
+	sp.t.pos = init_v3f(0, 0, 30);
+	sp.r.col = C_BLUE | C_RED;
+	sp.radius = 10;
 	ptr_sp = malloc(sizeof(t_sphere));
 	*ptr_sp = sp;
 	vector_add(objects, ptr_sp);
@@ -223,9 +235,7 @@ void	compute_ray(uint32_t x, uint32_t y, t_camera *cam, t_ray *ray)
 	camera_space.y = (1 - (2 * camera_space.y)) * view;
 	camera_space.z = -1;
 
-	// Camera-to-world transform matrix should be applied.
-	ray->origin = cam->t.pos;
-	ray->direction = v3f_norm(camera_space);
+	ray->direction = v3f_norm(camera_space); // This assumes the ray origin at (0, 0, 0)
 }
 
 void	render(mlx_image_t *img, t_col32 bg_col)
@@ -238,21 +248,27 @@ void	render(mlx_image_t *img, t_col32 bg_col)
 	t_camera	cam;
 	t_mat4x4	mat;
 
-	// https://stackoverflow.com/questions/18558910/direction-vector-to-rotation-matrix
 	cam = (t_camera){
 		.t = {
-			.pos = {.x = 0, .y = 0, .z = 0},
+			.pos = {.x = 0, .y = 0, .z = -10},
 			.dir = {.x = 0, .y = 0, .z = -1}
 		},
 		.fov = 70,
 		.img_plane = img,
-		.aspect_ratio = (float)img->width / (float)img->height
+		.aspect_ratio = img->width / (float)img->height
 	};
+
+	cam.t.dir = v3f_norm(cam.t.dir);
 	cam_to_world_mat(mat, cam.t.pos, cam.t.dir, init_v3f(0, 1, 0));
+	v3f_print(cam.t.dir);
+	mat4x4_print(mat);
+	mat4x4_rot_print(mat);
 
 	y = 0;
 	light.intensity = .75f;
 	light.pos = init_v3f(0, 30, 5);
+	ray.origin = mul_v3_m4x4(init_v3f(0, 0, 0), mat);
+	v3f_print(ray.origin);
 	create_objects(&objects);
 	while (y < img->height)
 	{
@@ -260,6 +276,9 @@ void	render(mlx_image_t *img, t_col32 bg_col)
 		while (x < img->width)
 		{
 			compute_ray(x, y, &cam, &ray);
+
+			ray.direction = v3f_norm(mul_dir_m4x4(ray.direction, mat));
+
 			mlx_put_pixel(img, x, y, trace(&ray, &objects, &light, bg_col, 0));
 			++x;
 		}

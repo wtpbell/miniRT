@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:51:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/15 00:00:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/15 15:08:13 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@
 float	ft_maxf(float a, float b);
 float	ft_signf(float a);
 void	ft_swapf(float *a, float *b);
+float	ft_absf(float *a);
 
 #endif
