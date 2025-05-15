@@ -28,7 +28,7 @@ bool	split_and_validate(const char *str, char ***out_tokens,
 {
 	*out_tokens = ft_split(str, ',');
 	if (!*out_tokens)
-		return (perror("Split failed"), false);
+		return (perror("split_and_validate"), false);
 	if (token_count(*out_tokens) != expected_count)
 	{
 		print_error(ERR_TOKEN_COUNT, ctx, str);

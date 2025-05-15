@@ -27,17 +27,16 @@ static bool	parse_ambient_light(char **tokens, t_scene *scene)
 
 	if (scene->scene_flags & SCENE_AMBIENT)
 		return (print_error(ERR_DUPLICATE, "ambient light", tokens[0]), false);
-	scene->scene_flags |= SCENE_AMBIENT;
-	ambient_light = malloc(sizeof(t_light));
+	ambient_light = ft_calloc(1, sizeof(t_light));
 	if (!ambient_light)
-		return (perror("Ambient light allocation failed"), false);
+		return (perror("parse_ambient_light"), false);
 	if (!parse_light_ratio(&ambient_light->intensity, tokens[1])
 		|| !parse_col(&ambient_light->col, tokens[2]))
 		return (free(ambient_light), false);
 	ambient_light->type = LIGHT_AMBIENT;
-	ambient_light->pos = (t_v3f){{0, 0, 0}};
 	if (!vector_add(&scene->lights, ambient_light))
 		return (free(ambient_light), false);
+	scene->scene_flags |= SCENE_AMBIENT;
 	return (true);
 }
 
@@ -47,34 +46,22 @@ static bool	parse_point_light(char **tokens, t_scene *scene)
 
 	if (scene->scene_flags & SCENE_POINT_LIGHT)
 		return (print_error(ERR_DUPLICATE, "point light", tokens[0]), false);
-	scene->scene_flags |= SCENE_POINT_LIGHT;
-	point_light = malloc(sizeof(t_light));
+	point_light = ft_calloc(1, sizeof(t_light));
 	if (!point_light)
-		return (perror("Point light allocation failed"), false);
+		return (perror("parse_point_light"), false);
 	if (!parse_v3f(&point_light->pos, tokens[1])
 		|| !parse_light_ratio(&point_light->intensity, tokens[2])
 		|| !parse_col(&point_light->col, tokens[3]))
 		return (free(point_light), false);
 	point_light->type = LIGHT_POINT;
-	point_light->pos = (t_v3f){{0, 0, 0}};
 	if (!vector_add(&scene->lights, point_light))
 		return (free(point_light), false);
+	scene->scene_flags |= SCENE_POINT_LIGHT;
 	return (true);
 }
 
 bool	parse_light(char **tokens, t_scene *scene)
 {
-	if (ft_strcmp(tokens[0], "A") == 0)
-	{
-		if (!parse_ambient_light(tokens, scene))
-			return (false);
-	}
-	else if (ft_strcmp(tokens[0], "L") == 0)
-	{
-		if (!parse_point_light(tokens, scene))
-			return (false);
-	}
-	else
-		return (false);
-	return (true);
+	return ((ft_strcmp(*tokens, "A") == 0 && parse_ambient_light(tokens, scene))
+		|| (ft_strcmp(*tokens, "L") == 0 && parse_point_light(tokens, scene)));
 }

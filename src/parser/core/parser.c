@@ -6,15 +6,15 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 17:19:08 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 18:03:06 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static bool	get_type_and_validate(char *processed, char **out_type)
+static bool	get_type_and_validate(char *processed, char *out_type)
 {
-	if (!validate_tokens(*out_type, processed))
+	if (!validate_tokens(out_type, processed))
 		return (false);
 	return (true);
 }
@@ -22,7 +22,6 @@ static bool	get_type_and_validate(char *processed, char **out_type)
 bool	parse_line(t_scene *scene, char *line)
 {
 	char	**tokens;
-	char	*type;
 	bool	result;
 
 	while (*line && ft_strchr(" \f\n\r\t\v", *line))
@@ -34,11 +33,10 @@ bool	parse_line(t_scene *scene, char *line)
 		return (false);
 	tokens = ft_split(line, ' ');
 	if (!tokens)
-		return (perror("Split failed"), false);
-	type = tokens[0];
-	if (!get_type_and_validate(line, &type))
+		return (perror("parse_line"), false);
+	if (!get_type_and_validate(line, *tokens))
 		return (free_tokens(tokens), false);
-	result = parse_scene_element(type, tokens, scene);
+	result = parse_scene_element(*tokens, tokens, scene);
 	free_tokens(tokens);
 	return (result);
 }

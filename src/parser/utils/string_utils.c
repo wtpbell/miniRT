@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 17:23:59 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 17:38:38 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ void	clean_spaces(char *str)
 	{
 		if (ft_strchr(" \f\n\r\t\v", str[i]))
 		{
-			while (str[i + 1] && (str[i + 1] == ' ' || str[i + 1] == '\t'
-					|| str[i + 1] == '\n' || str[i + 1] == '\r'))
+			while (str[i + 1] && ft_strchr(" \f\n\r\t\v", str[i + 1]))
 				i++;
 			if (!prev_space && str[i + 1] && str[i + 1] != ',')
 				str[pos++] = ' ';

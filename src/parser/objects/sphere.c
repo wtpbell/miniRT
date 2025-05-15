@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 16:49:46 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 17:45:22 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,12 @@ static t_sphere	*create_sphere(t_v3f pos, float diameter, t_col32 color)
 {
 	t_sphere	*sphere;
 
-	sphere = malloc(sizeof(t_sphere));
+	sphere = ft_calloc(1, sizeof(t_sphere));
 	if (!sphere)
 		return (NULL);
 	sphere->t.pos = pos;
 	sphere->radius = diameter / 2.0f;
 	sphere->r.col = color;
-	sphere->t.dir = (t_v3f){{0, 0, 0}};
 	return (sphere);
 }
 

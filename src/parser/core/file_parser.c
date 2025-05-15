@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:34:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 14:27:41 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 18:08:28 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ bool	parse_map(t_scene *scene, const char *file)
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 	{
-		perror("Open file failed");
+		perror("parse_map");
 		cleanup_scene(scene);
 		return (false);
 	}

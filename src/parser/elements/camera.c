@@ -38,6 +38,7 @@ bool	parse_camera(char **tokens, t_scene *scene)
 	if (!parse_v3f(&pos, tokens[1]) || !parse_dir(&dir, tokens[2])
 		|| !parse_fov(&fov, tokens[3]))
 		return (false);
+	ft_bzero(&scene->camera, sizeof(t_camera));
 	scene->camera.t.pos = pos;
 	scene->camera.t.dir = dir;
 	scene->camera.fov = fov;

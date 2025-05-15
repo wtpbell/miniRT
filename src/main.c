@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:21:05 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/15 16:13:54 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 18:08:21 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	init_scene_and_vector(t_scene *scene)
 	ft_bzero(scene, sizeof(t_scene));
 	if (!vector_init(&scene->objects, 8) || !vector_init(&scene->lights, 8))
 	{
-		perror("Vector initialization failed");
+		perror("init_scene_and_vector");
 		cleanup_scene(scene);
 		return ;
 	}
