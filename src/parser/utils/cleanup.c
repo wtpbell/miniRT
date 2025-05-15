@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cleanup.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:44:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/14 19:29:43 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   cleanup.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:44:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/05/15 10:39:15 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ void	del_objects(void *obj)
 	free(object);
 }
 
-// void	del_lights(void *light)
-// {
-// 	if (!light)
-// 		return ;
-// 	free(light);
-// }
+void	del_lights(void *light)
+{
+	if (!light)
+		return ;
+	free(light);
+}
 
 void	free_tokens(char **tokens)
 {
@@ -54,9 +54,5 @@ void	cleanup_gnl(char *line, int fd)
 void	cleanup_scene(t_scene *scene)
 {
 	vector_free(&scene->objects, del_objects);
-	if (scene->lights)
-	{
-		free(scene->lights);
-		
-	}
+	vector_free(&scene->lights, del_lights);
 }

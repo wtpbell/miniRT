@@ -39,7 +39,7 @@ bool	parse_camera(char **tokens, t_scene *scene)
 	t_v3f		dir;
 	float		fov;
 
-	if (scene->camera_set)
+	if (scene->scene_flags & SCENE_POINT_LIGHT)
 	{
 		print_error(ERR_DUPLICATE, "Camera", "Multiple cameras not allowed");
 		return (false);
@@ -52,7 +52,6 @@ bool	parse_camera(char **tokens, t_scene *scene)
 		return (perror("Camera allocation failed"), false);
 	create_camera(camera, pos, dir, fov);
 	scene->camera = *camera;
-	scene->camera_set = true;
 	free(camera);
 	return (true);
 }

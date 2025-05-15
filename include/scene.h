@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   scene.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 18:55:45 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/14 17:43:38 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   scene.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/15 11:33:11 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "color.h"
 # include "libft.h"
 # include "get_next_line.h"
+# include "container.h"
 
 typedef enum e_light_type
 {
@@ -25,11 +26,21 @@ typedef enum e_light_type
 	// LIGHT_SPOT,
 }	t_light_type;
 
+typedef enum e_scene_flags
+{
+	SCENE_NONE = 0,
+	SCENE_AMBIENT = 1 << 0,
+	SCENE_POINT_LIGHT = 1 << 1,
+	SCENE_CAMERA = 2 << 2
+}	t_scene_flags;
+
+
 typedef struct s_object
 {
 	void	*obj;
 	void	(*ray_intersect)(void *obj, void *ctx);
 }	t_object;
+
 
 typedef struct s_transform
 {
@@ -80,11 +91,14 @@ typedef struct s_light
 	t_col32			col;
 	t_light_type	type;
 	float			intensity;
-	union {
-		struct {
-			float	ratio;
-		} ambient;
-	} details;
 }	t_light;
+
+typedef struct s_scene
+{
+	t_vector		objects;
+	t_vector		lights;
+	t_camera		camera;
+	int				scene_flags;
+} t_scene;
 
 #endif

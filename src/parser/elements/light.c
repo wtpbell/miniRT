@@ -14,44 +14,47 @@
 
 static bool	parse_ambient_light(char **tokens, t_scene *scene)
 {
-	if (!scene->lights)
-	{
-		scene->lights = malloc(sizeof(t_light));
-		if (!scene->lights)
-			return (perror("Ambient light allocation failed"), false);
-	}
-	if (!parse_light_ratio(&scene->lights->intensity, tokens[1])
-					|| !parse_col(&scene->lights->col, tokens[2]))
-		return (false);
-	scene->lights->type = LIGHT_AMBIENT;
-	scene->lights->pos = (t_v3f){{0, 0, 0}};
-	scene->ambient_light_set = true;
+	t_light	*ambient_light;
+
+	if (scene->scene_flags & SCENE_AMBIENT)
+		return (print_error(ERR_DUPLICATE, "ambient light", tokens[0]), false);
+	scene->scene_flags |= SCENE_AMBIENT;
+	ambient_light = malloc(sizeof(t_light));
+	if (!ambient_light)
+		return (perror("Ambient light allocation failed"), false);
+	if (!parse_light_ratio(&ambient_light->intensity, tokens[1])
+					|| !parse_col(&ambient_light->col, tokens[2]))
+		return (free(ambient_light), false);
+	ambient_light->type = LIGHT_AMBIENT;
+	ambient_light->pos = (t_v3f){{0, 0, 0}};
+	if (!vector_add(&scene->lights, ambient_light))
+		return (free(ambient_light), false);
 	return (true);
 }
 
 static bool	parse_point_light(char **tokens, t_scene *scene)
 {
-	if (!scene->lights)
-	{
-		scene->lights = malloc(sizeof(t_light));
-		if (!scene->lights)
-			return (perror("Point light allocation failed"), false);
-	}
-	if (!parse_v3f(&scene->lights->pos, tokens[1])
-		|| !parse_light_ratio(&scene->lights->intensity, tokens[2])
-		|| !parse_col(&scene->lights->col, tokens[3]))
-		return (false);
-	scene->lights->type = LIGHT_POINT;
-	scene->light_set = true;
+	t_light	*point_light;
+
+	if (scene->scene_flags & SCENE_POINT_LIGHT)
+		return (print_error(ERR_DUPLICATE, "point light", tokens[0]), false);
+	scene->scene_flags |= SCENE_POINT_LIGHT;
+	point_light = malloc(sizeof(t_light));
+	if (!point_light)
+		return (perror("Point light allocation failed"), false);
+	if (!parse_v3f(&point_light->pos, tokens[1])
+		|| !parse_light_ratio(&point_light->intensity, tokens[2])
+		|| !parse_col(&point_light->col, tokens[3]))
+		return (free(point_light), false);
+	point_light->type = LIGHT_POINT;
+	point_light->pos = (t_v3f){{0, 0, 0}};
+	if (!vector_add(&scene->lights, point_light))
+	return (free(point_light), false);
 	return (true);
 }
 
 bool	parse_light(char **tokens, t_scene *scene)
 {
-	if (scene->ambient_light_set && ft_strcmp(tokens[0], "A") == 0)
-		return (print_error(ERR_DUPLICATE, "ambient light", tokens[0]), false);
-	if (scene->light_set && ft_strcmp(tokens[0], "L") == 0)
-		return (print_error(ERR_DUPLICATE, "point light", tokens[0]), false);
 	if (ft_strcmp(tokens[0], "A") == 0)
 	{
 		if (!parse_ambient_light(tokens, scene))

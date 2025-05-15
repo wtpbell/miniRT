@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 10:20:26 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 11:56:16 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,12 @@
 # define MAX_LIGHT_RATIO	1.0f
 # define MIN_LIGHT_RATIO	0.0f
 
-
 # define RED 			"\033[31m"
 # define GREEN 			"\033[32m"
 # define YELLOW 		"\033[33m"
 # define BLUE 			"\033[34m"
 # define RESET 			"\033[0m"
 
-typedef struct s_scene	t_scene;
 typedef bool			(*t_parser)(char **, t_scene *);
 
 typedef enum e_error
@@ -63,18 +61,10 @@ typedef enum e_error
 	ERR_POSITIVE_VALUE,
 	ERR_PARSE_FAIL,
 	ERR_INF,
+	ERR_MISSING_COMPONENT,
 	ERR_COUNT
 }	t_error;
 
-typedef struct s_scene
-{
-	t_vector	objects;
-	t_light		*lights;
-	t_camera	camera;
-	bool		ambient_light_set;
-	bool		camera_set;
-	bool		light_set;
-}	t_scene;
 
 // Token utilities
 bool		validate_tokens(const char *first_token, const char *line);
@@ -108,7 +98,6 @@ bool		parse_cylinder(char **tokens, t_scene *scene);
 
 /* ---------------------Utils--------------------- */
 // string_utils.c
-char		*trim_whitespace(const char *str);
 void		clean_spaces(char *str);
 size_t		token_count_in_str(const char *str);
 
@@ -129,6 +118,8 @@ bool		ft_stoi(const char *s, int *i);
 
 // validate_utils.c
 bool		validate_and_norm_dir(t_v3f *dir, const char *str);
+bool		v3f_dir_valid(t_v3f *dir);
+bool		validate_scene(const t_scene *scene);
 
 // error.c
 void		print_error(t_error type, const char *ctx, const char *value);

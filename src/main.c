@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:21:05 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/15 10:18:48 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 10:45:14 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,12 @@ static bool	valid_input(int argc, char **argv)
 static void	init_scene_and_vector(t_scene *scene)
 {
 	ft_bzero(scene, sizeof(t_scene));
-	if (!vector_init(&scene->objects, 8))
+	if (!vector_init(&scene->objects, 8) || !vector_init(&scene->lights, 8))
 	{
 		perror("Vector initialization failed");
-		vector_free(&scene->objects, del_objects);
+		cleanup_scene(scene);
 		return ;
 	}
-	scene->lights = NULL;
-	scene->ambient_light_set = false;
-	scene->light_set = false;
 }
 
 int	main(int argc, char **argv)

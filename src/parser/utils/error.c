@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/13 17:33:33 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 11:55:19 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ static const char	*get_err_msg(t_error type)
 	[ERR_V3F] = "Error v3f parsing",
 	[ERR_POSITIVE_VALUE] = "Value must be positive",
 	[ERR_PARSE_FAIL] = "Map parsing failed",
-	[ERR_INF] = "Floating point is infinitive"
+	[ERR_INF] = "Floating point is infinitive",
+	[ERR_MISSING_COMPONENT] = "Component is missing"
 	};
 
 	if (type >= 0 && type < ERR_COUNT)
