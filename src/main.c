@@ -3,46 +3,63 @@
 /*                                                        ::::::::            */
 /*   main.c                                             :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:21:05 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/09 11:57:52 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/15 18:08:21 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include "parser.h"
 
-#include "libft.h"
-#include "container.h"
-
-void my_free(void *item)
+static bool	valid_file_format(const char *file)
 {
-	(void)item;
+	const size_t	len = ft_strlen(file);
+
+	if (len < 3)
+		return (false);
+	file += len - 3;
+	return (ft_strncmp(file, ".rt", 3) == 0);
 }
 
-int	main(void)
+static bool	valid_input(int argc, char **argv)
 {
-	t_vector	vec;
-
-	vector_init(&vec, 10);
-	vector_add(&vec, ft_strdup("Hello"));
-	vector_add(&vec, ft_strdup("BYE"));
-	vector_add(&vec, ft_strdup("Hello"));
-
-	for (int i = 0; i < vec.size; ++i)
+	if (argc != 2)
 	{
-		printf("%s", (char *)vector_get(&vec, i));
+		print_error(ERR_NUM_ARGS, "input", NULL);
+		return (false);
 	}
-	printf("\n");
-	vector_rm(&vec, 1, free);
-
-	for (int i = 0; i < vec.size; ++i)
+	if (!valid_file_format(argv[1]))
 	{
-		printf("%s", (char *)vector_get(&vec, i));
+		print_error(ERR_FILE_FORMAT, "format", argv[1]);
+		return (false);
 	}
+	return (true);
+}
 
-	vector_free(&vec, free);
-	return (0);
+static void	init_scene_and_vector(t_scene *scene)
+{
+	ft_bzero(scene, sizeof(t_scene));
+	if (!vector_init(&scene->objects, 8) || !vector_init(&scene->lights, 8))
+	{
+		perror("init_scene_and_vector");
+		cleanup_scene(scene);
+		return ;
+	}
+}
+
+int	main(int argc, char **argv)
+{
+	t_scene	scene;
+
+	ft_bzero(&scene, sizeof(t_scene));
+	if (!valid_input(argc, argv))
+		return (EXIT_FAILURE);
+	init_scene_and_vector(&scene);
+	if (!parse_map(&scene, argv[1]))
+		print_error(ERR_PARSE_FAIL, "map", argv[1]);
+	else if (!validate_scene(&scene))
+		return (cleanup_scene(&scene), false);
+	cleanup_scene(&scene);
+	return (EXIT_SUCCESS);
 }

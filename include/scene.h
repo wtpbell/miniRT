@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   scene.h                                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/08 19:31:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/15 15:34:22 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,23 @@
 
 # include "vector.h"
 # include "color.h"
+# include "libft.h"
+# include "get_next_line.h"
+# include "container.h"
 
 typedef enum e_light_type
 {
 	LIGHT_AMBIENT,
-	LIGHT_SPOT,
+	LIGHT_POINT,
 }	t_light_type;
+
+typedef enum e_scene_flags
+{
+	SCENE_NONE = 0,
+	SCENE_AMBIENT = 1 << 0,
+	SCENE_POINT_LIGHT = 1 << 1,
+	SCENE_CAMERA = 2 << 2
+}	t_scene_flags;
 
 typedef struct s_object
 {
@@ -78,5 +89,13 @@ typedef struct s_light
 	t_light_type	type;
 	float			intensity;
 }	t_light;
+
+typedef struct s_scene
+{
+	t_vector		objects;
+	t_vector		lights;
+	t_camera		camera;
+	int				scene_flags;
+}	t_scene;
 
 #endif

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   math.h                                             :+:    :+:            */
+/*   rt_math.h                                          :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:51:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/08 19:50:13 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/13 17:50:14 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MATH_H
-# define MATH_H
+#ifndef RT_MATH_H
+# define RT_MATH_H
 
 # include <math.h>
 
