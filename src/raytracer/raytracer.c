@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/15 15:28:58 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/15 16:56:55 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ bool	intersect(t_sphere *sp, t_ray *ray, float *dst)
 			return (false);
 		t0 = t1;
 	}
-	*dst = v3f_mag(v3f_add(ray->origin, v3f_scale(ray->direction, t0)));
+	*dst = t0;
 	return (true);
 }
 
@@ -124,7 +124,7 @@ void	cam_to_world_mat(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up)
 	mat[10] = dir.z;
 }
 
-bool	t = true;
+int	g_n = 10;
 
 t_col32	trace(t_ray *ray, t_vector *objects, t_light *light, t_col32 bg_col, uint32_t depth)
 {
@@ -157,7 +157,6 @@ t_col32	trace(t_ray *ray, t_vector *objects, t_light *light, t_col32 bg_col, uin
 	else
 	{
 		curr_hit.hit = v3f_add(ray->origin, v3f_scale(ray->direction, min_dist));
-
 		curr_hit.normal = v3f_norm(v3f_sub(curr_hit.hit, hit->t.pos));
 		curr_hit.normal = v3f_scale(v3f_add(curr_hit.normal, init_v3f(1, 1, 1)), 255>>1);
 
@@ -221,7 +220,6 @@ void	create_objects(t_vector *objects)
 	vector_add(objects, ptr_sp);
 }
 
-// TODO: Take the position and direction of the camera into account
 void	compute_ray(uint32_t x, uint32_t y, t_camera *cam, t_ray *ray)
 {
 	t_v3f	camera_space;
@@ -235,7 +233,7 @@ void	compute_ray(uint32_t x, uint32_t y, t_camera *cam, t_ray *ray)
 	camera_space.y = (1 - (2 * camera_space.y)) * view;
 	camera_space.z = -1;
 
-	ray->direction = v3f_norm(camera_space); // This assumes the ray origin at (0, 0, 0)
+	ray->direction = v3f_norm(camera_space);
 }
 
 void	render(mlx_image_t *img, t_col32 bg_col)
@@ -250,13 +248,15 @@ void	render(mlx_image_t *img, t_col32 bg_col)
 
 	cam = (t_camera){
 		.t = {
-			.pos = {.x = 0, .y = 0, .z = -10},
-			.dir = {.x = 0, .y = 0, .z = -1}
+			.pos = {.x = 3, .y = 2, .z = -10},
+			.dir = {.x = .35, .y = -.1, .z = -1}
 		},
-		.fov = 70,
+		.fov = 90,
 		.img_plane = img,
 		.aspect_ratio = img->width / (float)img->height
 	};
+
+	printf("aspect-ratio: %f\n", cam.aspect_ratio);
 
 	cam.t.dir = v3f_norm(cam.t.dir);
 	cam_to_world_mat(mat, cam.t.pos, cam.t.dir, init_v3f(0, 1, 0));
