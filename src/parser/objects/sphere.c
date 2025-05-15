@@ -1,16 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   sphere.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/14 18:43:06 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   sphere.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/05/15 16:49:46 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+
+bool	parse_diameter(float *out, const char *str)
+{
+	t_v2f	radius_range;
+
+	radius_range = init_v2f(MIN_RADIUS, MAX_RADIUS);
+	return (parse_and_validate_float(out, str, radius_range, "parse diameter"));
+}
 
 static t_sphere	*create_sphere(t_v3f pos, float diameter, t_col32 color)
 {

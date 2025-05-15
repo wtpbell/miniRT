@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 11:56:16 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 16:56:55 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ typedef enum e_error
 	ERR_COUNT
 }	t_error;
 
-
 // Token utilities
 bool		validate_tokens(const char *first_token, const char *line);
 char		*get_first_token(const char *str);
@@ -80,8 +79,8 @@ bool		parse_map(t_scene *scene, const char *file);
 
 // element_parser.c
 bool		parse_scene_element(const char *type,
-								char **tokens, t_scene *scene);
-	
+				char **tokens, t_scene *scene);
+
 /* ---------------------Elements--------------------- */
 // camera.c
 bool		parse_camera(char **tokens, t_scene *scene);
@@ -91,6 +90,7 @@ bool		parse_light(char **tokens, t_scene *scene);
 /* ---------------------Objects--------------------- */
 // sphere.c
 bool		parse_sphere(char **tokens, t_scene *scene);
+bool		parse_diameter(float *out, const char *str);
 // plane.c
 bool		parse_plane(char **tokens, t_scene *scene);
 // cylinder.c
@@ -104,9 +104,7 @@ size_t		token_count_in_str(const char *str);
 // vector_utils.c
 bool		parse_v3f(t_v3f *v3f, const char *str);
 bool		parse_col(t_col32 *col, const char *str);
-bool		parse_diameter(float *out,const char *str);
 bool		parse_dir(t_v3f *dir, const char *str);
-bool		parse_light_ratio(float *ratio, const char *str);
 
 // general_utils.c
 size_t		token_count(char **tokens);
@@ -117,9 +115,12 @@ bool		ft_stof(const char *s, float *f);
 bool		ft_stoi(const char *s, int *i);
 
 // validate_utils.c
-bool		validate_and_norm_dir(t_v3f *dir, const char *str);
-bool		v3f_dir_valid(t_v3f *dir);
 bool		validate_scene(const t_scene *scene);
+bool		validate_scene(const t_scene *scene);
+bool		split_and_validate(const char *str, char ***out_tokens,
+				size_t expected_count, const char *ctx);
+bool		parse_and_validate_float(float *out, const char *str,
+				t_v2f range, const char *token);
 
 // error.c
 void		print_error(t_error type, const char *ctx, const char *value);

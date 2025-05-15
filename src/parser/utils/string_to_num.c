@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:49:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/13 17:39:07 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 16:54:22 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ bool	ft_stof(const char *s, float *f)
 	if (!*s)
 		return (false);
 	if (!parse_number(s, f, &fact))
-		return (print_error(ERR_INVALID_VALUE, "stof", s), false);
+		return (false);
 	*f *= fact;
 	if (isinf(*f) || isnan(*f))
-		return (print_error(ERR_INF, "stof", s), false);
+		return (false);
 	return (true);
 }
 

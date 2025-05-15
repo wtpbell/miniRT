@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   file_parser.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:34:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/14 19:33:25 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   file_parser.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:34:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/05/15 14:27:41 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ bool	parse_map(t_scene *scene, const char *file)
 	}
 	result = parse_file_lines(scene, fd);
 	close(fd);
-	// if (!result)
-	// 	cleanup_scene(scene);
+	if (!result)
+		cleanup_scene(scene);
 	return (result);
 }

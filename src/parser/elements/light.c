@@ -12,6 +12,15 @@
 
 #include "parser.h"
 
+static bool	parse_light_ratio(float *ratio, const char *str)
+{
+	t_v2f	light_ratio_range;
+
+	light_ratio_range = init_v2f(MIN_LIGHT_RATIO, MAX_LIGHT_RATIO);
+	return (parse_and_validate_float(ratio, str, light_ratio_range,
+			"parse light ratio"));
+}
+
 static bool	parse_ambient_light(char **tokens, t_scene *scene)
 {
 	t_light	*ambient_light;
@@ -23,7 +32,7 @@ static bool	parse_ambient_light(char **tokens, t_scene *scene)
 	if (!ambient_light)
 		return (perror("Ambient light allocation failed"), false);
 	if (!parse_light_ratio(&ambient_light->intensity, tokens[1])
-					|| !parse_col(&ambient_light->col, tokens[2]))
+		|| !parse_col(&ambient_light->col, tokens[2]))
 		return (free(ambient_light), false);
 	ambient_light->type = LIGHT_AMBIENT;
 	ambient_light->pos = (t_v3f){{0, 0, 0}};
@@ -49,7 +58,7 @@ static bool	parse_point_light(char **tokens, t_scene *scene)
 	point_light->type = LIGHT_POINT;
 	point_light->pos = (t_v3f){{0, 0, 0}};
 	if (!vector_add(&scene->lights, point_light))
-	return (free(point_light), false);
+		return (free(point_light), false);
 	return (true);
 }
 

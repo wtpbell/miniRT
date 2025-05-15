@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:21:05 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/15 10:45:14 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 16:13:54 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,12 @@ int	main(int argc, char **argv)
 
 	ft_bzero(&scene, sizeof(t_scene));
 	if (!valid_input(argc, argv))
-	{
-		ft_putstr_fd("Error\n", STDERR_FILENO);
-		exit(EXIT_FAILURE);
-	}
+		return (EXIT_FAILURE);
 	init_scene_and_vector(&scene);
 	if (!parse_map(&scene, argv[1]))
 		print_error(ERR_PARSE_FAIL, "map", argv[1]);
+	else if (!validate_scene(&scene))
+		return (cleanup_scene(&scene), false);
 	cleanup_scene(&scene);
-	exit(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }

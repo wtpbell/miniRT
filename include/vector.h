@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   vector.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 18:40:12 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/14 13:45:15 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   vector.h                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/15 16:27:53 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,5 @@ t_v3f	v3f_norm(t_v3f v);
 float	v3f_dot(t_v3f a, t_v3f b);
 float	v3f_mag(t_v3f v);
 float	v3f_sqr_mag(t_v3f v);
-bool	v3f_dir_valid(t_v3f *dir);
 
 #endif

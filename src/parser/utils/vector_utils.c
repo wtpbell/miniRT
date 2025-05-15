@@ -6,47 +6,58 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 12:03:31 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 16:56:40 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-bool	parse_diameter(float *out, const char *str)
+bool	parse_floats(const char **tokens, float *out,
+					size_t count, const char *ctx)
 {
-	float	value;
+	size_t	i;
 
-	if (!ft_stof(str, &value))
+	i = 0;
+	while (i < count)
 	{
-		print_error(ERR_STOF, "parse diameter", str);
-		return (false);
+		if (!ft_stof(tokens[i], &out[i]))
+		{
+			print_error(ERR_STOF, ctx, tokens[i]);
+			return (false);
+		}
+		i++;
 	}
-	if (value < MIN_RADIUS || value > MAX_RADIUS)
+	return (true);
+}
+
+bool	parse_ints(const char **tokens, int *out,
+					size_t count, const char *ctx)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < count)
 	{
-		print_error(ERR_RANGE, "parse diameter", str);
-		return (false);
+		if (!ft_stoi(tokens[i], &out[i]))
+		{
+			print_error(ERR_STOI, ctx, tokens[i]);
+			return (false);
+		}
+		i++;
 	}
-	*out = value;
 	return (true);
 }
 
 bool	parse_v3f(t_v3f *v3f, const char *str)
 {
 	char	**tokens;
+	float	values[3];
 
-	tokens = ft_split(str, ',');
-	if (!tokens)
-		return (perror("Parse_v3f memory failed"), false);
-	if (token_count(tokens) != 3)
-	{
-		print_error(ERR_V3F, "parse v3f", *tokens);
-		free_tokens(tokens);
+	if (!split_and_validate(str, &tokens, 3, "V3F"))
 		return (false);
-	}
-	ft_bzero(v3f, sizeof(t_v3f));
-	if (!ft_stof(tokens[0], &v3f->x) || !ft_stof(tokens[1], &v3f->y)
-		|| !ft_stof(tokens[2], &v3f->z))
+	if (!parse_floats((const char **)tokens, values, 3, "parse v3f"))
 		return (free_tokens(tokens), false);
+	*v3f = (t_v3f){{values[0], values[1], values[2]}};
 	free_tokens(tokens);
 	return (true);
 }
@@ -57,20 +68,18 @@ bool	parse_col(t_col32 *col, const char *str)
 	int		rgb[3];
 	int		i;
 
-	tokens = ft_split(str, ',');
-	if (!tokens)
-		return (false);
-	if (token_count(tokens) != 3)
-		return (free_tokens(tokens), false);
 	i = 0;
+	if (!split_and_validate(str, &tokens, 3, "parse color"))
+		return (false);
+	if (!parse_ints((const char **)tokens, rgb, 3, "parse color"))
+		return (free_tokens(tokens), false);
 	while (i < 3)
 	{
-		if (!ft_stoi(tokens[i], &rgb[i]))
-			return (print_error(ERR_STOI, "parse color", tokens[i]),
-				free_tokens(tokens), false);
 		if (rgb[i] < MIN_COLOR || rgb[i] > MAX_COLOR)
-			return (print_error(ERR_RANGE, "color range 0-255", tokens[i]),
-				free_tokens(tokens), false);
+		{
+			print_error(ERR_RANGE, "color 0-255", tokens[i]);
+			return (free_tokens(tokens), false);
+		}
 		i++;
 	}
 	*col = init_col32(rgb[0], rgb[1], rgb[2], 0xFF);
@@ -81,32 +90,13 @@ bool	parse_col(t_col32 *col, const char *str)
 bool	parse_dir(t_v3f *dir, const char *str)
 {
 	char	**tokens;
+	float	values[3];
 
-	tokens = ft_split(str, ',');
-	if (!tokens)
-		return (perror("Parse_dir memory failed"), false);
-	if (token_count(tokens) != 3)
-	{
-		print_error(ERR_V3F, "parse dir", *tokens);
-		free_tokens(tokens);
+	if (!split_and_validate(str, &tokens, 3, "parse dir"))
 		return (false);
-	}
-	ft_bzero(dir, sizeof(t_v3f));
-	if (!ft_stof(tokens[0], &dir->x) || !ft_stof(tokens[1], &dir->y)
-		|| !ft_stof(tokens[2], &dir->z) || !validate_and_norm_dir(dir, str))
+	if (!parse_floats((const char **)tokens, values, 3, "parse dir"))
 		return (free_tokens(tokens), false);
+	*dir = v3f_norm((t_v3f){{values[0], values[1], values[2]}});
 	free_tokens(tokens);
-	return (true);
-}
-
-bool	parse_light_ratio(float *ratio, const char *str)
-{
-	float	value;
-
-	if (!ft_stof(str, &value))
-		return (print_error(ERR_STOF, "parse light ratio", str), false);
-	if (value < MIN_LIGHT_RATIO || value > MAX_LIGHT_RATIO)
-		return (print_error(ERR_RANGE, "light ratio range 0-1", str), false);
-	*ratio = value;
 	return (true);
 }

@@ -12,14 +12,6 @@
 
 #include "parser.h"
 
-static t_camera	*create_camera(t_camera *camera, t_v3f pos, t_v3f dir, float fov)
-{
-	camera->t.pos = pos;
-	camera->t.dir = dir;
-	camera->fov = fov;
-	return (camera);
-}
-
 static bool	parse_fov(float *fov, const char *str)
 {
 	if (!ft_stof(str, fov))
@@ -34,24 +26,21 @@ static bool	parse_fov(float *fov, const char *str)
 
 bool	parse_camera(char **tokens, t_scene *scene)
 {
-	t_camera	*camera;
 	t_v3f		pos;
 	t_v3f		dir;
 	float		fov;
 
-	if (scene->scene_flags & SCENE_POINT_LIGHT)
+	if (scene->scene_flags & SCENE_CAMERA)
 	{
 		print_error(ERR_DUPLICATE, "Camera", "Multiple cameras not allowed");
 		return (false);
 	}
-	if (!parse_v3f(&pos, tokens[1]) || !parse_dir(&dir, tokens[2]) 
-	|| !parse_fov(&fov, tokens[3]))
+	if (!parse_v3f(&pos, tokens[1]) || !parse_dir(&dir, tokens[2])
+		|| !parse_fov(&fov, tokens[3]))
 		return (false);
-	camera = malloc(sizeof(t_camera));
-	if (!camera)
-		return (perror("Camera allocation failed"), false);
-	create_camera(camera, pos, dir, fov);
-	scene->camera = *camera;
-	free(camera);
+	scene->camera.t.pos = pos;
+	scene->camera.t.dir = dir;
+	scene->camera.fov = fov;
+	scene->scene_flags |= SCENE_CAMERA;
 	return (true);
 }

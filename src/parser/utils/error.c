@@ -6,11 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 11:55:19 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 16:13:13 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#define STDERR STDERR_FILENO
 
 static const char	*get_err_msg(t_error type)
 {
@@ -43,26 +44,26 @@ static const char	*get_err_msg(t_error type)
 
 void	print_error(t_error type, const char *ctx, const char *value)
 {
-	ft_putstr_fd(RED, 2);
-	ft_putstr_fd("Error: ", 2);
-	ft_putstr_fd(RESET, 2);
+	ft_putstr_fd(RED, STDERR);
+	ft_putstr_fd("Error: ", STDERR);
+	ft_putstr_fd(RESET, STDERR);
 	if (ctx)
 	{
-		ft_putstr_fd(GREEN, 2);
-		ft_putstr_fd("[", 2);
-		ft_putstr_fd((char *)ctx, 2);
-		ft_putstr_fd("] ", 2);
-		ft_putstr_fd(RESET, 2);
+		ft_putstr_fd(GREEN, STDERR);
+		ft_putstr_fd("[", STDERR);
+		ft_putstr_fd((char *)ctx, STDERR);
+		ft_putstr_fd("] ", STDERR);
+		ft_putstr_fd(RESET, STDERR);
 	}
-	ft_putstr_fd(RED, 2);
-	ft_putstr_fd((char *)get_err_msg(type), 2);
+	ft_putstr_fd(RED, STDERR);
+	ft_putstr_fd((char *)get_err_msg(type), STDERR);
 	if (value)
 	{
-		ft_putstr_fd(": ", 2);
-		ft_putstr_fd((char *)value, 2);
+		ft_putstr_fd(": ", STDERR);
+		ft_putstr_fd((char *)value, STDERR);
 	}
-	ft_putstr_fd("\n", 2);
-	ft_putstr_fd(RESET, 2);
+	ft_putstr_fd("\n", STDERR);
+	ft_putstr_fd(RESET, STDERR);
 }
 
 void	exit_err(t_error type, const char *ctx, const char *value)

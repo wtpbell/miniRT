@@ -12,29 +12,44 @@
 
 #include "parser.h"
 
-bool	validate_and_norm_dir(t_v3f *dir, const char *str)
+bool	validate_scene(const t_scene *scene)
 {
-	if (!v3f_dir_valid(dir))
-	{
-		print_error(ERR_RANGE, "direction range -1.0f - 1.0f", str);
-		return (false);
-	}
-	*dir = v3f_norm(*dir);
+	if (!(scene->scene_flags & SCENE_CAMERA))
+		return (print_error(ERR_MISSING_COMPONENT,
+				"Missing camera (C)", NULL), false);
+	if (!(scene->scene_flags & SCENE_POINT_LIGHT))
+		return (print_error(ERR_MISSING_COMPONENT,
+				"Missing point light (L)", NULL), false);
 	return (true);
 }
 
-bool	v3f_dir_valid(t_v3f *dir)
+bool	split_and_validate(const char *str, char ***out_tokens,
+	size_t expected_count, const char *ctx)
 {
-	return (dir->x >= -1.0f && dir->x <= 1.0f
-		&& dir->y >= -1.0f && dir->y <= 1.0f
-		&& dir->z >= -1.0f && dir->z <= 1.0f);
+	*out_tokens = ft_split(str, ',');
+	if (!*out_tokens)
+		return (perror("Split failed"), false);
+	if (token_count(*out_tokens) != expected_count)
+	{
+		print_error(ERR_TOKEN_COUNT, ctx, str);
+		free_tokens(*out_tokens);
+		return (false);
+	}
+	return (true);
 }
 
-bool	validate_scene(const t_scene *scene)
+bool	parse_and_validate_float(float *out, const char *str,
+	t_v2f range, const char *token)
 {
-	if (!(scene->scene_flags & SCENE_AMBIENT))
-		return (print_error(ERR_MISSING_COMPONENT, "Missing ambient light (A)", NULL), false);
-	if (!(scene->scene_flags & SCENE_POINT_LIGHT))
-		return (print_error(ERR_MISSING_COMPONENT, "Missing point light (L)", NULL), false);
+	if (!ft_stof(str, out))
+	{
+		print_error(ERR_STOF, token, str);
+		return (false);
+	}
+	if (*out < range.x || *out > range.y)
+	{
+		print_error(ERR_RANGE, token, str);
+		return (false);
+	}
 	return (true);
 }

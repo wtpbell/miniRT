@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/15 11:33:11 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 15:34:22 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ typedef enum e_light_type
 {
 	LIGHT_AMBIENT,
 	LIGHT_POINT,
-	// LIGHT_SPOT,
 }	t_light_type;
 
 typedef enum e_scene_flags
@@ -34,13 +33,11 @@ typedef enum e_scene_flags
 	SCENE_CAMERA = 2 << 2
 }	t_scene_flags;
 
-
 typedef struct s_object
 {
 	void	*obj;
 	void	(*ray_intersect)(void *obj, void *ctx);
 }	t_object;
-
 
 typedef struct s_transform
 {
@@ -99,6 +96,6 @@ typedef struct s_scene
 	t_vector		lights;
 	t_camera		camera;
 	int				scene_flags;
-} t_scene;
+}	t_scene;
 
 #endif
