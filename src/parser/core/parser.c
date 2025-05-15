@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 14:25:33 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 17:19:08 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ bool	parse_line(t_scene *scene, char *line)
 	if (*line == '\0' || *line == '#')
 		return (true);
 	clean_spaces(line);
+	if (!validate_commas(line))
+		return (false);
 	tokens = ft_split(line, ' ');
 	if (!tokens)
 		return (perror("Split failed"), false);

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 16:13:13 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 17:23:16 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ static const char	*get_err_msg(t_error type)
 	[ERR_V3F] = "Error v3f parsing",
 	[ERR_POSITIVE_VALUE] = "Value must be positive",
 	[ERR_PARSE_FAIL] = "Map parsing failed",
-	[ERR_INF] = "Floating point is infinitive",
-	[ERR_MISSING_COMPONENT] = "Component is missing"
+	[ERR_MISSING_COMPONENT] = "Component is missing",
+	[ERR_FORMAT] = "Repeated comma between numbers"
 	};
 
 	if (type >= 0 && type < ERR_COUNT)

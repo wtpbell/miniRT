@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 10:22:01 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 17:23:59 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,26 @@ size_t	token_count_in_str(const char *str)
 		str++;
 	}
 	return (count);
+}
+
+bool	validate_commas(const char *str)
+{
+	bool	prev_comma;
+	int		i;
+
+	prev_comma = false;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == ',')
+		{
+			if (prev_comma)
+				return (print_error(ERR_FORMAT, "repeated comma", str), false);
+			prev_comma = true;
+		}
+		else if (!ft_strchr(" \f\n\r\t\v", str[i]))
+			prev_comma = false;
+		i++;
+	}
+	return (true);
 }

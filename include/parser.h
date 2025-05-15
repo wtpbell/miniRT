@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 16:56:55 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 17:21:11 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef enum e_error
 	ERR_PARSE_FAIL,
 	ERR_INF,
 	ERR_MISSING_COMPONENT,
+	ERR_FORMAT,
 	ERR_COUNT
 }	t_error;
 
@@ -100,6 +101,7 @@ bool		parse_cylinder(char **tokens, t_scene *scene);
 // string_utils.c
 void		clean_spaces(char *str);
 size_t		token_count_in_str(const char *str);
+bool		validate_commas(const char *str);
 
 // vector_utils.c
 bool		parse_v3f(t_v3f *v3f, const char *str);
