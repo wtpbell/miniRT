@@ -6,16 +6,11 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 09:51:38 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/15 10:22:01 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-static inline int	is_whitespace(char c)
-{
-	return (c == ' ' || c == '\t' || c == '\n' || c == '\r');
-}
 
 void	clean_spaces(char *str)
 {
@@ -28,7 +23,7 @@ void	clean_spaces(char *str)
 	prev_space = true;
 	while (str[i])
 	{
-		if (is_whitespace(str[i]))
+		if (ft_strchr(" \f\n\r\t\v", str[i]))
 		{
 			while (str[i + 1] && (str[i + 1] == ' ' || str[i + 1] == '\t'
 					|| str[i + 1] == '\n' || str[i + 1] == '\r'))
@@ -57,7 +52,7 @@ size_t	token_count_in_str(const char *str)
 	in_token = false;
 	while (*str)
 	{
-		if (is_whitespace(*str))
+		if (ft_strchr(" \f\n\r\t\v", *str))
 			in_token = false;
 		else if (!in_token)
 		{

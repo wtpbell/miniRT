@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:55:45 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/14 10:01:40 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/14 17:43:38 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@
 typedef enum e_light_type
 {
 	LIGHT_AMBIENT,
-	LIGHT_SPOT,
+	LIGHT_POINT,
+	// LIGHT_SPOT,
 }	t_light_type;
 
 typedef struct s_object
@@ -79,6 +80,11 @@ typedef struct s_light
 	t_col32			col;
 	t_light_type	type;
 	float			intensity;
+	union {
+		struct {
+			float	ratio;
+		} ambient;
+	} details;
 }	t_light;
 
 #endif

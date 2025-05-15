@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 16:34:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/14 10:44:26 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/14 19:33:25 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,6 @@ bool	parse_map(t_scene *scene, const char *file)
 	int		fd;
 	bool	result;
 
-	if (!vector_init(&scene->objects, 8) || !vector_init(&scene->lights, 8))
-	{
-		cleanup_scene(scene);
-		perror("vector init failed");
-		return (false);
-	}
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 	{
@@ -48,7 +42,7 @@ bool	parse_map(t_scene *scene, const char *file)
 	}
 	result = parse_file_lines(scene, fd);
 	close(fd);
-	if (!result)
-		cleanup_scene(scene);
+	// if (!result)
+	// 	cleanup_scene(scene);
 	return (result);
 }

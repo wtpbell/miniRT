@@ -6,39 +6,13 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/14 10:43:10 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/14 19:21:10 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static size_t	token_count(char **tokens)
-{
-	size_t	count;
-
-	if (!tokens)
-		return (0);
-	count = 0;
-	while (tokens[count])
-		count++;
-	return (count);
-}
-
-size_t	count_vector_components(const char *str)
-{
-	size_t	count;
-
-	count = 1;
-	while (*str)
-	{
-		if (*str != ',')
-			++count;
-		++str;
-	}
-	return (count);
-}
-
-bool	parse_diameter(const char *str, float *out)
+bool	parse_diameter(float *out, const char *str)
 {
 	float	value;
 
@@ -59,28 +33,22 @@ bool	parse_diameter(const char *str, float *out)
 bool	parse_v3f(t_v3f *v3f, const char *str)
 {
 	char	**tokens;
-	bool	result;
 
 	tokens = ft_split(str, ',');
 	if (!tokens)
 		return (perror("Parse_v3f memory failed"), false);
-	result = true;
-	if (token_count(tokens) == 3)
-	{
-		ft_bzero(v3f, sizeof(t_v3f));
-		result = (
-				ft_stof(tokens[0], &v3f->x)
-				&& ft_stof(tokens[1], &v3f->y)
-				&& ft_stof(tokens[2], &v3f->z)
-				);
-	}
-	else
+	if (token_count(tokens) != 3)
 	{
 		print_error(ERR_V3F, "parse v3f", *tokens);
-		result = false;
+		free_tokens(tokens);
+		return (false);
 	}
+	ft_bzero(v3f, sizeof(t_v3f));
+	if (!ft_stof(tokens[0], &v3f->x) || !ft_stof(tokens[1], &v3f->y)
+		|| !ft_stof(tokens[2], &v3f->z))
+		return (free_tokens(tokens), false);
 	free_tokens(tokens);
-	return (result);
+	return (true);
 }
 
 bool	parse_col(t_col32 *col, const char *str)
@@ -107,5 +75,38 @@ bool	parse_col(t_col32 *col, const char *str)
 	}
 	*col = init_col32(rgb[0], rgb[1], rgb[2], 0xFF);
 	free_tokens(tokens);
+	return (true);
+}
+
+bool	parse_dir(t_v3f *dir, const char *str)
+{
+	char	**tokens;
+
+	tokens = ft_split(str, ',');
+	if (!tokens)
+		return (perror("Parse_dir memory failed"), false);
+	if (token_count(tokens) != 3)
+	{
+		print_error(ERR_V3F, "parse dir", *tokens);
+		free_tokens(tokens);
+		return (false);
+	}
+	ft_bzero(dir, sizeof(t_v3f));
+	if (!ft_stof(tokens[0], &dir->x) || !ft_stof(tokens[1], &dir->y)
+		|| !ft_stof(tokens[2], &dir->z) || !validate_and_norm_dir(dir, str))
+		return (free_tokens(tokens), false);
+	free_tokens(tokens);
+	return (true);
+}
+
+bool	parse_light_ratio(float *ratio, const char *str)
+{
+	float	value;
+
+	if (!ft_stof(str, &value))
+		return (print_error(ERR_STOF, "parse light ratio", str), false);
+	if (value < MIN_LIGHT_RATIO || value > MAX_LIGHT_RATIO)
+		return (print_error(ERR_RANGE, "light ratio range 0-1", str), false);
+	*ratio = value;
 	return (true);
 }
