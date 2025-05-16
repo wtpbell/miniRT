@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 17:45:22 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 15:26:21 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ bool	parse_sphere(char **tokens, t_scene *scene)
 	if (!obj)
 		return (free(sphere), false);
 	obj->obj = sphere;
+	obj->type = OBJ_SPHERE;
 	obj->ray_intersect = NULL;
 	if (!vector_add(&scene->objects, obj))
 		return (free(sphere), free(obj), false);

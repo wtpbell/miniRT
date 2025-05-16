@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 14:53:49 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 14:56:29 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ bool	solve_quadratic(t_v3f *abc, float *x0, float *x1)
 		return (false);
 	else if (dis == 0)
 	{
-		*x0 = -0.5f * abc->y * abc->x;
+		*x0 = -0.5f * abc->y / abc->x;
 		*x1 = *x0;
 	}
 	else

@@ -6,11 +6,12 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/15 14:18:25 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 15:38:07 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "debug/rt_debug.h"
+#include "minirt.h"
 
 void	mat4x4_rot_print(t_mat4x4 m)
 {
@@ -22,32 +23,80 @@ void	mat4x4_rot_print(t_mat4x4 m)
 	angles.x = acosf(v3f_dot(init_v3f(m[0], m[1], m[2]), right)) * RADTODEG;
 	angles.y = acosf(v3f_dot(init_v3f(m[4], m[5], m[6]), up)) * RADTODEG;
 	angles.z = acosf(v3f_dot(init_v3f(m[8], m[9], m[10]), forward)) * RADTODEG;
-	v3f_print(angles);
+	v3f_print(angles, 0, "");
 }
 
-void	v3f_print(t_v3f v)
+void	v3f_print(t_v3f v, int spaces, const char *prefix)
 {
-	printf("v3f <%.4f, %.4f, %.4f>\n", v.x, v.y, v.z);
+	printf("%*s%s(v3f) <%.4f, %.4f, %.4f>\n", spaces, "", prefix, v.x, v.y, v.z);
 }
 
-void	col32_print(t_col32 c)
+void	col32_print(t_col32 c, int spaces, const char *prefix)
 {
-	printf("col32 <%i, %i, %i, %i>\n", get_r(c), get_g(c), get_b(c), get_a(c));
+	printf("%*s%s(col32) <%i, %i, %i, %i>\n", spaces, "", prefix, get_r(c), get_g(c), get_b(c), get_a(c));
 }
 
-void	mat4x4_print(t_mat4x4 m)
+void	float_print(float f, int spaces, const char *prefix)
 {
-	const int	width = 4;
-	const int	preci = 4;
+	printf("%*s%s(flt) <%.2f>\n", spaces, "", prefix, f);
+}
 
-	printf("\
-|%3$ *1$.*2$f %4$ *1$.*2$f %5$ *1$.*2$f %6$ *1$.*2$f|\n\
-|%7$ *1$.*2$f %8$ *1$.*2$f %9$ *1$.*2$f %10$ *1$.*2$f|\n\
-|%11$ *1$.*2$f %12$ *1$.*2$f %13$ *1$.*2$f %14$ *1$.*2$f|\n\
-|%15$ *1$.*2$f %16$ *1$.*2$f %17$ *1$.*2$f %18$ *1$.*2$f|\n\
-", width, preci,
-		m[0], m[1], m[2], m[3],
-		m[4], m[5], m[6], m[7],
-		m[8], m[9], m[10], m[11],
-		m[12], m[13], m[14], m[15]);
+void	mat4x4_print(t_mat4x4 m, int spaces, const char *prefix)
+{
+	printf("%*s%s\n", spaces, "", prefix);
+	spaces += 2;
+	printf("%*s|%f %f %f %f|\n", spaces, "", m[0], m[1], m[2], m[3]);
+	printf("%*s|%f %f %f %f|\n", spaces, "", m[4], m[5], m[6], m[7]);
+	printf("%*s|%f %f %f %f|\n", spaces, "", m[8], m[9], m[10], m[11]);
+	printf("%*s|%f %f %f %f|\n", spaces, "", m[12], m[13], m[14], m[15]);
+}
+
+void	transform_print(t_transform	*t, int spaces)
+{
+	printf("%*s%s", spaces, "","TRANSFORM:\n");
+	v3f_print(t->pos, spaces + 2, "POS");
+	v3f_print(t->dir, spaces + 2, "DIR");
+}
+
+void	camera_print(t_camera *cam, int spaces)
+{
+	printf("%*s%s", spaces, "","CAMERA:\n");
+	transform_print(&cam->t, spaces + 2);
+	mat4x4_print(cam->cam_to_world, spaces + 2, "CAM_TO_WORLD");
+	float_print(cam->fov, spaces + 2, "FOV");
+	col32_print(cam->bg_col, spaces + 2, "bg_col");
+}
+
+void	sphere_print(t_sphere *sp, int spaces)
+{
+	printf("%*s%s", spaces, "","SPHERE:\n");
+	transform_print(&sp->t, spaces + 2);
+	float_print(sp->radius, spaces + 2, "RADIUS");
+	col32_print(sp->r.col, spaces + 2, "COL");
+}
+
+void	objects_print(t_vector	objects, int spaces, const char *prefix)
+{
+	int			i;
+	t_object	*obj;
+
+	i = 0;
+	printf("%*s%s <%i/%i>\n", spaces, "", prefix, objects.size, objects.capacity);
+	while (i < objects.size)
+	{
+		obj = (t_object *)objects.items[i];
+		if (obj->type == OBJ_SPHERE)
+			sphere_print(obj->obj, spaces + 2);
+		++i;
+	}
+}
+
+void	scene_print(t_scene *scene)
+{
+	int	spaces = 0;
+
+	printf("===SCENE===\n");
+	camera_print(&scene->camera, spaces + 2);
+	objects_print(scene->objects, spaces + 2, "OBJECTS");
+	printf("===END SCENE===\n");
 }

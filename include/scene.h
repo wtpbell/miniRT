@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 14:36:34 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 15:25:56 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@
 # include "libft.h"
 # include "get_next_line.h"
 # include "container.h"
+
+typedef enum e_object_type
+{
+	OBJ_SPHERE,
+	OBJ_CYLINDER,
+	OBJ_CONE,
+	OBJ_PLANE,
+}	t_obj_type;
 
 typedef enum e_light_type
 {
@@ -37,8 +45,9 @@ typedef enum e_scene_flags
 
 typedef struct s_object
 {
-	void	*obj;
-	void	(*ray_intersect)(void *obj, void *ctx);
+	void		*obj;
+	t_obj_type	type;
+	void		(*ray_intersect)(void *obj, void *ctx);
 }	t_object;
 
 typedef struct s_transform

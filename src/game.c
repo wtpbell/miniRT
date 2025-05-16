@@ -6,12 +6,13 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 14:27:07 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 15:30:13 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "MLX42/MLX42.h"
 #include "minirt.h"
+#include "debug/rt_debug.h"
 
 #define WIDTH	1024
 #define HEIGHT	1024
@@ -63,6 +64,7 @@ int	game(t_scene *scene)
 	mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
 	if (cam_init(&scene->camera, mlx))
 	{
+		scene_print(scene);
 		mlx_loop_hook(mlx, update, mlx);
 		render(scene);
 		mlx_loop(mlx);
