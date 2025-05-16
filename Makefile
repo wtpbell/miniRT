@@ -1,6 +1,4 @@
-vpath %.c src:src/container:src/math:src/math/vector:src/raytracer
-
-# === VARIABLES ===
+vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/raytracer
 
 NAME		:= miniRT
 CC			:= cc
@@ -16,14 +14,17 @@ MLX42		:= $(addprefix $(MLX42_DIR)/build/, libmlx42.a)
 LIBFT		:= $(addprefix $(LIBFT_DIR)/, libft.a)
 
 INC			:= -I ./include -I $(MLX42_DIR)/include -I $(LIBFT_DIR)/include
+
+PARSER_CORE	:= parser.c element_parser.c file_parser.c camera.c light.c\
+					sphere.c plane.c cylinder.c string_utils.c vector_utils.c\
+					error.c cleanup.c string_to_num.c token_utils.c\
+					general_utils.c validate_utils.c
 SRCS_MAIN	:= main.c vector_init.c vector_helper.c vector_operation.c\
 				vec_container.c vec_container_utils.c color.c raytracer.c\
 				rt_math.c matrix.c
 SRCS_DEBUG	:= print_var.c
-SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG)
-OBJS		:= $(SRCS:%.c=$(BIN_DIR)%.o)
-
-# === COMPILE RULES ===
+SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE)
+OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)
 
 all: $(LIBFT) $(MLX42) $(NAME)
 
@@ -57,30 +58,23 @@ $(MLX42_DIR):
 	@make $(LIB_DIR)
 	@git clone --branch v2.4.1 https://github.com/codam-coding-college/MLX42.git $(MLX42_DIR)
 
-# === DIRECTORIES/GIT SUBMODULE ===
-
 $(BIN_DIR):
-	@mkdir $(BIN_DIR)
-
-$(DB_DIR):
-	@mkdir $(DB_DIR)
+	@mkdir -p $(BIN_DIR)
 
 $(LIB_DIR):
-	@mkdir $(LIB_DIR)
-
-# === DIRECTORIES/GIT SUBMODULE ===
+	@mkdir -p $(LIB_DIR)
 
 clean:
 	@make -C $(LIBFT_DIR) clean
 	@$(RM) $(OBJS)
 	@$(RM) $(NAME)
-	@echo Clean complete!
+	@echo "Clean complete!"
 
 fclean: clean
 	@make -C $(LIBFT_DIR) fclean
 	@$(RM) -r $(MLX42_DIR)/build
 	@$(RM) -r $(BIN_DIR)
-	@echo Fclean complete!
+	@echo "Fclean complete!"
 
 re: fclean all
 

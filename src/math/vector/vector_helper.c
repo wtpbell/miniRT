@@ -3,17 +3,15 @@
 /*                                                        ::::::::            */
 /*   vector_helper.c                                    :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:41:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/09 11:22:03 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/15 10:34:30 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <math.h>
-
 #include "vector.h"
-
+#include <math.h>
 /**
  * @brief cosine of the angle between two vectors.
  *  0 means the vectors are orthogonal (perpendicular) to each other.
@@ -48,6 +46,7 @@ inline float	v3f_sqr_mag(t_v3f v)
 
 inline float	v3f_mag(t_v3f v)
 {
+	
 	return (sqrtf(v3f_sqr_mag(v)));
 }
 

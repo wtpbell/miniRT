@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   container.h                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/09 10:07:36 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/09 11:12:34 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   container.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/09 10:07:36 by jboon             #+#    #+#             */
+/*   Updated: 2025/05/14 17:33:42 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	CONTAINER_H
+#ifndef CONTAINER_H
 # define CONTAINER_H
 
-#include <stdbool.h>
+# include <stdbool.h>
 
 # define COL_INIT_CAPACITY 10
 

@@ -3,15 +3,17 @@
 /*                                                        ::::::::            */
 /*   vector.h                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/10 23:09:19 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 11:46:48 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_H
 # define VECTOR_H
+
+# include <stdbool.h>
 
 typedef union s_vector2
 {
