@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/15 16:56:55 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 14:53:49 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,49 +103,28 @@ bool	intersect(t_sphere *sp, t_ray *ray, float *dst)
 	return (true);
 }
 
-// https://stackoverflow.com/questions/18558910/direction-vector-to-rotation-matrix (column major, right-handed)
-void	cam_to_world_mat(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up)
-{
-	t_v3f	x_axis;
-	t_v3f	y_axis;
-
-	id_m4x4(mat);
-	trans_m4x4(mat, pos);
-	x_axis = v3f_norm(v3f_cross(up, dir));
-	y_axis = v3f_norm(v3f_cross(dir, x_axis));
-	mat[0] = -x_axis.x;
-	mat[1] = x_axis.y;
-	mat[2] = x_axis.z;
-	mat[4] = y_axis.x;
-	mat[5] = y_axis.y;
-	mat[6] = y_axis.z;
-	mat[8] = dir.x;
-	mat[9] = dir.y;
-	mat[10] = dir.z;
-}
-
-int	g_n = 10;
-
-t_col32	trace(t_ray *ray, t_vector *objects, t_light *light, t_col32 bg_col, uint32_t depth)
+t_col32	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 {
 	int			i;
-	t_ray		shadow_ray;
 	float		min_dist;
 	float		curr_dst;
 	t_sphere	*hit;
-	t_ray_hit	curr_hit;
+	// t_ray_hit	curr_hit;
+	t_vector	objects;
 
 	(void)depth;
 	i = 0;
 	hit = NULL;
 	min_dist = FLT_MAX;
-	while (i < objects->size)
+	objects = scene->objects;
+	while (i < objects.size)
 	{
-		if (intersect(objects->items[i], ray, &curr_dst)
+		if (intersect(objects.items[i], ray, &curr_dst)
 			&& curr_dst < min_dist)
 			{
+				printf(".");
 				min_dist = curr_dst;
-				hit = objects->items[i];
+				hit = objects.items[i];
 			}
 		++i;
 	}
@@ -156,68 +135,13 @@ t_col32	trace(t_ray *ray, t_vector *objects, t_light *light, t_col32 bg_col, uin
 	}
 	else
 	{
-		curr_hit.hit = v3f_add(ray->origin, v3f_scale(ray->direction, min_dist));
-		curr_hit.normal = v3f_norm(v3f_sub(curr_hit.hit, hit->t.pos));
-		curr_hit.normal = v3f_scale(v3f_add(curr_hit.normal, init_v3f(1, 1, 1)), 255>>1);
-
-		return (init_col32(curr_hit.normal.x, curr_hit.normal.y, curr_hit.normal.z, 255));
+		// curr_hit.hit = v3f_add(ray->origin, v3f_scale(ray->direction, min_dist));
+		// curr_hit.normal = v3f_norm(v3f_sub(curr_hit.hit, hit->t.pos));
+		// curr_hit.normal = v3f_scale(v3f_add(curr_hit.normal, init_v3f(1, 1, 1)), 255>>1);
+		// return (init_col32(curr_hit.normal.x, curr_hit.normal.y, curr_hit.normal.z, 255));
+		return (hit->r.col);
 	}
-	// IF GLASS && DEPTH < MAX_DEPTH
-	// Calc reflection, refraction
-	// Call trace(refraction_ray, depth + 1)
-	// Calc fresnel effect
-	// Return color
-	// ELSE
-	// Calc shadow_ray
-	// END IF
-	i = 0;
-	shadow_ray.origin = v3f_add(ray->origin, v3f_scale(ray->direction, min_dist));
-	shadow_ray.direction = v3f_sub(light->pos, ray->origin);
-	while (i < objects->size)
-	{
-		if (intersect(objects->items[i], &shadow_ray, NULL))
-			return (((t_sphere *)(objects->items + i))->r.col * light->intensity);
-		++i;
-	}
-	return (bg_col);
-}
-
-void	create_objects(t_vector *objects)
-{
-	t_sphere	*ptr_sp;
-	t_sphere	sp;
-
-	ft_bzero(&sp, sizeof(t_sphere));
-
-	vector_init(objects, 4);
-
-	sp.t.pos = init_v3f(0, 0, 0);
-	sp.r.col = C_RED;
-	sp.radius = 3;
-	ptr_sp = malloc(sizeof(t_sphere));
-	*ptr_sp = sp;
-	vector_add(objects, ptr_sp);
-
-	sp.t.pos = init_v3f(6, 0, 0);
-	sp.r.col = C_GREEN;
-	sp.radius = 2;
-	ptr_sp = malloc(sizeof(t_sphere));
-	*ptr_sp = sp;
-	vector_add(objects, ptr_sp);
-
-	sp.t.pos = init_v3f(-5, 0, 0);
-	sp.r.col = C_BLUE;
-	sp.radius = 1;
-	ptr_sp = malloc(sizeof(t_sphere));
-	*ptr_sp = sp;
-	vector_add(objects, ptr_sp);
-
-	sp.t.pos = init_v3f(0, 0, 30);
-	sp.r.col = C_BLUE | C_RED;
-	sp.radius = 10;
-	ptr_sp = malloc(sizeof(t_sphere));
-	*ptr_sp = sp;
-	vector_add(objects, ptr_sp);
+	return (scene->camera.bg_col);
 }
 
 void	compute_ray(uint32_t x, uint32_t y, t_camera *cam, t_ray *ray)
@@ -236,53 +160,29 @@ void	compute_ray(uint32_t x, uint32_t y, t_camera *cam, t_ray *ray)
 	ray->direction = v3f_norm(camera_space);
 }
 
-void	render(mlx_image_t *img, t_col32 bg_col)
+void	render(t_scene *scene)
 {
 	uint32_t	x;
 	uint32_t	y;
 	t_ray		ray;
-	t_vector	objects;
-	t_light		light;
-	t_camera	cam;
-	t_mat4x4	mat;
-
-	cam = (t_camera){
-		.t = {
-			.pos = {.x = 3, .y = 2, .z = -10},
-			.dir = {.x = .35, .y = -.1, .z = -1}
-		},
-		.fov = 90,
-		.img_plane = img,
-		.aspect_ratio = img->width / (float)img->height
-	};
-
-	printf("aspect-ratio: %f\n", cam.aspect_ratio);
-
-	cam.t.dir = v3f_norm(cam.t.dir);
-	cam_to_world_mat(mat, cam.t.pos, cam.t.dir, init_v3f(0, 1, 0));
-	v3f_print(cam.t.dir);
-	mat4x4_print(mat);
-	mat4x4_rot_print(mat);
+	mlx_image_t	*img;
 
 	y = 0;
-	light.intensity = .75f;
-	light.pos = init_v3f(0, 30, 5);
-	ray.origin = mul_v3_m4x4(init_v3f(0, 0, 0), mat);
-	v3f_print(ray.origin);
-	create_objects(&objects);
+	img = scene->camera.img_plane;
+	ray.origin = mul_v3_m4x4(init_v3f(0, 0, 0), scene->camera.cam_to_world);
+
+	printf("%i items\n", scene->objects.size);
 	while (y < img->height)
 	{
 		x = 0;
 		while (x < img->width)
 		{
-			compute_ray(x, y, &cam, &ray);
-
-			ray.direction = v3f_norm(mul_dir_m4x4(ray.direction, mat));
-
-			mlx_put_pixel(img, x, y, trace(&ray, &objects, &light, bg_col, 0));
+			compute_ray(x, y, &scene->camera, &ray);
+			ray.direction = v3f_norm(mul_dir_m4x4(ray.direction, scene->camera.cam_to_world));
+			mlx_put_pixel(img, x, y, trace(&ray, scene, 0));
 			++x;
 		}
 		++y;
 	}
-	vector_free(&objects, free);
+	printf("done!\n");
 }

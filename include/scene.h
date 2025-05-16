@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 11:08:17 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 14:36:34 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define SCENE_H
 
 # include "MLX42/MLX42.h"
+# include "matrix.h"
 # include "vector.h"
 # include "color.h"
 # include "libft.h"
@@ -50,8 +51,10 @@ typedef struct s_camera
 {
 	t_transform	t;
 	float		fov;
-	mlx_image_t	*img_plane;
 	float		aspect_ratio;
+	t_col32		bg_col;
+	mlx_image_t	*img_plane;
+	t_mat4x4	cam_to_world;
 }	t_camera;
 
 typedef struct s_material

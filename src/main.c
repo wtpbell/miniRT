@@ -6,11 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:21:05 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 11:47:56 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 12:35:19 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "minirt.h"
 
 static bool	valid_file_format(const char *file)
 {
@@ -60,6 +61,7 @@ int	main(int argc, char **argv)
 		print_error(ERR_PARSE_FAIL, "map", argv[1]);
 	else if (!validate_scene(&scene))
 		return (cleanup_scene(&scene), false);
+	game(&scene);
 	cleanup_scene(&scene);
 	return (EXIT_SUCCESS);
 }

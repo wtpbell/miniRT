@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/14 09:37:34 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 14:36:56 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINIRT_H
 
 # include "MLX42/MLX42.h"
+# include "scene.h"
 # include "color.h"
 # include "vector.h"
 
@@ -30,6 +31,7 @@ typedef struct s_ray_hit
 	float		distance;
 }	t_ray_hit;
 
-void	render(mlx_image_t *img, t_col32 bg_col);
+int		game(t_scene *scene);
+void	render(t_scene *scene);
 
 #endif
