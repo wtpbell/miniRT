@@ -1,4 +1,4 @@
-vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/raytracer
+vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/render
 
 NAME		:= miniRT
 CC			:= cc
@@ -19,13 +19,17 @@ PARSER_CORE	:= parser.c element_parser.c file_parser.c camera.c light.c\
 				sphere.c plane.c cylinder.c string_utils.c vector_utils.c\
 				error.c cleanup.c string_to_num.c token_utils.c\
 				general_utils.c validate_utils.c
-MAIN_SRCS	:= main.c vector_init.c vector_helper.c vector_operation.c\
-				vec_container.c vec_container_utils.c color.c
-
-SRCS := $(MAIN_SRCS) $(PARSER_CORE)
-OBJS := $(SRCS:%.c=$(BIN_DIR)%.o)
+SRCS_MAIN	:= main.c vector_init.c vector_helper.c vector_operation.c\
+				vec_container.c vec_container_utils.c color.c render.c\
+				rt_math.c matrix.c game.c rt_sphere.c
+SRCS_DEBUG	:= print_var.c
+SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE)
+OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)
 
 all: $(LIBFT) $(MLX42) $(NAME)
+
+debug: C_FLAGS += -g3 -fsanitize=address,undefined
+debug: all
 
 val: C_FLAGS += -g3
 val: clean all
@@ -34,7 +38,7 @@ val: clean all
 bonus: all
 
 $(NAME): $(BIN_DIR) $(OBJS)
-	@$(CC) $(OBJS) $(LIBFT) $(MLX42) $(C_LINK) $(INC) -o $(NAME)
+	@$(CC) $(C_FLAGS) $(OBJS) $(LIBFT) $(MLX42) $(C_LINK) $(INC) -o $(NAME)
 	@echo Build complete!
 
 $(BIN_DIR)%.o: %.c
@@ -46,10 +50,12 @@ $(LIBFT): $(LIBFT_DIR)
 $(MLX42): $(MLX42_DIR)
 	@cmake -S $(MLX42_DIR) -B $(MLX42_DIR)/build && make -C $(MLX42_DIR)/build -j4
 
-$(LIBFT_DIR): $(LIB_DIR)
+$(LIBFT_DIR):
+	@make $(LIB_DIR)
 	@git clone git@github.com:JoseJBoon/libft.git $(LIBFT_DIR)
 
-$(MLX42_DIR): $(LIB_DIR)
+$(MLX42_DIR):
+	@make $(LIB_DIR)
 	@git clone --branch v2.4.1 https://github.com/codam-coding-college/MLX42.git $(MLX42_DIR)
 
 $(BIN_DIR):

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   vec_container_utils.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/09 11:08:23 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/14 17:30:01 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   vec_container_utils.c                              :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/09 11:08:23 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/16 18:55:28 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	vector_set(t_vector *vec, int i, void *item)
 	vec->items[i] = item;
 }
 
-size_t vector_size(t_vector *vec)
+size_t	vector_size(t_vector *vec)
 {
 	if (!vec)
 		return (0);

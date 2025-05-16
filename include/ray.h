@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   rt_math.h                                          :+:    :+:            */
+/*   ray.h                                              :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/05/08 18:51:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 18:52:32 by jboon         ########   odam.nl         */
+/*   Created: 2025/05/16 18:30:15 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/16 18:48:22 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RT_MATH_H
-# define RT_MATH_H
-
-# include <math.h>
+#ifndef RAY_H
+# define RAY_H
 
 # include "vector.h"
-# include "matrix.h"
 
-# define PI			3.14159265358979323846f
-# define RADTODEG	57.2957795131f
-# define DEGTORAD	0.01745329251
-# define FLT_MAX	3.40282347e+38F
-# define FLT_EPI	1.19209290e-7F
+typedef struct s_ray
+{
+	t_v3f	origin;
+	t_v3f	direction;
+}	t_ray;
 
-float	ft_maxf(float a, float b);
-float	ft_signf(float a);
-void	ft_swapf(float *a, float *b);
-float	ft_absf(float a);
+typedef struct s_ray_hit
+{
+	t_v3f	hit;
+	t_v3f	normal;
+	float	distance;
+}	t_ray_hit;
 
 #endif

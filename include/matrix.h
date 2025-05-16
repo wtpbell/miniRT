@@ -1,32 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   rt_math.h                                          :+:    :+:            */
+/*   matrix.h                                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/05/08 18:51:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 18:52:32 by jboon         ########   odam.nl         */
+/*   Created: 2025/05/14 08:51:07 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/15 11:20:24 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RT_MATH_H
-# define RT_MATH_H
-
-# include <math.h>
+#ifndef MATRIX_H
+# define MATRIX_H
 
 # include "vector.h"
-# include "matrix.h"
 
-# define PI			3.14159265358979323846f
-# define RADTODEG	57.2957795131f
-# define DEGTORAD	0.01745329251
-# define FLT_MAX	3.40282347e+38F
-# define FLT_EPI	1.19209290e-7F
+# define M4X4_SIZE	16
 
-float	ft_maxf(float a, float b);
-float	ft_signf(float a);
-void	ft_swapf(float *a, float *b);
-float	ft_absf(float a);
+typedef float	t_mat4x4[16];
+
+void	id_m4x4(t_mat4x4 mat);
+void	trans_m4x4(t_mat4x4 mat, t_v3f trans);
+void	scale_m4x4(t_mat4x4 mat, t_v3f scale);
+t_v3f	mul_v3_m4x4(t_v3f v, t_mat4x4 mat);
+t_v3f	mul_dir_m4x4(t_v3f dir, t_mat4x4 mat);
+void	mul_mat4x4(t_mat4x4 dst, t_mat4x4 a, t_mat4x4 b);
 
 #endif
