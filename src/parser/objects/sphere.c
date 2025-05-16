@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/16 18:12:22 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 18:55:45 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ static inline t_sp	create_sphere(float diameter)
 
 bool	parse_sphere(char **tokens, t_scene *scene)
 {
-	t_v3f		pos;
-	float		diameter;
-	t_col32		color;
+	t_v3f	pos;
+	float	diameter;
+	t_col32	color;
 	t_obj	*obj;
 
 	if (!parse_v3f(&pos, tokens[1]) || !parse_diameter(&diameter, tokens[2])
@@ -43,7 +43,7 @@ bool	parse_sphere(char **tokens, t_scene *scene)
 	obj->t.pos = pos;
 	obj->r.col = color;
 	obj->type = OBJ_SPHERE;
-	obj->shape.sp = create_sphere(diameter);
+	obj->u_shape.sp = create_sphere(diameter);
 	obj->intersect = sphere_intersect;
 	if (!vector_add(&scene->objects, obj))
 		return (free(obj), false);

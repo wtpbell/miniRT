@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 18:32:03 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 18:56:15 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,8 @@ void	render(t_scene *scene)
 		while (x < img->width)
 		{
 			compute_ray(x, y, &scene->camera, &ray);
-			ray.direction = v3f_norm(mul_dir_m4x4(ray.direction, scene->camera.cam_to_world));
+			ray.direction = v3f_norm(
+				mul_dir_m4x4(ray.direction, scene->camera.cam_to_world));
 			mlx_put_pixel(img, x, y, trace(&ray, scene, 0));
 			++x;
 		}

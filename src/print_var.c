@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 18:34:12 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 18:45:17 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	sphere_print(t_obj *sp, int spaces)
 {
 	printf("%*s%s", spaces, "","SPHERE:\n");
 	transform_print(&sp->t, spaces + 2);
-	float_print(sp->shape.sp.radius, spaces + 2, "RADIUS");
+	float_print(sp->u_shape.sp.radius, spaces + 2, "RADIUS");
 	col32_print(sp->r.col, spaces + 2, "COL");
 }
 

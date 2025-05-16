@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 18:31:54 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 18:53:48 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ static void	update(void *ctx)
 	(void)ctx;
 }
 
-// https://stackoverflow.com/questions/18558910/direction-vector-to-rotation-matrix (column major, right-handed)
-void	cam_to_world_mat(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up)
+void	cam_to_world(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up)
 {
 	t_v3f	x_axis;
 	t_v3f	y_axis;
@@ -54,7 +53,7 @@ static bool	cam_init(t_cam *cam, mlx_t *mlx)
 	cam->aspect_ratio = cam->img_plane->width / (float)cam->img_plane->height;
 	cam->bg_col = init_col32(127, 0, 127, 255);
 	cam->t.dir = v3f_norm(cam->t.dir);
-	cam_to_world_mat(cam->cam_to_world, cam->t.pos, cam->t.dir, init_v3f(0, 1, 0));
+	cam_to_world(cam->cam_to_world, cam->t.pos, cam->t.dir, init_v3f(0, 1, 0));
 	return (true);
 }
 

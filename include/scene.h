@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 18:31:36 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 18:47:27 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include "libft.h"
 # include "container.h"
 
-typedef struct s_object t_obj;
+typedef struct s_object	t_obj;
 
 typedef enum e_object_type
 {
@@ -96,16 +96,16 @@ typedef struct s_light
 
 struct s_object
 {
-	t_trans	t;
-	t_ren	r;
+	t_trans		t;
+	t_ren		r;
 	union
 	{
 		t_sp	sp;
 		t_pl	pl;
 		t_cy	cy;
-	}			shape;
+	}			u_shape;
 	t_obj_type	type;
-	bool		(*intersect)(t_obj *obj, t_ray *ray, float *dst);
+	int			(*intersect)(t_obj *obj, t_ray *ray, float *dst);
 };
 
 typedef struct s_scene

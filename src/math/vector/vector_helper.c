@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:41:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/15 10:34:30 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/16 18:54:48 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ inline float	v3f_sqr_mag(t_v3f v)
 
 inline float	v3f_mag(t_v3f v)
 {
-	
 	return (sqrtf(v3f_sqr_mag(v)));
 }
 

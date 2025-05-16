@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 18:31:44 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 18:58:32 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,6 @@
 
 int		game(t_scene *scene);
 void	render(t_scene *scene);
-bool	sphere_intersect(t_obj *obj, t_ray *ray, float *dst);
+int		sphere_intersect(t_obj *obj, t_ray *ray, float *dst);
 
 #endif

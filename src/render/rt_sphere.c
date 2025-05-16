@@ -38,27 +38,27 @@ static bool	solve_quadratic(t_v3f *abc, float *x0, float *x1)
 	return (true);
 }
 
-bool	sphere_intersect(t_obj *obj, t_ray *ray, float *dst)
+int	sphere_intersect(t_obj *obj, t_ray *ray, float *dst)
 {
-	t_v3f		L;
+	t_v3f		oc;
 	t_v3f		abc;
 	float		t0;
 	float		t1;
 	float		r;
 
-	r = obj->shape.sp.radius;
-	L = v3f_sub(ray->origin, obj->t.pos);
+	r = obj->u_shape.sp.radius;
+	oc = v3f_sub(ray->origin, obj->t.pos);
 	abc.x = v3f_dot(ray->direction, ray->direction);
-	abc.y = 2.0f * v3f_dot(ray->direction, L);
-	abc.z = v3f_dot(L, L) - r * r;
+	abc.y = 2.0f * v3f_dot(ray->direction, oc);
+	abc.z = v3f_dot(oc, oc) - r * r;
 	if (!solve_quadratic(&abc, &t0, &t1))
-		return (false);
+		return (0);
 	if (t0 < 0)
 	{
 		if (t1 < 0)
-			return (false);
+			return (0);
 		t0 = t1;
 	}
 	*dst = t0;
-	return (true);
+	return (1);
 }
