@@ -6,29 +6,11 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:44:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 10:39:15 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/16 18:35:45 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-void	del_objects(void *obj)
-{
-	t_object	*object;
-
-	if (!obj)
-		return ;
-	object = (t_object *)obj;
-	free(object->obj);
-	free(object);
-}
-
-void	del_lights(void *light)
-{
-	if (!light)
-		return ;
-	free(light);
-}
 
 void	free_tokens(char **tokens)
 {
@@ -53,6 +35,6 @@ void	cleanup_gnl(char *line, int fd)
 
 void	cleanup_scene(t_scene *scene)
 {
-	vector_free(&scene->objects, del_objects);
-	vector_free(&scene->lights, del_lights);
+	vector_free(&scene->objects, free);
+	vector_free(&scene->lights, free);
 }

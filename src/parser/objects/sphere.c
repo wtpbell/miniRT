@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/16 15:26:21 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 18:12:22 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,40 +20,32 @@ bool	parse_diameter(float *out, const char *str)
 	return (parse_and_validate_float(out, str, radius_range, "parse diameter"));
 }
 
-static t_sphere	*create_sphere(t_v3f pos, float diameter, t_col32 color)
+static inline t_sp	create_sphere(float diameter)
 {
-	t_sphere	*sphere;
-
-	sphere = ft_calloc(1, sizeof(t_sphere));
-	if (!sphere)
-		return (NULL);
-	sphere->t.pos = pos;
-	sphere->radius = diameter / 2.0f;
-	sphere->r.col = color;
-	return (sphere);
+	return ((t_sp){
+		.radius = diameter / 2.0f
+	});
 }
 
 bool	parse_sphere(char **tokens, t_scene *scene)
 {
-	t_sphere	*sphere;
 	t_v3f		pos;
 	float		diameter;
 	t_col32		color;
-	t_object	*obj;
+	t_obj	*obj;
 
 	if (!parse_v3f(&pos, tokens[1]) || !parse_diameter(&diameter, tokens[2])
 		|| !parse_col(&color, tokens[3]))
 		return (false);
-	sphere = create_sphere(pos, diameter, color);
-	if (!sphere)
-		return (false);
-	obj = malloc(sizeof(t_object));
+	obj = ft_calloc(1, sizeof(t_obj));
 	if (!obj)
-		return (free(sphere), false);
-	obj->obj = sphere;
+		return (false);
+	obj->t.pos = pos;
+	obj->r.col = color;
 	obj->type = OBJ_SPHERE;
-	obj->ray_intersect = NULL;
+	obj->shape.sp = create_sphere(diameter);
+	obj->intersect = sphere_intersect;
 	if (!vector_add(&scene->objects, obj))
-		return (free(sphere), free(obj), false);
+		return (free(obj), false);
 	return (true);
 }

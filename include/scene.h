@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 15:25:56 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 18:31:36 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 # define SCENE_H
 
 # include "MLX42/MLX42.h"
+# include "ray.h"
 # include "matrix.h"
 # include "vector.h"
 # include "color.h"
 # include "libft.h"
-# include "get_next_line.h"
 # include "container.h"
+
+typedef struct s_object t_obj;
 
 typedef enum e_object_type
 {
@@ -43,59 +45,46 @@ typedef enum e_scene_flags
 	SCENE_CAMERA = 2 << 2
 }	t_scene_flags;
 
-typedef struct s_object
-{
-	void		*obj;
-	t_obj_type	type;
-	void		(*ray_intersect)(void *obj, void *ctx);
-}	t_object;
-
 typedef struct s_transform
 {
 	t_v3f	pos;
 	t_v3f	dir;
-}	t_transform;
+}	t_trans;
 
 typedef struct s_camera
 {
-	t_transform	t;
+	t_trans		t;
 	float		fov;
 	float		aspect_ratio;
 	t_col32		bg_col;
 	mlx_image_t	*img_plane;
 	t_mat4x4	cam_to_world;
-}	t_camera;
+}	t_cam;
 
 typedef struct s_material
 {
-}	t_material;
+}	t_mat;
 
 typedef struct s_render
 {
-	t_material	mat;
-	t_col32		col;
-}	t_render;
+	t_mat	mat;
+	t_col32	col;
+}	t_ren;
 
 typedef struct s_plane
 {
-	t_transform	t;
-	t_render	r;
-}	t_plane;
+}	t_pl;
 
 typedef struct s_sphere
 {
-	t_transform	t;
-	t_render	r;
 	float		radius;
-}	t_sphere;
+}	t_sp;
 
 typedef struct s_cylinder
 {
-	t_transform	t;
-	t_render	r;
 	float		radius;
 	float		height;
-}	t_cylinder;
+}	t_cy;
 
 typedef struct s_light
 {
@@ -105,12 +94,26 @@ typedef struct s_light
 	float			intensity;
 }	t_light;
 
+struct s_object
+{
+	t_trans	t;
+	t_ren	r;
+	union
+	{
+		t_sp	sp;
+		t_pl	pl;
+		t_cy	cy;
+	}			shape;
+	t_obj_type	type;
+	bool		(*intersect)(t_obj *obj, t_ray *ray, float *dst);
+};
+
 typedef struct s_scene
 {
-	t_vector		objects;
-	t_vector		lights;
-	t_camera		camera;
-	int				scene_flags;
+	t_vector	objects;
+	t_vector	lights;
+	t_cam		camera;
+	int			scene_flags;
 }	t_scene;
 
 #endif

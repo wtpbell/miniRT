@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 15:30:13 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 18:31:54 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ void	cam_to_world_mat(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up)
 	trans_m4x4(mat, pos);
 	x_axis = v3f_norm(v3f_cross(up, dir));
 	y_axis = v3f_norm(v3f_cross(dir, x_axis));
-	mat[0] = -x_axis.x;
+	x_axis = v3f_scale(x_axis, -1);
+	mat[0] = x_axis.x;
 	mat[1] = x_axis.y;
 	mat[2] = x_axis.z;
 	mat[4] = y_axis.x;
@@ -44,7 +45,7 @@ void	cam_to_world_mat(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up)
 	mat[10] = dir.z;
 }
 
-static bool	cam_init(t_camera *cam, mlx_t *mlx)
+static bool	cam_init(t_cam *cam, mlx_t *mlx)
 {
 	cam->img_plane = mlx_new_image(mlx, mlx->width, mlx->height);
 	if (cam->img_plane == NULL

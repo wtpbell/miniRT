@@ -1,4 +1,4 @@
-vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/raytracer
+vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/render
 
 NAME		:= miniRT
 CC			:= cc
@@ -16,19 +16,19 @@ LIBFT		:= $(addprefix $(LIBFT_DIR)/, libft.a)
 INC			:= -I ./include -I $(MLX42_DIR)/include -I $(LIBFT_DIR)/include
 
 PARSER_CORE	:= parser.c element_parser.c file_parser.c camera.c light.c\
-					sphere.c plane.c cylinder.c string_utils.c vector_utils.c\
-					error.c cleanup.c string_to_num.c token_utils.c\
-					general_utils.c validate_utils.c
+				sphere.c plane.c cylinder.c string_utils.c vector_utils.c\
+				error.c cleanup.c string_to_num.c token_utils.c\
+				general_utils.c validate_utils.c
 SRCS_MAIN	:= main.c vector_init.c vector_helper.c vector_operation.c\
-				vec_container.c vec_container_utils.c color.c raytracer.c\
-				rt_math.c matrix.c game.c
+				vec_container.c vec_container_utils.c color.c render.c\
+				rt_math.c matrix.c game.c rt_sphere.c
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE)
 OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)
 
 all: $(LIBFT) $(MLX42) $(NAME)
 
-debug: C_FLAGS += -g3
+debug: C_FLAGS += -g3 -fsanitize=address,undefined
 debug: all
 
 val: C_FLAGS += -g3
@@ -38,7 +38,7 @@ val: clean all
 bonus: all
 
 $(NAME): $(BIN_DIR) $(OBJS)
-	@$(CC) $(OBJS) $(LIBFT) $(MLX42) $(C_LINK) $(INC) -o $(NAME)
+	@$(CC) $(C_FLAGS) $(OBJS) $(LIBFT) $(MLX42) $(C_LINK) $(INC) -o $(NAME)
 	@echo Build complete!
 
 $(BIN_DIR)%.o: %.c

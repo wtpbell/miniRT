@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 15:38:07 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/16 18:34:12 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ void	mat4x4_print(t_mat4x4 m, int spaces, const char *prefix)
 	printf("%*s|%f %f %f %f|\n", spaces, "", m[12], m[13], m[14], m[15]);
 }
 
-void	transform_print(t_transform	*t, int spaces)
+void	transform_print(t_trans	*t, int spaces)
 {
 	printf("%*s%s", spaces, "","TRANSFORM:\n");
 	v3f_print(t->pos, spaces + 2, "POS");
 	v3f_print(t->dir, spaces + 2, "DIR");
 }
 
-void	camera_print(t_camera *cam, int spaces)
+void	camera_print(t_cam *cam, int spaces)
 {
 	printf("%*s%s", spaces, "","CAMERA:\n");
 	transform_print(&cam->t, spaces + 2);
@@ -67,26 +67,26 @@ void	camera_print(t_camera *cam, int spaces)
 	col32_print(cam->bg_col, spaces + 2, "bg_col");
 }
 
-void	sphere_print(t_sphere *sp, int spaces)
+void	sphere_print(t_obj *sp, int spaces)
 {
 	printf("%*s%s", spaces, "","SPHERE:\n");
 	transform_print(&sp->t, spaces + 2);
-	float_print(sp->radius, spaces + 2, "RADIUS");
+	float_print(sp->shape.sp.radius, spaces + 2, "RADIUS");
 	col32_print(sp->r.col, spaces + 2, "COL");
 }
 
 void	objects_print(t_vector	objects, int spaces, const char *prefix)
 {
 	int			i;
-	t_object	*obj;
+	t_obj	*obj;
 
 	i = 0;
 	printf("%*s%s <%i/%i>\n", spaces, "", prefix, objects.size, objects.capacity);
 	while (i < objects.size)
 	{
-		obj = (t_object *)objects.items[i];
+		obj = (t_obj *)objects.items[i];
 		if (obj->type == OBJ_SPHERE)
-			sphere_print(obj->obj, spaces + 2);
+			sphere_print(obj, spaces + 2);
 		++i;
 	}
 }
