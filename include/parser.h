@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   parser.h                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/16 18:35:54 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   parser.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 22:20:50 by bewong            #+#    #+#             */
+/*   Updated: 2025/05/18 13:20:50 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # define MAX_POS			10000.0f
 # define MAX_RADIUS			1000.0f
 # define MIN_RADIUS			0.0f
+# define MAX_HEIGHT			1000.0f
+# define MIN_HEIGHT			0.0f
 # define MAX_BRIGHTNESS		1000.0f
 # define MAX_COLOR			255
 # define MIN_COLOR			0
@@ -109,6 +111,10 @@ bool		validate_commas(const char *str);
 bool		parse_v3f(t_v3f *v3f, const char *str);
 bool		parse_col(t_col32 *col, const char *str);
 bool		parse_dir(t_v3f *dir, const char *str);
+bool		parse_floats(const char **tokens, float *out,
+					size_t count, const char *ctx);
+bool		parse_ints(const char **tokens, int *out,
+					size_t count, const char *ctx);
 
 // general_utils.c
 size_t		token_count(char **tokens);

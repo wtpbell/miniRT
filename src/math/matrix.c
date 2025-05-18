@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   matrix.c                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/14 08:55:34 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/15 11:19:50 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   matrix.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/14 08:55:34 by jboon             #+#    #+#             */
+/*   Updated: 2025/05/18 16:39:40 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,38 @@ void	mul_mat4x4(t_mat4x4 dst, t_mat4x4 a, t_mat4x4 b)
 			+ a[r + 3] * b[c + 12];
 		++i;
 	}
+}
+
+void invert_m4x4(t_mat4x4 dst, const t_mat4x4 src)
+{
+	t_v3f	t;
+
+	id_m4x4(dst);
+	dst[0] = src[0];
+	dst[1] = src[4];
+	dst[2] = src[8];
+	dst[4] = src[1];
+	dst[5] = src[5];
+	dst[6] = src[9];
+	dst[8] = src[2];
+	dst[9] = src[6];
+	dst[10] = src[10];
+	t = init_v3f(-src[12], -src[13], -src[14]);
+	dst[12] = t.x * dst[0] + t.y * dst[4] + t.z * dst[8];
+	dst[13] = t.x * dst[1] + t.y * dst[5] + t.z * dst[9];
+	dst[14] = t.x * dst[2] + t.y * dst[6] + t.z * dst[10];
+}
+
+void	rotate_m4x4(t_mat4x4 rot, t_v3f x, t_v3f y, t_v3f z)
+{
+	id_m4x4(rot);
+	rot[0] = x.x;
+	rot[4] = y.x;
+	rot[8] = z.x;
+	rot[1] = x.y;
+	rot[5] = y.y;
+	rot[9] = z.y;
+	rot[2] = x.z;
+	rot[6] = y.z;
+	rot[10] = z.z;
 }
