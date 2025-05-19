@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 18:56:15 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/19 11:42:25 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,10 @@ static t_col32	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	else
 	{
 		curr_hit.hit = v3f_add(ray->origin, v3f_scale(ray->direction, min_dist));
-		curr_hit.normal = v3f_norm(v3f_sub(curr_hit.hit, hit->t.pos));
+		if (hit->type == OBJ_PLANE)
+			curr_hit.normal = hit->t.dir;
+		else
+			curr_hit.normal = v3f_norm(v3f_sub(curr_hit.hit, hit->t.pos));
 		curr_hit.normal = v3f_scale(v3f_add(curr_hit.normal, init_v3f(1, 1, 1)), 255>>1);
 		return (init_col32(curr_hit.normal.x, curr_hit.normal.y, curr_hit.normal.z, 255));
 	}

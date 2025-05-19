@@ -14,7 +14,23 @@
 
 bool	parse_plane(char **tokens, t_scene *scene)
 {
-	(void) tokens;
-	(void) scene;
-	return (false);
+	t_obj	*obj;
+	t_v3f	pos;
+	t_v3f	dir;
+	t_col32	col;
+
+	if (!parse_v3f(&pos, tokens[1]) || !parse_dir(&dir, tokens[2]) || !parse_col(&col, tokens[3]))
+		return (false);
+	obj = ft_calloc(1, sizeof(t_obj));
+	if (!obj)
+		return (false);
+	obj->t.pos = pos;
+	obj->t.dir = dir;
+	obj->r.col = col;
+	obj->u_shape.pl = (t_pl) {};
+	obj->type = OBJ_PLANE;
+	obj->intersect = plane_intersect;
+	if (!vector_add(&scene->objects, obj))
+		return (free(obj), false);
+	return (true);
 }

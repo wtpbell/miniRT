@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   minirt.h                                           :+:    :+:            */
+/*   rt_plane.c                                         :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/19 10:51:57 by jboon         ########   odam.nl         */
+/*   Created: 2025/05/19 10:33:19 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/19 10:57:08 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIRT_H
-# define MINIRT_H
+#include "ray.h"
+#include "scene.h"
+#include "rt_math.h"
 
-# include "MLX42/MLX42.h"
-# include "scene.h"
-# include "ray.h"
-# include "color.h"
-# include "vector.h"
+int	plane_intersect(t_obj *obj, t_ray *ray, float *dst)
+{
+	float	denom;
 
-int		game(t_scene *scene);
-void	render(t_scene *scene);
-int		sphere_intersect(t_obj *obj, t_ray *ray, float *dst);
-int		plane_intersect(t_obj *obj, t_ray *ray, float *dst);
-
-#endif
+	denom = v3f_dot(ray->direction, obj->t.dir);
+	if (denom > FLT_EPI)
+	{
+		*dst = v3f_dot(v3f_sub(obj->t.pos, ray->origin), obj->t.dir) / denom;
+		return (*dst >= 0);
+	}
+	return (false);
+}
