@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   game.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/18 21:25:46 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   game.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/19 10:37:49 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir)
 	
 	y_axis = v3f_norm(dir); //dir to up
 	z_axis = v3f_cross((t_v3f){.x = 0, .y = 1, .z = 0}, y_axis);
-	if (v3f_len(z_axis) < 1e-4f)
+	if (v3f_len(z_axis) < EPSILON)
 	{
 		if (y_axis.y > 0)
 			id_m4x4(rot);

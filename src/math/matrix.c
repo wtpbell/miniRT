@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   matrix.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 08:55:34 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/18 16:39:40 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   matrix.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/14 08:55:34 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/19 10:36:19 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	mul_mat4x4(t_mat4x4 dst, t_mat4x4 a, t_mat4x4 b)
 
 void invert_m4x4(t_mat4x4 dst, const t_mat4x4 src)
 {
-	t_v3f	t;
+	t_v3f t;
 
 	id_m4x4(dst);
 	dst[0] = src[0];

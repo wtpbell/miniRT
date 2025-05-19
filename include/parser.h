@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 22:20:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/18 13:20:50 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   parser.h                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
+/*   Updated: 2025/05/19 11:28:03 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@
 # define MIN_FOV			0.0f
 # define MAX_LIGHT_RATIO	1.0f
 # define MIN_LIGHT_RATIO	0.0f
+# define MAX_DIR			1.0f
+# define MIN_DIR			-1.0f
 
 # define RED 			"\033[31m"
 # define GREEN 			"\033[32m"
