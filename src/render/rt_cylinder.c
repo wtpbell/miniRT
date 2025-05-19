@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/17 11:59:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/19 10:59:14 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/19 16:42:27 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	cylinder_intersect(t_obj *obj, t_ray *ray, float *dst)
 	int			hit_body;
 	int			hit_disc;
 
-	obj_to_world(to_world, obj->t.pos, obj->t.dir);
+	obj_to_world(to_world, obj->t.pos, obj->t.dir, (t_v3f){.x = 0, .y = 1, .z = 0});
 	invert_m4x4(to_obj, to_world);
 	l_ray.origin = mul_v3_m4x4(ray->origin, to_obj);
 	l_ray.direction = mul_dir_m4x4(ray->direction, to_obj);

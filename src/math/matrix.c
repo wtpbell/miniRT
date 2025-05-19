@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 08:55:34 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/19 10:36:19 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/19 16:17:59 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,34 @@ void	mul_mat4x4(t_mat4x4 dst, t_mat4x4 a, t_mat4x4 b)
 		++i;
 	}
 }
+
+void mul_col_mat4x4(t_mat4x4 dst, t_mat4x4 a, t_mat4x4 b)
+{
+	int		r;
+	int		c;
+	int		k;
+	float	sum;
+
+	c = 0;
+	while (c < 4)
+	{
+		r = 0;
+		while ( r < 4)
+		{
+			sum = 0.0f;
+			k = 0;
+			while (k < 4)
+			{
+				sum += a[(k << 2) + r] * b[(c << 2) + k];
+				++k;
+			}
+			dst[(c << 2) + r] = sum;
+			++r;
+		}
+		++c;
+	}
+}
+
 
 void invert_m4x4(t_mat4x4 dst, const t_mat4x4 src)
 {
