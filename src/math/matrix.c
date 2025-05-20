@@ -6,11 +6,11 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 08:55:34 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/15 11:19:50 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/19 11:53:24 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "matrix.h"
+#include "rt_math.h"
 #include "libft.h"
 
 void	id_m4x4(t_mat4x4 mat)
@@ -85,6 +85,24 @@ void	mul_mat4x4(t_mat4x4 dst, t_mat4x4 a, t_mat4x4 b)
 			+ a[r + 1] * b[c + 4]
 			+ a[r + 2] * b[c + 8]
 			+ a[r + 3] * b[c + 12];
+		++i;
+	}
+}
+
+void	transpose_mat4x4(t_mat4x4 mat)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < 4)
+	{
+		j = i + 1;
+		while (j < 4)
+		{
+			ft_swapf(mat + (i << 2) + j, mat + (j << 2) + i);
+			++j;
+		}
 		++i;
 	}
 }

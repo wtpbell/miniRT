@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 18:45:17 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/19 10:54:55 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,13 @@ void	camera_print(t_cam *cam, int spaces)
 	col32_print(cam->bg_col, spaces + 2, "bg_col");
 }
 
+void	plane_print(t_obj *pl, int spaces)
+{
+	printf("%*s%s", spaces, "","PLANE:\n");
+	transform_print(&pl->t, spaces + 2);
+	col32_print(pl->r.col, spaces + 2, "COL");
+}
+
 void	sphere_print(t_obj *sp, int spaces)
 {
 	printf("%*s%s", spaces, "","SPHERE:\n");
@@ -87,6 +94,8 @@ void	objects_print(t_vector	objects, int spaces, const char *prefix)
 		obj = (t_obj *)objects.items[i];
 		if (obj->type == OBJ_SPHERE)
 			sphere_print(obj, spaces + 2);
+		else if (obj->type == OBJ_PLANE)
+			plane_print(obj, spaces + 2);
 		++i;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:21:05 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 12:35:19 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/20 10:27:51 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	init_scene_and_vector(&scene);
 	if (!parse_map(&scene, argv[1]))
-		print_error(ERR_PARSE_FAIL, "map", argv[1]);
+		return (print_error(ERR_PARSE_FAIL, "map", argv[1]), EXIT_FAILURE);
 	else if (!validate_scene(&scene))
-		return (cleanup_scene(&scene), false);
+		return (cleanup_scene(&scene), EXIT_FAILURE);
 	game(&scene);
 	cleanup_scene(&scene);
 	return (EXIT_SUCCESS);
