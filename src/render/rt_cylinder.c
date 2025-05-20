@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/17 11:59:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/19 16:42:27 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/20 12:16:04 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,35 +18,34 @@
 //https://math.stackexchange.com/questions/2613781/line-cylinder-intersection
 // Oy + t *Dy = ydisc, t = (ydisc -Oy) / Dy
 
-static int	check_disc(t_ray *ray, float y, float r, float *dst, float current)
+static t_v3f	cylinder_normal(t_obj *obj, t_v3f point_world)
 {
-	float	t;
-	t_v3f	p;
-
-	t = (y - ray->origin.y) / ray->direction.y; //along y axis
-	if (t < 0.001f || t > current)
-		return (0);
-	p = v3f_add(ray->origin, v3f_scale(ray->direction, t));
-	if ((p.x * p.x + p.z * p.z) <= r * r) //check if pt is within the radius of the disc
-	{
-		*dst = t;
-		return (1);
-	}
-	return (0);
+	
 }
 
-static int	intersect_cylinder_discs(t_obj *obj, t_ray *ray, float *dst, float current)
+static int	intersect_cylinder_discs(t_obj *obj, t_ray *ray,
+	float *dst, float current)
 {
 	float	h;
 	float	r;
+	t_v3f	p;
 
 	h = obj->u_shape.cy.height * 0.5f;
 	r = obj->u_shape.cy.radius;
-	if (ray->direction.y != 0) // if ray is not parallel to the disc
+	if (ray->direction.y == 0)
+		return (0);
+	*dst = (-h - ray->origin.y) / ray->direction.y;
+	if (*dst > FLT_EPI && *dst  < current)
 	{
-		if (check_disc(ray, -h, r, dst, current))
+		p = v3f_add(ray->origin, v3f_scale(ray->direction, *dst));
+		if ((p.x * p.x + p.z * p.z) <= r * r)
 			return (1);
-		if (check_disc(ray, h, r, dst, current))
+	}
+	*dst = (h - ray->origin.y) / ray->direction.y;
+	if (*dst > FLT_EPI && *dst  < current)
+	{
+		p = v3f_add(ray->origin, v3f_scale(ray->direction, *dst));
+		if ((p.x * p.x + p.z * p.z) <= r * r)
 			return (1);
 	}
 	return (0);
@@ -58,31 +57,27 @@ static int	intersect_cylinder_discs(t_obj *obj, t_ray *ray, float *dst, float cu
 	t^2 (Dx^2 + Dz^2) + 2t (Dx Ox + Dz Oz) + (Ox^2 + Oz^2 - r^2) = 0
 	at^2 + bt + c = 0
 */
-static int	check_body(t_v3f coeff, t_v3f o, t_v3f d, float h, float *dst)
+static int	check_body(t_v3f coeff, t_ray *ray, float h, float *dst)
 {
-	float	t0;
-	float	t1;
+	t_v2f	t_vals;
 	t_v3f	p;
 	int		i;
 	float	t;
 
-	if (!solve_quadratic(&coeff, &t0, &t1))
+	if (!solve_quadratic(&coeff, &t_vals.x, &t_vals.y))
 		return (0);
 	i = 0;
 	while (i < 2)
 	{
 		if (i == 0)
-			t = t0;
+			t = t_vals.x;
 		else
-			t = t1;
-		if (t > 0.001f)
+			t = t_vals.y;
+		if (t > FLT_EPI)
 		{
-			p = v3f_add(o, v3f_scale(d, t)); //pt along ray
-			if (p.y >= -h / 2 && p.y <= h / 2) // check if inside cylinder height bounds
-			{
-				*dst = t;
-				return (1);
-			}
+			p = v3f_add(ray->origin, v3f_scale(ray->direction, t));
+			if (p.y >= -h / 2 && p.y <= h / 2)
+				return (*dst = t, 1);
 		}
 		++i;
 	}
@@ -91,47 +86,37 @@ static int	check_body(t_v3f coeff, t_v3f o, t_v3f d, float h, float *dst)
 
 static int	intersect_cylinder_body(t_obj *obj, t_ray *ray, float *dst)
 {
-	t_v3f	o;
-	t_v3f	d;
 	t_v3f	coeff;
 
-	o = ray->origin;
-	d = ray->direction;
-	coeff.x = d.x * d.x + d.z * d.z;
-	coeff.y = 2 * (o.x * d.x + o.z * d.z);
-	coeff.z = o.x * o.x + o.z * o.z - obj->u_shape.cy.radius * obj->u_shape.cy.radius;
-	return (check_body(coeff, o, d, obj->u_shape.cy.height, dst));
+	coeff.x = ray->direction.x * ray->direction.x
+		+ ray->direction.z * ray->direction.z;
+	coeff.y = 2 * (ray->origin.x * ray->direction.x
+			+ ray->origin.z * ray->direction.z);
+	coeff.z = ray->origin.x * ray->origin.x + ray->origin.z
+		* ray->origin.z - obj->u_shape.cy.radius * obj->u_shape.cy.radius;
+	return (check_body(coeff, ray, obj->u_shape.cy.height, dst));
 }
 
 int	cylinder_intersect(t_obj *obj, t_ray *ray, float *dst)
 {
 	t_ray		l_ray;
-	t_mat4x4	to_world;
-	t_mat4x4	to_obj;
-	float		t_body;
-	float		t_disc;
-	int			hit_body;
-	int			hit_disc;
+	t_mat4x4	mat[2];
+	t_v2f		t_values;
+	t_v2f		hits;
 
-	obj_to_world(to_world, obj->t.pos, obj->t.dir, (t_v3f){.x = 0, .y = 1, .z = 0});
-	invert_m4x4(to_obj, to_world);
-	l_ray.origin = mul_v3_m4x4(ray->origin, to_obj);
-	l_ray.direction = mul_dir_m4x4(ray->direction, to_obj);
-	hit_body = intersect_cylinder_body(obj, &l_ray, &t_body);
-	if (!hit_body)
-		hit_disc = intersect_cylinder_discs(obj, &l_ray, &t_disc, FLT_MAX);
+	obj_to_world(mat[0], obj->t.pos, obj->t.dir,
+		(t_v3f){.x = 0, .y = 1, .z = 0});
+	invert_m4x4(mat[1], mat[0]);
+	l_ray.origin = mul_v3_m4x4(ray->origin, mat[1]);
+	l_ray.direction = mul_dir_m4x4(ray->direction, mat[1]);
+	hits.x = intersect_cylinder_body(obj, &l_ray, &t_values.x);
+	if (!hits.x)
+		hits.y = intersect_cylinder_discs(obj, &l_ray, &t_values.y, FLT_MAX);
 	else
-		hit_disc = intersect_cylinder_discs(obj, &l_ray, &t_disc, t_body);
-	if (hit_body && (!hit_disc || t_body < t_disc))
-	{
-		*dst = t_body;
-		return (1);
-	}
-	if (hit_disc)
-	{
-		*dst = t_disc;
-		return (1);
-	}
+		hits.y = intersect_cylinder_discs(obj, &l_ray, &t_values.y, t_values.x);
+	if (hits.x && (!hits.y || t_values.x < t_values.y))
+		return (*dst = t_values.x, 1);
+	if (hits.y)
+		return (*dst = t_values.y, 1);
 	return (0);
 }
-
