@@ -40,6 +40,7 @@ bool	parse_cylinder(char **tokens, t_scene *scene)
 	obj->t.dir = dir;
 	obj->r.col = color;
 	obj->type = OBJ_CYLINDER;
+	obj->calc_norm = cylinder_normal;
 	obj->u_shape.cy = (t_cy){.radius = dimensions.x, .height = dimensions.y};
 	obj->intersect = cylinder_intersect;
 	if (!vector_add(&scene->objects, obj))

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/17 11:59:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/20 12:29:46 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/20 16:56:30 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,25 @@
 //https://math.stackexchange.com/questions/2613781/line-cylinder-intersection
 // Oy + t *Dy = ydisc, t = (ydisc -Oy) / Dy
 
-static t_v3f	cylinder_normal(t_obj *obj, t_v3f point)
+t_v3f	cylinder_normal(t_obj *obj, t_v3f point)
 {
-	return (v3f_norm(v3f_sub(point, obj->t.pos)));
+	t_mat4x4	to_world;
+	t_mat4x4	to_obj;
+	t_v3f		obj_p;
+	t_v3f		norm;
+
+	obj_to_world(to_world, obj->t.pos, obj->t.dir, (t_v3f){.x = 0, .y = 1, .z = 0});
+	invert_m4x4(to_obj, to_world);
+	obj_p = mul_v3_m4x4(point, to_obj);
+	if (fabsf(obj_p.y) >= obj->u_shape.cy.height * 0.5f - 1e-6f)
+	{
+		if (obj_p.y > 0)
+			return (v3f_norm(mul_dir_m4x4(init_v3f(0, 1, 0), to_world)));
+		return (v3f_norm(mul_dir_m4x4(init_v3f(0, -1, 0), to_world)));
+	}
+	norm = init_v3f(obj_p.x, 0, obj_p.z);
+	norm = mul_dir_m4x4(norm, to_world);
+	return (v3f_norm(norm));
 }
 
 static int	intersect_cylinder_discs(t_obj *obj, t_ray *ray,
@@ -111,7 +127,7 @@ int	cylinder_intersect(t_obj *obj, t_ray *ray, float *dst)
 	l_ray.direction = mul_dir_m4x4(ray->direction, mat[1]);
 	hits.x = intersect_cylinder_body(obj, &l_ray, &t_values.x);
 	if (!hits.x)
-		hits.y = intersect_cylinder_discs(obj, &l_ray, &t_values.y, FLT_MAX);
+		hits.y = intersect_cylinder_discs(obj, &l_ray, &t_values.y, 1e-6f);
 	else
 		hits.y = intersect_cylinder_discs(obj, &l_ray, &t_values.y, t_values.x);
 	if (hits.x && (!hits.y || t_values.x < t_values.y))
