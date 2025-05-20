@@ -38,6 +38,11 @@ static bool	solve_quadratic(t_v3f *abc, float *x0, float *x1)
 	return (true);
 }
 
+t_v3f	sphere_normal(t_obj *obj, t_v3f point)
+{
+	return (v3f_norm(v3f_sub(point, obj->t.pos)));
+}
+
 int	sphere_intersect(t_obj *obj, t_ray *ray, float *dst)
 {
 	t_v3f		oc;
