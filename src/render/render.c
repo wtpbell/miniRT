@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/20 15:55:36 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/20 19:06:25 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	render(t_scene *scene)
 
 	y = 0;
 	img = scene->camera.img_plane;
-	ray.origin = mul_v3_m4x4(init_v3f(0, 0, 0), scene->camera.cam_to_world);
+	ray.origin = scene->camera.t.pos;// mul_v3_m4x4(init_v3f(0, 0, 0), scene->camera.cam_to_world);
 	while (y < img->height)
 	{
 		x = 0;

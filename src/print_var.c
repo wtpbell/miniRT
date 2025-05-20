@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/19 10:54:55 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/20 17:56:25 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,15 @@ void	sphere_print(t_obj *sp, int spaces)
 	col32_print(sp->r.col, spaces + 2, "COL");
 }
 
+void	cylinder_print(t_obj *cy, int spaces)
+{
+	printf("%*s%s", spaces, "","CYLINDER:\n");
+	transform_print(&cy->t, spaces + 2);
+	float_print(cy->u_shape.cy.radius, spaces + 2, "RADIUS");
+	float_print(cy->u_shape.cy.height, spaces + 2, "HEIGHT");
+	col32_print(cy->r.col, spaces + 2, "COL");
+}
+
 void	objects_print(t_vector	objects, int spaces, const char *prefix)
 {
 	int			i;
@@ -96,6 +105,8 @@ void	objects_print(t_vector	objects, int spaces, const char *prefix)
 			sphere_print(obj, spaces + 2);
 		else if (obj->type == OBJ_PLANE)
 			plane_print(obj, spaces + 2);
+		else if (obj->type == OBJ_CYLINDER)
+			cylinder_print(obj, spaces + 2);
 		++i;
 	}
 }
