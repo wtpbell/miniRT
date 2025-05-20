@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:16:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/09 16:19:53 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/19 14:40:51 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # define C_BLUE		0x0000FFFF
 # define C_WHITE	0xFFFFFFFF
 # define C_BLACK	0x000000FF
+# define C_TRANS	0x00000000
 
 typedef uint32_t	t_col32;
 
