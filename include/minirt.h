@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/19 16:42:44 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/20 14:24:16 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 # include "ray.h"
 # include "color.h"
 # include "vector.h"
-
-# define EPSILON 1e-3f
 
 int		game(t_scene *scene);
 void	render(t_scene *scene);

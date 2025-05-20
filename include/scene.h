@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   scene.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 18:55:45 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/18 20:33:50 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   scene.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/20 11:53:16 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ struct s_object
 	}			u_shape;
 	t_obj_type	type;
 	int			(*intersect)(t_obj *obj, t_ray *ray, float *dst);
+	t_v3f		(*calc_norm)(t_obj *obj, t_v3f point);
 };
 
 typedef struct s_scene

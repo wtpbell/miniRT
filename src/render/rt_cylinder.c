@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/17 11:59:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/20 12:16:04 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/20 12:29:46 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 //https://math.stackexchange.com/questions/2613781/line-cylinder-intersection
 // Oy + t *Dy = ydisc, t = (ydisc -Oy) / Dy
 
-static t_v3f	cylinder_normal(t_obj *obj, t_v3f point_world)
+static t_v3f	cylinder_normal(t_obj *obj, t_v3f point)
 {
-	
+	return (v3f_norm(v3f_sub(point, obj->t.pos)));
 }
 
 static int	intersect_cylinder_discs(t_obj *obj, t_ray *ray,
