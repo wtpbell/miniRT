@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/21 20:14:39 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/21 20:32:37 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	view_matrix(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up)
 	t_v3f	x_axis;
 	t_v3f	y_axis;
 
-	dir = v3f_norm(dir);
 	x_axis = v3f_norm(v3f_cross(dir, up));
 	y_axis = v3f_cross(x_axis, dir);
 	mat[0] = x_axis.x;

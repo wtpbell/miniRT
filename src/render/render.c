@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/21 20:14:39 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/21 20:31:31 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,25 @@ static t_col32	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 {
 	float	t;
 	t_obj	*hit;
+	t_ray	shadow_ray;
 
-	(void)depth;
-
+	// (void)depth;
 	hit = find_intersection(ray, scene, &t);
 	if (hit == NULL)
 		return (gradient_color(ray->direction, scene->camera.bg_col));
 	else
-		return (hit->r.col);
+	{
+		shadow_ray.origin = v3f_add(ray->origin, v3f_scale(ray->direction, t));
+		shadow_ray.direction = hit->calc_norm(hit, shadow_ray.origin);
+		// TODO: Find correct color to return
+		if (depth == MAX_DEPTH)
+			return (normal_color(shadow_ray.direction));
+		// TODO: Do fancy stuff;
+		// call trace (depth + 1)
+		return (normal_color(shadow_ray.direction));
+	}
+	return (scene->camera.bg_col);
+	// return (hit->r.col); (the real color from test file)
 }
 
 static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
@@ -96,7 +107,6 @@ static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
 	t_v3f	camera_space;
 	float	view;
 
-	ray->origin = cam->t.pos;
 	view = tanf(cam->fov * 0.5f * DEGTORAD);
 	camera_space.x = (2.0f * ((x + 0.5f) / cam->img_plane->width) - 1.0f) * cam->aspect_ratio * view;
 	camera_space.y = (1.0f - 2.0f * ((y + 0.5f) / cam->img_plane->height)) * view;
