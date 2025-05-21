@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   game.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/20 19:16:14 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   game.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
+/*   Updated: 2025/05/21 20:14:39 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,16 @@
 #include "minirt.h"
 #include "debug/rt_debug.h"
 
-#include <stdlib.h>
 
 #define WIDTH	1024
 #define HEIGHT	1024
 
-// TODO: Implementation needed ()
 static void	update(void *ctx)
 {
 	(void)ctx;
 }
 
-// http://bentonian.com/Lectures/AdvGraph1314/2.%20Ray%20tracing%20-%20all%20the%20maths.pdf
-//https://www.scratchapixel.com/lessons/3d-basic-rendering/transforming-objects-using-matrices/using-4x4-matrices-transform-objects-3D.html
-
+// TODO: Implementation needed ()
 void obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up)
 {
 	t_v3f		x_axis;
@@ -36,7 +32,6 @@ void obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up)
 	t_mat4x4	rot;
 	t_mat4x4	trans;
 
-	up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	y_axis = v3f_norm(dir);
 	if (fabs(v3f_dot(y_axis, up)) > .99f)// cos(2.5))
 		up = (t_v3f){.x = 0, .y = 0, .z = 1};
@@ -46,31 +41,42 @@ void obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up)
 	id_m4x4(trans);
 	trans_m4x4(trans, pos);
 	mul_col_mat4x4(dst, trans, rot);
-	mat4x4_print(dst, 0, "FINAL");
-	mat4x4_print(trans, 0, "TRANS");
-	mat4x4_print(rot, 0, "ROT");
-	exit(0);
 }
 
-void	cam_to_world(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up)
+	//| x_axis.x  y_axis.x  -dir.x  ? |
+	//| x_axis.y  y_axis.y  -dir.y  ? |
+	//| x_axis.z  y_axis.z  -dir.z  ? |
+	//|   0         0         0     1 |
+void	view_matrix(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up)
 {
 	t_v3f	x_axis;
 	t_v3f	y_axis;
 
-	id_m4x4(mat);
-	trans_m4x4(mat, pos);
-	x_axis = v3f_norm(v3f_cross(up, dir));
-	y_axis = v3f_norm(v3f_cross(dir, x_axis));
-	x_axis = v3f_scale(x_axis, -1);
+	dir = v3f_norm(dir);
+	x_axis = v3f_norm(v3f_cross(dir, up));
+	y_axis = v3f_cross(x_axis, dir);
 	mat[0] = x_axis.x;
 	mat[1] = x_axis.y;
 	mat[2] = x_axis.z;
+	mat[3] = 0.0f;
 	mat[4] = y_axis.x;
 	mat[5] = y_axis.y;
 	mat[6] = y_axis.z;
-	mat[8] = dir.x;
-	mat[9] = dir.y;
-	mat[10] = dir.z;
+	mat[7] = 0.0f;
+	mat[8] = -dir.x;
+	mat[9] = -dir.y;
+	mat[10] = -dir.z;
+	mat[11] = 0.0f;
+	mat[12] = -v3f_dot(x_axis, pos); // -R^T * pos
+	mat[13] = -v3f_dot(y_axis, pos);
+	mat[14] = v3f_dot(dir, pos); //+ve as dir is -ve now
+	mat[15] = 1.0f;
+	
+	printf("\nCamera to World Matrix:\n");
+	printf("|%.2f %.2f %.2f %.2f|\n", mat[0], mat[4], mat[8], mat[12]);
+	printf("|%.2f %.2f %.2f %.2f|\n", mat[1], mat[5], mat[9], mat[13]);
+	printf("|%.2f %.2f %.2f %.2f|\n", mat[2], mat[6], mat[10], mat[14]);
+	printf("|%.2f %.2f %.2f %.2f|\n", mat[3], mat[7], mat[11], mat[15]);
 }
 
 static bool	cam_init(t_cam *cam, mlx_t *mlx)
@@ -82,7 +88,8 @@ static bool	cam_init(t_cam *cam, mlx_t *mlx)
 	cam->aspect_ratio = cam->img_plane->width / (float)cam->img_plane->height;
 	cam->bg_col = init_col32(127, 0, 127, 255);
 	cam->t.dir = v3f_norm(cam->t.dir);
-	cam_to_world(cam->cam_to_world, cam->t.pos, cam->t.dir, init_v3f(0, 1, 0));
+	// Use the camera's up vector that was set during parsing
+	view_matrix(cam->view_matrix, cam->t.pos, cam->t.dir, cam->t.up);
 	return (true);
 }
 

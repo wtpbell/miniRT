@@ -1,42 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   rt_cylinder.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/17 11:59:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/20 18:30:38 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   rt_cylinder.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/17 11:59:52 by bewong            #+#    #+#             */
+/*   Updated: 2025/05/21 19:34:21 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ray.h"
 #include "scene.h"
-#include "minirt.h"
 #include "rt_math.h"
+#include "minirt.h"
+#include <float.h>
 
-//https://math.stackexchange.com/questions/2613781/line-cylinder-intersection
-// Oy + t *Dy = ydisc, t = (ydisc -Oy) / Dy
+#include <float.h>
+#include <math.h>
+#include <stdio.h>
 
 t_v3f	cylinder_normal(t_obj *obj, t_v3f point)
 {
-	t_mat4x4	to_world;
-	t_mat4x4	to_obj;
-	t_v3f		obj_p;
-	t_v3f		norm;
+	t_v3f	obj_p;
 
-	obj_to_world(to_world, obj->t.pos, obj->t.dir, (t_v3f){.x = 0, .y = 1, .z = 0});
-	invert_m4x4(to_obj, to_world);
-	obj_p = mul_v3_m4x4(point, to_obj);
+	obj_p = mul_v3_m4x4(point, obj->to_obj);
 	if (fabsf(obj_p.y) >= obj->u_shape.cy.height * 0.5f - FLT_SML)
 	{
 		if (obj_p.y > 0)
-			return (v3f_norm(mul_dir_m4x4(init_v3f(0, 1, 0), to_world)));
-		return (v3f_norm(mul_dir_m4x4(init_v3f(0, -1, 0), to_world)));
+			return (v3f_norm(mul_dir_m4x4(init_v3f(0, 1, 0), obj->to_world)));
+		return (v3f_norm(mul_dir_m4x4(init_v3f(0, -1, 0), obj->to_world)));
 	}
-	norm = init_v3f(obj_p.x, 0, obj_p.z);
-	norm = mul_dir_m4x4(norm, to_world);
-	return (v3f_norm(norm));
+	return v3f_norm(mul_dir_m4x4(init_v3f(obj_p.x, 0, obj_p.z), obj->to_world));
 }
 
 static int	intersect_cylinder_discs(t_obj *obj, t_ray *ray,
@@ -115,15 +110,11 @@ static int	intersect_cylinder_body(t_obj *obj, t_ray *ray, float *dst)
 int	cylinder_intersect(t_obj *obj, t_ray *ray, float *dst)
 {
 	t_ray		l_ray;
-	t_mat4x4	mat[2];
 	t_v2f		t_values;
 	t_v2f		hits;
 
-	obj_to_world(mat[0], obj->t.pos, obj->t.dir,
-		(t_v3f){.x = 0, .y = 1, .z = 0});
-	invert_m4x4(mat[1], mat[0]);
-	l_ray.origin = mul_v3_m4x4(ray->origin, mat[1]);
-	l_ray.direction = mul_dir_m4x4(ray->direction, mat[1]);
+	l_ray.origin = mul_v3_m4x4(ray->origin, obj->to_obj);
+	l_ray.direction = mul_dir_m4x4(ray->direction, obj->to_obj);
 	hits.x = intersect_cylinder_body(obj, &l_ray, &t_values.x);
 	if (!hits.x)
 		hits.y = intersect_cylinder_discs(obj, &l_ray, &t_values.y, FLT_MAX);

@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <math.h>
 #include "parser.h"
 
 static bool	parse_fov(float *fov, const char *str)
@@ -28,6 +29,7 @@ bool	parse_camera(char **tokens, t_scene *scene)
 {
 	t_v3f		pos;
 	t_v3f		dir;
+	t_v3f		up;
 	float		fov;
 
 	if (scene->scene_flags & SCENE_CAMERA)
@@ -40,7 +42,12 @@ bool	parse_camera(char **tokens, t_scene *scene)
 		return (false);
 	ft_bzero(&scene->camera, sizeof(t_cam));
 	scene->camera.t.pos = pos;
-	scene->camera.t.dir = dir;
+	scene->camera.t.dir = v3f_norm(dir);
+	if (fabsf(dir.y) > 0.999f)
+		up = (t_v3f){.x = 0.0f, .y = 0.0f, .z = -1.0f + 2.0f * (dir.y < 0.0f)};
+	else
+		up = v3f_norm(v3f_cross(v3f_cross(dir, (t_v3f){.x = 0.0f, .y = 1.0f, .z = 0.0f}), dir));
+	scene->camera.t.up = up;
 	scene->camera.fov = fov;
 	scene->scene_flags |= SCENE_CAMERA;
 	return (true);

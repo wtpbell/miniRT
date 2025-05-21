@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   print_var.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/20 17:56:25 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   print_var.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/14 09:34:02 by jboon             #+#    #+#             */
+/*   Updated: 2025/05/21 20:14:39 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	camera_print(t_cam *cam, int spaces)
 {
 	printf("%*s%s", spaces, "","CAMERA:\n");
 	transform_print(&cam->t, spaces + 2);
-	mat4x4_print(cam->cam_to_world, spaces + 2, "CAM_TO_WORLD");
+	mat4x4_print(cam->view_matrix, spaces + 2, "view_matrix");
 	float_print(cam->fov, spaces + 2, "FOV");
 	col32_print(cam->bg_col, spaces + 2, "bg_col");
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   minirt.h                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/20 14:46:59 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   minirt.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 11:37:50 by jboon             #+#    #+#             */
+/*   Updated: 2025/05/21 11:17:11 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "vector.h"
 
 int		game(t_scene *scene);
+void	init_object_matrices(t_obj *obj);
 void	render(t_scene *scene);
 bool	solve_quadratic(t_v3f *abc, float *x0, float *x1);
 void	obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up);

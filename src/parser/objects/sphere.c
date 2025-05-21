@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   sphere.c                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/20 11:05:00 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   sphere.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
+/*   Updated: 2025/05/21 19:31:07 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,12 @@ bool	parse_sphere(char **tokens, t_scene *scene)
 		return (false);
 	obj->t.pos = pos;
 	obj->r.col = color;
+	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	obj->type = OBJ_SPHERE;
 	obj->u_shape.sp = create_sphere(diameter);
 	obj->intersect = sphere_intersect;
 	obj->calc_norm = sphere_normal;
+	init_object_matrices(obj);
 	if (!vector_add(&scene->objects, obj))
 		return (free(obj), false);
 	return (true);

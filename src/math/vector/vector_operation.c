@@ -39,6 +39,34 @@ inline t_v3f	v3f_scale(t_v3f v, float f)
 	});
 }
 
+inline t_v3f	v3f_mul_s(t_v3f v, float s)
+{
+	return ((t_v3f){
+		.x = v.x * s,
+		.y = v.y * s,
+		.z = v.z * s
+	});
+}
+
+inline t_v3f	v3f_div_s(t_v3f v, float s)
+{
+	float inv_s = 1.0f / s;
+	return ((t_v3f){
+		.x = v.x * inv_s,
+		.y = v.y * inv_s,
+		.z = v.z * inv_s
+	});
+}
+
+inline t_v3f	v3f_neg(t_v3f v)
+{
+	return ((t_v3f){
+		.x = -v.x,
+		.y = -v.y,
+		.z = -v.z
+	});
+}
+
 float	v3f_dist(t_v3f a, t_v3f b)
 {
 	return (v3f_mag(v3f_sub(a, b)));

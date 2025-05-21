@@ -38,11 +38,13 @@ bool	parse_cylinder(char **tokens, t_scene *scene)
 		return (false);
 	obj->t.pos = pos;
 	obj->t.dir = dir;
+	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	obj->r.col = color;
 	obj->type = OBJ_CYLINDER;
 	obj->calc_norm = cylinder_normal;
 	obj->u_shape.cy = (t_cy){.radius = dimensions.x, .height = dimensions.y};
 	obj->intersect = cylinder_intersect;
+	init_object_matrices(obj);
 	if (!vector_add(&scene->objects, obj))
 		return (free(obj), false);
 	return (true);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   scene.h                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/20 14:25:21 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   scene.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 18:55:45 by jboon             #+#    #+#             */
+/*   Updated: 2025/05/21 20:14:39 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "color.h"
 # include "libft.h"
 # include "container.h"
+# include <stdio.h>
 
 typedef struct s_object	t_obj;
 
@@ -49,6 +50,7 @@ typedef struct s_transform
 {
 	t_v3f	pos;
 	t_v3f	dir;
+	t_v3f	up;
 }	t_trans;
 
 typedef struct s_camera
@@ -58,7 +60,7 @@ typedef struct s_camera
 	float		aspect_ratio;
 	t_col32		bg_col;
 	mlx_image_t	*img_plane;
-	t_mat4x4	cam_to_world;
+	t_mat4x4	view_matrix;
 }	t_cam;
 
 typedef struct s_material
@@ -107,6 +109,8 @@ struct s_object
 	t_obj_type	type;
 	int			(*intersect)(t_obj *obj, t_ray *ray, float *dst);
 	t_v3f		(*calc_norm)(t_obj *obj, t_v3f point);
+	t_mat4x4	to_world;
+	t_mat4x4	to_obj;
 };
 
 typedef struct s_scene
