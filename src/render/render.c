@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   render.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/21 20:31:31 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   render.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/22 17:06:12 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ static	t_col32	normal_color(t_v3f norm)
 
 static t_col32	gradient_color(t_v3f dir, t_col32 b)
 {
-
 	(void)b;
 	return (normal_color(dir));
 	// hitcolor = v3f_scale(v3f_add(dir,
@@ -83,23 +82,18 @@ static t_col32	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	t_obj	*hit;
 	t_ray	shadow_ray;
 
-	// (void)depth;
 	hit = find_intersection(ray, scene, &t);
 	if (hit == NULL)
 		return (gradient_color(ray->direction, scene->camera.bg_col));
-	else
-	{
-		shadow_ray.origin = v3f_add(ray->origin, v3f_scale(ray->direction, t));
-		shadow_ray.direction = hit->calc_norm(hit, shadow_ray.origin);
-		// TODO: Find correct color to return
-		if (depth == MAX_DEPTH)
-			return (normal_color(shadow_ray.direction));
-		// TODO: Do fancy stuff;
-		// call trace (depth + 1)
+	shadow_ray.origin = v3f_add(ray->origin, v3f_scale(ray->direction, t));
+	shadow_ray.direction = hit->calc_norm(hit, shadow_ray.origin);
+	// TODO: Find correct color to return
+	if (depth == MAX_DEPTH)
 		return (normal_color(shadow_ray.direction));
-	}
-	return (scene->camera.bg_col);
-	// return (hit->r.col); (the real color from test file)
+	// TODO: Do fancy stuff;
+	// call trace (depth + 1)
+	return (normal_color(shadow_ray.direction));
+	// return (hit->r.col); //(the real color from test file)
 }
 
 static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
@@ -112,31 +106,15 @@ static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
 	camera_space.y = (1.0f - 2.0f * ((y + 0.5f) / cam->img_plane->height)) * view;
 	camera_space.z = -1.0f;
 	ray->direction.x = cam->view_matrix[0] * camera_space.x +
-					   cam->view_matrix[4] * camera_space.y +
-					   cam->view_matrix[8] * camera_space.z;
+						cam->view_matrix[4] * camera_space.y +
+						cam->view_matrix[8] * camera_space.z;
 	ray->direction.y = cam->view_matrix[1] * camera_space.x +
-					   cam->view_matrix[5] * camera_space.y +
-					   cam->view_matrix[9] * camera_space.z;
+						cam->view_matrix[5] * camera_space.y +
+						cam->view_matrix[9] * camera_space.z;
 	ray->direction.z = cam->view_matrix[2] * camera_space.x +
-					   cam->view_matrix[6] * camera_space.y +
-					   cam->view_matrix[10] * camera_space.z;
+						cam->view_matrix[6] * camera_space.y +
+						cam->view_matrix[10] * camera_space.z;
 	ray->direction = v3f_norm(ray->direction);
-
-	// Debug output for the first ray
-	static bool first_ray = true;
-	if (first_ray && x == 0 && y == 0) {
-		first_ray = false;
-		printf("\n--- First Ray ---\n");
-		printf("Pixel (0, 0)\n");
-		printf("Camera space: (%.6f, %.6f, %.6f)\n", camera_space.x, camera_space.y, camera_space.z);
-		printf("World direction: (%.6f, %.6f, %.6f)\n", 
-			ray->direction.x, ray->direction.y, ray->direction.z);
-		printf("Direction length: %.6f\n", v3f_mag(ray->direction));
-		printf("Camera position: (%.6f, %.6f, %.6f)\n", 
-			cam->t.pos.x, cam->t.pos.y, cam->t.pos.z);
-		printf("Camera direction: (%.6f, %.6f, %.6f)\n", 
-			cam->t.dir.x, cam->t.dir.y, cam->t.dir.z);
-	}
 }
 
 void	render(t_scene *scene)

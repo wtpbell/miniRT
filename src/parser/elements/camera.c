@@ -46,7 +46,8 @@ bool	parse_camera(char **tokens, t_scene *scene)
 	if (fabsf(dir.y) > 0.999f)
 		up = (t_v3f){.x = 0.0f, .y = 0.0f, .z = -1.0f + 2.0f * (dir.y < 0.0f)};
 	else
-		up = v3f_norm(v3f_cross(v3f_cross(dir, (t_v3f){.x = 0.0f, .y = 1.0f, .z = 0.0f}), dir));
+		up = v3f_norm(v3f_cross(v3f_cross(
+						dir, (t_v3f){.x = 0.0f, .y = 1.0f, .z = 0.0f}), dir));
 	scene->camera.t.up = up;
 	scene->camera.fov = fov;
 	scene->scene_flags |= SCENE_CAMERA;

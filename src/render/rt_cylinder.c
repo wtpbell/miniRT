@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_cylinder.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/17 11:59:52 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/21 19:34:21 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_cylinder.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/17 11:59:52 by bewong        #+#    #+#                 */
+/*   Updated: 2025/05/22 15:48:42 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 #include "scene.h"
 #include "rt_math.h"
 #include "minirt.h"
-#include <float.h>
-
-#include <float.h>
 #include <math.h>
 #include <stdio.h>
 
@@ -31,7 +28,8 @@ t_v3f	cylinder_normal(t_obj *obj, t_v3f point)
 			return (v3f_norm(mul_dir_m4x4(init_v3f(0, 1, 0), obj->to_world)));
 		return (v3f_norm(mul_dir_m4x4(init_v3f(0, -1, 0), obj->to_world)));
 	}
-	return v3f_norm(mul_dir_m4x4(init_v3f(obj_p.x, 0, obj_p.z), obj->to_world));
+	return (v3f_norm(mul_dir_m4x4(init_v3f(obj_p.x, 0, obj_p.z),
+				obj->to_world)));
 }
 
 static int	intersect_cylinder_discs(t_obj *obj, t_ray *ray,
@@ -46,14 +44,14 @@ static int	intersect_cylinder_discs(t_obj *obj, t_ray *ray,
 	if (ray->direction.y == 0)
 		return (0);
 	*dst = (-h - ray->origin.y) / ray->direction.y;
-	if (*dst > FLT_SML && *dst  < current)
+	if (*dst > FLT_SML && *dst < current)
 	{
 		p = v3f_add(ray->origin, v3f_scale(ray->direction, *dst));
 		if ((p.x * p.x + p.z * p.z) <= r * r)
 			return (1);
 	}
 	*dst = (h - ray->origin.y) / ray->direction.y;
-	if (*dst > FLT_SML && *dst  < current)
+	if (*dst > FLT_SML && *dst < current)
 	{
 		p = v3f_add(ray->origin, v3f_scale(ray->direction, *dst));
 		if ((p.x * p.x + p.z * p.z) <= r * r)

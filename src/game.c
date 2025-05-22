@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   game.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/21 20:32:37 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   game.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/22 16:58:31 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "MLX42/MLX42.h"
 #include "minirt.h"
 #include "debug/rt_debug.h"
-
 
 #define WIDTH	1024
 #define HEIGHT	1024
@@ -24,7 +23,7 @@ static void	update(void *ctx)
 }
 
 // TODO: Implementation needed ()
-void obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up)
+void	obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up)
 {
 	t_v3f		x_axis;
 	t_v3f		y_axis;
@@ -33,7 +32,7 @@ void obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up)
 	t_mat4x4	trans;
 
 	y_axis = v3f_norm(dir);
-	if (fabs(v3f_dot(y_axis, up)) > .99f)// cos(2.5))
+	if (fabs(v3f_dot(y_axis, up)) > .99f)
 		up = (t_v3f){.x = 0, .y = 0, .z = 1};
 	x_axis = v3f_norm(v3f_cross(up, y_axis));
 	z_axis = v3f_cross(x_axis, y_axis);
@@ -43,39 +42,28 @@ void obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up)
 	mul_col_mat4x4(dst, trans, rot);
 }
 
-	//| x_axis.x  y_axis.x  -dir.x  ? |
-	//| x_axis.y  y_axis.y  -dir.y  ? |
-	//| x_axis.z  y_axis.z  -dir.z  ? |
-	//|   0         0         0     1 |
 void	view_matrix(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up)
 {
 	t_v3f	x_axis;
 	t_v3f	y_axis;
 
+	id_m4x4(mat);
+	if (fabs(v3f_dot(dir, up)) > .99f)
+		up = (t_v3f){.x = 0, .y = 0, .z = 1};
 	x_axis = v3f_norm(v3f_cross(dir, up));
 	y_axis = v3f_cross(x_axis, dir);
 	mat[0] = x_axis.x;
 	mat[1] = x_axis.y;
 	mat[2] = x_axis.z;
-	mat[3] = 0.0f;
 	mat[4] = y_axis.x;
 	mat[5] = y_axis.y;
 	mat[6] = y_axis.z;
-	mat[7] = 0.0f;
 	mat[8] = -dir.x;
 	mat[9] = -dir.y;
 	mat[10] = -dir.z;
-	mat[11] = 0.0f;
-	mat[12] = -v3f_dot(x_axis, pos); // -R^T * pos
+	mat[12] = -v3f_dot(x_axis, pos);
 	mat[13] = -v3f_dot(y_axis, pos);
-	mat[14] = v3f_dot(dir, pos); //+ve as dir is -ve now
-	mat[15] = 1.0f;
-	
-	printf("\nCamera to World Matrix:\n");
-	printf("|%.2f %.2f %.2f %.2f|\n", mat[0], mat[4], mat[8], mat[12]);
-	printf("|%.2f %.2f %.2f %.2f|\n", mat[1], mat[5], mat[9], mat[13]);
-	printf("|%.2f %.2f %.2f %.2f|\n", mat[2], mat[6], mat[10], mat[14]);
-	printf("|%.2f %.2f %.2f %.2f|\n", mat[3], mat[7], mat[11], mat[15]);
+	mat[14] = v3f_dot(dir, pos);
 }
 
 static bool	cam_init(t_cam *cam, mlx_t *mlx)
