@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 11:46:48 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/23 10:53:32 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,8 @@ t_v3f	init_v3f(float x, float y, float z);
 t_v3f	v3f_add(t_v3f a, t_v3f b);
 t_v3f	v3f_sub(t_v3f a, t_v3f b);
 t_v3f	v3f_scale(t_v3f v, float f);
-t_v3f	v3f_mul_s(t_v3f v, float s);
-t_v3f	v3f_div_s(t_v3f v, float s);
 t_v3f	v3f_cross(t_v3f a, t_v3f b);
 t_v3f	v3f_norm(t_v3f v);
-t_v3f	v3f_neg(t_v3f v);
 float	v3f_dot(t_v3f a, t_v3f b);
 float	v3f_mag(t_v3f v);
 float	v3f_sqr_mag(t_v3f v);

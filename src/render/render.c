@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/23 09:54:35 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/23 12:06:52 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void	init_object_matrices(t_obj *obj)
 	up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	if (obj->t.up.x != 0 || obj->t.up.y != 0 || obj->t.up.z != 0)
 		up = obj->t.up;
-	obj_to_world(obj->to_world, obj->t.pos, obj->t.dir, up);
-	invert_m4x4(obj->to_obj, obj->to_world);
+	obj_to_world(obj->t.to_world, obj->t.pos, obj->t.dir, up);
+	invert_m4x4(obj->t.to_obj, obj->t.to_world);
 }
 
 static	t_col32	normal_color(t_v3f norm)
@@ -50,7 +50,7 @@ static t_col32	gradient_color(t_v3f dir, t_col32 b)
 	// hitcolor = v3f_scale(v3f_add(dir,
 	// // 			v3f_norm(init_v3f(get_r(b), get_g(b), get_b(b)))), 255 >> 1);
 	// return (init_col32(hitcolor.x * (get_r(b) / 255.0f), hitcolor.y * (get_g(b) / 255.0f), hitcolor.z * (get_b(b) / 255.0f), 255));
-	// return (init_col32(ft_absf(dir.y) * get_r(b), ft_absf(dir.x) * get_g(b), ft_absf(dir.x) * get_b(b), 255));	
+	// return (init_col32(ft_absf(dir.y) * get_r(b), ft_absf(dir.x) * get_g(b), ft_absf(dir.x) * get_b(b), 255));
 }
 
 static t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t)
@@ -114,10 +114,12 @@ void	render(t_scene *scene)
 	uint32_t	y;
 	t_ray		ray;
 	mlx_image_t	*img;
+	t_mat4x4	inv;
 
 	y = 0;
 	img = scene->camera.img_plane;
-	ray.origin = mul_v3_m4x4(init_v3f(0, 0, 0), scene->camera.view_matrix);
+	invert_m4x4(inv, scene->camera.view_matrix);
+	ray.origin = mul_v3_m4x4(init_v3f(0, 0, 0), inv);
 	while (y < img->height)
 	{
 		x = 0;

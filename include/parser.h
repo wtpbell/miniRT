@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/19 11:28:03 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/23 11:56:08 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,9 +114,9 @@ bool		parse_v3f(t_v3f *v3f, const char *str);
 bool		parse_col(t_col32 *col, const char *str);
 bool		parse_dir(t_v3f *dir, const char *str);
 bool		parse_floats(const char **tokens, float *out,
-					size_t count, const char *ctx);
+				size_t count, const char *ctx);
 bool		parse_ints(const char **tokens, int *out,
-					size_t count, const char *ctx);
+				size_t count, const char *ctx);
 
 // general_utils.c
 size_t		token_count(char **tokens);

@@ -6,10 +6,9 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 08:51:07 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/20 14:27:44 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/23 11:55:28 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MATRIX_H
 # define MATRIX_H
