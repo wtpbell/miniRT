@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:38:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/22 13:52:08 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/23 13:51:59 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,9 @@ inline t_v3f	v3f_scale(t_v3f v, float f)
 float	v3f_dist(t_v3f a, t_v3f b)
 {
 	return (v3f_mag(v3f_sub(a, b)));
+}
+
+t_v3f	v3f_refl(t_v3f d, t_v3f n)
+{
+	return (v3f_sub(d, (v3f_scale(n, v3f_dot(v3f_scale(d, 2), n)))));
 }

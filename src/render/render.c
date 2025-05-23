@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/23 12:06:52 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/23 18:10:49 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,28 @@
 #include "debug/rt_debug.h"
 
 #define MAX_DEPTH	5
+
+// Randomizer (not allowed functions...)
+#include <stdlib.h>
+#include <time.h>
+
+float	frandom(float min, float max)
+{
+	return (min + (max - min) * ((float)rand() / (float)rand()));
+}
+
+inline t_v3f	v3f_random(float min, float max)
+{
+	return (init_v3f(frandom(min, max), frandom(min, max), frandom(min, max)));
+}
+
+inline t_v3f	v3f_random_unit()
+{
+	return (v3f_random(-1.0f, 1.0f));
+}
+
+// end Randomizer
+
 
 void	init_object_matrices(t_obj *obj)
 {
@@ -85,8 +107,21 @@ static t_col32	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	hit = find_intersection(ray, scene, &t);
 	if (hit == NULL)
 		return (gradient_color(ray->direction, scene->camera.bg_col));
+
 	shadow_ray.origin = v3f_add(ray->origin, v3f_scale(ray->direction, t));
 	shadow_ray.direction = hit->calc_norm(hit, shadow_ray.origin);
+
+	// Lambert's Cosine Law
+	t_v3f inv_ray = v3f_scale(ray->direction, -1);
+	float	ratio = v3f_dot(shadow_ray.direction, inv_ray);
+	return (init_col32(
+		get_r(hit->r.col) * ratio,
+		get_g(hit->r.col) * ratio,
+		get_b(hit->r.col) * ratio, 255));
+
+	// albedo = reflected light / incident light
+
+
 	// TODO: Find correct color to return
 	if (depth == MAX_DEPTH)
 		return (normal_color(shadow_ray.direction));
@@ -115,6 +150,9 @@ void	render(t_scene *scene)
 	t_ray		ray;
 	mlx_image_t	*img;
 	t_mat4x4	inv;
+
+	// TODO: delete later
+	srand(time(NULL));
 
 	y = 0;
 	img = scene->camera.img_plane;
