@@ -6,9 +6,11 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/13 13:40:09 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/15 15:09:34 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/23 12:07:59 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "rt_math.h"
 
 float	ft_maxf(float a, float b)
 {
@@ -33,9 +35,7 @@ void	ft_swapf(float *a, float *b)
 	*b = tmp;
 }
 
-float	ft_absf(float a)
+inline int	fapprox(float n)
 {
-	if (a < 0)
-		return (-a);
-	return (a);
+	return (fabsf(n) > FLT_SML);
 }

@@ -28,10 +28,12 @@ bool	parse_plane(char **tokens, t_scene *scene)
 	obj->t.pos = pos;
 	obj->t.dir = dir;
 	obj->r.col = col;
+	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	obj->u_shape.pl = (t_pl){};
 	obj->type = OBJ_PLANE;
 	obj->intersect = plane_intersect;
 	obj->calc_norm = plane_normal;
+	init_object_matrices(obj);
 	if (!vector_add(&scene->objects, obj))
 		return (free(obj), false);
 	return (true);

@@ -14,7 +14,7 @@
 #include "scene.h"
 #include "rt_math.h"
 
-static bool	solve_quadratic(t_v3f *abc, float *x0, float *x1)
+bool	solve_quadratic(t_v3f *abc, float *x0, float *x1)
 {
 	float	dis;
 	float	q;

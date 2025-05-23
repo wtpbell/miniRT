@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   print_var.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/19 10:54:55 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   print_var.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/14 09:34:02 by jboon             #+#    #+#             */
+/*   Updated: 2025/05/21 20:14:39 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	camera_print(t_cam *cam, int spaces)
 {
 	printf("%*s%s", spaces, "","CAMERA:\n");
 	transform_print(&cam->t, spaces + 2);
-	mat4x4_print(cam->cam_to_world, spaces + 2, "CAM_TO_WORLD");
+	mat4x4_print(cam->view_matrix, spaces + 2, "view_matrix");
 	float_print(cam->fov, spaces + 2, "FOV");
 	col32_print(cam->bg_col, spaces + 2, "bg_col");
 }
@@ -82,6 +82,15 @@ void	sphere_print(t_obj *sp, int spaces)
 	col32_print(sp->r.col, spaces + 2, "COL");
 }
 
+void	cylinder_print(t_obj *cy, int spaces)
+{
+	printf("%*s%s", spaces, "","CYLINDER:\n");
+	transform_print(&cy->t, spaces + 2);
+	float_print(cy->u_shape.cy.radius, spaces + 2, "RADIUS");
+	float_print(cy->u_shape.cy.height, spaces + 2, "HEIGHT");
+	col32_print(cy->r.col, spaces + 2, "COL");
+}
+
 void	objects_print(t_vector	objects, int spaces, const char *prefix)
 {
 	int			i;
@@ -96,6 +105,8 @@ void	objects_print(t_vector	objects, int spaces, const char *prefix)
 			sphere_print(obj, spaces + 2);
 		else if (obj->type == OBJ_PLANE)
 			plane_print(obj, spaces + 2);
+		else if (obj->type == OBJ_CYLINDER)
+			cylinder_print(obj, spaces + 2);
 		++i;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   rt_plane.c                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/19 10:33:19 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/20 11:04:29 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/22 15:47:46 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,17 @@ t_v3f	plane_normal(t_obj *obj, t_v3f point)
 int	plane_intersect(t_obj *obj, t_ray *ray, float *dst)
 {
 	float	denom;
+	float	t;
 
 	denom = v3f_dot(obj->t.dir, ray->direction);
-	if (denom > FLT_EPI)
+	if (fabs(denom) > FLT_SML)
 	{
-		*dst = v3f_dot(v3f_sub(obj->t.pos, ray->origin), obj->t.dir) / denom;
-		return (*dst >= 0);
+		t = v3f_dot(v3f_sub(obj->t.pos, ray->origin), obj->t.dir) / denom;
+		if (t >= FLT_SML)
+		{
+			*dst = t;
+			return (true);
+		}
 	}
 	return (false);
 }
