@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/22 16:58:31 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/23 09:55:06 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ static bool	cam_init(t_cam *cam, mlx_t *mlx)
 	cam->aspect_ratio = cam->img_plane->width / (float)cam->img_plane->height;
 	cam->bg_col = init_col32(127, 0, 127, 255);
 	cam->t.dir = v3f_norm(cam->t.dir);
-	// Use the camera's up vector that was set during parsing
 	view_matrix(cam->view_matrix, cam->t.pos, cam->t.dir, cam->t.up);
 	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/22 17:06:12 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/23 09:54:35 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,16 +105,7 @@ static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
 	camera_space.x = (2.0f * ((x + 0.5f) / cam->img_plane->width) - 1.0f) * cam->aspect_ratio * view;
 	camera_space.y = (1.0f - 2.0f * ((y + 0.5f) / cam->img_plane->height)) * view;
 	camera_space.z = -1.0f;
-	ray->direction.x = cam->view_matrix[0] * camera_space.x +
-						cam->view_matrix[4] * camera_space.y +
-						cam->view_matrix[8] * camera_space.z;
-	ray->direction.y = cam->view_matrix[1] * camera_space.x +
-						cam->view_matrix[5] * camera_space.y +
-						cam->view_matrix[9] * camera_space.z;
-	ray->direction.z = cam->view_matrix[2] * camera_space.x +
-						cam->view_matrix[6] * camera_space.y +
-						cam->view_matrix[10] * camera_space.z;
-	ray->direction = v3f_norm(ray->direction);
+	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
 }
 
 void	render(t_scene *scene)
@@ -126,7 +117,7 @@ void	render(t_scene *scene)
 
 	y = 0;
 	img = scene->camera.img_plane;
-	ray.origin = scene->camera.t.pos;// mul_v3_m4x4(init_v3f(0, 0, 0), scene->camera.view_matrix);
+	ray.origin = mul_v3_m4x4(init_v3f(0, 0, 0), scene->camera.view_matrix);
 	while (y < img->height)
 	{
 		x = 0;

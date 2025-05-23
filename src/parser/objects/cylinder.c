@@ -25,11 +25,11 @@ bool	parse_cylinder(char **tokens, t_scene *scene)
 	t_obj	*obj;
 	t_v3f	pos;
 	t_v3f	dir;
-	t_v2f	dim;
+	t_v2f	dm;
 	t_col32	color;
 
-	if (!parse_v3f(&pos, tokens[1]) || !parse_dir(&dir, tokens[2]) || \
-		!parse_diameter(&dim.x, tokens[3]) || !parse_height(&dim.y, tokens[4])
+	if (!parse_v3f(&pos, tokens[1]) || !parse_dir(&dir, tokens[2])
+		|| !parse_diameter(&dm.x, tokens[3]) || !parse_height(&dm.y, tokens[4])
 		|| !parse_col(&color, tokens[5]))
 		return (false);
 	obj = ft_calloc(1, sizeof(t_obj));
@@ -41,7 +41,7 @@ bool	parse_cylinder(char **tokens, t_scene *scene)
 	obj->r.col = color;
 	obj->type = OBJ_CYLINDER;
 	obj->calc_norm = cylinder_normal;
-	obj->u_shape.cy = (t_cy){.radius = dim.x, .height = dim.y};
+	obj->u_shape.cy = (t_cy){.radius = dm.x, .height = dm.y};
 	obj->intersect = cylinder_intersect;
 	init_object_matrices(obj);
 	if (!vector_add(&scene->objects, obj))
