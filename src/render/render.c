@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   render.c                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/23 18:10:49 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   render.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
+/*   Updated: 2025/05/25 21:43:26 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,37 +98,86 @@ static t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t)
 	return (hit);
 }
 
+static	t_col32	apply_ambient(t_col32 base_col, t_light *light)
+{
+	return (init_col32(
+		get_r(base_col) * light->intensity,
+		get_g(base_col) * light->intensity,
+		get_b(base_col) * light->intensity,
+		255
+	));
+}
+
+static int	ft_min(int a, int b)
+{
+	if (a < b)
+		return (a);
+	return (b);
+}
+
+static t_col32	apply_point(t_scene *scene, t_col32 base_col, t_light *light, t_ray *shadow_ray)
+{
+	t_v3f	light_dir;
+	float	light_distance;
+	float	t;
+	float	diffuse;
+
+	light_dir = v3f_sub(light->pos, shadow_ray->origin);
+	light_distance = v3f_dist(light->pos, shadow_ray->origin);
+	light_dir = v3f_norm(light_dir);
+	if (find_intersection(&(t_ray){shadow_ray->origin, light_dir}, scene, &t) && t < light_distance)
+		return (init_col32(0, 0, 0, 255));
+	diffuse = ft_maxf(0.0f, v3f_dot(shadow_ray->direction, light_dir));
+	return (init_col32(
+		get_r(base_col) * diffuse * light->intensity,
+		get_g(base_col) * diffuse * light->intensity,
+		get_b(base_col) * diffuse * light->intensity,
+		255
+	));
+}
+
+static t_col32 add_colors(t_col32 a, t_col32 b)
+{
+	return (init_col32(
+		ft_min(255, get_r(a) + get_r(b)),
+		ft_min(255, get_g(a) + get_g(b)),
+		ft_min(255, get_b(a) + get_b(b)),
+		255
+	));
+}
+
 static t_col32	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 {
 	float	t;
 	t_obj	*hit;
 	t_ray	shadow_ray;
+	bool	front_face;
+	t_col32	accumulated_light;
+	int		i;
 
+	(void)depth;
 	hit = find_intersection(ray, scene, &t);
 	if (hit == NULL)
 		return (gradient_color(ray->direction, scene->camera.bg_col));
-
 	shadow_ray.origin = v3f_add(ray->origin, v3f_scale(ray->direction, t));
 	shadow_ray.direction = hit->calc_norm(hit, shadow_ray.origin);
-
-	// Lambert's Cosine Law
-	t_v3f inv_ray = v3f_scale(ray->direction, -1);
-	float	ratio = v3f_dot(shadow_ray.direction, inv_ray);
-	return (init_col32(
-		get_r(hit->r.col) * ratio,
-		get_g(hit->r.col) * ratio,
-		get_b(hit->r.col) * ratio, 255));
-
-	// albedo = reflected light / incident light
-
-
-	// TODO: Find correct color to return
-	if (depth == MAX_DEPTH)
-		return (normal_color(shadow_ray.direction));
-	// TODO: Do fancy stuff;
-	// call trace (depth + 1)
-	return (normal_color(shadow_ray.direction));
-	// return (hit->r.col); //(the real color from test file)
+	front_face = (v3f_dot(ray->direction, shadow_ray.direction) < 0);
+	if (!front_face)
+		shadow_ray.direction = v3f_scale(shadow_ray.direction, -1.0f);
+	i = 0;
+	accumulated_light = init_col32(0, 0, 0, 255); 
+	while (i < scene->lights.size)
+	{
+		t_light *light = (t_light *)scene->lights.items[i];
+		if (light->type == LIGHT_AMBIENT)
+			accumulated_light = add_colors(accumulated_light, 
+				apply_ambient(hit->r.col, light));
+		else if (light->type == LIGHT_POINT)
+			accumulated_light = add_colors(accumulated_light,
+				apply_point(scene, hit->r.col, light, &shadow_ray));
+		i++;
+	}
+	return (add_colors(init_col32(0, 0, 0, 255), accumulated_light));
 }
 
 static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
@@ -143,6 +192,48 @@ static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
 	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
 }
 
+// LCG: state = (state * A + C) % 2^32, [prev state] --×747796405 +2891336453--> [new state]
+// permutation step (*state >> 28) top 4, +4  shift between 4 and 19 bits, (*state >> shift_amount) extract high bits
+// https://www.pcg-random.org/
+// https://www.youtube.com/watch?v=45Oet5qjlms
+inline float	random_float_pcg(uint32_t *state)
+{
+	uint32_t	result;
+
+	*state = *state * 747796405 + 2891336453; // Linear Congruential Generator (LCG)
+	result = ((*state >> ((*state >> 28) + 4)) ^ *state) * 277803737; // permutation step
+	result = (result >> 22) ^ result;
+	return ((float)result / 4294967295.0f); // normalized to [0, 1]
+}
+
+#define SAMPLES_PER_PIXEL 4
+
+static t_col32	anti_aliasing(t_scene *scene, t_ray *ray, uint32_t x, uint32_t y)
+{
+	uint32_t	s;
+	uint32_t	r;
+	uint32_t	g;
+	uint32_t	b;
+	uint32_t	state;
+
+	r = g = b = 0;
+	state = (uint32_t)time(NULL);
+	s = 0;
+	while (s < SAMPLES_PER_PIXEL)
+	{
+		compute_ray((float)x + random_float_pcg(&state), (float)y + random_float_pcg(&state), &scene->camera, ray);
+		t_col32 sample = trace(ray, scene, 0);
+		r += get_r(sample);
+		g += get_g(sample);
+		b += get_b(sample);
+		++s;
+	}
+	return (init_col32(
+		r / SAMPLES_PER_PIXEL,
+		g / SAMPLES_PER_PIXEL,
+		b / SAMPLES_PER_PIXEL,
+		255));
+}
 void	render(t_scene *scene)
 {
 	uint32_t	x;
@@ -151,20 +242,17 @@ void	render(t_scene *scene)
 	mlx_image_t	*img;
 	t_mat4x4	inv;
 
-	// TODO: delete later
-	srand(time(NULL));
-
-	y = 0;
 	img = scene->camera.img_plane;
 	invert_m4x4(inv, scene->camera.view_matrix);
 	ray.origin = mul_v3_m4x4(init_v3f(0, 0, 0), inv);
+
+	y = 0;
 	while (y < img->height)
 	{
 		x = 0;
 		while (x < img->width)
 		{
-			compute_ray(x, y, &scene->camera, &ray);
-			mlx_put_pixel(img, x, y, trace(&ray, scene, 0));
+			mlx_put_pixel(img, x, y, anti_aliasing(scene, &ray, x, y));
 			++x;
 		}
 		++y;
