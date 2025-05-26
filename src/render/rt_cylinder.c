@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/17 11:59:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/23 12:06:05 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/26 18:52:57 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,33 +32,68 @@ t_v3f	cylinder_normal(t_obj *obj, t_v3f point)
 				obj->t.to_world)));
 }
 
+// static int	intersect_cylinder_discs(t_obj *obj, t_ray *ray,
+// 	float *dst, float current)
+// {
+// 	float	h;
+// 	float	r;
+// 	t_v3f	p;
+// 	int		i;
+// 	float	t;
+
+// 	h = obj->u_shape.cy.height * 0.5f;
+// 	r = obj->u_shape.cy.radius;
+// 	if (fabsf(ray->direction.y) < FLT_SML)
+// 		return (0);
+// 	i = 0;
+// 	while (i < 2)
+// 	{
+// 		t = ((i == 0 ? -h : h) - ray->origin.y) / ray->direction.y;
+// 		if (t > FLT_SML && t < current)
+// 		{
+// 			p = v3f_add(ray->origin, v3f_scale(ray->direction, t));
+// 			if ((p.x * p.x + p.z * p.z) <= r * r)
+// 			{
+// 				*dst = t;
+// 				return (1);
+// 			}
+// 		}
+// 		++i;
+// 	}
+// 	return (0);
+// }
+
 static int	intersect_cylinder_discs(t_obj *obj, t_ray *ray,
 	float *dst, float current)
 {
 	float	h;
 	float	r;
+	float	t;
 	t_v3f	p;
-	int		i;
 
 	h = obj->u_shape.cy.height * 0.5f;
 	r = obj->u_shape.cy.radius;
-	if (ray->direction.y == 0)
+	if (fabsf(ray->direction.y) < FLT_SML)
 		return (0);
-	i = 0;
-	*dst = (-h - ray->origin.y) / ray->direction.y;
-	while (i < 2)
+	*dst = current;
+	t = (-h - ray->origin.y) / ray->direction.y;
+	if (t > FLT_SML && t < *dst)
 	{
-		if (*dst > FLT_SML && *dst < current)
-		{
-			p = v3f_add(ray->origin, v3f_scale(ray->direction, *dst));
-			if ((p.x * p.x + p.z * p.z) <= r * r)
-				return (1);
-		}
-		*dst = (h - ray->origin.y) / ray->direction.y;
-		++i;
+		p = v3f_add(ray->origin, v3f_scale(ray->direction, t));
+		if (p.x * p.x + p.z * p.z <= r * r)
+			*dst = t;
 	}
-	return (0);
+	t = (h - ray->origin.y) / ray->direction.y;
+	if (t > FLT_SML && t < *dst)
+	{
+		p = v3f_add(ray->origin, v3f_scale(ray->direction, t));
+		if (p.x * p.x + p.z * p.z <= r * r)
+			*dst = t;
+	}
+	return (*dst < current);
 }
+
+
 
 static int	check_body(t_v3f coeff, t_ray *ray, float h, float *dst)
 {

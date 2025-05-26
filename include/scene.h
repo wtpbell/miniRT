@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/23 12:04:47 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/26 18:48:31 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_camera
 
 typedef struct s_material
 {
+	
 }	t_mat;
 
 typedef struct s_render

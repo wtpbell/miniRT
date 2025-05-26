@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   render.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/25 21:43:26 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   render.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/26 19:11:45 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,18 @@ static int	ft_min(int a, int b)
 		return (a);
 	return (b);
 }
+// float spec = 0.0f;
+//             if (diff > 0.0f) { // Only calculate specular if light is hitting the surface
+//                 t_v3f view_dir = v3f_scale(ray->direction, -1.0f);
+//                 view_dir = v3f_norm(view_dir);
+//                 t_v3f halfway = v3f_add(light_dir, view_dir);
+//                 halfway = v3f_norm(halfway);
+//                 float nh = fmaxf(0.0f, v3f_dot(normal, halfway));
+//                 // Adjust shininess and specular intensity
+//                 if (nh > 0.0f) {
+//                     spec = powf(nh, 64.0f) * 2.0f;
+//                 }
+                
 
 static t_col32	apply_point(t_scene *scene, t_col32 base_col, t_light *light, t_ray *shadow_ray)
 {
@@ -121,13 +133,20 @@ static t_col32	apply_point(t_scene *scene, t_col32 base_col, t_light *light, t_r
 	float	light_distance;
 	float	t;
 	float	diffuse;
+	float	spec;
+	// t_v3f	view_dir;
 
 	light_dir = v3f_sub(light->pos, shadow_ray->origin);
 	light_distance = v3f_dist(light->pos, shadow_ray->origin);
-	light_dir = v3f_norm(light_dir);
-	if (find_intersection(&(t_ray){shadow_ray->origin, light_dir}, scene, &t) && t < light_distance)
+	// light_dir = v3f_norm(light_dir);
+	light_dir = v3f_scale(light_dir, 1.0f/light_distance);
+	
+	if (find_intersection(&(t_ray){shadow_ray->origin, light_dir}, scene, &t) && t > 0.001f && t < light_distance)
 		return (init_col32(0, 0, 0, 255));
 	diffuse = ft_maxf(0.0f, v3f_dot(shadow_ray->direction, light_dir));
+	spec = 0.0f;
+	// if (diffuse > 0.0f)
+		
 	return (init_col32(
 		get_r(base_col) * diffuse * light->intensity,
 		get_g(base_col) * diffuse * light->intensity,
@@ -206,7 +225,7 @@ inline float	random_float_pcg(uint32_t *state)
 	return ((float)result / 4294967295.0f); // normalized to [0, 1]
 }
 
-#define SAMPLES_PER_PIXEL 4
+#define SAMPLES_PER_PIXEL 3
 
 static t_col32	anti_aliasing(t_scene *scene, t_ray *ray, uint32_t x, uint32_t y)
 {
@@ -221,7 +240,7 @@ static t_col32	anti_aliasing(t_scene *scene, t_ray *ray, uint32_t x, uint32_t y)
 	s = 0;
 	while (s < SAMPLES_PER_PIXEL)
 	{
-		compute_ray((float)x + random_float_pcg(&state), (float)y + random_float_pcg(&state), &scene->camera, ray);
+		compute_ray((float)x + (random_float_pcg(&state)), (float)y + (random_float_pcg(&state)), &scene->camera, ray);
 		t_col32 sample = trace(ray, scene, 0);
 		r += get_r(sample);
 		g += get_g(sample);
@@ -234,6 +253,7 @@ static t_col32	anti_aliasing(t_scene *scene, t_ray *ray, uint32_t x, uint32_t y)
 		b / SAMPLES_PER_PIXEL,
 		255));
 }
+
 void	render(t_scene *scene)
 {
 	uint32_t	x;
@@ -258,3 +278,4 @@ void	render(t_scene *scene)
 		++y;
 	}
 }
+

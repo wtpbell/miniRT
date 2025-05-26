@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/23 12:24:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/26 18:54:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 #include "minirt.h"
 #include "debug/rt_debug.h"
 
-#define WIDTH	1024
-#define HEIGHT	1024
+#define WIDTH	2048
+#define HEIGHT	2048
 
 static void	update(void *ctx)
 {
