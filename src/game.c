@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   game.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/26 18:54:37 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   game.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
+/*   Updated: 2025/05/26 21:22:59 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 #include "minirt.h"
 #include "debug/rt_debug.h"
 
-#define WIDTH	2048
-#define HEIGHT	2048
+#define WIDTH	1200
+#define HEIGHT	1200
 
 static void	update(void *ctx)
 {
