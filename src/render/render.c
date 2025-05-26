@@ -6,13 +6,14 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/26 21:48:11 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/26 22:05:26 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <math.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <time.h> 
 
 #include "MLX42/MLX42.h"
 #include "libft.h"
@@ -93,6 +94,19 @@ static int	ft_min(int a, int b)
 	return (b);
 }
 
+static t_col32 apply_gamma(t_col32 color, float gamma)
+{
+    float r = powf(get_r(color) / 255.0f, 1.0f / gamma);
+    float g = powf(get_g(color) / 255.0f, 1.0f / gamma);
+    float b = powf(get_b(color) / 255.0f, 1.0f / gamma);
+    return init_col32(
+        (uint8_t)(r * 255.0f),
+        (uint8_t)(g * 255.0f),
+        (uint8_t)(b * 255.0f),
+        255
+    );
+}
+
 static t_col32	apply_point(t_scene *scene, t_col32 base_col, t_light *light, t_ray *shadow_ray)
 {
 	t_v3f	light_dir;
@@ -120,12 +134,12 @@ static t_col32	apply_point(t_scene *scene, t_col32 base_col, t_light *light, t_r
 
 static t_col32 add_colors(t_col32 a, t_col32 b)
 {
-	return (init_col32(
+	return init_col32(
 		ft_min(255, get_r(a) + get_r(b)),
 		ft_min(255, get_g(a) + get_g(b)),
 		ft_min(255, get_b(a) + get_b(b)),
 		255
-	));
+	);
 }
 
 static t_col32	trace(t_ray *ray, t_scene *scene, uint32_t depth)
@@ -159,7 +173,7 @@ static t_col32	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 				apply_point(scene, hit->r.col, light, &shadow_ray));
 		i++;
 	}
-	return (add_colors(init_col32(0, 0, 0, 255), accumulated_light));
+	return (apply_gamma(add_colors(init_col32(0, 0, 0, 255), accumulated_light), GAMMA));
 }
 
 static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
@@ -187,6 +201,7 @@ inline float	random_float_pcg(uint32_t *state)
 	result = (result >> 22) ^ result;
 	return ((float)result / 4294967295.0f); // normalized to [0, 1]
 }
+
 
 #define SAMPLES_PER_PIXEL 1
 
