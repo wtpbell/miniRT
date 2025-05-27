@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/23 12:04:47 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/27 10:24:27 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <stdio.h>
 
 typedef struct s_object	t_obj;
-typedef int				(*t_intsct)(t_obj *obj, t_ray *ray, float *dst);
+typedef int				(*t_intsct)(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
 typedef t_v3f			(*t_cnorm)(t_obj *obj, t_v3f point);
 
 typedef enum e_object_type

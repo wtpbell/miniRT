@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/17 11:59:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/23 12:06:05 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/27 17:52:59 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,54 +32,36 @@ t_v3f	cylinder_normal(t_obj *obj, t_v3f point)
 				obj->t.to_world)));
 }
 
-static int	intersect_cylinder_discs(t_obj *obj, t_ray *ray,
-	float *dst, float current)
+static int	intersect_cylinder_disc(float r, float h, t_ray *ray, t_v2f *t_lim)
 {
-	float	h;
-	float	r;
+	float	t;
 	t_v3f	p;
-	int		i;
 
-	h = obj->u_shape.cy.height * 0.5f;
-	r = obj->u_shape.cy.radius;
-	if (ray->direction.y == 0)
+	if (fabsf(ray->direction.y) < FLT_SML)
 		return (0);
-	i = 0;
-	*dst = (-h - ray->origin.y) / ray->direction.y;
-	while (i < 2)
+	t = (h - ray->origin.y) / ray->direction.y;
+	if (t > t_lim->x && t < t_lim->y)
 	{
-		if (*dst > FLT_SML && *dst < current)
-		{
-			p = v3f_add(ray->origin, v3f_scale(ray->direction, *dst));
-			if ((p.x * p.x + p.z * p.z) <= r * r)
-				return (1);
-		}
-		*dst = (h - ray->origin.y) / ray->direction.y;
-		++i;
+		p = v3f_add(ray->origin, v3f_scale(ray->direction, t));
+		if ((p.x * p.x + p.z * p.z) <= r * r)
+			return (t_lim->y = t, 1);
 	}
 	return (0);
 }
 
-static int	check_body(t_v3f coeff, t_ray *ray, float h, float *dst)
+static int	check_body(t_v3f coeff, t_ray *ray, float h, t_v2f *t)
 {
-	t_v2f	t_vals;
 	t_v3f	p;
-	int		i;
+	float	t0;
+	float	t1;
 
-	if (!solve_quadratic(&coeff, &t_vals.x, &t_vals.y))
+	if (!solve_quadratic(&coeff, &t0, &t1))
 		return (0);
-	i = 0;
-	*dst = t_vals.x;
-	while (i < 2)
+	if (t0 > t->x && t0 < t->y)
 	{
-		if (*dst > FLT_SML)
-		{
-			p = v3f_add(ray->origin, v3f_scale(ray->direction, *dst));
-			if (p.y >= -h * .5f && p.y <= h * .5f)
-				return (1);
-		}
-		*dst = t_vals.y;
-		++i;
+		p = v3f_add(ray->origin, v3f_scale(ray->direction, t0));
+		if (p.y >= -h * .5f && p.y <= h * .5f)
+			return (t->y = t0, 1);
 	}
 	return (0);
 }
@@ -91,7 +73,7 @@ static int	check_body(t_v3f coeff, t_ray *ray, float h, float *dst)
 	t^2 (Dx^2 + Dz^2) + 2t (Dx Ox + Dz Oz) + (Ox^2 + Oz^2 - r^2) = 0
 	at^2 + bt + c = 0
 */
-static int	intersect_cylinder_body(t_obj *obj, t_ray *ray, float *dst)
+static int	intersect_cylinder_body(t_obj *obj, t_ray *ray, t_v2f *t)
 {
 	t_v3f	coeff;
 
@@ -101,26 +83,22 @@ static int	intersect_cylinder_body(t_obj *obj, t_ray *ray, float *dst)
 			+ ray->origin.z * ray->direction.z);
 	coeff.z = ray->origin.x * ray->origin.x + ray->origin.z
 		* ray->origin.z - obj->u_shape.cy.radius * obj->u_shape.cy.radius;
-	return (check_body(coeff, ray, obj->u_shape.cy.height, dst));
+	return (check_body(coeff, ray, obj->u_shape.cy.height, t));
 }
 
-int	cylinder_intersect(t_obj *obj, t_ray *ray, float *dst)
+int	cylinder_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
 {
-	t_ray		l_ray;
-	t_v2f		t_val;
-	int			is_body;
-	int			is_disc;
+	t_ray	l_ray;
+	float	r;
+	float	h;
 
+	r = obj->u_shape.cy.radius;
+	h = obj->u_shape.cy.height * .5f;
 	l_ray.origin = mul_v3_m4x4(ray->origin, obj->t.to_obj);
 	l_ray.direction = mul_dir_m4x4(ray->direction, obj->t.to_obj);
-	is_body = intersect_cylinder_body(obj, &l_ray, &t_val.x);
-	if (!is_body)
-		is_disc = intersect_cylinder_discs(obj, &l_ray, &t_val.y, FLT_MAX);
-	else
-		is_disc = intersect_cylinder_discs(obj, &l_ray, &t_val.y, t_val.x);
-	if (is_body && (!is_disc || t_val.x < t_val.y))
-		return (*dst = t_val.x, 1);
-	if (is_disc)
-		return (*dst = t_val.y, 1);
+	if ((intersect_cylinder_body(obj, &l_ray, &t)
+			| intersect_cylinder_disc(r, h, &l_ray, &t)
+			| intersect_cylinder_disc(r, -h, &l_ray, &t)) == 1)
+		return (*dst = t.y, 1);
 	return (0);
 }
