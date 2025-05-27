@@ -43,7 +43,7 @@ t_v3f	sphere_normal(t_obj *obj, t_v3f point)
 	return (v3f_norm(v3f_sub(point, obj->t.pos)));
 }
 
-int	sphere_intersect(t_obj *obj, t_ray *ray, float *dst)
+int	sphere_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
 {
 	t_v3f		oc;
 	t_v3f		abc;
@@ -58,12 +58,12 @@ int	sphere_intersect(t_obj *obj, t_ray *ray, float *dst)
 	abc.z = v3f_dot(oc, oc) - r * r;
 	if (!solve_quadratic(&abc, &t0, &t1))
 		return (0);
-	if (t0 < 0)
+	if (t0 < t.x)
 	{
-		if (t1 < 0)
+		if (t1 < t.x)
 			return (0);
 		t0 = t1;
 	}
 	*dst = t0;
-	return (1);
+	return (t0 < t.y);
 }

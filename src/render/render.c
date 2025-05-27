@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/23 12:06:52 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/27 10:51:56 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t)
 	while (i < scene->objects.size)
 	{
 		obj = (t_obj *)scene->objects.items[i];
-		if (obj->intersect(obj, ray, &dst) && dst < *t)
+		if (obj->intersect(obj, ray, init_v2f(FLT_SML, *t), &dst))
 		{
 			*t = dst;
 			hit = obj;
