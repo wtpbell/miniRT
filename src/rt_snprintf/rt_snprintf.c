@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/20 13:40:28 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/20 19:20:36 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/27 19:01:47 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 #include <math.h>
 #include "libft.h"
 
+#include <unistd.h>
 #include <stdio.h>
 #include <limits.h>
+#include <ieee754.h>
 
 #define SIZE 1000
 
@@ -26,11 +28,11 @@ typedef struct s_str
 	size_t	cap;
 }	t_str;
 
-int	int_count(int n)
+size_t	int_count(unsigned int n)
 {
-	int	count;
+	size_t	count;
 
-	count = (n <= 0);
+	count = (n == 0);
 	while (n != 0)
 	{
 		n /= 10;
@@ -39,35 +41,39 @@ int	int_count(int n)
 	return (count);
 }
 
-void	itos(t_str *str, int n)
+void	utos(t_str *str, unsigned int n, char prefix)
 {
-	size_t			count;
-	char			*dst;
-	unsigned int	num;
+	size_t	count;
+	char	*dst;
 
-	num = n;
-	count = int_count(n);
-	if (n < 0)
-		num *= -1;
+	count = int_count(n) + (prefix != '\0');
 	while (str->len + count >= str->cap)
 	{
-		num /= 10;
+		n /= 10;
 		--count;
 	}
-	dst = str->s + (str->len + count - 1);
 	if (count == 0)
 		return ;
-	while (num != 0)
+	dst = str->s + (str->len + count - 1);
+	if (n == 0)
+		*dst-- = '0';
+	while (n != 0)
 	{
-		*dst = '0' + (num % 10);
-		num /= 10;
+		*dst = '0' + (n % 10);
+		n /= 10;
 		--dst;
 	}
-	if (n < 0 )
-		*dst = '-';
-	else if (n == 0)
-		*dst = '0';
+	if (prefix != '\0')
+		*dst = prefix;
 	str->len += count;
+}
+
+void	itos(t_str *str, int n)
+{
+	if (n < 0)
+		utos(str, -n, '-');
+	else
+		utos(str, n, '\0');
 }
 
 void	stos(t_str *str, const char *src)
@@ -89,23 +95,33 @@ void	ctos(t_str *str, char c)
 	str->len += 1;
 }
 
-void	ftos(t_str *str, double f)
+// TODO: pad missing precision
+// TODO: need a solution for values like 0.0001f
+// TODO: round off numbers at the precision
+void	ftos(t_str *str, double r)
 {
-	const double	prec = 4.0;
-	int				numeric;
-	int				decimal;
+	const double			prec = 4.0;
+	int						numeric;
+	int						decimal;
+	union ieee754_double	*d;
 
-	// TODO: handle differently
-	// if (isinf(f) || isnan(f))
-	// 	return ;
-
-	numeric = (int)f;
-	decimal = (int)((f - numeric) * pow(10.0, prec));
-
-	printf("(%i %i)\n", numeric, decimal);
-	itos(str, numeric);
-	ctos(str, '.');
-	itos(str, decimal);
+	d = (union ieee754_double *)&r;
+	if (d->ieee.negative == 1)
+		ctos(str, '-');
+	if (isinf(r))
+		stos(str, "inf");
+	else if (isnan(r))
+		stos(str, "nan");
+	else if (d->d == 0.0f)
+		stos(str, "0.0");
+	else
+	{
+		numeric = (int)(r * -1.0f);
+		decimal = (int)((round(r - floor(r))) * pow(10.0, prec));
+		itos(str, numeric);
+		ctos(str, '.');
+		utos(str, decimal, '\0');
+	}
 }
 
 const char	*process(t_str *str, const char *format, va_list args)
@@ -157,6 +173,21 @@ int	rt_snprintf(char *s, size_t size, const char *format, ...)
 	return (str.len);
 }
 
+void dump_write(char *s, size_t size)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < size)
+	{
+		if (s[i] == '\0')
+			write(1, "+", 1);
+		else
+			write(1, &s[i], 1);
+		++i;
+	}
+}
+
 int	main(void)
 {
 	char	s[SIZE];
@@ -164,9 +195,13 @@ int	main(void)
 	ft_bzero(s, SIZE);
 	// hello: 2147483647
 	// hello: 2147483647|-1|-5|1231-
-	rt_snprintf(s, SIZE, "%i\n%i\n%i\n%f\n%f\n%f\n%f\n", 0, INT_MAX, INT_MIN, 1.0f, .99f, 123.321f, -123.321f);
+	printf("%i\n%i\n%i\n%f\n%f\n%f\n%f\n%f\n%f\n%f\n\n", 0, INT_MAX, INT_MIN, 1.0f, .99f, 123.321f, -123.321f, 0.0f, 0.0001f, -0.001f);
+	rt_snprintf(s, SIZE, "snprint:\n%i\n%i\n%i\n%f\n%f\n%f\n%f\n%f\n%f\n%f\n", 0, INT_MAX, INT_MIN, 1.0f, .99f, 123.321f, -123.321f, 0.0f, 0.0001f, -0.001f);
 	// rt_snprintf(s, SIZE, "hello: \n");
 	s[SIZE - 1] = '\0';
-	printf("%s (%zu/%i)", s, ft_strlen(s), SIZE);
+	dump_write(s, 1000);
+	ft_putchar_fd('\n', 1);
+	// printf("%s (%zu/%i)", s, ft_strlen(s), SIZE);
+
 	return (0);
 }
