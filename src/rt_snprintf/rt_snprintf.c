@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/20 13:40:28 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/27 19:01:47 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/27 19:31:34 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,21 @@ void	ctos(t_str *str, char c)
 	str->len += 1;
 }
 
+void	fdectos(t_str *str, int decimal, int prec)
+{
+	size_t	count;
+	int		pad;
+
+	count = int_count(decimal);
+	pad = count - prec;
+	while (pad > 0)
+	{
+		ctos(str, '0');
+		--pad;
+	}
+	utos(str, decimal, '\0');
+}
+
 // TODO: pad missing precision
 // TODO: need a solution for values like 0.0001f
 // TODO: round off numbers at the precision
@@ -116,11 +131,11 @@ void	ftos(t_str *str, double r)
 		stos(str, "0.0");
 	else
 	{
-		numeric = (int)(r * -1.0f);
-		decimal = (int)((round(r - floor(r))) * pow(10.0, prec));
+		numeric = (int)(fabs(r));
+		decimal = (int)(fabs((r - floor(r)) * pow(10.0, prec)));
 		itos(str, numeric);
 		ctos(str, '.');
-		utos(str, decimal, '\0');
+		fdectos(str, decimal, prec);
 	}
 }
 
@@ -128,6 +143,8 @@ const char	*process(t_str *str, const char *format, va_list args)
 {
 	if (*format == 'i' || *format == 'd')
 		itos(str, va_arg(args, int));
+	else if (*format == 'u')
+		utos(str, va_arg(args, int), '\0');
 	else if (*format == 's')
 		stos(str, va_arg(args, char *));
 	else if (*format == 'c')
