@@ -6,11 +6,13 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/21 19:31:07 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/28 18:28:36 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "material.h"
+#include "color_utils.h"
 
 bool	parse_diameter(float *out, const char *str)
 {
@@ -31,17 +33,18 @@ bool	parse_sphere(char **tokens, t_scene *scene)
 {
 	t_v3f	pos;
 	float	diameter;
-	t_col32	color;
+	t_col32	col;
 	t_obj	*obj;
 
 	if (!parse_v3f(&pos, tokens[1]) || !parse_diameter(&diameter, tokens[2])
-		|| !parse_col(&color, tokens[3]))
+		|| !parse_col(&col, tokens[3]))
 		return (false);
 	obj = ft_calloc(1, sizeof(t_obj));
 	if (!obj)
 		return (false);
 	obj->t.pos = pos;
-	obj->r.col = color;
+	obj->r.col = col;
+	obj->r.mat = create_dielectric(col32_to_v3f(col), 2.5f, 0.9f);
 	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	obj->type = OBJ_SPHERE;
 	obj->u_shape.sp = create_sphere(diameter);

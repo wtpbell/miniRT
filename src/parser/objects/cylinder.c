@@ -6,11 +6,13 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 12:05:06 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/14 12:05:06 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/28 18:09:15 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "material.h"
+#include "color_utils.h"
 
 static bool	parse_height(float *out, const char *str)
 {
@@ -37,6 +39,7 @@ bool	parse_cylinder(char **tokens, t_scene *scene)
 		return (false);
 	obj->t.pos = pos;
 	obj->t.dir = dir;
+	obj->r.mat = create_lambertian(col32_to_v3f(color), 0.95f, 256.0f);
 	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	obj->r.col = color;
 	obj->type = OBJ_CYLINDER;

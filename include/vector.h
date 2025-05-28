@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   vector.h                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/23 10:53:32 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   vector.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 18:40:12 by jboon             #+#    #+#             */
+/*   Updated: 2025/05/28 17:56:43 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define VECTOR_H
 
 # include <stdbool.h>
+# include <float.h>
+# include <math.h>
 
 typedef union s_vector2
 {
@@ -43,9 +45,15 @@ t_v3f	v3f_sub(t_v3f a, t_v3f b);
 t_v3f	v3f_scale(t_v3f v, float f);
 t_v3f	v3f_cross(t_v3f a, t_v3f b);
 t_v3f	v3f_norm(t_v3f v);
+t_v3f	v3f_refl(t_v3f d, t_v3f n);
+t_v3f	v3f_neg(t_v3f v);
+t_v3f	v3f_refr(t_v3f uv, t_v3f n, float etai_over_etat);
+t_v3f	v3f_lerp(t_v3f a, t_v3f b, float t);
+t_v3f	v3f_unit(t_v3f v);
 float	v3f_dot(t_v3f a, t_v3f b);
 float	v3f_mag(t_v3f v);
 float	v3f_sqr_mag(t_v3f v);
 float	v3f_dist(t_v3f a, t_v3f b);
-
+bool	v3f_near_zero(t_v3f v);
+float	v3f_schlick(float cosin, float ref_idx);
 #endif

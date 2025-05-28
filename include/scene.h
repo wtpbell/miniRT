@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   scene.h                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/26 18:48:31 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   scene.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 18:55:45 by jboon             #+#    #+#             */
+/*   Updated: 2025/05/28 19:00:01 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define SCENE_H
 
 # include "MLX42/MLX42.h"
-# include "ray.h"
 # include "matrix.h"
 # include "vector.h"
 # include "color.h"
@@ -23,7 +22,8 @@
 # include <stdio.h>
 
 typedef struct s_object	t_obj;
-typedef int				(*t_intsct)(t_obj *obj, t_ray *ray, float *dst);
+typedef struct s_ray	t_ray;
+typedef int				(*t_intsct)(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
 typedef t_v3f			(*t_cnorm)(t_obj *obj, t_v3f point);
 
 typedef enum e_object_type
@@ -67,9 +67,34 @@ typedef struct s_camera
 	t_mat4x4	view_matrix;
 }	t_cam;
 
+typedef enum e_material_type
+{
+	MAT_LAMBERTIAN,
+	MAT_METAL,
+	MAT_DIELECTRIC
+}	t_mat_type;
+
 typedef struct s_material
 {
-	
+	t_mat_type	type;
+	t_v3f		albedo;
+	union
+	{
+		struct
+		{
+			float	specular;
+			float	shininess;
+		}	lambertian;
+		struct
+		{
+			float	fuzz;
+		}	metal;
+		struct
+		{
+			float	ir;
+			float	transmittance;
+		}	dielectric;
+	}	data;
 }	t_mat;
 
 typedef struct s_render
@@ -101,6 +126,22 @@ typedef struct s_light
 	float			intensity;
 }	t_light;
 
+typedef struct s_ray
+{
+	t_v3f	origin;
+	t_v3f	direction;
+}	t_ray;
+
+typedef struct s_ray_hit
+{
+	t_v3f	hit;
+	t_v3f	normal;
+	float	distance;
+	bool	front_face;
+	t_obj	*obj;
+	t_ray	ray;
+}	t_ray_hit;
+
 struct s_object
 {
 	t_trans		t;
@@ -122,6 +163,9 @@ typedef struct s_scene
 	t_vector	lights;
 	t_cam		camera;
 	int			scene_flags;
+	uint32_t	frame_num;
 }	t_scene;
+
+
 
 #endif

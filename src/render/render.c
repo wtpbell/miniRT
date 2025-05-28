@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/26 22:05:26 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/28 19:00:44 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,26 @@
 #include "color.h"
 #include "rt_math.h"
 #include "container.h"
+#include "color_utils.h"
 
 #include "debug/rt_debug.h"
 
 #define MAX_DEPTH	5
+
+// PCG Random Number Generator
+// LCG: state = (state * A + C) % 2^32, [prev state] --×747796405 +2891336453--> [new state]
+// permutation step (*state >> 28) top 4, +4  shift between 4 and 19 bits, (*state >> shift_amount) extract high bits
+// https://www.pcg-random.org/
+// https://www.youtube.com/watch?v=45Oet5qjlms
+static inline float	random_float_pcg(uint32_t *state)
+{
+	uint32_t	result;
+
+	*state = *state * 747796405 + 2891336453; // Linear Congruential Generator (LCG)
+	result = ((*state >> ((*state >> 28) + 4)) ^ *state) * 277803737; // permutation step
+	result = (result >> 22) ^ result;
+	return ((float)result / 4294967295.0f); // normalized to [0, 1]
+}
 
 void	init_object_matrices(t_obj *obj)
 {
@@ -67,7 +83,7 @@ static t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t)
 	while (i < scene->objects.size)
 	{
 		obj = (t_obj *)scene->objects.items[i];
-		if (obj->intersect(obj, ray, &dst) && dst < *t)
+		if (obj->intersect(obj, ray, init_v2f(FLT_SML, *t), &dst))
 		{
 			*t = dst;
 			hit = obj;
@@ -87,93 +103,131 @@ static	t_col32	apply_ambient(t_col32 base_col, t_light *light)
 	));
 }
 
-static int	ft_min(int a, int b)
+static	float	apply_specular(t_ray_hit *hit, t_v3f light_dir)
 {
-	if (a < b)
-		return (a);
-	return (b);
+	t_v3f	view_dir;
+	t_v3f	halfway_dir;
+	float	spec;
+	float	specular_strength;
+
+	view_dir = v3f_norm(v3f_scale(hit->normal, -1.0f));
+	halfway_dir = v3f_norm(v3f_add(light_dir, view_dir));
+	spec = powf(ft_maxf(0.0f, v3f_dot(hit->normal, halfway_dir)), 
+		hit->obj->r.mat.data.lambertian.shininess);
+	specular_strength = hit->obj->r.mat.data.lambertian.specular;
+	return (spec * specular_strength);
 }
 
-static t_col32 apply_gamma(t_col32 color, float gamma)
+static t_col32	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 {
-    float r = powf(get_r(color) / 255.0f, 1.0f / gamma);
-    float g = powf(get_g(color) / 255.0f, 1.0f / gamma);
-    float b = powf(get_b(color) / 255.0f, 1.0f / gamma);
-    return init_col32(
-        (uint8_t)(r * 255.0f),
-        (uint8_t)(g * 255.0f),
-        (uint8_t)(b * 255.0f),
-        255
-    );
-}
-
-static t_col32	apply_point(t_scene *scene, t_col32 base_col, t_light *light, t_ray *shadow_ray)
-{
+	t_ray	ray;
 	t_v3f	light_dir;
-	float	light_distance;
-	float	t;
+	t_v3f	light_color;
 	float	diffuse;
-	t_ray	offset_ray;
-	
-	light_dir = v3f_sub(light->pos, shadow_ray->origin);
-	light_distance = v3f_dist(light->pos, shadow_ray->origin);
-	light_dir = v3f_scale(light_dir, 1.0f/light_distance);
-	offset_ray.origin = v3f_add(shadow_ray->origin, v3f_scale(shadow_ray->direction, BIAS));
-	offset_ray.direction = light_dir;
-	if (find_intersection(&offset_ray, scene, &t) && t > 0.0f && t < light_distance)
+	float	specular;
+	float	shadow_t;
+
+	light_dir = v3f_sub(light->pos, hit->hit);
+	ray.origin = v3f_add(hit->hit, v3f_scale(hit->normal, BIAS));
+	ray.direction = v3f_norm(light_dir);
+	shadow_t = v3f_mag(light_dir);
+	if (find_intersection(&ray, scene, &shadow_t) && shadow_t < v3f_mag(light_dir))
 		return (init_col32(0, 0, 0, 255));
-		
-	diffuse = ft_maxf(0.0f, v3f_dot(shadow_ray->direction, light_dir));
-	return (init_col32(
-		get_r(base_col) * diffuse * light->intensity,
-		get_g(base_col) * diffuse * light->intensity,
-		get_b(base_col) * diffuse * light->intensity,
-		255
-	));
-}
-
-static t_col32 add_colors(t_col32 a, t_col32 b)
-{
-	return init_col32(
-		ft_min(255, get_r(a) + get_r(b)),
-		ft_min(255, get_g(a) + get_g(b)),
-		ft_min(255, get_b(a) + get_b(b)),
-		255
+	diffuse = ft_maxf(0.0f, v3f_dot(hit->normal, ray.direction));
+	specular = apply_specular(hit, ray.direction);
+	light_color = v3f_add(
+		v3f_scale(col32_to_v3f(hit->obj->r.col), diffuse),
+		v3f_scale((t_v3f){.x = 1.0f, .y = 1.0f, .z = 1.0f}, specular)
 	);
+	return (v3f_to_col32(v3f_scale(light_color, light->intensity)));
 }
 
-static t_col32	trace(t_ray *ray, t_scene *scene, uint32_t depth)
+static t_col32	handle_lambertian(t_scene *scene, t_ray_hit *hit_info)
 {
-	float	t;
-	t_obj	*hit;
-	t_ray	shadow_ray;
-	bool	front_face;
-	t_col32	accumulated_light;
+	t_light	*light;
+	t_col32	acc_color;
+	t_col32	base_color;
 	int		i;
 
-	(void)depth;
-	hit = find_intersection(ray, scene, &t);
-	if (hit == NULL)
-		return (gradient_color(ray->direction, scene->camera.bg_col));
-	shadow_ray.origin = v3f_add(ray->origin, v3f_scale(ray->direction, t));
-	shadow_ray.direction = hit->calc_norm(hit, shadow_ray.origin);
-	front_face = (v3f_dot(ray->direction, shadow_ray.direction) < 0);
-	if (!front_face)
-		shadow_ray.direction = v3f_scale(shadow_ray.direction, -1.0f);
 	i = 0;
-	accumulated_light = init_col32(0, 0, 0, 255); 
+	acc_color = init_col32(0, 0, 0, 255);
+	base_color = v3f_to_col32(hit_info->obj->r.mat.albedo);
 	while (i < scene->lights.size)
 	{
-		t_light *light = (t_light *)scene->lights.items[i];
+		light = (t_light *)scene->lights.items[i];
 		if (light->type == LIGHT_AMBIENT)
-			accumulated_light = add_colors(accumulated_light, 
-				apply_ambient(hit->r.col, light));
+			acc_color = add_colors_clamped(acc_color, apply_ambient(base_color, light));
 		else if (light->type == LIGHT_POINT)
-			accumulated_light = add_colors(accumulated_light,
-				apply_point(scene, hit->r.col, light, &shadow_ray));
-		i++;
+			acc_color = add_colors_clamped(acc_color, apply_point(scene, hit_info, light));
+		++i;
 	}
-	return (apply_gamma(add_colors(init_col32(0, 0, 0, 255), accumulated_light), GAMMA));
+	return (apply_gamma(acc_color, GAMMA));
+}
+
+
+//magic numbers (0x9e3779b9 and 0x6d0f27bd) are large primes
+static t_col32	handle_dielectric(t_scene *scene, t_ray_hit *hit_info, uint32_t depth)
+{
+	t_ray		scatter;
+	float		refract_ratio;
+	float		cos_theta;
+	float		sin_theta;
+	t_v3f		unit_dir;
+	uint32_t	state;
+
+	state = scene->frame_num * 0x9e3779b9 + depth * 0x6d0f27bd;
+	unit_dir = v3f_unit(hit_info->ray.direction);
+	if (hit_info->front_face)
+		refract_ratio = 1.0f / hit_info->obj->r.mat.data.dielectric.ir;
+	else
+		refract_ratio = hit_info->obj->r.mat.data.dielectric.ir;
+	cos_theta = fminf(1.0f, v3f_dot(v3f_scale(unit_dir, -1.0f), hit_info->normal));
+	sin_theta = sqrtf(1.0f - cos_theta * cos_theta);
+	scatter.origin = hit_info->hit;
+	if (refract_ratio * sin_theta > 1.0f
+		|| v3f_schlick(cos_theta, refract_ratio) > random_float_pcg(&state))
+		scatter.direction = v3f_refl(unit_dir, hit_info->normal);
+	else
+		scatter.direction = v3f_refr(unit_dir, hit_info->normal, refract_ratio);
+	return (trace(&scatter, scene, depth - 1));
+}
+
+static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
+{
+	hit_info->hit = v3f_add(ray->origin, v3f_scale(ray->direction, t));
+	hit_info->normal = obj->calc_norm(obj, hit_info->hit);
+	hit_info->distance = t;
+	hit_info->front_face = v3f_dot(ray->direction, hit_info->normal) < 0;
+	hit_info->obj = obj;
+	if (!hit_info->front_face)
+		hit_info->normal = v3f_scale(hit_info->normal, -1.0f);
+}
+
+t_col32	trace(t_ray *ray, t_scene *scene, uint32_t depth)
+{
+	float		t;
+	t_obj		*hit;
+	t_ray_hit	hit_info;
+	t_col32		color;
+
+	if (depth <= 0)
+		return init_col32(0, 0, 0, 255);
+
+	hit = find_intersection(ray, scene, &t);
+	if (hit == NULL)
+		return gradient_color(ray->direction, scene->camera.bg_col);
+	init_hit_info(&hit_info, hit, ray, t);
+	hit_info.ray = *ray;
+
+	if (hit->r.mat.type == MAT_LAMBERTIAN)
+		color = handle_lambertian(scene, &hit_info);
+	else if (hit->r.mat.type == MAT_DIELECTRIC)
+		color = handle_dielectric(scene, &hit_info, depth);
+	// else if (hit->r.mat.type == MAT_METAL)
+	// 	color = handle_metal(scene, &hit_info);
+	else
+		color = init_col32(255, 0, 255, 255);
+	return (color);
 }
 
 static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
@@ -188,22 +242,19 @@ static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
 	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
 }
 
-// LCG: state = (state * A + C) % 2^32, [prev state] --×747796405 +2891336453--> [new state]
-// permutation step (*state >> 28) top 4, +4  shift between 4 and 19 bits, (*state >> shift_amount) extract high bits
-// https://www.pcg-random.org/
-// https://www.youtube.com/watch?v=45Oet5qjlms
-inline float	random_float_pcg(uint32_t *state)
-{
-	uint32_t	result;
-
-	*state = *state * 747796405 + 2891336453; // Linear Congruential Generator (LCG)
-	result = ((*state >> ((*state >> 28) + 4)) ^ *state) * 277803737; // permutation step
-	result = (result >> 22) ^ result;
-	return ((float)result / 4294967295.0f); // normalized to [0, 1]
-}
-
 
 #define SAMPLES_PER_PIXEL 1
+
+// x * large prime number in hex, ^ y to mix x and y
+// + frame * large prime number in hex to mix frame
+// 0x9e3779b9 golden ratio prime
+uint32_t	get_rngstate(uint32_t x, uint32_t y, uint32_t frame)
+{
+	uint32_t	hash;
+
+	hash = (x * 0x1f1f1f1f) ^ y;
+	return (hash + frame * 0x9e3779b9);
+}
 
 static t_col32	anti_aliasing(t_scene *scene, t_ray *ray, uint32_t x, uint32_t y)
 {
@@ -214,12 +265,12 @@ static t_col32	anti_aliasing(t_scene *scene, t_ray *ray, uint32_t x, uint32_t y)
 	uint32_t	state;
 
 	r = g = b = 0;
-	state = (uint32_t)time(NULL);
 	s = 0;
 	while (s < SAMPLES_PER_PIXEL)
 	{
-		compute_ray((float)x + (random_float_pcg(&state)), (float)y + (random_float_pcg(&state)), &scene->camera, ray);
-		t_col32 sample = trace(ray, scene, 0);
+		state = get_rngstate(x, y, s + scene->frame_num);
+		compute_ray((float)x + random_float_pcg(&state), (float)y + random_float_pcg(&state), &scene->camera, ray);
+		t_col32 sample = trace(ray, scene, MAX_DEPTH);
 		r += get_r(sample);
 		g += get_g(sample);
 		b += get_b(sample);
@@ -239,11 +290,18 @@ void	render(t_scene *scene)
 	t_ray		ray;
 	mlx_image_t	*img;
 	t_mat4x4	inv;
+	static bool first_frame = true;
 
 	img = scene->camera.img_plane;
 	invert_m4x4(inv, scene->camera.view_matrix);
 	ray.origin = mul_v3_m4x4(init_v3f(0, 0, 0), inv);
-
+	if (first_frame)
+	{
+		scene->frame_num = 0;
+		first_frame = false;
+	}
+	else
+		scene->frame_num++;
 	y = 0;
 	while (y < img->height)
 	{
