@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/27 10:54:02 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/29 14:00:14 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,10 @@ void	obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up);
 int		sphere_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
 int		plane_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
 int		cylinder_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
+int		triangle_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
 t_v3f	sphere_normal(t_obj *obj, t_v3f point);
 t_v3f	plane_normal(t_obj *obj, t_v3f point);
 t_v3f	cylinder_normal(t_obj *obj, t_v3f point);
+t_v3f	triangle_normal(t_obj *obj, t_v3f point);
 
 #endif

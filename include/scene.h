@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/27 10:24:27 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/29 13:59:03 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef enum e_object_type
 	OBJ_CYLINDER,
 	OBJ_CONE,
 	OBJ_PLANE,
+	OBJ_TRIANGLE
 }	t_obj_type;
 
 typedef enum e_light_type
@@ -92,6 +93,13 @@ typedef struct s_cylinder
 	float		height;
 }	t_cy;
 
+typedef struct s_triangle
+{
+	t_v3f	v0;
+	t_v3f	v1;
+	t_v3f	v2;
+}	t_tri;
+
 typedef struct s_light
 {
 	t_v3f			pos;
@@ -109,6 +117,7 @@ struct s_object
 		t_sp	sp;
 		t_pl	pl;
 		t_cy	cy;
+		t_tri	tri;
 	}			u_shape;
 	t_obj_type	type;
 	t_intsct	intersect;
