@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/23 12:24:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/29 15:53:43 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ void	view_matrix(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up)
 	mat[8] = -dir.x;
 	mat[9] = -dir.y;
 	mat[10] = -dir.z;
-	mat[12] = -v3f_dot(x_axis, pos);
-	mat[13] = -v3f_dot(y_axis, pos);
+	mat[12] = v3f_dot(x_axis, pos);
+	mat[13] = v3f_dot(y_axis, pos);
 	mat[14] = v3f_dot(dir, pos);
 }
 
