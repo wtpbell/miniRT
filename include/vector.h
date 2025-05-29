@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   vector.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 18:40:12 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/28 17:56:43 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   vector.h                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/29 13:51:56 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define VECTOR_H
 
 # include <stdbool.h>
-# include <float.h>
+# include "float.h"
 # include <math.h>
 
 typedef union s_vector2

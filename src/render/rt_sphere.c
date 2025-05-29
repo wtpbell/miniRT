@@ -50,7 +50,7 @@ int	sphere_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
 	float		t1;
 	float		r;
 
-	r = obj->u_shape.sp.radius;
+	r = obj->sp.radius;
 	oc = v3f_sub(ray->origin, obj->t.pos);
 	abc.x = v3f_dot(ray->direction, ray->direction);
 	abc.y = 2.0f * v3f_dot(ray->direction, oc);

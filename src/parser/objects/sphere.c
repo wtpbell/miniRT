@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   sphere.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/28 18:28:36 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   sphere.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/05/29 14:55:31 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "material.h"
-#include "color_utils.h"
+#include "color.h"
 
 bool	parse_diameter(float *out, const char *str)
 {
@@ -44,10 +44,10 @@ bool	parse_sphere(char **tokens, t_scene *scene)
 		return (false);
 	obj->t.pos = pos;
 	obj->r.col = col;
-	obj->r.mat = create_dielectric(col32_to_v3f(col), 2.5f, 0.9f);
+	obj->r.mat = create_dielectric(col32_to_v3f(col), 1.5f, 5.0f);  //null protection later
 	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	obj->type = OBJ_SPHERE;
-	obj->u_shape.sp = create_sphere(diameter);
+	obj->sp = create_sphere(diameter);
 	obj->intersect = sphere_intersect;
 	obj->calc_norm = sphere_normal;
 	init_object_matrices(obj);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   print_var.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 09:34:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/21 20:14:39 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   print_var.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/29 14:37:17 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	sphere_print(t_obj *sp, int spaces)
 {
 	printf("%*s%s", spaces, "","SPHERE:\n");
 	transform_print(&sp->t, spaces + 2);
-	float_print(sp->u_shape.sp.radius, spaces + 2, "RADIUS");
+	float_print(sp->sp.radius, spaces + 2, "RADIUS");
 	col32_print(sp->r.col, spaces + 2, "COL");
 }
 
@@ -86,8 +86,8 @@ void	cylinder_print(t_obj *cy, int spaces)
 {
 	printf("%*s%s", spaces, "","CYLINDER:\n");
 	transform_print(&cy->t, spaces + 2);
-	float_print(cy->u_shape.cy.radius, spaces + 2, "RADIUS");
-	float_print(cy->u_shape.cy.height, spaces + 2, "HEIGHT");
+	float_print(cy->cy.radius, spaces + 2, "RADIUS");
+	float_print(cy->cy.height, spaces + 2, "HEIGHT");
 	col32_print(cy->r.col, spaces + 2, "COL");
 }
 

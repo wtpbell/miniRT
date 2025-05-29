@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   render.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/28 19:00:44 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   render.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/29 14:44:52 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #include "color.h"
 #include "rt_math.h"
 #include "container.h"
-#include "color_utils.h"
+#include "color.h"
 
 #include "debug/rt_debug.h"
 
@@ -60,7 +60,7 @@ static	t_col32	normal_color(t_v3f norm)
 	return (init_col32(norm.x, norm.y, norm.z, 255));
 }
 
-static t_col32	gradient_color(t_v3f dir, t_col32 b)
+t_col32	gradient_color(t_v3f dir, t_col32 b)
 {
 	(void)b;
 	return (normal_color(dir));
@@ -83,8 +83,9 @@ static t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t)
 	while (i < scene->objects.size)
 	{
 		obj = (t_obj *)scene->objects.items[i];
-		if (obj->intersect(obj, ray, init_v2f(FLT_SML, *t), &dst))
+		if (obj->intersect(obj, ray, init_v2f(BIAS, *t), &dst))
 		{
+			// printf("Obj type: %d, intersect: %p\n", obj->type, (void*)obj->intersect);
 			*t = dst;
 			hit = obj;
 		}
@@ -103,18 +104,18 @@ static	t_col32	apply_ambient(t_col32 base_col, t_light *light)
 	));
 }
 
-static	float	apply_specular(t_ray_hit *hit, t_v3f light_dir)
+static	float	apply_specular(t_ray_hit *hit, t_v3f light_dir, t_v3f c_pos)
 {
 	t_v3f	view_dir;
-	t_v3f	halfway_dir;
+	t_v3f	refl_dir;
 	float	spec;
 	float	specular_strength;
 
-	view_dir = v3f_norm(v3f_scale(hit->normal, -1.0f));
-	halfway_dir = v3f_norm(v3f_add(light_dir, view_dir));
-	spec = powf(ft_maxf(0.0f, v3f_dot(hit->normal, halfway_dir)), 
-		hit->obj->r.mat.data.lambertian.shininess);
-	specular_strength = hit->obj->r.mat.data.lambertian.specular;
+	view_dir = v3f_norm(v3f_sub(c_pos, hit->hit));
+	refl_dir = v3f_refl(v3f_scale(light_dir, -1.0f), hit->normal);
+	spec = powf(ft_maxf(0.0f, v3f_dot(view_dir, refl_dir)), 
+		hit->obj->r.mat->lamb.shininess);
+	specular_strength = hit->obj->r.mat->lamb.specular;
 	return (spec * specular_strength);
 }
 
@@ -134,10 +135,10 @@ static t_col32	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 	if (find_intersection(&ray, scene, &shadow_t) && shadow_t < v3f_mag(light_dir))
 		return (init_col32(0, 0, 0, 255));
 	diffuse = ft_maxf(0.0f, v3f_dot(hit->normal, ray.direction));
-	specular = apply_specular(hit, ray.direction);
+	specular = apply_specular(hit, ray.direction, scene->camera.t.pos);
 	light_color = v3f_add(
 		v3f_scale(col32_to_v3f(hit->obj->r.col), diffuse),
-		v3f_scale((t_v3f){.x = 1.0f, .y = 1.0f, .z = 1.0f}, specular)
+		v3f_scale((t_v3f){.x = 0.5f, .y = 0.5f, .z = 0.5f}, specular)
 	);
 	return (v3f_to_col32(v3f_scale(light_color, light->intensity)));
 }
@@ -151,7 +152,7 @@ static t_col32	handle_lambertian(t_scene *scene, t_ray_hit *hit_info)
 
 	i = 0;
 	acc_color = init_col32(0, 0, 0, 255);
-	base_color = v3f_to_col32(hit_info->obj->r.mat.albedo);
+	base_color = v3f_to_col32(hit_info->obj->r.mat->albedo);
 	while (i < scene->lights.size)
 	{
 		light = (t_light *)scene->lights.items[i];
@@ -164,9 +165,8 @@ static t_col32	handle_lambertian(t_scene *scene, t_ray_hit *hit_info)
 	return (apply_gamma(acc_color, GAMMA));
 }
 
-
 //magic numbers (0x9e3779b9 and 0x6d0f27bd) are large primes
-static t_col32	handle_dielectric(t_scene *scene, t_ray_hit *hit_info, uint32_t depth)
+static t_col32	handle_dielectric(t_scene *scene, t_ray_hit *hit_info,uint32_t depth)
 {
 	t_ray		scatter;
 	float		refract_ratio;
@@ -176,11 +176,11 @@ static t_col32	handle_dielectric(t_scene *scene, t_ray_hit *hit_info, uint32_t d
 	uint32_t	state;
 
 	state = scene->frame_num * 0x9e3779b9 + depth * 0x6d0f27bd;
-	unit_dir = v3f_unit(hit_info->ray.direction);
-	if (hit_info->front_face)
-		refract_ratio = 1.0f / hit_info->obj->r.mat.data.dielectric.ir;
+	unit_dir = v3f_unit(hit_info->ray->direction);
+	if (hit_info->front_face && hit_info->obj->r.mat->diel.ir!= 0.0f)
+		refract_ratio = 1.0f / hit_info->obj->r.mat->diel.ir;
 	else
-		refract_ratio = hit_info->obj->r.mat.data.dielectric.ir;
+		refract_ratio = hit_info->obj->r.mat->diel.ir;
 	cos_theta = fminf(1.0f, v3f_dot(v3f_scale(unit_dir, -1.0f), hit_info->normal));
 	sin_theta = sqrtf(1.0f - cos_theta * cos_theta);
 	scatter.origin = hit_info->hit;
@@ -215,13 +215,15 @@ t_col32	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 
 	hit = find_intersection(ray, scene, &t);
 	if (hit == NULL)
-		return gradient_color(ray->direction, scene->camera.bg_col);
+	{
+		return (init_col32(255, 255, 255, 255));//gradient_color(ray->direction, scene->camera.bg_col);
+	}
 	init_hit_info(&hit_info, hit, ray, t);
-	hit_info.ray = *ray;
+	hit_info.ray = ray;
 
-	if (hit->r.mat.type == MAT_LAMBERTIAN)
+	if (hit->r.mat->type == MAT_LAMBERTIAN)
 		color = handle_lambertian(scene, &hit_info);
-	else if (hit->r.mat.type == MAT_DIELECTRIC)
+	else if (hit->r.mat->type == MAT_DIELECTRIC)
 		color = handle_dielectric(scene, &hit_info, depth);
 	// else if (hit->r.mat.type == MAT_METAL)
 	// 	color = handle_metal(scene, &hit_info);

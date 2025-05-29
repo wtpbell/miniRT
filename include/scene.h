@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   scene.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 18:55:45 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/28 19:00:01 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   scene.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/29 13:56:04 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,32 +74,39 @@ typedef enum e_material_type
 	MAT_DIELECTRIC
 }	t_mat_type;
 
+typedef struct s_lambertian
+{
+	float	specular;
+	float	shininess;
+}	t_lamb;
+
+typedef struct s_metal
+{
+	float	fuzz;
+}	t_metal;
+
+typedef struct s_dielectric
+{
+	float	ir;
+	float	transmittance;
+}	t_diel;
+
 typedef struct s_material
 {
 	t_mat_type	type;
 	t_v3f		albedo;
 	union
 	{
-		struct
-		{
-			float	specular;
-			float	shininess;
-		}	lambertian;
-		struct
-		{
-			float	fuzz;
-		}	metal;
-		struct
-		{
-			float	ir;
-			float	transmittance;
-		}	dielectric;
-	}	data;
+		t_lamb	lamb;
+		t_metal	metal;
+		t_diel	diel;
+	};
 }	t_mat;
+
 
 typedef struct s_render
 {
-	t_mat	mat;
+	t_mat	*mat;
 	t_col32	col;
 }	t_ren;
 
@@ -139,7 +146,7 @@ typedef struct s_ray_hit
 	float	distance;
 	bool	front_face;
 	t_obj	*obj;
-	t_ray	ray;
+	t_ray	*ray;
 }	t_ray_hit;
 
 struct s_object
@@ -151,7 +158,7 @@ struct s_object
 		t_sp	sp;
 		t_pl	pl;
 		t_cy	cy;
-	}			u_shape;
+	} ;
 	t_obj_type	type;
 	t_intsct	intersect;
 	t_cnorm		calc_norm;

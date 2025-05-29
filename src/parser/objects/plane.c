@@ -12,7 +12,7 @@
 
 #include "parser.h"
 #include "material.h"
-#include "color_utils.h"
+#include "color.h"
 
 bool	parse_plane(char **tokens, t_scene *scene)
 {
@@ -30,9 +30,9 @@ bool	parse_plane(char **tokens, t_scene *scene)
 	obj->t.pos = pos;
 	obj->t.dir = dir;
 	obj->r.col = col;
-	obj->r.mat = create_lambertian(col32_to_v3f(col), 0.6f, 64.0f);
+	obj->r.mat = create_lambertian(col32_to_v3f(col), 0.6f, 64.0f); //null protection later
 	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
-	obj->u_shape.pl = (t_pl){};
+	obj->pl = (t_pl){};
 	obj->type = OBJ_PLANE;
 	obj->intersect = plane_intersect;
 	obj->calc_norm = plane_normal;
