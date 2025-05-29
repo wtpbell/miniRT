@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/29 14:44:52 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/29 19:00:03 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,7 @@ static t_col32	handle_dielectric(t_scene *scene, t_ray_hit *hit_info,uint32_t de
 	float		cos_theta;
 	float		sin_theta;
 	t_v3f		unit_dir;
+	t_col32		out_color;
 	uint32_t	state;
 
 	state = scene->frame_num * 0x9e3779b9 + depth * 0x6d0f27bd;
@@ -189,7 +190,8 @@ static t_col32	handle_dielectric(t_scene *scene, t_ray_hit *hit_info,uint32_t de
 		scatter.direction = v3f_refl(unit_dir, hit_info->normal);
 	else
 		scatter.direction = v3f_refr(unit_dir, hit_info->normal, refract_ratio);
-	return (trace(&scatter, scene, depth - 1));
+	out_color = col32_scale(trace(&scatter, scene, depth - 1), hit_info->obj->r.mat->diel.transmittance);
+	return (out_color);
 }
 
 static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
@@ -217,6 +219,7 @@ t_col32	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	if (hit == NULL)
 	{
 		return (init_col32(255, 255, 255, 255));//gradient_color(ray->direction, scene->camera.bg_col);
+
 	}
 	init_hit_info(&hit_info, hit, ray, t);
 	hit_info.ray = ray;
@@ -240,7 +243,7 @@ static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
 	view = tanf(cam->fov * 0.5f * DEGTORAD);
 	camera_space.x = (2.0f * ((x + 0.5f) / cam->img_plane->width) - 1.0f) * cam->aspect_ratio * view;
 	camera_space.y = (1.0f - 2.0f * ((y + 0.5f) / cam->img_plane->height)) * view;
-	camera_space.z = -1.0f;
+	camera_space.z = 1.0f;
 	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
 }
 

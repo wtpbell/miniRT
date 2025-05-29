@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:16:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/29 14:47:57 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/29 16:54:48 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,6 @@ t_col32	v3f_to_col32(t_v3f color);
 t_col32	lerp_col32(t_col32 a, t_col32 b, float t);
 t_col32	add_colors_clamped(t_col32 a, t_col32 b);
 t_col32	apply_gamma(t_col32 color, float gamma);
+t_col32	col32_scale(t_col32 color, float factor);
 
 #endif

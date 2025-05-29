@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/29 14:55:31 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/29 18:15:49 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ static inline t_sp	create_sphere(float diameter)
 	});
 }
 
+//0.0 ≤ transmittance ≤ 1.0
+
 bool	parse_sphere(char **tokens, t_scene *scene)
 {
 	t_v3f	pos;
@@ -44,7 +46,7 @@ bool	parse_sphere(char **tokens, t_scene *scene)
 		return (false);
 	obj->t.pos = pos;
 	obj->r.col = col;
-	obj->r.mat = create_dielectric(col32_to_v3f(col), 1.5f, 5.0f);  //null protection later
+	obj->r.mat = create_dielectric(col32_to_v3f(col), 1.5f, 0.8f);  //null protection later
 	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	obj->type = OBJ_SPHERE;
 	obj->sp = create_sphere(diameter);

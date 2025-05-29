@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/29 13:56:04 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/29 17:27:39 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ typedef struct s_material
 		t_diel	diel;
 	};
 }	t_mat;
-
 
 typedef struct s_render
 {

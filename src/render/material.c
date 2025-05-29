@@ -1,4 +1,5 @@
 #include "scene.h"
+#include "rt_math.h"
 
 t_mat	*init_material(t_mat_type type)
 {
@@ -59,6 +60,6 @@ t_mat	*create_dielectric(t_v3f albedo, float ir, float transmittance)
 		return (NULL);
 	mat->albedo = albedo;
 	mat->diel.ir = ir;
-	mat->diel.transmittance = transmittance;
+	mat->diel.transmittance = ft_clampf(transmittance, 0.0f, 1.0f);
 	return (mat);
 }

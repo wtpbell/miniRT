@@ -61,3 +61,8 @@ t_col32	apply_gamma(t_col32 color, float gamma)
 		.z = fminf(powf(v.z, inv_gamma), 1.0f)
 	}));
 }
+
+t_col32	col32_scale(t_col32 color, float factor)
+{
+	return (v3f_to_col32(v3f_scale(col32_to_v3f(color), factor)));
+}
