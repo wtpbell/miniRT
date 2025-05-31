@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/29 15:43:07 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/27 10:51:56 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,7 @@ static	t_col32	normal_color(t_v3f norm)
 static t_col32	gradient_color(t_v3f dir, t_col32 b)
 {
 	(void)b;
-	(void)dir;
-	return (init_col32(100, 100, 200, 255));// normal_color(dir));
+	return (normal_color(dir));
 	// hitcolor = v3f_scale(v3f_add(dir,
 	// // 			v3f_norm(init_v3f(get_r(b), get_g(b), get_b(b)))), 255 >> 1);
 	// return (init_col32(hitcolor.x * (get_r(b) / 255.0f), hitcolor.y * (get_g(b) / 255.0f), hitcolor.z * (get_b(b) / 255.0f), 255));
@@ -105,7 +104,7 @@ static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
 	view = tanf(cam->fov * 0.5f * DEGTORAD);
 	camera_space.x = (2.0f * ((x + 0.5f) / cam->img_plane->width) - 1.0f) * cam->aspect_ratio * view;
 	camera_space.y = (1.0f - 2.0f * ((y + 0.5f) / cam->img_plane->height)) * view;
-	camera_space.z = 1.0f;
+	camera_space.z = -1.0f;
 	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
 }
 
