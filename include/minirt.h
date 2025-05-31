@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 11:37:50 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/31 19:18:06 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/31 23:22:03 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,35 @@
 # include "color.h"
 # include "vector.h"
 
-int			game(t_scene *scene);
-void		init_object_matrices(t_obj *obj);
-void		render(t_scene *scene);
-t_obj		*find_intersection(t_ray *ray, t_scene *scene, float *t);
-bool		solve_quadratic(t_v3f *abc, float *x0, float *x1);
-void		obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up);
-int			sphere_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
-int			plane_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
-int			cylinder_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
-t_v3f		sphere_normal(t_obj *obj, t_v3f point);
-t_v3f		plane_normal(t_obj *obj, t_v3f point);
-t_v3f		cylinder_normal(t_obj *obj, t_v3f point);
-t_col32		trace(t_ray *ray, t_scene *scene, uint32_t depth);
-uint32_t	get_rngstate(uint32_t x, uint32_t y, uint32_t frame);
-void		debug_scene_setup(t_scene *scene);
+typedef struct s_game
+{
+	mlx_t	*mlx;
+	/* TODO: Add more members here for access during a MLX hook */
+}	t_game;
 
+typedef struct s_tri_var
+{
+	t_v3f	v0v1;
+	t_v3f	v0v2;
+	t_v3f	pvec;
+	float	det;
+}	t_tri_var;
+
+int		game(t_scene *scene);
+void	quit_on_escape(mlx_key_data_t keydata, void *param);
+void	init_object_matrices(t_obj *obj);
+void	render(t_scene *scene);
+bool	solve_quadratic(t_v3f *abc, float *x0, float *x1);
+void	obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up);
+int		sphere_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
+int		plane_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
+int		cylinder_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
+int		triangle_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
+t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t);
+t_col32	trace(t_ray *ray, t_scene *scene, uint32_t depth);
+t_v3f	sphere_normal(t_obj *obj, t_v3f point);
+t_v3f	plane_normal(t_obj *obj, t_v3f point);
+t_v3f	cylinder_normal(t_obj *obj, t_v3f point);
+t_v3f	triangle_normal(t_obj *obj, t_v3f point);
+void	debug_scene_setup(t_scene *scene);
 #endif

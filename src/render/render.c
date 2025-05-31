@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/31 19:17:35 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/31 23:21:20 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,24 +23,6 @@
 #include "rt_math.h"
 #include "random.h"
 #include "light.h"
-
-// Debug function to visualize ray direction and hit point
-// static void debug_ray_hit(t_ray *ray, t_ray_hit *hit_info, const char *label) {
-//     printf("\n--- %s ---\n", label);
-//     printf("Ray origin: (%.2f, %.2f, %.2f)\n", ray->origin.x, ray->origin.y, ray->origin.z);
-//     printf("Ray dir: (%.2f, %.2f, %.2f)\n", ray->direction.x, ray->direction.y, ray->direction.z);
-//     printf("Hit point: (%.2f, %.2f, %.2f)\n", hit_info->hit.x, hit_info->hit.y, hit_info->hit.z);
-//     printf("Normal: (%.2f, %.2f, %.2f)\n", hit_info->normal.x, hit_info->normal.y, hit_info->normal.z);
-//     if (hit_info->obj && hit_info->obj->r.mat) {
-//         printf("Material type: %d\n", hit_info->obj->r.mat->type);
-//         printf("Albedo: (%.2f, %.2f, %.2f)\n", 
-//                hit_info->obj->r.mat->albedo.x, 
-//                hit_info->obj->r.mat->albedo.y, 
-//                hit_info->obj->r.mat->albedo.z);
-//     } else {
-//         printf("No material information available\n");
-//     }
-// }
 
 #define MAX_DEPTH	5
 

@@ -11,13 +11,15 @@
 /* ************************************************************************** */
 
 #ifndef LIGHT_H
-#define LIGHT_H
+# define LIGHT_H
 
-#include "minirt.h"
+# include "minirt.h"
 
-void	init_lighting(t_lighting *lighting, t_ray_hit *hit, t_light *light, t_v3f view_pos);
+void	init_lighting(t_lighting *lighting, t_ray_hit *hit,
+			t_light *light, t_v3f view_pos);
 float	calculate_diffuse(t_lighting *lighting);
-float	calculate_specular(t_lighting *lighting, float shininess, float specular_strength);
+float	calculate_specular(t_lighting *lighting, float shininess,
+			float specular_strength);
 t_col32	apply_ambient(t_col32 base_col, t_light *light);
 t_col32	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light);
 

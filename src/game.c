@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/31 17:35:20 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/31 23:13:26 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,6 @@
 
 #define WIDTH	1200
 #define HEIGHT	1200
-
-static void	update(void *ctx)
-{
-	(void)ctx;
-}
 
 // TODO: Implementation needed ()
 void	obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up)
@@ -81,16 +76,16 @@ static bool	cam_init(t_cam *cam, mlx_t *mlx)
 
 int	game(t_scene *scene)
 {
-	mlx_t	*mlx;
+	t_game	game;
 
-	mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
-	if (cam_init(&scene->camera, mlx))
+	game.mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
+	if (cam_init(&scene->camera, game.mlx))
 	{
 		scene_print(scene);
-		mlx_loop_hook(mlx, update, mlx);
+		mlx_key_hook(game.mlx, quit_on_escape, &game);
 		render(scene);
-		mlx_loop(mlx);
+		mlx_loop(game.mlx);
 	}
-	mlx_terminate(mlx);
+	mlx_terminate(game.mlx);
 	return (0);
 }

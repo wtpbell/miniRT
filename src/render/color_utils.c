@@ -28,10 +28,10 @@ t_v3f	col32_to_v3f(t_col32 color)
 t_col32	v3f_to_col32(t_v3f color)
 {
 	return (init_col32(
-		(int)(ft_clampf(color.x, 0.0f, 1.0f) * 255.0f),
-		(int)(ft_clampf(color.y, 0.0f, 1.0f) * 255.0f),
-		(int)(ft_clampf(color.z, 0.0f, 1.0f) * 255.0f),
-		255
+			(int)(ft_clampf(color.x, 0.0f, 1.0f) * 255.0f),
+			(int)(ft_clampf(color.y, 0.0f, 1.0f) * 255.0f),
+			(int)(ft_clampf(color.z, 0.0f, 1.0f) * 255.0f),
+			255
 	));
 }
 

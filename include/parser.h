@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/23 11:56:08 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/29 12:12:19 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ bool		parse_diameter(float *out, const char *str);
 bool		parse_plane(char **tokens, t_scene *scene);
 // cylinder.c
 bool		parse_cylinder(char **tokens, t_scene *scene);
+// triangle.c
+bool		parse_triangle(char **tokens, t_scene *scene);
 
 /* ---------------------Utils--------------------- */
 // string_utils.c

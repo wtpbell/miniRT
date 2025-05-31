@@ -4,6 +4,7 @@
 # sp [position (x,y,z float)] [diameter (float)] [color (R,G,B in 0–255)]
 # pl [position (x,y,z float)] [normal (x,y,z float)] [color (R,G,B in 0–255)]
 # cy [position (x,y,z float)] [axis (x,y,z float)] [diameter (float)] [height (float)] [color (R,G,B in 0–255)]
+# tri [v0 (x,y,z float)] [v1 (x,y,z float)] [v2 (x,y,z float)] [color (R,G,B in 0–255)]
 
 # Camera position, look direction, FOV
 C 0,2,5     0,0,-1  100
@@ -25,13 +26,13 @@ pl 0,0,-10	0,0,1		200,200,255
 # Reflective sphere (position, diameter, color)
 sp 0,1,0 1.5 255,255,255
 
-# Some objects to reflect
+# # Some objects to reflect
 sp 2,1,2 0.5 255,100,100 
 sp -2,1,2 0.5 100,255,100 
 sp 0,3,1 0.4 100,100,255
 
 # # Cylinders
-# cy 3,0,0 0,1,0 0.5 2 255,200,0 
+cy 3,0,0 0,1,0 0.5 2 255,200,0 
 cy 0,0,0 0,1,0 0.5 2 255,0,200
 
 #add light color

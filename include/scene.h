@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:55:45 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/31 12:57:50 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/31 23:56:30 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@
 
 typedef struct s_object	t_obj;
 typedef struct s_ray	t_ray;
-typedef int				(*t_intsct)(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
+typedef int				(*t_intsct)(t_obj *obj, t_ray *ray,
+							t_v2f t, float *dst);
 typedef t_v3f			(*t_cnorm)(t_obj *obj, t_v3f point);
 
 typedef enum e_object_type
@@ -32,6 +33,7 @@ typedef enum e_object_type
 	OBJ_CYLINDER,
 	OBJ_CONE,
 	OBJ_PLANE,
+	OBJ_TRIANGLE
 }	t_obj_type;
 
 typedef enum e_light_type
@@ -124,6 +126,13 @@ typedef struct s_cylinder
 	float		height;
 }	t_cy;
 
+typedef struct s_triangle
+{
+	t_v3f	v0;
+	t_v3f	v1;
+	t_v3f	v2;
+}	t_tri;
+
 typedef struct s_light
 {
 	t_v3f			pos;
@@ -171,6 +180,7 @@ struct s_object
 		t_sp	sp;
 		t_pl	pl;
 		t_cy	cy;
+		t_tri	tri;
 	} ;
 	t_obj_type	type;
 	t_intsct	intersect;
@@ -185,7 +195,5 @@ typedef struct s_scene
 	int			scene_flags;
 	uint32_t	frame_num;
 }	t_scene;
-
-
 
 #endif

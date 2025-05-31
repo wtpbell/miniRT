@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:38:24 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/31 15:38:51 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/31 23:44:13 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ inline t_v3f	v3f_neg(t_v3f v)
 
 bool	v3f_near_zero(t_v3f v)
 {
-	return (fabsf(v.x) < FLT_EPSILON && fabsf(v.y) < FLT_EPSILON && fabsf(v.z) < FLT_EPSILON);
+	return (fabsf(v.x) < FLT_EPSILON && fabsf(v.y) < FLT_EPSILON
+		&& fabsf(v.z) < FLT_EPSILON);
 }
 
 t_v3f	v3f_unit(t_v3f v)
@@ -73,8 +74,10 @@ t_v3f	v3f_refr(t_v3f uv, t_v3f n, float etai_over_etat)
 	t_v3f	r_out_parallel;
 
 	cos_theta = fminf(v3f_dot(v3f_neg(uv), n), 1.0f);
-	r_out_perp = v3f_scale(v3f_add(uv, v3f_scale(n, cos_theta)), etai_over_etat);
-	r_out_parallel = v3f_scale(n, -sqrtf(fabsf(1.0f - v3f_dot(r_out_perp, r_out_perp))));
+	r_out_perp = v3f_scale(v3f_add(uv, v3f_scale(n, cos_theta))
+			, etai_over_etat);
+	r_out_parallel = v3f_scale(n, -sqrtf(fabsf(
+					1.0f - v3f_dot(r_out_perp, r_out_perp))));
 	return (v3f_add(r_out_perp, r_out_parallel));
 }
 
