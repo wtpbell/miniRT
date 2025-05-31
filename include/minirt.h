@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/31 17:15:42 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/31 21:38:27 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,12 @@
 # include "color.h"
 # include "vector.h"
 
+typedef struct s_game
+{
+	mlx_t	*mlx;
+	/* TODO: Add more members here for access during a MLX hook */
+}	t_game;
+
 typedef struct s_tri_var
 {
 	t_v3f	v0v1;
@@ -28,6 +34,7 @@ typedef struct s_tri_var
 }	t_tri_var;
 
 int		game(t_scene *scene);
+void	quit_on_escape(mlx_key_data_t keydata, void *param);
 void	init_object_matrices(t_obj *obj);
 void	render(t_scene *scene);
 bool	solve_quadratic(t_v3f *abc, float *x0, float *x1);

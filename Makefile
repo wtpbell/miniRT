@@ -1,4 +1,4 @@
-vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/render
+vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/render:src/ui
 
 NAME		:= miniRT
 CC			:= cc
@@ -22,7 +22,7 @@ PARSER_CORE	:= parser.c element_parser.c file_parser.c camera.c light.c\
 SRCS_MAIN	:= main.c vector_init.c vector_helper.c vector_operation.c\
 				vec_container.c vec_container_utils.c color.c render.c\
 				rt_math.c matrix.c game.c rt_sphere.c rt_plane.c rt_cylinder.c\
-				rt_triangle.c
+				quit.c rt_triangle.c
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE)
 OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)
