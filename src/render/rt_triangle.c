@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 14:00:37 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/30 16:21:56 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/31 16:10:45 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,5 @@ int triangle_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
 		return (0);
 
 	*dst = v3f_dot(v0v2, qvec) * (1.0f / det);
-	return (1);
+	return (*dst > t.x && *dst < t.y);
 }
