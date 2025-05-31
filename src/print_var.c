@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   print_var.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/29 14:37:17 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   print_var.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/14 09:34:02 by jboon             #+#    #+#             */
+/*   Updated: 2025/05/31 17:10:36 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,4 +119,38 @@ void	scene_print(t_scene *scene)
 	camera_print(&scene->camera, spaces + 2);
 	objects_print(scene->objects, spaces + 2, "OBJECTS");
 	printf("===END SCENE===\n");
+}
+
+void debug_scene_setup(t_scene *scene) {
+	printf("\n=== SCENE SETUP DEBUG ===\n");
+	printf("Camera position: (%.2f, %.2f, %.2f)\n", 
+			scene->camera.t.pos.x, scene->camera.t.pos.y, scene->camera.t.pos.z);
+	printf("Camera direction: (%.2f, %.2f, %.2f)\n", 
+			scene->camera.t.dir.x, scene->camera.t.dir.y, scene->camera.t.dir.z);
+	printf("FOV: %.2f\n", scene->camera.fov);
+	printf("\nObjects (%d):\n", scene->objects.size);
+	for (int i = 0; i < scene->objects.size; i++) {
+		t_obj *obj = (t_obj *)scene->objects.items[i];
+		printf("  [%d] Type: %d, Pos: (%.2f, %.2f, %.2f), Dir: (%.2f, %.2f, %.2f)\n",
+				i, obj->type, 
+				obj->t.pos.x, obj->t.pos.y, obj->t.pos.z,
+				obj->t.dir.x, obj->t.dir.y, obj->t.dir.z);
+		if (obj->r.mat) {
+			printf("     Material: type=%d, albedo=(%.2f, %.2f, %.2f)\n",
+					obj->r.mat->type,
+					obj->r.mat->albedo.x,
+					obj->r.mat->albedo.y,
+					obj->r.mat->albedo.z);
+		}
+	}
+	printf("\nLights (%d):\n", scene->lights.size);
+	for (int i = 0; i < scene->lights.size; i++) {
+		t_light *light = (t_light *)scene->lights.items[i];
+		printf("  [%d] Type: %d, Pos: (%.2f, %.2f, %.2f), Color: (%d,%d,%d), Intensity: %.2f\n",
+				i, light->type,
+				light->pos.x, light->pos.y, light->pos.z,
+				get_r(light->col), get_g(light->col), get_b(light->col),
+				light->intensity);
+	}
+	printf("=========================\n\n");
 }

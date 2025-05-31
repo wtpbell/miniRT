@@ -66,3 +66,21 @@ t_col32	col32_scale(t_col32 color, float factor)
 {
 	return (v3f_to_col32(v3f_scale(col32_to_v3f(color), factor)));
 }
+
+t_col32	col32_lerp(t_col32 x, t_col32 y, float t)
+{
+	uint32_t	r;
+	uint32_t	g;
+	uint32_t	b;
+	uint32_t	alpha;
+
+	if (t <= 0.0f)
+		return (x);
+	if (t >= 1.0f)
+		return (y);
+	r = (uint32_t)(get_r(x) * (1.0f - t) + get_r(y) * t);
+	g = (uint32_t)(get_g(x) * (1.0f - t) + get_g(y) * t);
+	b = (uint32_t)(get_b(x) * (1.0f - t) + get_b(y) * t);
+	alpha = (uint32_t)(get_a(x) * (1.0f - t) + get_a(y) * t);
+	return (init_col32(r, g, b, alpha));
+}

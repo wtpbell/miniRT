@@ -6,11 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:38:24 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/28 18:21:10 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/31 15:38:51 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vector.h"
+#include <stdio.h>
 
 inline t_v3f	v3f_add(t_v3f a, t_v3f b)
 {
@@ -61,7 +62,8 @@ t_v3f	v3f_unit(t_v3f v)
 
 t_v3f	v3f_refl(t_v3f d, t_v3f n)
 {
-	return (v3f_sub(d, (v3f_scale(n, v3f_dot(v3f_scale(d, 2), n)))));
+	// Reflection formula: r = d - 2*(d·n)*n
+	return (v3f_sub(d, v3f_scale(n, 2 * v3f_dot(d, n))));
 }
 
 t_v3f	v3f_refr(t_v3f uv, t_v3f n, float etai_over_etat)

@@ -5,31 +5,34 @@
 # pl [position (x,y,z float)] [normal (x,y,z float)] [color (R,G,B in 0–255)]
 # cy [position (x,y,z float)] [axis (x,y,z float)] [diameter (float)] [height (float)] [color (R,G,B in 0–255)]
 
-C 3,1,-2     0,0,-1  90
-A 0.1 0,0,0
-L -3,8,0 1.0 0,0,255
+# Camera position, look direction, FOV
+C 0,2,5     0,0,-1  100
 
-# pl 0,0,8	0,0,-1		100,100,255
+# Ambient light (intensity, color)
+A 0.3 255,255,255
 
-pl -5,0,0	1,0,0		200,200,200
-pl 5,0,0	-1,0,0		0,0,255
+# Point light (position, brightness, color)
+L -3,5,2 0.70 0,255,255
 
-pl 0,0,10	0,0,-1		220,220,220
-pl 0,0,-10	0,0,1		100,100,255
+# Floor and walls (position, normal, color)
+pl 0,-1,0	0,1,0		0,255,0
+pl 0,10,0	0,-1,0		150,150,255  
+pl -5,0,0	1,0,0		200,150,150  
+pl 5,0,0	-1,0,0		150,200,150  
+pl 0,0,10	0,0,-1		255,255,255  
+pl 0,0,-10	0,0,1		200,200,255
 
+# Reflective sphere (position, diameter, color)
+sp 0,1,0 1.5 255,255,255
 
-pl 0,-1,0	0,1,0		180,180,180
-pl 0,10,0	0,-1,0		100,100,255
+# Some objects to reflect
+sp 2,1,2 0.5 255,100,100 
+sp -2,1,2 0.5 100,255,100 
+sp 0,3,1 0.4 100,100,255
 
-# sp 0,9,5 .5 255,100,100
-cy 2,0,5 0,1,0 1 2 255,0,0
-cy 2,4,5 0,1,0 1 2 255,255,255
-cy 3,0,5 0,1,0 1 2 0,0,255
-
-# sp 0,1,5 1 255,0,0
-cy 0,3,4     1,-1,0   1  2    100,255,100
-# sp 2,1,0 2 255,255,0
-# sp -2,1,2 0.8 255,255,255
+# # Cylinders
+# cy 3,0,0 0,1,0 0.5 2 255,200,0 
+cy 0,0,0 0,1,0 0.5 2 255,0,200
 
 #add light color
 #flip the c dir.z input 

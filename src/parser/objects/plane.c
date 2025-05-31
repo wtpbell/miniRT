@@ -30,7 +30,7 @@ bool	parse_plane(char **tokens, t_scene *scene)
 	obj->t.pos = pos;
 	obj->t.dir = dir;
 	obj->r.col = col;
-	obj->r.mat = create_lambertian(col32_to_v3f(col), 0.6f, 64.0f); //null protection later
+	obj->r.mat = create_lambertian(col32_to_v3f(col), 0.95f, 256.0f);
 	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	obj->pl = (t_pl){};
 	obj->type = OBJ_PLANE;

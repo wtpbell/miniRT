@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   scene.h                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/29 17:27:39 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   scene.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 18:55:45 by jboon             #+#    #+#             */
+/*   Updated: 2025/05/31 12:57:50 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,20 @@ typedef struct s_light
 	t_light_type	type;
 	float			intensity;
 }	t_light;
+
+typedef struct s_lighting
+{
+	t_v3f	light_dir;
+	t_v3f	view_dir;
+	t_v3f	hit_point;
+	t_v3f	normal;
+	t_col32	light_color;
+	t_col32	obj_color;
+	float	intensity;
+	float	specular;
+	float	diffuse;
+	float	distance;
+}	t_lighting;
 
 typedef struct s_ray
 {
