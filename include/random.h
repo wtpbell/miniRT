@@ -16,7 +16,5 @@
 # include <stdint.h>
 # include "vector.h"
 
-// Generate a random point inside a unit sphere
-t_v3f	random_in_unit_sphere(uint32_t *state);
 float	random_float_pcg(uint32_t *state);
 #endif

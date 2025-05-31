@@ -27,16 +27,3 @@ inline float	random_float_pcg(uint32_t *state)
 	result = (result >> 22) ^ result;
 	return ((float)result / 4294967295.0f); // normalized to [0, 1]
 }
-
-
-// Generate a random point inside a unit sphere
-t_v3f	random_in_unit_sphere(uint32_t *state)
-{
-	t_v3f p;
-	do {
-		p.x = 2.0f * random_float_pcg(state) - 1.0f;
-		p.y = 2.0f * random_float_pcg(state) - 1.0f;
-		p.z = 2.0f * random_float_pcg(state) - 1.0f;
-	} while (v3f_sqr_mag(p) >= 1.0f);
-	return (p);
-}
