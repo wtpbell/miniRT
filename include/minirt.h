@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   minirt.h                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/29 14:00:14 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/31 17:15:42 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,14 @@
 # include "ray.h"
 # include "color.h"
 # include "vector.h"
+
+typedef struct s_tri_var
+{
+	t_v3f	v0v1;
+	t_v3f	v0v2;
+	t_v3f	pvec;
+	float	det;
+}	t_tri_var;
 
 int		game(t_scene *scene);
 void	init_object_matrices(t_obj *obj);
