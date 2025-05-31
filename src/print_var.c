@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   print_var.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 09:34:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/21 20:14:39 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   print_var.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
+/*   Updated: 2025/05/29 13:59:20 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,16 @@ void	cylinder_print(t_obj *cy, int spaces)
 	col32_print(cy->r.col, spaces + 2, "COL");
 }
 
+void	triangle_print(t_obj *tri, int spaces)
+{
+	printf("%*s%s", spaces, "","TRIANGLE:\n");
+	transform_print(&tri->t, spaces + 2);
+	v3f_print(tri->u_shape.tri.v0, spaces + 2, "v0");
+	v3f_print(tri->u_shape.tri.v1, spaces + 2, "v1");
+	v3f_print(tri->u_shape.tri.v2, spaces + 2, "v2");
+	col32_print(tri->r.col, spaces + 2, "COL");
+}
+
 void	objects_print(t_vector	objects, int spaces, const char *prefix)
 {
 	int			i;
@@ -107,6 +117,8 @@ void	objects_print(t_vector	objects, int spaces, const char *prefix)
 			plane_print(obj, spaces + 2);
 		else if (obj->type == OBJ_CYLINDER)
 			cylinder_print(obj, spaces + 2);
+		else if (obj->type == OBJ_TRIANGLE)
+			triangle_print(obj, spaces + 2);
 		++i;
 	}
 }
