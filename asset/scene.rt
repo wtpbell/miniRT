@@ -4,6 +4,7 @@
 # sp [position (x,y,z float)] [diameter (float)] [color (R,G,B in 0–255)]
 # pl [position (x,y,z float)] [normal (x,y,z float)] [color (R,G,B in 0–255)]
 # cy [position (x,y,z float)] [axis (x,y,z float)] [diameter (float)] [height (float)] [color (R,G,B in 0–255)]
+# tri [v0 (x,y,z float)] [v1 (x,y,z float)] [v2 (x,y,z float)] [color (R,G,B in 0–255)]
 
 
 C 0,10,0		0,-1,0 		60

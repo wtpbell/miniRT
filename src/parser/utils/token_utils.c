@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 18:31:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 14:19:48 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/29 14:09:36 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ size_t	get_expected_token_count(const char *type)
 		return (4);
 	if (ft_strcmp(type, "cy") == 0)
 		return (6);
+	if (ft_strcmp(type, "tri") == 0)
+		return (5);
 	if (ft_strcmp(type, "A") == 0)
 		return (3);
 	return (0);

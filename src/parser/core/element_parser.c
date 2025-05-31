@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 12:08:07 by bewong        ########   odam.nl         */
+/*   Updated: 2025/05/29 12:13:16 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ static t_parser	get_parser(const char *type)
 		return (parse_plane);
 	else if (ft_strcmp(type, "cy") == 0)
 		return (parse_cylinder);
+	else if (ft_strcmp(type, "tri") == 0)
+		return (parse_triangle);
 	else if (ft_strcmp(type, "L") == 0 || ft_strcmp(type, "A") == 0)
 		return (parse_light);
 	else if (ft_strcmp(type, "C") == 0)
