@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/01 19:04:43 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/01 20:09:19 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,17 +120,17 @@ static t_v3f	blend_color(t_scene *sc, t_ray_hit *hit, uint32_t depth, float ior)
 	if (hit->front_face)
 		ray.origin = v3f_add(hit->hit, v3f_scale(hit->normal, 0.001f));
 	else
-		ray.origin = v3f_add(hit->hit, v3f_scale(hit->normal, -0.001f));
+		ray.origin = v3f_add(hit->hit, v3f_scale(hit->normal, -0.001f)); // inside the obj
 	ray.direction = v3f_refl(ray.direction, hit->normal);
-	colors[0] = trace(&ray, sc, depth - 1);
-	if (ior * sqrtf(1.0f - cos_theta * cos_theta) <= 1.0f)
+	colors[0] = trace(&ray, sc, depth - 1); // trace reflection ray
+	if (ior * sqrtf(1.0f - cos_theta * cos_theta) <= 1.0f) // if total internal reflection
 	{
 		ray.direction = v3f_refr(ray.direction, hit->normal, ior);
-		colors[1] = trace(&ray, sc, depth - 1);
+		colors[1] = trace(&ray, sc, depth - 1); // trace refraction ray
 	}
 	else
-		colors[1] = (t_v3f){{0.0f, 0.0f, 0.0f}};
-	return (v3f_lerp(colors[1], colors[0], reflectance));
+		colors[1] = (t_v3f){{0.0f, 0.0f, 0.0f}}; // no refraction
+	return (v3f_lerp(colors[1], colors[0], reflectance)); // blend reflection and refraction
 }
 
 // 0.1f more perfect, 0.3f more visible diffuse lighting, 0.0f pure transparent
@@ -198,7 +198,7 @@ static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
 	view = tanf(cam->fov * 0.5f * DEGTORAD);
 	camera_space.x = (2.0f * ((x + 0.5f) / cam->img_plane->width) - 1.0f) * cam->aspect_ratio * view;
 	camera_space.y = (1.0f - 2.0f * ((y + 0.5f) / cam->img_plane->height)) * view;
-	camera_space.z = -1.0f;
+	camera_space.z = 1.0f;
 	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
 }
 
@@ -227,7 +227,7 @@ static t_v3f	anti_aliasing(t_scene *scene, t_ray *ray, uint32_t x, uint32_t y)
 	s = 0;
 	while (s < SAMPLES_PER_PIXEL)
 	{
-		rng_state = get_rngstate(x, y, s + scene->frame_num);
+		rng_state = get_rngstate(x, y, scene->frame_num);
 		compute_ray((float)x + random_float_pcg(&rng_state),
 			(float)y + random_float_pcg(&rng_state), &scene->camera, ray);
 		color = trace(ray, scene, MAX_DEPTH);
