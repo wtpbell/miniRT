@@ -17,7 +17,7 @@
 // permutation step (*state >> 28) top 4, +4  shift between 4 and 19 bits, (*state >> shift_amount) extract high bits
 // https://www.pcg-random.org/
 // https://www.youtube.com/watch?v=45Oet5qjlms
-inline float	random_float_pcg(uint32_t *state)
+float	random_float_pcg(uint32_t *state)
 {
 	uint32_t	result;
 
