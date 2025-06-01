@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   render.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/01 20:09:19 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   render.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/01 22:10:46 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info)
 	t_v3f	obj_albedo;
 	int		i;
 
-	total_light = (t_v3f){{0.0f, 0.0f, 0.0f}};
+	total_light = init_v3f(0.0f, 0.0f, 0.0f);
 	obj_albedo = hit_info->obj->r.mat->albedo;
 	i = 0;
 	while (i < scene->lights.size)
@@ -89,11 +89,7 @@ static t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info)
 			total_light = v3f_add(total_light, apply_ambient(obj_albedo, light));
 		i++;
 	}
-	return ((t_v3f){{
-		.x = obj_albedo.x * total_light.x,
-		.y = obj_albedo.y * total_light.y,
-		.z = obj_albedo.z * total_light.z
-	}});
+	return (v3f_mul(obj_albedo, total_light));
 }
 
 static float	get_refraction_ratio(t_ray_hit *hit_info)
@@ -129,7 +125,7 @@ static t_v3f	blend_color(t_scene *sc, t_ray_hit *hit, uint32_t depth, float ior)
 		colors[1] = trace(&ray, sc, depth - 1); // trace refraction ray
 	}
 	else
-		colors[1] = (t_v3f){{0.0f, 0.0f, 0.0f}}; // no refraction
+		colors[1] = init_v3f(0.0f, 0.0f, 0.0f); // no refraction
 	return (v3f_lerp(colors[1], colors[0], reflectance)); // blend reflection and refraction
 }
 
@@ -142,7 +138,7 @@ static t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 	float	kd;
 
 	if (depth == 0)
-		return ((t_v3f){{0.0f, 0.0f, 0.0f}});
+		return (init_v3f(0.0f, 0.0f, 0.0f));
 	direct = handle_lambertian(sc, hit);
 	indirect = blend_color(sc, hit, depth, get_refraction_ratio(hit));
 	kd = 1.0f - hit->obj->r.mat->diel.transmittance - 0.2f;  // Diffuse weight = 1.0 - transmittance - 0.2f(small bias)
@@ -173,10 +169,10 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	t_v3f		color;
 
 	if (depth <= 0)
-		return (t_v3f){{0.0f, 0.0f, 0.0f}};
+		return (init_v3f(0.0f, 0.0f, 0.0f));
 	hit = find_intersection(ray, scene, &t);
 	if (hit == NULL)
-		return (t_v3f){{1.0f, 1.0f, 1.0f}};
+		return (init_v3f(1.0f, 1.0f, 1.0f));
 	init_hit_info(&hit_info, hit, ray, t);
 	hit_info.ray = ray;
 	if (hit->r.mat->type == MAT_LAMBERTIAN)
@@ -186,8 +182,8 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	// else if (hit->r.mat->type == MAT_METAL)
 	// 	color = handle_metal(scene, &hit_info, depth);
 	else
-		color = (t_v3f){{1.0f, 0.0f, 1.0f}};
-	return (v3f_clamp(color, 0.0f, 1.0f));
+		color = (init_v3f(1.0f, 1.0f, 1.0f));
+	return (v3f_clampf01(color));
 }
 
 static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)

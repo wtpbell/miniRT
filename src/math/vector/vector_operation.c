@@ -1,15 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   vector_operation.c                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 19:38:24 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/01 18:52:56 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   vector_operation.c                                 :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 19:38:24 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/01 21:57:14 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "rt_math.h"
 #include "vector.h"
 
 inline t_v3f	v3f_add(t_v3f a, t_v3f b)
@@ -44,11 +45,6 @@ float	v3f_dist(t_v3f a, t_v3f b)
 	return (v3f_mag(v3f_sub(a, b)));
 }
 
-t_v3f	v3f_unit(t_v3f v)
-{
-	return (v3f_scale(v, 1.0f / v3f_mag(v)));
-}
-
 t_v3f	v3f_refl(t_v3f d, t_v3f n)
 {
 	// Reflection formula: r = d - 2*(d·n)*n
@@ -81,9 +77,9 @@ t_v3f	v3f_lerp(t_v3f a, t_v3f b, float t)
 inline t_v3f	v3f_clamp(t_v3f v, float min, float max)
 {
 	return ((t_v3f){{
-			.x = fmaxf(min, fminf(max, v.x)),
-			.y = fmaxf(min, fminf(max, v.y)),
-			.z = fmaxf(min, fminf(max, v.z))
+			.x = ft_clampf(v.x, min, max),
+			.y = ft_clampf(v.y, min, max),
+			.z =ft_clampf(v.z, min, max)
 		}});
 }
 

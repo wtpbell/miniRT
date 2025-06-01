@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   material.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/31 23:53:11 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/01 18:59:14 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   material.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/31 23:53:11 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/01 22:17:05 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_mat	*init_material(t_mat_type type)
 	if (!mat)
 		return (NULL);
 	mat->type = type;
-	mat->albedo = (t_v3f){.x = 1.0f, .y = 1.0f, .z = 1.0f};
+	mat->albedo = init_v3f(1.0f, 1.0f, 1.0f);
 	if (type == MAT_LAMBERTIAN)
 	{
 		mat->lamb.specular = 0.7f;
@@ -71,6 +71,6 @@ t_mat	*create_dielectric(t_v3f albedo, float ir, float transmittance)
 		return (NULL);
 	mat->albedo = albedo;
 	mat->diel.ir = ir;
-	mat->diel.transmittance = ft_clampf(transmittance, 0.0f, 1.0f);
+	mat->diel.transmittance = ft_clampf01(transmittance);
 	return (mat);
 }

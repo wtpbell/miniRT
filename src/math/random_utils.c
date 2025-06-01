@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "random.h"
-#include "vector.h"
+#include <stdint.h>
 
 // PCG Random Number Generator
 // LCG: state = (state * A + C) % 2^32, [prev state] --×747796405 +2891336453--> [new state]

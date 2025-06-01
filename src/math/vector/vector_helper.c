@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   vector_helper.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 19:41:08 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/28 18:02:10 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   vector_helper.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 19:41:08 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/01 21:55:20 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_v3f	v3f_norm(t_v3f v)
 	len = v3f_sqr_mag(v);
 	if (len > 0)
 	{
-		len = 1 / sqrtf(len);
+		len = 1.0f / sqrtf(len);
 		return (v3f_scale(v, len));
 	}
 	return (v);

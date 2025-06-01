@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   vector.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 18:40:12 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/01 18:42:17 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   vector.h                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/01 21:53:12 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,8 @@ t_v3f	v3f_scale(t_v3f v, float f);
 t_v3f	v3f_cross(t_v3f a, t_v3f b);
 t_v3f	v3f_norm(t_v3f v);
 t_v3f	v3f_refl(t_v3f d, t_v3f n);
-t_v3f	v3f_neg(t_v3f v);
 t_v3f	v3f_refr(t_v3f uv, t_v3f n, float etai_over_etat);
 t_v3f	v3f_lerp(t_v3f a, t_v3f b, float t);
-t_v3f	v3f_unit(t_v3f v);
 t_v3f	v3f_mul(t_v3f a, t_v3f b);
 t_v3f	v3f_clamp(t_v3f v, float min, float max);
 t_v3f	v3f_clampf01(t_v3f v);
