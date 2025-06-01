@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/01 20:09:19 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/01 21:43:35 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,7 @@ static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
 	view = tanf(cam->fov * 0.5f * DEGTORAD);
 	camera_space.x = (2.0f * ((x + 0.5f) / cam->img_plane->width) - 1.0f) * cam->aspect_ratio * view;
 	camera_space.y = (1.0f - 2.0f * ((y + 0.5f) / cam->img_plane->height)) * view;
-	camera_space.z = 1.0f;
+	camera_space.z = -1.0f;
 	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
 }
 
