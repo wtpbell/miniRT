@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 12:05:02 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/14 12:05:02 by bewong           ###   ########.fr       */
+/*   Updated: 2025/05/31 15:54:42 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ bool	parse_camera(char **tokens, t_scene *scene)
 		return (false);
 	ft_bzero(&scene->camera, sizeof(t_cam));
 	scene->camera.t.pos = pos;
+	dir.z = -dir.z;
 	scene->camera.t.dir = v3f_norm(dir);
 	if (fabsf(dir.y) > 0.999f)
 		up = (t_v3f){.x = 0.0f, .y = 0.0f, .z = -1.0f + 2.0f * (dir.y < 0.0f)};

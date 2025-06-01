@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   game.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/31 21:38:04 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   game.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/01 19:02:24 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 #include "minirt.h"
 #include "debug/rt_debug.h"
 
-#define WIDTH	1024
-#define HEIGHT	1024
+#define WIDTH	1200
+#define HEIGHT	1200
 
 // TODO: Implementation needed ()
 void	obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up)
@@ -68,7 +68,7 @@ static bool	cam_init(t_cam *cam, mlx_t *mlx)
 		|| mlx_image_to_window(mlx, cam->img_plane, 0, 0) == -1)
 		return (false);
 	cam->aspect_ratio = cam->img_plane->width / (float)cam->img_plane->height;
-	cam->bg_col = init_col32(127, 0, 127, 255);
+	cam->bg_color = (t_v3f){{0.5f, 0.0f, 0.5f}};
 	cam->t.dir = v3f_norm(cam->t.dir);
 	view_matrix(cam->view_matrix, cam->t.pos, cam->t.dir, cam->t.up);
 	return (true);

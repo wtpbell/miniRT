@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   scene.h                                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/29 13:59:03 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/01 21:53:14 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,17 @@
 # define SCENE_H
 
 # include "MLX42/MLX42.h"
-# include "ray.h"
 # include "matrix.h"
 # include "vector.h"
 # include "color.h"
 # include "libft.h"
 # include "container.h"
-# include <stdio.h>
+# include "material.h"
 
 typedef struct s_object	t_obj;
-typedef int				(*t_intsct)(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
+typedef struct s_ray	t_ray;
+typedef int				(*t_intsct)(t_obj *obj, t_ray *ray,
+							t_v2f t, float *dst);
 typedef t_v3f			(*t_cnorm)(t_obj *obj, t_v3f point);
 
 typedef enum e_object_type
@@ -63,19 +64,15 @@ typedef struct s_camera
 	t_trans		t;
 	float		fov;
 	float		aspect_ratio;
-	t_col32		bg_col;
+	t_v3f		bg_color;
 	mlx_image_t	*img_plane;
 	t_mat4x4	view_matrix;
 }	t_cam;
 
-typedef struct s_material
-{
-}	t_mat;
-
 typedef struct s_render
 {
-	t_mat	mat;
-	t_col32	col;
+	t_mat	*mat;
+	t_v3f	color;
 }	t_ren;
 
 typedef struct s_plane
@@ -103,10 +100,26 @@ typedef struct s_triangle
 typedef struct s_light
 {
 	t_v3f			pos;
-	t_col32			col;
+	t_v3f			color;
 	t_light_type	type;
 	float			intensity;
 }	t_light;
+
+typedef struct s_ray
+{
+	t_v3f	origin;
+	t_v3f	direction;
+}	t_ray;
+
+typedef struct s_ray_hit
+{
+	t_v3f	hit;
+	t_v3f	normal;
+	float	distance;
+	bool	front_face;
+	t_obj	*obj;
+	t_ray	*ray;
+}	t_ray_hit;
 
 struct s_object
 {
@@ -118,7 +131,7 @@ struct s_object
 		t_pl	pl;
 		t_cy	cy;
 		t_tri	tri;
-	}			u_shape;
+	} ;
 	t_obj_type	type;
 	t_intsct	intersect;
 	t_cnorm		calc_norm;
@@ -130,6 +143,7 @@ typedef struct s_scene
 	t_vector	lights;
 	t_cam		camera;
 	int			scene_flags;
+	uint32_t	frame_num;
 }	t_scene;
 
 #endif

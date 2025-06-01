@@ -31,7 +31,7 @@ static bool	parse_ambient_light(char **tokens, t_scene *scene)
 	if (!ambient_light)
 		return (perror("parse_ambient_light"), false);
 	if (!parse_light_ratio(&ambient_light->intensity, tokens[1])
-		|| !parse_col(&ambient_light->col, tokens[2]))
+		|| !parse_col(&ambient_light->color, tokens[2]))
 		return (free(ambient_light), false);
 	ambient_light->type = LIGHT_AMBIENT;
 	if (!vector_add(&scene->lights, ambient_light))
@@ -51,7 +51,7 @@ static bool	parse_point_light(char **tokens, t_scene *scene)
 		return (perror("parse_point_light"), false);
 	if (!parse_v3f(&point_light->pos, tokens[1])
 		|| !parse_light_ratio(&point_light->intensity, tokens[2])
-		|| !parse_col(&point_light->col, tokens[3]))
+		|| !parse_col(&point_light->color, tokens[3]))
 		return (free(point_light), false);
 	point_light->type = LIGHT_POINT;
 	if (!vector_add(&scene->lights, point_light))

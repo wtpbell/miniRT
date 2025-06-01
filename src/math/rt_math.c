@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   rt_math.c                                          :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/13 13:40:09 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/23 12:07:59 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   rt_math.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/13 13:40:09 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/01 17:22:15 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,27 @@ void	ft_swapf(float *a, float *b)
 inline int	fapprox(float n)
 {
 	return (fabsf(n) > FLT_SML);
+}
+
+float	ft_clampf(float value, float min, float max)
+{
+	if (value < min)
+		return (min);
+	if (value > max)
+		return (max);
+	return (value);
+}
+
+inline float	ft_clampf01(float val)
+{
+	return (ft_clampf(val, 0.0f, 1.0f));
+}
+
+float	schlick(float cosin, float ref_idx)
+{
+	float	r0;
+
+	r0 = (1 - ref_idx) / (1 + ref_idx);
+	r0 = r0 * r0;
+	return (r0 + (1 - r0) * powf(1 - cosin, 5));
 }

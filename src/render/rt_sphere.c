@@ -6,11 +6,10 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 16:04:41 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 18:07:24 by jboon         ########   odam.nl         */
+/*   Updated: 2025/05/28 12:50:36 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ray.h"
 #include "scene.h"
 #include "rt_math.h"
 
@@ -51,7 +50,7 @@ int	sphere_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
 	float		t1;
 	float		r;
 
-	r = obj->u_shape.sp.radius;
+	r = obj->sp.radius;
 	oc = v3f_sub(ray->origin, obj->t.pos);
 	abc.x = v3f_dot(ray->direction, ray->direction);
 	abc.y = 2.0f * v3f_dot(ray->direction, oc);

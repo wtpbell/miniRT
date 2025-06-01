@@ -21,7 +21,8 @@ PARSER_CORE	:= parser.c element_parser.c file_parser.c camera.c light.c\
 				general_utils.c validate_utils.c triangle.c
 SRCS_MAIN	:= main.c vector_init.c vector_helper.c vector_operation.c\
 				vec_container.c vec_container_utils.c color.c render.c\
-				rt_math.c matrix.c game.c rt_sphere.c rt_plane.c rt_cylinder.c\
+				rt_math.c matrix.c game.c rt_sphere.c rt_plane.c rt_cylinder.c \
+				color_utils.c material.c random_utils.c rt_light.c \
 				quit.c rt_triangle.c
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE)
@@ -30,7 +31,7 @@ OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)
 all: $(LIBFT) $(MLX42) $(NAME)
 
 debug: C_FLAGS += -g3 -fsanitize=address,undefined
-debug: all
+debug: clean all
 
 val: C_FLAGS += -g3
 val: clean all
@@ -79,4 +80,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re debug val

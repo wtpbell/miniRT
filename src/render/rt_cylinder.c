@@ -1,16 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   rt_cylinder.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/17 11:59:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/27 17:52:59 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   rt_cylinder.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/17 11:59:52 by bewong            #+#    #+#             */
+/*   Updated: 2025/05/31 23:18:17 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ray.h"
 #include "scene.h"
 #include "rt_math.h"
 #include "minirt.h"
@@ -22,7 +21,7 @@ t_v3f	cylinder_normal(t_obj *obj, t_v3f point)
 	t_v3f	obj_p;
 
 	obj_p = mul_v3_m4x4(point, obj->t.to_obj);
-	if (fabsf(obj_p.y) >= obj->u_shape.cy.height * 0.5f - FLT_SML)
+	if (fabsf(obj_p.y) >= obj->cy.height * 0.5f - FLT_SML)
 	{
 		if (obj_p.y > 0)
 			return (v3f_norm(mul_dir_m4x4(init_v3f(0, 1, 0), obj->t.to_world)));
@@ -82,8 +81,8 @@ static int	intersect_cylinder_body(t_obj *obj, t_ray *ray, t_v2f *t)
 	coeff.y = 2 * (ray->origin.x * ray->direction.x
 			+ ray->origin.z * ray->direction.z);
 	coeff.z = ray->origin.x * ray->origin.x + ray->origin.z
-		* ray->origin.z - obj->u_shape.cy.radius * obj->u_shape.cy.radius;
-	return (check_body(coeff, ray, obj->u_shape.cy.height, t));
+		* ray->origin.z - obj->cy.radius * obj->cy.radius;
+	return (check_body(coeff, ray, obj->cy.height, t));
 }
 
 int	cylinder_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
@@ -92,8 +91,8 @@ int	cylinder_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
 	float	r;
 	float	h;
 
-	r = obj->u_shape.cy.radius;
-	h = obj->u_shape.cy.height * .5f;
+	r = obj->cy.radius;
+	h = obj->cy.height * .5f;
 	l_ray.origin = mul_v3_m4x4(ray->origin, obj->t.to_obj);
 	l_ray.direction = mul_dir_m4x4(ray->direction, obj->t.to_obj);
 	if ((intersect_cylinder_body(obj, &l_ray, &t)

@@ -6,11 +6,13 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/21 19:31:07 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/01 18:29:50 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "material.h"
+#include "color.h"
 
 bool	parse_diameter(float *out, const char *str)
 {
@@ -27,11 +29,12 @@ static inline t_sp	create_sphere(float diameter)
 	});
 }
 
+//0.0 ≤ transmittance ≤ 1.0
 bool	parse_sphere(char **tokens, t_scene *scene)
 {
 	t_v3f	pos;
+	t_v3f	color;
 	float	diameter;
-	t_col32	color;
 	t_obj	*obj;
 
 	if (!parse_v3f(&pos, tokens[1]) || !parse_diameter(&diameter, tokens[2])
@@ -41,10 +44,11 @@ bool	parse_sphere(char **tokens, t_scene *scene)
 	if (!obj)
 		return (false);
 	obj->t.pos = pos;
-	obj->r.col = color;
+	obj->r.color = color;
+	obj->r.mat = create_dielectric(color, 2.5f, 1.0f);
 	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	obj->type = OBJ_SPHERE;
-	obj->u_shape.sp = create_sphere(diameter);
+	obj->sp = create_sphere(diameter);
 	obj->intersect = sphere_intersect;
 	obj->calc_norm = sphere_normal;
 	init_object_matrices(obj);

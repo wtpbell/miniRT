@@ -6,11 +6,13 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 12:05:06 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/14 12:05:06 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/01 17:06:17 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "material.h"
+#include "color.h"
 
 static bool	parse_height(float *out, const char *str)
 {
@@ -25,8 +27,8 @@ bool	parse_cylinder(char **tokens, t_scene *scene)
 	t_obj	*obj;
 	t_v3f	pos;
 	t_v3f	dir;
+	t_v3f	color;
 	t_v2f	dm;
-	t_col32	color;
 
 	if (!parse_v3f(&pos, tokens[1]) || !parse_dir(&dir, tokens[2])
 		|| !parse_diameter(&dm.x, tokens[3]) || !parse_height(&dm.y, tokens[4])
@@ -37,11 +39,12 @@ bool	parse_cylinder(char **tokens, t_scene *scene)
 		return (false);
 	obj->t.pos = pos;
 	obj->t.dir = dir;
+	obj->r.color = color;
+	obj->r.mat = create_lambertian(color, 0.95f, 256.0f);
 	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
-	obj->r.col = color;
 	obj->type = OBJ_CYLINDER;
 	obj->calc_norm = cylinder_normal;
-	obj->u_shape.cy = (t_cy){.radius = dm.x, .height = dm.y};
+	obj->cy = (t_cy){.radius = dm.x, .height = dm.y};
 	obj->intersect = cylinder_intersect;
 	init_object_matrices(obj);
 	if (!vector_add(&scene->objects, obj))

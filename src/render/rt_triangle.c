@@ -1,16 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   rt_triangle.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/29 14:00:37 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/31 20:19:42 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   rt_triangle.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/29 14:00:37 by jboon             #+#    #+#             */
+/*   Updated: 2025/05/31 23:29:11 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ray.h"
 #include "scene.h"
 #include "rt_math.h"
 
@@ -60,7 +59,7 @@ int	triangle_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
 	t_tri		*tri;
 	t_tri_var	var;
 
-	tri = &obj->u_shape.tri;
+	tri = &obj->tri;
 	var.v0v1 = v3f_sub(tri->v1, tri->v0);
 	var.v0v2 = v3f_sub(tri->v2, tri->v0);
 	var.pvec = v3f_cross(ray->direction, var.v0v2);
