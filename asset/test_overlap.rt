@@ -1,20 +1,22 @@
-# Camera position
+# A [ratio (float 0.0–1.0)] [color (R,G,B in 0–255)]
+# C [position (x,y,z float)] [direction (x,y,z float)] [FOV (float 0–180)]
+# L [position (x,y,z float)] [brightness ratio (float 0.0–1.0)] [color (R,G,B in 0–255)]
+# sp [position (x,y,z float)] [diameter (float)] [color (R,G,B in 0–255)]
+# pl [position (x,y,z float)] [normal (x,y,z float)] [color (R,G,B in 0–255)]
+# cy [position (x,y,z float)] [axis (x,y,z float)] [diameter (float)] [height (float)] [color (R,G,B in 0–255)]
+# tri [v0 (x,y,z float)] [v1 (x,y,z float)] [v2 (x,y,z float)] [color (R,G,B in 0–255)]
+
 C 0,2,5     0,0,1  100
 
-# Ambient light
 A 0.3 255,255,255
 
-# Point light
 L 0,5,5 0.80 255,255,255
 
-# Floor
 pl 0,-1,0	0,1,0		200,200,200
-
-# Three overlapping spheres with different materials/colors
 sp 0,0,0 1.0 255,0,0
 sp 0.5,0.5,0 1.0 0,255,0
 sp 1.0,0,0 1.0 0,0,255
 
-# Two overlapping cylinders
+
 cy 3,0,0 0,1,0 0.5 2 255,200,0
 cy 3.5,0,0 0,1,0 0.5 2 200,0,200
