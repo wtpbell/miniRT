@@ -113,7 +113,7 @@ bool		validate_commas(const char *str);
 
 // vector_utils.c
 bool		parse_v3f(t_v3f *v3f, const char *str);
-bool		parse_col(t_col32 *col, const char *str);
+bool		parse_col(t_v3f *color, const char *str);
 bool		parse_dir(t_v3f *dir, const char *str);
 bool		parse_floats(const char **tokens, float *out,
 				size_t count, const char *ctx);

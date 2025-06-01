@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   vector_utils.c                                     :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/19 11:21:26 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   vector_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/01 17:03:24 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ bool	parse_v3f(t_v3f *v3f, const char *str)
 	return (true);
 }
 
-bool	parse_col(t_col32 *col, const char *str)
+bool	parse_col(t_v3f *color, const char *str)
 {
 	char	**tokens;
 	int		rgb[3];
@@ -82,7 +82,11 @@ bool	parse_col(t_col32 *col, const char *str)
 		}
 		i++;
 	}
-	*col = init_col32(rgb[0], rgb[1], rgb[2], 0xFF);
+	*color = (t_v3f){{
+		.x = (float)rgb[0] / 255.0f,
+		.y = (float)rgb[1] / 255.0f,
+		.z = (float)rgb[2] / 255.0f
+	}};
 	free_tokens(tokens);
 	return (true);
 }

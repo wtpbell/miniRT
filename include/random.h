@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   random.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bell <bell@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/31 15:30:00 by bell              #+#    #+#             */
-/*   Updated: 2023/05/31 15:30:00 by bell             ###   ########.fr       */
+/*   Created: 2023/05/31 15:30:00 by bewong            #+#    #+#             */
+/*   Updated: 2023/05/31 15:30:00 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define RANDOM_H
 
 # include <stdint.h>
-# include "vector.h"
 
 float	random_float_pcg(uint32_t *state);
 #endif

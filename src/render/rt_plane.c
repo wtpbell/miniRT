@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:33:19 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/31 23:13:55 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/01 16:56:26 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 t_v3f	plane_normal(t_obj *obj, t_v3f point)
 {
 	(void)point;
-	return (v3f_norm(obj->t.dir));
+	return (obj->t.dir);
 }
 
 int	plane_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)

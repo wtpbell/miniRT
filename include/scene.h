@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:55:45 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/31 23:56:30 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/01 17:35:46 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include "color.h"
 # include "libft.h"
 # include "container.h"
+# include "material.h"
 # include <stdio.h>
 
 typedef struct s_object	t_obj;
@@ -64,51 +65,15 @@ typedef struct s_camera
 	t_trans		t;
 	float		fov;
 	float		aspect_ratio;
-	t_col32		bg_col;
+	t_v3f		bg_color;
 	mlx_image_t	*img_plane;
 	t_mat4x4	view_matrix;
 }	t_cam;
 
-typedef enum e_material_type
-{
-	MAT_LAMBERTIAN,
-	MAT_METAL,
-	MAT_DIELECTRIC
-}	t_mat_type;
-
-typedef struct s_lambertian
-{
-	float	specular;
-	float	shininess;
-}	t_lamb;
-
-typedef struct s_metal
-{
-	float	fuzz;
-}	t_metal;
-
-typedef struct s_dielectric
-{
-	float	ir;
-	float	transmittance;
-}	t_diel;
-
-typedef struct s_material
-{
-	t_mat_type	type;
-	t_v3f		albedo;
-	union
-	{
-		t_lamb	lamb;
-		t_metal	metal;
-		t_diel	diel;
-	};
-}	t_mat;
-
 typedef struct s_render
 {
 	t_mat	*mat;
-	t_col32	col;
+	t_v3f	color;
 }	t_ren;
 
 typedef struct s_plane
@@ -136,24 +101,10 @@ typedef struct s_triangle
 typedef struct s_light
 {
 	t_v3f			pos;
-	t_col32			col;
+	t_v3f			color;
 	t_light_type	type;
 	float			intensity;
 }	t_light;
-
-typedef struct s_lighting
-{
-	t_v3f	light_dir;
-	t_v3f	view_dir;
-	t_v3f	hit_point;
-	t_v3f	normal;
-	t_col32	light_color;
-	t_col32	obj_color;
-	float	intensity;
-	float	specular;
-	float	diffuse;
-	float	distance;
-}	t_lighting;
 
 typedef struct s_ray
 {

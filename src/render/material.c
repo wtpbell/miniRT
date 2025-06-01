@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 23:53:11 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/31 23:53:22 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/01 18:59:14 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ t_mat	*init_material(t_mat_type type)
 		return (NULL);
 	mat->type = type;
 	mat->albedo = (t_v3f){.x = 1.0f, .y = 1.0f, .z = 1.0f};
-
 	if (type == MAT_LAMBERTIAN)
 	{
 		mat->lamb.specular = 0.7f;

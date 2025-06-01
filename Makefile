@@ -30,8 +30,8 @@ OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)
 
 all: $(LIBFT) $(MLX42) $(NAME)
 
-debug: C_FLAGS += -g3 -fsanitize=address,undefined
-debug: all
+debug: C_FLAGS += -g3 -fsanitize=address,undefined -Werror -Wunused-function -Wunused-variable -Wunused-parameter -Wunused-but-set-variable
+debug: clean all
 
 val: C_FLAGS += -g3
 val: clean all
@@ -80,4 +80,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re debug val

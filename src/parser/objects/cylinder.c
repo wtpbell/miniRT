@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 12:05:06 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/31 23:37:11 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/01 17:06:17 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,21 +27,21 @@ bool	parse_cylinder(char **tokens, t_scene *scene)
 	t_obj	*obj;
 	t_v3f	pos;
 	t_v3f	dir;
+	t_v3f	color;
 	t_v2f	dm;
-	t_col32	col;
 
 	if (!parse_v3f(&pos, tokens[1]) || !parse_dir(&dir, tokens[2])
 		|| !parse_diameter(&dm.x, tokens[3]) || !parse_height(&dm.y, tokens[4])
-		|| !parse_col(&col, tokens[5]))
+		|| !parse_col(&color, tokens[5]))
 		return (false);
 	obj = ft_calloc(1, sizeof(t_obj));
 	if (!obj)
 		return (false);
 	obj->t.pos = pos;
 	obj->t.dir = dir;
-	obj->r.mat = create_lambertian(col32_to_v3f(col), 0.95f, 256.0f); //null protection later
+	obj->r.color = color;
+	obj->r.mat = create_lambertian(color, 0.95f, 256.0f);
 	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
-	obj->r.col = col;
 	obj->type = OBJ_CYLINDER;
 	obj->calc_norm = cylinder_normal;
 	obj->cy = (t_cy){.radius = dm.x, .height = dm.y};

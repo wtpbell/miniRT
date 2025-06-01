@@ -31,9 +31,9 @@ void	v3f_print(t_v3f v, int spaces, const char *prefix)
 	printf("%*s%s(v3f) <%.4f, %.4f, %.4f>\n", spaces, "", prefix, v.x, v.y, v.z);
 }
 
-void	col32_print(t_col32 c, int spaces, const char *prefix)
+void	col32_print(t_v3f c, int spaces, const char *prefix)
 {
-	printf("%*s%s(col32) <%i, %i, %i, %i>\n", spaces, "", prefix, get_r(c), get_g(c), get_b(c), get_a(c));
+	printf("%*s%s(color) <%.3f, %.3f, %.3f>\n", spaces, "", prefix, c.x, c.y, c.z);
 }
 
 void	float_print(float f, int spaces, const char *prefix)
@@ -64,14 +64,14 @@ void	camera_print(t_cam *cam, int spaces)
 	transform_print(&cam->t, spaces + 2);
 	mat4x4_print(cam->view_matrix, spaces + 2, "view_matrix");
 	float_print(cam->fov, spaces + 2, "FOV");
-	col32_print(cam->bg_col, spaces + 2, "bg_col");
+	col32_print(cam->bg_color, spaces + 2, "bg_color");
 }
 
 void	plane_print(t_obj *pl, int spaces)
 {
 	printf("%*s%s", spaces, "","PLANE:\n");
 	transform_print(&pl->t, spaces + 2);
-	col32_print(pl->r.col, spaces + 2, "COL");
+	col32_print(pl->r.color, spaces + 2, "COLOR");
 }
 
 void	sphere_print(t_obj *sp, int spaces)
@@ -79,7 +79,7 @@ void	sphere_print(t_obj *sp, int spaces)
 	printf("%*s%s", spaces, "","SPHERE:\n");
 	transform_print(&sp->t, spaces + 2);
 	float_print(sp->sp.radius, spaces + 2, "RADIUS");
-	col32_print(sp->r.col, spaces + 2, "COL");
+	col32_print(sp->r.color, spaces + 2, "COLOR");
 }
 
 void	cylinder_print(t_obj *cy, int spaces)
@@ -88,7 +88,7 @@ void	cylinder_print(t_obj *cy, int spaces)
 	transform_print(&cy->t, spaces + 2);
 	float_print(cy->cy.radius, spaces + 2, "RADIUS");
 	float_print(cy->cy.height, spaces + 2, "HEIGHT");
-	col32_print(cy->r.col, spaces + 2, "COL");
+	col32_print(cy->r.color, spaces + 2, "COLOR");
 }
 
 void	triangle_print(t_obj *tri, int spaces)
@@ -98,7 +98,7 @@ void	triangle_print(t_obj *tri, int spaces)
 	v3f_print(tri->tri.v0, spaces + 2, "v0");
 	v3f_print(tri->tri.v1, spaces + 2, "v1");
 	v3f_print(tri->tri.v2, spaces + 2, "v2");
-	col32_print(tri->r.col, spaces + 2, "COL");
+	col32_print(tri->r.color, spaces + 2, "COLOR");
 }
 
 void	objects_print(t_vector	objects, int spaces, const char *prefix)
@@ -158,10 +158,10 @@ void debug_scene_setup(t_scene *scene) {
 	printf("\nLights (%d):\n", scene->lights.size);
 	for (int i = 0; i < scene->lights.size; i++) {
 		t_light *light = (t_light *)scene->lights.items[i];
-		printf("  [%d] Type: %d, Pos: (%.2f, %.2f, %.2f), Color: (%d,%d,%d), Intensity: %.2f\n",
+		printf("  [%d] Type: %d, Pos: (%.2f, %.2f, %.2f), Color: (%.2f,%.2f,%.2f), Intensity: %.2f\n",
 				i, light->type,
 				light->pos.x, light->pos.y, light->pos.z,
-				get_r(light->col), get_g(light->col), get_b(light->col),
+				light->color.x, light->color.y, light->color.z,
 				light->intensity);
 	}
 	printf("=========================\n\n");

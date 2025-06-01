@@ -7,7 +7,7 @@
 # tri [v0 (x,y,z float)] [v1 (x,y,z float)] [v2 (x,y,z float)] [color (R,G,B in 0–255)]
 
 # Camera position, look direction, FOV
-C 0,2,5     0,0,-1  100
+C 0,2,5     0,0,1  100
 
 # Ambient light (intensity, color)
 A 0.3 255,255,255
@@ -33,7 +33,7 @@ sp 0,3,1 0.4 100,100,255
 
 # # Cylinders
 cy 3,0,0 0,1,0 0.5 2 255,200,0 
-cy 0,0,0 0,1,0 0.5 2 255,0,200
+cy 1,0,0 0,1,0 0.5 2 255,0,200
 
 #add light color
 #flip the c dir.z input 
