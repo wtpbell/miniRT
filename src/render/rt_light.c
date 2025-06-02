@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_light.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/31 19:11:17 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/01 20:06:28 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_light.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/31 19:11:17 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/02 11:47:52 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "light.h"
 #include "rt_math.h"
 #include "material.h"
+#include "minirt.h"
 
 t_v3f	apply_ambient(t_v3f base_col, t_light *light)
 {
@@ -57,25 +58,24 @@ t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 	t_lighting	lt;
 	float		intensity;
 	float		shadow_dist;
+	t_v3f		color;
 
 	init_lighting(&lt, hit, light, scene->camera.t.pos);
 	intensity = lt.intensity / (1.0f + 0.1f
 			* lt.distance + 0.01f * lt.distance * lt.distance); 
-	ray.origin = v3f_add(hit->hit, v3f_scale(hit->normal, BIAS)); // bias to avoid shadow acne
+	ray.origin = v3f_add(hit->hit, hit->normal); // bias to avoid shadow acne (removed)
 	ray.direction = v3f_norm(v3f_sub(light->pos, hit->hit));
 	shadow_dist = lt.distance;
 	if (find_intersection(&ray, scene, &shadow_dist)
-		&& shadow_dist < lt.distance - BIAS)
+		&& shadow_dist < lt.distance) //Bias is removed
 		return ((t_v3f){{0.0f, 0.0f, 0.0f}}); // if sth between hit and light, in shadow
 	lt.diffuse = calculate_diffuse(&lt);
 	if (hit->obj->r.mat->lamb.specular > 0.0f) // only calculate specular if there is any
-		lt.specular = calculate_specular(&lt,
-				hit->obj->r.mat->lamb.shininess,
+		lt.specular = calculate_specular(&lt, hit->obj->r.mat->lamb.shininess,
 				hit->obj->r.mat->lamb.specular);
 	else
 		lt.specular = 0.0f;
-	return (v3f_clampf01(v3f_scale(v3f_add(v3f_scale(
-					v3f_mul(hit->obj->r.mat->albedo, light->color), lt.diffuse),
-					v3f_scale(light->color, lt.specular)
-			), intensity))); //combines diffuse and specular, multiplies by albedo and light color and intensity, finally clamps to 0-1
+	color = v3f_scale(v3f_mul(hit->obj->r.mat->albedo, light->color), lt.diffuse);
+	return (v3f_clampf01(v3f_scale(v3f_add(color, v3f_scale(light->color, lt.specular)), intensity)));
 }
+//combines diffuse and specular, multiplies by albedo and light color and intensity, finally clamps to 0-1

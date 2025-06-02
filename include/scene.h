@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/01 21:53:14 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/02 11:44:34 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,14 @@
 # include "MLX42/MLX42.h"
 # include "matrix.h"
 # include "vector.h"
+# include "material.h"
 # include "color.h"
 # include "libft.h"
 # include "container.h"
-# include "material.h"
+# include "ray.h"
 
 typedef struct s_object	t_obj;
-typedef struct s_ray	t_ray;
+// typedef struct s_ray	t_ray;
 typedef int				(*t_intsct)(t_obj *obj, t_ray *ray,
 							t_v2f t, float *dst);
 typedef t_v3f			(*t_cnorm)(t_obj *obj, t_v3f point);
@@ -105,21 +106,21 @@ typedef struct s_light
 	float			intensity;
 }	t_light;
 
-typedef struct s_ray
-{
-	t_v3f	origin;
-	t_v3f	direction;
-}	t_ray;
+// typedef struct s_ray
+// {
+// 	t_v3f	origin;
+// 	t_v3f	direction;
+// }	t_ray;
 
-typedef struct s_ray_hit
-{
-	t_v3f	hit;
-	t_v3f	normal;
-	float	distance;
-	bool	front_face;
-	t_obj	*obj;
-	t_ray	*ray;
-}	t_ray_hit;
+// typedef struct s_ray_hit
+// {
+// 	t_v3f	hit;
+// 	t_v3f	normal;
+// 	float	distance;
+// 	bool	front_face;
+// 	t_obj	*obj;
+// 	t_ray	*ray;
+// }	t_ray_hit;
 
 struct s_object
 {

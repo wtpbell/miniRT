@@ -13,7 +13,7 @@
 #ifndef LIGHT_H
 # define LIGHT_H
 
-# include "minirt.h"
+# include "scene.h"
 
 typedef struct s_lighting
 {
