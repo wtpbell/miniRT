@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/02 11:43:51 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/02 17:57:41 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,6 @@ t_mat	*create_metal(t_v3f albedo, float fuzz);
 t_mat	*create_dielectric(t_v3f albedo, float ir, float transmittance);
 t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth);
 t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info);
+t_v3f	handle_metal(t_scene *scene, t_ray_hit *hit_info, uint32_t depth);
 
 #endif

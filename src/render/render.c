@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/02 14:17:52 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/02 19:18:02 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	return (v3f_clampf01(color));
 }
 
-static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
+static void	compute_ray(float x, float y, t_cam *cam, t_ray *ray)
 {
 	t_v3f	camera_space;
 	float	view;
@@ -121,7 +121,7 @@ static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
 	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
 }
 
-#define SAMPLES_PER_PIXEL 1
+#define SAMPLES_PER_PIXEL 8
 
 // x * large prime number in hex, ^ y to mix x and y
 // + frame * large prime number in hex to mix frame
@@ -146,14 +146,14 @@ static t_v3f	anti_aliasing(t_scene *scene, t_ray *ray,
 	s = 0;
 	while (s < SAMPLES_PER_PIXEL)
 	{
-		rng_state = get_rngstate(x, y, scene->frame_num);
-		compute_ray((float)x + random_float_pcg(&rng_state),
-			(float)y + random_float_pcg(&rng_state), &scene->camera, ray);
+		rng_state = get_rngstate(x, y, 1);
+		compute_ray((float)x + random_float_pcg(&rng_state) - 0.5f,
+			(float)y + random_float_pcg(&rng_state) - 0.5f, &scene->camera, ray);
 		color = trace(ray, scene, MAX_DEPTH);
 		final_color = v3f_add(final_color, color);
 		s++;
 	}
-	return (v3f_scale(final_color, 1.0f / SAMPLES_PER_PIXEL));
+	return (v3f_scale(final_color, 1.0f / (float)SAMPLES_PER_PIXEL));
 }
 
 void	render(t_scene *scene)

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/02 11:44:34 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/02 18:36:09 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,22 +105,6 @@ typedef struct s_light
 	t_light_type	type;
 	float			intensity;
 }	t_light;
-
-// typedef struct s_ray
-// {
-// 	t_v3f	origin;
-// 	t_v3f	direction;
-// }	t_ray;
-
-// typedef struct s_ray_hit
-// {
-// 	t_v3f	hit;
-// 	t_v3f	normal;
-// 	float	distance;
-// 	bool	front_face;
-// 	t_obj	*obj;
-// 	t_ray	*ray;
-// }	t_ray_hit;
 
 struct s_object
 {
