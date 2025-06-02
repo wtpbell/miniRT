@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/02 11:49:59 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/02 14:17:52 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 
 t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 {
-	float	t;
+	float		t;
 	t_obj		*hit;
 	t_ray_hit	hit_info;
 	t_v3f		color;
@@ -113,12 +113,13 @@ static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
 	float	view;
 
 	view = tanf(cam->fov * 0.5f * DEGTORAD);
-	camera_space.x = (2.0f * ((x + 0.5f) / cam->img_plane->width) - 1.0f) * cam->aspect_ratio * view;
-	camera_space.y = (1.0f - 2.0f * ((y + 0.5f) / cam->img_plane->height)) * view;
+	camera_space.x = (2.0f * ((x + 0.5f) / cam->img_plane->width) - 1.0f)
+		* cam->aspect_ratio * view;
+	camera_space.y = (1.0f - 2.0f * ((y + 0.5f) / cam->img_plane->height))
+		* view;
 	camera_space.z = -1.0f;
 	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
 }
-
 
 #define SAMPLES_PER_PIXEL 1
 
@@ -133,7 +134,8 @@ uint32_t	get_rngstate(uint32_t x, uint32_t y, uint32_t frame)
 	return (hash + frame * 0x9e3779b9);
 }
 
-static t_v3f	anti_aliasing(t_scene *scene, t_ray *ray, uint32_t x, uint32_t y)
+static t_v3f	anti_aliasing(t_scene *scene, t_ray *ray,
+		uint32_t x, uint32_t y)
 {
 	t_v3f		color;
 	t_v3f		final_color;

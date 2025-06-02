@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/02 11:16:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/02 11:50:01 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/02 14:13:38 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ static float	get_refraction_ratio(t_ray_hit *hit_info)
 	return (hit_info->obj->r.mat->diel.ir);
 }
 
-static t_v3f	blend_color(t_scene *sc, t_ray_hit *hit, uint32_t depth, float ior)
+static t_v3f	blend_color(t_scene *sc, t_ray_hit *hit,
+				uint32_t depth, float ior)
 {
 	t_ray	ray;
 	t_v3f	colors[2];
@@ -58,7 +59,6 @@ t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 {
 	t_v3f	direct;
 	t_v3f	indirect;
-	t_v3f	final;
 	float	kd;
 
 	if (depth == 0)
@@ -66,12 +66,9 @@ t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 	direct = handle_lambertian(sc, hit);
 	indirect = blend_color(sc, hit, depth, get_refraction_ratio(hit));
 	kd = 1.0f - hit->obj->r.mat->diel.transmittance;  // Diffuse weight = 1.0 - transmittance - 0.2f(small bias) bias is removed
-	final = (t_v3f){{
-		.x = (direct.x * kd + indirect.x * (1.0f - kd)) * hit->obj->r.mat->albedo.x,
-		.y = (direct.y * kd + indirect.y * (1.0f - kd)) * hit->obj->r.mat->albedo.y,
-		.z = (direct.z * kd + indirect.z * (1.0f - kd)) * hit->obj->r.mat->albedo.z
-	}};
-	return (final);
+	return (v3f_mul(
+			v3f_add(v3f_scale(direct, kd), v3f_scale(indirect, (1.0f - kd)))
+			, hit->obj->r.mat->albedo));
 }
 
 t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info)
