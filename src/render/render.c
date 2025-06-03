@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   render.c                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/03 18:35:19 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   render.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/03 20:33:02 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,17 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	t_obj		*hit;
 	t_ray_hit	hit_info;
 	t_v3f		color;
+	t_obj		*direct_hit;
 
 	if (depth <= 0)
-		return (init_v3f(0.0f, 0.0f, 0.0f));
+	{
+		direct_hit = find_intersection(ray, scene, &t);
+		if (direct_hit == NULL)
+			return (init_v3f(0.0f, 0.0f, 0.0f));
+		init_hit_info(&hit_info, direct_hit, ray, t);
+		hit_info.ray = ray;
+		return (handle_lambertian(scene, &hit_info));
+	}
 	hit = find_intersection(ray, scene, &t);
 	if (hit == NULL)
 		return (init_v3f(0.0f, 0.0f, 0.0f));
@@ -121,7 +129,7 @@ static void	compute_ray(float x, float y, t_cam *cam, t_ray *ray)
 	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
 }
 
-#define SAMPLES_PER_PIXEL 4
+#define SAMPLES_PER_PIXEL 1
 
 static t_v3f	anti_aliasing(t_scene *scene, t_ray *ray,
 		uint32_t x, uint32_t y)
