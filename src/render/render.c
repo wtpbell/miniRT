@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/01 22:21:24 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/03 12:11:35 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,7 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	return (v3f_clampf01(color));
 }
 
-static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
+static void	compute_ray(float x, float y, t_cam *cam, t_ray *ray)
 {
 	t_v3f	camera_space;
 	float	view;
@@ -198,37 +198,25 @@ static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
 	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
 }
 
-
-#define SAMPLES_PER_PIXEL 1
-
-// x * large prime number in hex, ^ y to mix x and y
-// + frame * large prime number in hex to mix frame
-// 0x9e3779b9 golden ratio prime
-uint32_t	get_rngstate(uint32_t x, uint32_t y, uint32_t frame)
-{
-	uint32_t	hash;
-
-	hash = (x * 0x1f1f1f1f) ^ y;
-	return (hash + frame * 0x9e3779b9);
-}
+#define SAMPLES_PER_PIXEL 4
 
 static t_v3f	anti_aliasing(t_scene *scene, t_ray *ray, uint32_t x, uint32_t y)
 {
+	const float	size = 1.0f;
+	const float	offset = size / 2.0f;
 	t_v3f		color;
 	t_v3f		final_color;
 	uint32_t	s;
-	uint32_t	rng_state;
 
-	final_color = (t_v3f){{0.0f, 0.0f, 0.0f}};
 	s = 0;
+	final_color = g_v3f_zero;
 	while (s < SAMPLES_PER_PIXEL)
 	{
-		rng_state = get_rngstate(x, y, scene->frame_num);
-		compute_ray((float)x + random_float_pcg(&rng_state),
-			(float)y + random_float_pcg(&rng_state), &scene->camera, ray);
+		compute_ray((float)x + frandom() * size - offset,
+			(float)y + frandom() * size - offset, &scene->camera, ray);
 		color = trace(ray, scene, MAX_DEPTH);
 		final_color = v3f_add(final_color, color);
-		s++;
+		++s;
 	}
 	return (v3f_scale(final_color, 1.0f / SAMPLES_PER_PIXEL));
 }
@@ -242,16 +230,16 @@ void	render(t_scene *scene)
 	t_mat4x4	inv;
 	t_v3f		color;
 
-	debug_scene_setup(scene);
+	y = 0;
 	img = scene->camera.img_plane;
 	invert_m4x4(inv, scene->camera.view_matrix);
-	ray.origin = mul_v3_m4x4(init_v3f(0, 0, 0), inv);
-	y = 0;
+	ray.origin = mul_v3_m4x4(g_v3f_zero, inv);
 	while (y < img->height)
 	{
 		x = 0;
 		while (x < img->width)
 		{
+			seed_rand(get_rngstate(x, y, 1));
 			color = anti_aliasing(scene, &ray, x, y);
 			color = v3f_apply_gamma(color, GAMMA);
 			mlx_put_pixel(img, x, y, v3f_to_col32(color));

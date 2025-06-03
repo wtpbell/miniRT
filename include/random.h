@@ -15,5 +15,10 @@
 
 # include <stdint.h>
 
-float	random_float_pcg(uint32_t *state);
+void		seed_rand(uint32_t seed);
+uint32_t	get_rngstate(uint32_t x, uint32_t y, uint32_t frame);
+float		frandom(void);
+float		frandom_norm_distribution(void);
+t_v3f		random_direction(void);
+
 #endif
