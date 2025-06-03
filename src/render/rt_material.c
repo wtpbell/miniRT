@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/02 11:16:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/02 19:20:58 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/03 15:28:38 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "light.h"
 #include "minirt.h"
 #include "rt_math.h"
+#include <stdlib.h>
 
 static float	get_refraction_ratio(t_ray_hit *hit_info)
 {
@@ -92,3 +93,51 @@ t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info)
 	}
 	return (v3f_mul(obj_albedo, total_light));
 }
+
+#include <stdlib.h>
+
+static float randomf(void)
+{
+	return (float)rand() / (float)RAND_MAX;
+}
+
+static float v3f_len2(t_v3f v)
+{
+	return v.x * v.x + v.y * v.y + v.z * v.z;
+}
+
+static t_v3f	v3f_random_unit(void)
+{
+	t_v3f v;
+
+	v = init_v3f(0.0f, 0.0f, 0.0f);
+	while (v3f_len2(v) >= 1.0f)
+		v = init_v3f(randomf() * 2 - 1, randomf() * 2 - 1, randomf() * 2 - 1);
+	return v3f_norm(v);
+}
+
+
+t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth)
+{
+	t_ray	reflected_ray;
+	t_v3f	reflected_dir;
+	t_v3f	random_fuzz;
+	t_metal	metal_data;
+	t_v3f	result;
+
+	if (depth == 0)
+		return (init_v3f(0.0f, 0.0f, 0.0f));
+	metal_data = hit->obj->r.mat->metal;
+	reflected_dir = v3f_refl(v3f_norm(hit->ray->direction), hit->normal);
+	random_fuzz = v3f_scale(v3f_random_unit(), metal_data.fuzz);
+	reflected_dir = v3f_add(reflected_dir, random_fuzz);
+	if (v3f_dot(reflected_dir, hit->normal) <= 0.0f)
+		return (init_v3f(0.0f, 0.0f, 0.0f));
+	reflected_ray.origin = v3f_add(hit->hit, v3f_scale(hit->normal, 0.0001f));
+	reflected_ray.direction = v3f_norm(reflected_dir);
+	result = trace(&reflected_ray, sc, depth - 1);
+
+	// return (v3f_lerp(hit->obj->r.mat->albedo, result, .9f));
+	return (v3f_mul(hit->obj->r.mat->albedo, result));
+}
+

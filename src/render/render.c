@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/02 19:18:02 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/03 15:31:00 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include "light.h"
 #include "material.h"
 
-#define MAX_DEPTH	5
+#define MAX_DEPTH	8
 
 void	init_object_matrices(t_obj *obj)
 {
@@ -93,15 +93,15 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 		return (init_v3f(0.0f, 0.0f, 0.0f));
 	hit = find_intersection(ray, scene, &t);
 	if (hit == NULL)
-		return (init_v3f(1.0f, 1.0f, 1.0f));
+		return (init_v3f(0.0f, 0.0f, 0.0f));
 	init_hit_info(&hit_info, hit, ray, t);
 	hit_info.ray = ray;
 	if (hit->r.mat->type == MAT_LAMBERTIAN)
 		color = handle_lambertian(scene, &hit_info);
 	else if (hit->r.mat->type == MAT_DIELECTRIC)
 		color = handle_dielectric(scene, &hit_info, depth);
-	// else if (hit->r.mat->type == MAT_METAL)
-	// 	color = handle_metal(scene, &hit_info, depth);
+	else if (hit->r.mat->type == MAT_METAL)
+		color = handle_metal(scene, &hit_info, depth);
 	else
 		color = (init_v3f(1.0f, 1.0f, 1.0f));
 	return (v3f_clampf01(color));
@@ -121,7 +121,7 @@ static void	compute_ray(float x, float y, t_cam *cam, t_ray *ray)
 	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
 }
 
-#define SAMPLES_PER_PIXEL 8
+#define SAMPLES_PER_PIXEL 1
 
 // x * large prime number in hex, ^ y to mix x and y
 // + frame * large prime number in hex to mix frame

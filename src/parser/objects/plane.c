@@ -32,6 +32,7 @@ bool	parse_plane(char **tokens, t_scene *scene)
 	obj->r.color = color;
 	obj->r.mat = create_lambertian(color, 0.95f, 256.0f);
 	// obj->r.mat = create_dielectric(color, 2.5f, 1.0f);
+	// obj->r.mat = create_metal(color, 1.0f);
 	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	obj->pl = (t_pl){};
 	obj->type = OBJ_PLANE;
