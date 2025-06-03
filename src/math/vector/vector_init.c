@@ -6,11 +6,13 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:35:46 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/15 00:01:24 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/03 12:15:54 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vector.h"
+
+const t_v3f	g_v3f_zero = (t_v3f){.x = 0.0f, .y = 0.0f, .z = 0.0f};
 
 inline t_v2f	init_v2f(float x, float y)
 {
