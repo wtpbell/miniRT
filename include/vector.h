@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/01 21:53:12 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/03 12:14:14 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ typedef union s_vector3
 	};
 	float	_axis[3];
 }	t_v3f;
+
+extern const t_v3f	g_v3f_zero;
 
 t_v2f	init_v2f(float x, float y);
 t_v3f	init_v3f(float x, float y, float z);

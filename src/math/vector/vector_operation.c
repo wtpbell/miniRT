@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:38:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/01 21:57:14 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/03 12:16:32 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ float	v3f_dist(t_v3f a, t_v3f b)
 	return (v3f_mag(v3f_sub(a, b)));
 }
 
+// Reflection formula: r = d - 2*(d·n)*n
 t_v3f	v3f_refl(t_v3f d, t_v3f n)
 {
-	// Reflection formula: r = d - 2*(d·n)*n
 	return (v3f_sub(d, v3f_scale(n, 2 * v3f_dot(d, n))));
 }
 
@@ -79,7 +79,7 @@ inline t_v3f	v3f_clamp(t_v3f v, float min, float max)
 	return ((t_v3f){{
 			.x = ft_clampf(v.x, min, max),
 			.y = ft_clampf(v.y, min, max),
-			.z =ft_clampf(v.z, min, max)
+			.z = ft_clampf(v.z, min, max)
 		}});
 }
 
