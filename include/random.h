@@ -21,5 +21,6 @@ float		frandom(void);
 float		frandom_norm_distribution(void);
 t_v3f		random_direction(void);
 t_v3f		random_in_hemisphere(t_v3f normal);
+t_v3f		random_in_unit_disk(void);
 
 #endif

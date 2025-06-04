@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   scene.h                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/02 18:36:09 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   scene.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 18:55:45 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/04 16:55:41 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,20 @@ typedef struct s_camera
 	t_v3f		bg_color;
 	mlx_image_t	*img_plane;
 	t_mat4x4	view_matrix;
+
+	// Depth of field parameters
+	float		aperture;       // Controls the amount of blur (0 = no blur)
+	float		focus_dist;     // Distance to the focal plane
+
+	// Camera basis vectors
+	t_v3f	u;              // Right vector
+	t_v3f	v;              // Up vector
+	t_v3f	w;              // Forward vector (negative of view direction)
+
+	// Viewport vectors
+	t_v3f	horizontal;      // Horizontal viewport vector
+	t_v3f	vertical;        // Vertical viewport vector
+	t_v3f	lower_left;      // Lower left corner of viewport
 }	t_cam;
 
 typedef struct s_render
@@ -130,5 +144,10 @@ typedef struct s_scene
 	int			scene_flags;
 	uint32_t	frame_num;
 }	t_scene;
+
+// Function declarations
+t_ray   get_ray_with_dof(t_cam *cam, float u, float v);
+void    update_camera_view(t_cam *cam);
+void    auto_dof_settings(t_scene *scene, t_cam *cam);
 
 #endif

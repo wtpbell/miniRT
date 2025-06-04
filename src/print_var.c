@@ -65,6 +65,16 @@ void	camera_print(t_cam *cam, int spaces)
 	mat4x4_print(cam->view_matrix, spaces + 2, "view_matrix");
 	float_print(cam->fov, spaces + 2, "FOV");
 	col32_print(cam->bg_color, spaces + 2, "bg_color");
+	
+	// Print DoF parameters
+	float_print(cam->aperture, spaces + 2, "APERTURE");
+	float_print(cam->focus_dist, spaces + 2, "FOCUS_DIST");
+	v3f_print(cam->u, spaces + 2, "U (right)");
+	v3f_print(cam->v, spaces + 2, "V (up)");
+	v3f_print(cam->w, spaces + 2, "W (forward)");
+	v3f_print(cam->horizontal, spaces + 2, "HORIZONTAL");
+	v3f_print(cam->vertical, spaces + 2, "VERTICAL");
+	v3f_print(cam->lower_left, spaces + 2, "LOWER_LEFT");
 }
 
 void	plane_print(t_obj *pl, int spaces)

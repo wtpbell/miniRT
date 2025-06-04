@@ -89,3 +89,23 @@ t_v3f	random_in_hemisphere(t_v3f normal)
 	else
 		return v3f_scale(v3f_norm(v), -1.0f); // in opposite hemisphere
 }
+
+
+t_v3f random_in_unit_disk(void)
+{
+	t_v3f p;
+
+	// Initialize p to a point outside the unit circle
+	p = (t_v3f){{2.0f, 2.0f, 0.0f}};
+
+	// Keep generating points until we get one inside the unit circle
+	while (v3f_dot(p, p) >= 1.0f)
+	{
+		p = (t_v3f){{
+			frandom() * 2.0f - 1.0f,  // Random x in [-1, 1]
+			frandom() * 2.0f - 1.0f,  // Random y in [-1, 1]
+			0.0f
+		}};
+	}
+	return p;
+}

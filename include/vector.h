@@ -49,6 +49,7 @@ t_v3f	v3f_norm(t_v3f v);
 t_v3f	v3f_refl(t_v3f d, t_v3f n);
 t_v3f	v3f_refr(t_v3f uv, t_v3f n, float etai_over_etat);
 t_v3f	v3f_lerp(t_v3f a, t_v3f b, float t);
+float	v3f_length_squared(t_v3f v);
 t_v3f	v3f_mul(t_v3f a, t_v3f b);
 t_v3f	v3f_clamp(t_v3f v, float min, float max);
 t_v3f	v3f_clampf01(t_v3f v);
