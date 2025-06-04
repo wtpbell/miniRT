@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 19:11:17 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/04 12:36:34 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/04 20:48:36 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,5 @@ t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 	color = v3f_scale(v3f_mul(hit->obj->r.mat->albedo, light->color),
 			lt.diffuse);
 	return (v3f_clampf01(v3f_scale(v3f_add(
-					color, v3f_scale(light->color, lt.specular)), inten * lt.inten)));
+					color, v3f_scale(light->color, lt.specular)), inten)));
 }
