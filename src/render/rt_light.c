@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 19:11:17 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/03 21:38:29 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/04 12:36:34 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	init_lighting(t_lighting *lighting, t_ray_hit *hit,
 	lighting->dist = v3f_mag(v3f_sub(light->pos, hit->hit));
 }
 
-// use Oren-Nayar to reduce the banding
 float	calculate_diffuse(t_lighting *lighting)
 {
 	float	NdotL;
@@ -76,7 +75,7 @@ t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 	ray.direction = v3f_sub(light->pos, hit->hit);
 	shadow_dist = lt.dist;
 	if (find_intersection(&ray, scene, &shadow_dist) && shadow_dist < 1.0f)
-		return ((t_v3f){{0.0f, 0.0f, 0.0f}}); // if sth between hit and light, in shadow
+		return (g_v3f_zero); // if sth between hit and light, in shadow
 	lt.diffuse = ft_maxf(0.1f, v3f_dot(lt.normal, lt.light_dir));
 	if (hit->obj->r.mat->lamb.specular > 0.0f)
 	{

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 11:16:23 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/03 21:29:04 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/04 12:37:16 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static t_v3f	blend_color(t_scene *sc, t_ray_hit *hit,
 		colors[1] = trace(&ray, sc, depth - 1); // trace refraction ray
 	}
 	else
-		colors[1] = init_v3f(0.0f, 0.0f, 0.0f); // no refraction
+		colors[1] = g_v3f_zero; // no refraction
 	return (v3f_lerp(colors[1], colors[0], reflectance)); // blend reflection and refraction
 }
 
@@ -78,7 +78,7 @@ t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info)
 	t_v3f	obj_albedo;
 	int		i;
 
-	total_light = init_v3f(0.0f, 0.0f, 0.0f);
+	total_light = g_v3f_zero;
 	obj_albedo = hit_info->obj->r.mat->albedo;
 	i = 0;
 	while (i < scene->lights.size)
@@ -103,11 +103,14 @@ t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 
 	metal_data = hit->obj->r.mat->metal;
 	reflected_dir = v3f_refl(v3f_norm(hit->ray->direction), hit->normal);
-	random_fuzz = v3f_scale(random_direction(), metal_data.fuzz);
-	reflected_dir = v3f_add(reflected_dir, random_fuzz);
+	if (metal_data.fuzz > 0.0f) //random only when perfect mirror
+	{
+		random_fuzz = v3f_scale(random_in_hemisphere(hit->normal), metal_data.fuzz);
+		reflected_dir = v3f_add(reflected_dir, random_fuzz);
+	}
 	if (v3f_dot(reflected_dir, hit->normal) <= 0.0f)
-		return (init_v3f(0.0f, 0.0f, 0.0f));
-	reflected_ray.origin = v3f_add(hit->hit, v3f_scale(hit->normal, 0.001f));
+		return (g_v3f_zero); //discard invalid bounce
+	reflected_ray.origin = v3f_add(hit->hit, v3f_scale(hit->normal, BIAS));
 	reflected_ray.direction = v3f_norm(reflected_dir);
 	result = trace(&reflected_ray, sc, depth - 1);
 	return (v3f_mul(hit->obj->r.mat->albedo, result));

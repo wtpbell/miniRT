@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/03 20:33:02 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/04 12:36:10 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,14 +94,14 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	{
 		direct_hit = find_intersection(ray, scene, &t);
 		if (direct_hit == NULL)
-			return (init_v3f(0.0f, 0.0f, 0.0f));
+			return (g_v3f_zero);
 		init_hit_info(&hit_info, direct_hit, ray, t);
 		hit_info.ray = ray;
 		return (handle_lambertian(scene, &hit_info));
 	}
 	hit = find_intersection(ray, scene, &t);
 	if (hit == NULL)
-		return (init_v3f(0.0f, 0.0f, 0.0f));
+		return (g_v3f_zero);
 	init_hit_info(&hit_info, hit, ray, t);
 	hit_info.ray = ray;
 	if (hit->r.mat->type == MAT_LAMBERTIAN)
@@ -129,7 +129,7 @@ static void	compute_ray(float x, float y, t_cam *cam, t_ray *ray)
 	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
 }
 
-#define SAMPLES_PER_PIXEL 1
+#define SAMPLES_PER_PIXEL 10
 
 static t_v3f	anti_aliasing(t_scene *scene, t_ray *ray,
 		uint32_t x, uint32_t y)
@@ -144,6 +144,7 @@ static t_v3f	anti_aliasing(t_scene *scene, t_ray *ray,
 	final_color = g_v3f_zero;
 	while (s < SAMPLES_PER_PIXEL)
 	{
+		seed_rand(get_rngstate(x, y, s));
 		compute_ray((float)x + frandom() * size - offset,
 			(float)y + frandom() * size - offset, &scene->camera, ray);
 		color = trace(ray, scene, MAX_DEPTH);
@@ -171,7 +172,6 @@ void	render(t_scene *scene)
 		x = 0;
 		while (x < img->width)
 		{
-			seed_rand(get_rngstate(x, y, 1));
 			color = anti_aliasing(scene, &ray, x, y);
 			color = v3f_apply_gamma(color, GAMMA);
 			mlx_put_pixel(img, x, y, v3f_to_col32(color));

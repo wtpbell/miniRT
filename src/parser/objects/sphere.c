@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/03 20:40:34 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/04 11:44:40 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ bool	parse_sphere(char **tokens, t_scene *scene)
 		return (false);
 	obj->t.pos = pos;
 	obj->r.color = color;
-	obj->r.mat = create_dielectric(color, 2.5f, 1.0f);
+	// obj->r.mat = create_dielectric(color, 2.5f, 1.0f);
 	// obj->r.mat = create_lambertian(color, 0.95f, 256.0f);
-	// obj->r.mat = create_metal(color, 0.9f);
+	obj->r.mat = create_metal(color, 0.9f);
 	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	obj->type = OBJ_SPHERE;
 	obj->sp = create_sphere(diameter);

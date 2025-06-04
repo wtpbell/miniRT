@@ -20,5 +20,6 @@ uint32_t	get_rngstate(uint32_t x, uint32_t y, uint32_t frame);
 float		frandom(void);
 float		frandom_norm_distribution(void);
 t_v3f		random_direction(void);
+t_v3f		random_in_hemisphere(t_v3f normal);
 
 #endif

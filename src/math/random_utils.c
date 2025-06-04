@@ -71,3 +71,21 @@ t_v3f	random_direction(void)
 	dir.z = frandom_norm_distribution();
 	return (v3f_norm(dir));
 }
+
+// random unit vector for diffuse reflection 
+t_v3f	random_in_hemisphere(t_v3f normal)
+{
+	t_v3f v;
+
+	v = init_v3f(0.0f, 0.0f, 0.0f);
+	while (v3f_dot(v, v) >= 1.0f) // repeat until v inside unit sphere
+		v = init_v3f(
+			frandom() * 2.0f - 1.0f,
+			frandom() * 2.0f - 1.0f,
+			frandom() * 2.0f - 1.0f
+		);
+	if (v3f_dot(v, normal) > 0.0f)
+		return v3f_norm(v); // in same hemisphere as normal
+	else
+		return v3f_scale(v3f_norm(v), -1.0f); // in opposite hemisphere
+}
