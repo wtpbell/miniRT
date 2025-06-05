@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/01 21:53:14 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/05 14:05:39 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ typedef struct s_scene
 {
 	t_vector	objects;
 	t_vector	lights;
+	t_vector	shared_materials;
 	t_cam		camera;
 	int			scene_flags;
 	uint32_t	frame_num;

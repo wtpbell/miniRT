@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:44:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/29 14:54:23 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/05 14:32:14 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,18 @@ static void	free_obj(void *ptr)
 	t_obj	*obj;
 
 	obj = (t_obj *)ptr;
-	if (obj->r.mat)
-		free(obj->r.mat);
 	free(obj);
+}
+
+void	free_material(t_mat *mat)
+{
+	free(mat->name);
+	free(mat);
 }
 
 void	cleanup_scene(t_scene *scene)
 {
 	vector_free(&scene->objects, free_obj);
 	vector_free(&scene->lights, free);
+	vector_free(&scene->shared_materials, free_material);
 }

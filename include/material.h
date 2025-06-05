@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   material.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/29 13:47:23 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/01 16:43:23 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   material.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/05 16:32:52 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 typedef enum e_material_type
 {
+	MAT_UNKNOWN,
 	MAT_LAMBERTIAN,
 	MAT_METAL,
 	MAT_DIELECTRIC
@@ -41,6 +42,7 @@ typedef struct s_dielectric
 
 typedef struct s_material
 {
+	char		*name;
 	t_mat_type	type;
 	t_v3f		albedo;
 	union
@@ -51,7 +53,7 @@ typedef struct s_material
 	};
 }	t_mat;
 
-t_mat	*init_material(t_mat_type type);
+t_mat	*init_material(t_mat_type type, const char *name);
 t_mat	*create_lambertian(t_v3f albedo, float specular, float shininess);
 t_mat	*create_metal(t_v3f albedo, float fuzz);
 t_mat	*create_dielectric(t_v3f albedo, float ir, float transmittance);
