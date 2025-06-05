@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cylinder.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 12:05:06 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/03 20:59:04 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   cylinder.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/14 12:05:06 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/05 15:27:06 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ bool	parse_cylinder(char **tokens, t_scene *scene)
 	obj->t.pos = pos;
 	obj->t.dir = dir;
 	obj->r.color = color;
-	// obj->r.mat = create_lambertian(color, 0.95f, 256.0f);
-	obj->r.mat = create_dielectric(color, 2.5f, 1.0f);
+	obj->r.mat = create_lambertian(color, 0.95f, 256.0f);
+	// obj->r.mat = create_dielectric(color, 2.5f, 1.0f);
 	// obj->r.mat = create_metal(color, 1.0f);
 	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	obj->type = OBJ_CYLINDER;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_dof.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 12:05:02 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/04 20:41:26 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_dof.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/05 17:03:49 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,22 +52,87 @@ void	update_camera_view(t_cam *cam)
 }
 
 // Get a ray from the camera through the specified viewport coordinates with depth of field
-t_ray	get_ray_with_dof(t_cam *cam, float u, float v)
+// t_ray	get_ray_with_dof(t_cam *cam, float u, float v)
+// {
+// 	// 1. Calculate the point on the viewport
+// 	t_v3f viewport_point;
+// 	t_v3f ray_dir;
+// 	t_v3f focal_point;
+// 	t_v3f lens_pt;
+// 	t_v3f origin;
+// 	t_v3f direction;
+// 	static int debug = 0;
+
+// 	if (debug++ < 5) {
+// 		printf("\n--- DoF Debug (sample %d) ---\n", debug);
+// 		printf("Camera pos: (%.2f, %.2f, %.2f)\n", cam->t.pos.x, cam->t.pos.y, cam->t.pos.z);
+// 		printf("Aperture: %.2f, Focus distance: %.2f\n", cam->aperture, cam->focus_dist);
+// 	}
+// 	viewport_point = v3f_add(
+// 		cam->lower_left,
+// 		v3f_add(
+// 			v3f_scale(cam->horizontal, u),
+// 			v3f_scale(cam->vertical, v)
+// 		)
+// 	);
+// 	ray_dir = v3f_sub(viewport_point, cam->t.pos);
+// 	focal_point = v3f_add(
+// 		cam->t.pos,
+// 		v3f_scale(v3f_norm(ray_dir), cam->focus_dist / fabsf(v3f_dot(cam->w, v3f_norm(ray_dir))))
+// 	);
+// 	// 4. Get a random point on the lens (in camera space, then transform to world space)
+// 	lens_pt = random_direction();
+// 	lens_pt = v3f_scale(lens_pt, cam->aperture * 0.5f);
+// 	origin = v3f_add(cam->t.pos,
+// 		v3f_add(
+// 			v3f_scale(cam->u, lens_pt.x),
+// 			v3f_scale(cam->v, lens_pt.y)
+// 		));
+// 	direction = v3f_sub(focal_point, origin);
+// 	return (t_ray){
+// 		.origin = origin,
+// 		.direction = v3f_norm(direction)
+// 	};
+// }
+
+void concentric_sample_disk(float u1, float u2, float *dx, float *dy)
 {
-	// 1. Calculate the point on the viewport
+	float sx = 2.0f * u1 - 1.0f;
+	float sy = 2.0f * u2 - 1.0f;
+
+	if (sx == 0 && sy == 0)
+	{
+		*dx = 0.0f;
+		*dy = 0.0f;
+		return;
+	}
+
+	float r, theta;
+	if (fabsf(sx) > fabsf(sy))
+	{
+		r = sx;
+		theta = (M_PI / 4.0f) * (sy / sx);
+	}
+	else
+	{
+		r = sy;
+		theta = (M_PI / 2.0f) - (M_PI / 4.0f) * (sx / sy);
+	}
+
+	*dx = r * cosf(theta);
+	*dy = r * sinf(theta);
+}
+
+
+t_ray get_ray_with_dof(t_cam *cam, float u, float v)
+{
 	t_v3f viewport_point;
 	t_v3f ray_dir;
 	t_v3f focal_point;
-	t_v3f lens_pt;
-	t_v3f origin;
-	t_v3f direction;
-	static int debug = 0;
+	t_v3f origin, direction;
+	float lens_dx, lens_dy;
+	float r, weight;
 
-	if (debug++ < 5) {
-		printf("\n--- DoF Debug (sample %d) ---\n", debug);
-		printf("Camera pos: (%.2f, %.2f, %.2f)\n", cam->t.pos.x, cam->t.pos.y, cam->t.pos.z);
-		printf("Aperture: %.2f, Focus distance: %.2f\n", cam->aperture, cam->focus_dist);
-	}
 	viewport_point = v3f_add(
 		cam->lower_left,
 		v3f_add(
@@ -75,22 +140,28 @@ t_ray	get_ray_with_dof(t_cam *cam, float u, float v)
 			v3f_scale(cam->vertical, v)
 		)
 	);
-	ray_dir = v3f_sub(viewport_point, cam->t.pos);
-	focal_point = v3f_add(
+	ray_dir = v3f_norm(v3f_sub(viewport_point, cam->t.pos));
+	focal_point = v3f_add(cam->t.pos, v3f_scale(ray_dir, cam->focus_dist));
+	concentric_sample_disk(frandom(), frandom(), &lens_dx, &lens_dy);
+	r = sqrtf(lens_dx * lens_dx + lens_dy * lens_dy); //falloff
+	weight = 1.0f - r * r;
+	lens_dx *= weight;
+	lens_dy *= weight;
+	lens_dx *= cam->aperture * 0.5f;
+	lens_dy *= cam->aperture * 0.5f;
+	origin = v3f_add(
 		cam->t.pos,
-		v3f_scale(v3f_norm(ray_dir), cam->focus_dist / fabsf(v3f_dot(cam->w, v3f_norm(ray_dir))))
-	);
-	// 4. Get a random point on the lens (in camera space, then transform to world space)
-	lens_pt = random_in_unit_disk();
-	lens_pt = v3f_scale(lens_pt, cam->aperture * 0.5f);
-	origin = v3f_add(cam->t.pos,
 		v3f_add(
-			v3f_scale(cam->u, lens_pt.x),
-			v3f_scale(cam->v, lens_pt.y)
-		));
+			v3f_scale(cam->u, lens_dx),
+			v3f_scale(cam->v, lens_dy)
+		)
+	);
 	direction = v3f_sub(focal_point, origin);
 	return (t_ray){
 		.origin = origin,
 		.direction = v3f_norm(direction)
 	};
 }
+
+// weight = expf(-r * r * k); // k = sharpness, e.g. 2.0f
+// weight = powf(1.0f - r, 2);

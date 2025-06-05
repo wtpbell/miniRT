@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   camera.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 12:05:02 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/04 20:21:43 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   camera.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/05 16:26:50 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ bool	parse_camera(char **tokens, t_scene *scene)
 	scene->camera.fov = fov;
 	// Only set default DoF values if they haven't been set yet
 	if (scene->camera.aperture <= 0.0f)
-		scene->camera.aperture = 0.01f;
+		scene->camera.aperture = 0.6f;
 	if (scene->camera.focus_dist <= 0.0f)
 		scene->camera.focus_dist = 10.0f;
 	id_m4x4(scene->camera.view_matrix);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   render.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/04 20:32:44 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   render.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/05 16:57:43 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 // 	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
 // }
 
-#define SAMPLES_PER_PIXEL 4 // Number of samples per pixel
+#define SAMPLES_PER_PIXEL 18 // Number of samples per pixel
 
 //u = x / (width - 1)
 // v = 1 - y / (height - 1)
@@ -147,8 +147,8 @@ static t_v3f	sample_pixel(t_scene *scene, float x, float y)
 	i = 0;
 	while (i < SAMPLES_PER_PIXEL)
 	{
-		jitter_x = frandom() - 0.5f;  // -0.5 to 0.5
-		jitter_y = frandom() - 0.5f;  // -0.5 to 0.5
+		jitter_x = frandom_norm_distribution() - 0.5f;  // -0.5 to 0.5
+		jitter_y = frandom_norm_distribution() - 0.5f;  // -0.5 to 0.5
 		u = (x + 0.5f + jitter_x) / (float)(scene->camera.img_plane->width - 1);
 		v = 1.0f - (y + 0.5f + jitter_y) / (float)(scene->camera.img_plane->height - 1);
 		ray = get_ray_with_dof(&scene->camera, u, v);
