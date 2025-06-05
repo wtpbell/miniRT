@@ -37,7 +37,7 @@ bool	parse_plane(char **tokens, t_scene *scene)
 	obj->pl = (t_pl){};
 	obj->type = OBJ_PLANE;
 	obj->intersect = plane_intersect;
-	obj->calc_norm = plane_normal;
+	obj->calc_norm = plane_normal; 
 	init_object_matrices(obj);
 	if (!vector_add(&scene->objects, obj))
 		return (free(obj), false);
