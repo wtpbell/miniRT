@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/05 14:35:39 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/06 16:53:09 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,10 @@ typedef enum e_error
 	ERR_INF,
 	ERR_MISSING_COMPONENT,
 	ERR_FORMAT,
+	ERR_INV_MAT_NAME,
+	ERR_UNKNOWN_MAT_TYPE,
+	ERR_UNKNOWN_FIELD,
+	ERR_REQ_FIELD,
 	ERR_COUNT
 }	t_error;
 
@@ -96,14 +100,16 @@ bool		parse_light(char **tokens, t_scene *scene);
 
 /* ---------------------Objects--------------------- */
 // sphere.c
-bool		parse_sphere(char **tokens, t_scene *scene);
 bool		parse_diameter(float *out, const char *str);
+bool		parse_sphere(char **tokens, t_scene *scene);
 // plane.c
 bool		parse_plane(char **tokens, t_scene *scene);
 // cylinder.c
 bool		parse_cylinder(char **tokens, t_scene *scene);
 // triangle.c
 bool		parse_triangle(char **tokens, t_scene *scene);
+// material.c
+bool		parse_material(char **tokens, t_scene *scene);
 
 /* ---------------------Utils--------------------- */
 // string_utils.c
@@ -135,6 +141,8 @@ bool		split_and_validate(const char *str, char ***out_tokens,
 				size_t expected_count, const char *ctx);
 bool		parse_and_validate_float(float *out, const char *str,
 				t_v2f range, const char *token);
+bool		parse_and_validate_int(int *out, const char *str,
+				t_v2f range, const char *token);
 
 // error.c
 void		print_error(t_error type, const char *ctx, const char *value);
@@ -143,6 +151,11 @@ void		exit_err(t_error type, const char *ctx, const char *value);
 // cleanup.c
 void		free_tokens(char **tokens);
 void		cleanup_gnl(char *line, int fd);
-void		free_material(t_mat *mat);
+void		free_material(void *ptr);
 void		cleanup_scene(t_scene *scene);
+
+// TODO: TEMP PROTOTYPES!!
+t_mat	*find_or_create_material(t_vector *materials, const char *m_name);
+int		create_default_materials(t_scene *scene);
+bool	assign_material(t_obj *obj, t_vector *materials, const char *m_name);
 #endif
