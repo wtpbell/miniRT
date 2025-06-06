@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/05 13:53:33 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/06 09:05:32 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	t_obj		*hit;
 	t_ray_hit	hit_info;
 	t_v3f		color;
-	t_obj		*direct_hit;
 
 	if (depth <= 0)
 		return (g_v3f_zero);

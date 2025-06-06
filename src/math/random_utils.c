@@ -72,7 +72,7 @@ t_v3f	random_direction(void)
 	return (v3f_norm(dir));
 }
 
-// random unit vector for diffuse reflection 
+// random unit vector for diffuse reflection, create smooth no noise surface
 t_v3f	random_in_hemisphere(t_v3f normal)
 {
 	t_v3f v;
@@ -85,7 +85,7 @@ t_v3f	random_in_hemisphere(t_v3f normal)
 			frandom() * 2.0f - 1.0f
 		);
 	if (v3f_dot(v, normal) > 0.0f)
-		return v3f_norm(v); // in same hemisphere as normal
+		return (v3f_norm(v)); // in same hemisphere as normal
 	else
-		return v3f_scale(v3f_norm(v), -1.0f); // in opposite hemisphere
+		return (v3f_scale(v3f_norm(v), -1.0f)); // in opposite hemisphere
 }

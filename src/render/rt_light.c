@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_light.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/31 19:11:17 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/04 20:48:36 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_light.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/31 19:11:17 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/06 09:23:23 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,13 @@ void	init_lighting(t_lighting *lighting, t_ray_hit *hit,
 
 float	calculate_diffuse(t_lighting *lighting)
 {
-	float	NdotL;
+	float	n_dot_l;
 	float	energy;
 
-	NdotL = ft_clampf01(v3f_dot(lighting->normal, lighting->light_dir) * 0.9f);
+	n_dot_l = ft_clampf01(v3f_dot(lighting->normal,
+				lighting->light_dir) * 0.9f);
 	energy = 1.0f - (0.3f * lighting->specular);
-	return (ft_maxf(0.0f, NdotL * energy * 0.95f));
+	return (ft_maxf(0.0f, n_dot_l * energy * 0.95f));
 	// return (ft_maxf(0.0f, v3f_dot(lighting->normal, lighting->light_dir)));
 }
 
@@ -63,14 +64,15 @@ color and intensity, finally clamps to 0-1 **/
 t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 {
 	t_ray		ray;
-	t_lighting	lt = {0};
+	t_lighting	lt;
 	float		inten;
 	float		shadow_dist;
 	t_v3f		color;
 
+	ft_bzero(&lt, sizeof(t_lighting));
 	init_lighting(&lt, hit, light, scene->camera.t.pos);
 	inten = lt.inten / (1.0f + 0.02f
-			* lt.dist + 0.0002f * lt.dist * lt.dist);
+			* lt.dist + 0.0002f * lt.dist * lt.dist); // play around the number, previous is too sharp
 	ray.origin = hit->hit;
 	ray.direction = v3f_sub(light->pos, hit->hit);
 	shadow_dist = lt.dist;

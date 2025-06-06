@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   triangle.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/29 12:00:31 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/04 12:32:00 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   triangle.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/29 12:00:31 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/06 09:08:11 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ bool	parse_triangle(char **tokens, t_scene *scene)
 	obj->t.pos = get_mid_point(tri.v0, tri.v1, tri.v2);
 	obj->t.dir = get_normal(tri.v0, tri.v1, tri.v2);
 	obj->r.color = color;
-	obj->r.mat = create_metal(color, 1.0f);
-	// obj->r.mat = create_dielectric(color, 1.05f, 0.95f); // this good for glass room
+	// obj->r.mat = create_metal(color, 1.0f);
+	obj->r.mat = create_dielectric(color, 1.05f, 0.95f); // this good for glass room
 	obj->tri = tri;
 	obj->intersect = triangle_intersect;
 	obj->calc_norm = triangle_normal;
