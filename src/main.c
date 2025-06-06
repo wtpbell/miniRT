@@ -41,7 +41,8 @@ static bool	valid_input(int argc, char **argv)
 static void	init_scene_and_vector(t_scene *scene)
 {
 	ft_bzero(scene, sizeof(t_scene));
-	if (!vector_init(&scene->objects, 8) || !vector_init(&scene->lights, 8))
+	if (!vector_init(&scene->objects, 8) || !vector_init(&scene->lights, 8)
+		|| !create_default_materials(scene))
 	{
 		perror("init_scene_and_vector");
 		cleanup_scene(scene);

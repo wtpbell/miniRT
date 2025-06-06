@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cylinder.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 12:05:06 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/01 17:06:17 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   cylinder.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/14 12:05:06 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/06 16:54:35 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,12 @@ bool	parse_cylinder(char **tokens, t_scene *scene)
 	obj->t.pos = pos;
 	obj->t.dir = dir;
 	obj->r.color = color;
-	obj->r.mat = create_lambertian(color, 0.95f, 256.0f);
+	if (!assign_material(obj, &scene->shared_materials, tokens[6]))
+		return (free(obj), false);
 	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	obj->type = OBJ_CYLINDER;
-	obj->calc_norm = cylinder_normal;
 	obj->cy = (t_cy){.radius = dm.x, .height = dm.y};
+	obj->calc_norm = cylinder_normal;
 	obj->intersect = cylinder_intersect;
 	init_object_matrices(obj);
 	if (!vector_add(&scene->objects, obj))

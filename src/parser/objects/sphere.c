@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   sphere.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/01 18:29:50 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   sphere.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/06 16:55:22 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ bool	parse_sphere(char **tokens, t_scene *scene)
 		return (false);
 	obj->t.pos = pos;
 	obj->r.color = color;
-	obj->r.mat = create_dielectric(color, 2.5f, 1.0f);
+	if (!assign_material(obj, &scene->shared_materials, tokens[4]))
+		return (free(obj), false);
 	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	obj->type = OBJ_SPHERE;
 	obj->sp = create_sphere(diameter);

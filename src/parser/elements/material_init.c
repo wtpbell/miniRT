@@ -1,15 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   material.c                                         :+:    :+:            */
+/*   material_init.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/31 23:53:11 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/05 14:10:33 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/06 13:10:40 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "scene.h"
 #include "rt_math.h"
 
@@ -17,7 +18,7 @@ t_mat	*init_material(t_mat_type type, const char *name)
 {
 	t_mat	*mat;
 
-	mat = (t_mat *)ft_calloc(1, sizeof(t_mat));
+	mat = ft_calloc(1, sizeof(t_mat));
 	if (!mat)
 		return (NULL);
 	mat->name = ft_strdup(name);

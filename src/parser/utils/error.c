@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 17:23:16 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/06 15:52:17 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,11 @@ static const char	*get_err_msg(t_error type)
 	[ERR_POSITIVE_VALUE] = "Value must be positive",
 	[ERR_PARSE_FAIL] = "Map parsing failed",
 	[ERR_MISSING_COMPONENT] = "Component is missing",
-	[ERR_FORMAT] = "Repeated comma between numbers"
+	[ERR_FORMAT] = "Repeated comma between numbers",
+	[ERR_INV_MAT_NAME] = "Invalid material name (must be ^m_[a-zA-Z0-9]+$)",
+	[ERR_UNKNOWN_MAT_TYPE] = "Unknown material type",
+	[ERR_UNKNOWN_FIELD] = "Unknown field (<field>:<value>)",
+	[ERR_REQ_FIELD] = "Required field is missing"
 	};
 
 	if (type >= 0 && type < ERR_COUNT)

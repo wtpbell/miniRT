@@ -23,7 +23,7 @@ SRCS_MAIN	:= main.c vector_init.c vector_helper.c vector_operation.c\
 				vec_container.c vec_container_utils.c color.c render.c\
 				rt_math.c matrix.c game.c rt_sphere.c rt_plane.c rt_cylinder.c \
 				color_utils.c material.c random_utils.c rt_light.c \
-				quit.c rt_triangle.c
+				quit.c rt_triangle.c material_init.c
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE)
 OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)

@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   cleanup.c                                          :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:44:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/05 14:32:14 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/06 17:08:26 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,15 @@ void	cleanup_gnl(char *line, int fd)
 	get_next_line(-1);
 }
 
-static void	free_obj(void *ptr)
+void	free_material(void *ptr)
 {
-	t_obj	*obj;
-
-	obj = (t_obj *)ptr;
-	free(obj);
-}
-
-void	free_material(t_mat *mat)
-{
-	free(mat->name);
-	free(mat);
+	free(((t_mat *)ptr)->name);
+	free(ptr);
 }
 
 void	cleanup_scene(t_scene *scene)
 {
-	vector_free(&scene->objects, free_obj);
+	vector_free(&scene->objects, free);
 	vector_free(&scene->lights, free);
 	vector_free(&scene->shared_materials, free_material);
 }

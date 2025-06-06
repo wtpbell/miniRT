@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 18:31:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/29 14:09:36 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/06 16:42:09 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,14 @@ bool	validate_tokens(const char *first_token, const char *line)
 	size_t	expected;
 	size_t	count;
 
+	if (ft_strncmp(first_token, "m_", 2) == 0) // Special case to by-pass the function
+		return (true);
 	expected = get_expected_token_count(first_token);
 	if (expected == 0)
 	{
 		print_error(ERR_UNKNOWN_TOKEN, "token", first_token);
 		return (false);
-	}
-	count = token_count_in_str(line);
-	if (count != expected)
+	if (count < expected || count > (expected + 1))
 	{
 		print_error(ERR_TOKEN_COUNT, "token", line);
 		return (false);

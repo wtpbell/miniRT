@@ -53,3 +53,19 @@ bool	parse_and_validate_float(float *out, const char *str,
 	}
 	return (true);
 }
+
+bool	parse_and_validate_int(int *out, const char *str,
+	t_v2f range, const char *token)
+{
+	if (!ft_stoi(str, out))
+	{
+		print_error(ERR_STOI, token, str);
+		return (false);
+	}
+	if (*out < (int)range.x || *out > (int)range.y)
+	{
+		print_error(ERR_RANGE, token, str);
+		return (false);
+	}
+	return (true);
+}

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/29 12:13:16 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/06 15:01:38 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static t_parser	get_parser(const char *type)
 		return (parse_light);
 	else if (ft_strcmp(type, "C") == 0)
 		return (parse_camera);
+	else if (ft_strncmp(type, "m_", 2) == 0)
+		return (parse_material);
 	return (NULL);
 }
 
