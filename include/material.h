@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/07 16:39:46 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/08 00:22:46 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MATERIAL_H
 
 # include "rt_types.h"
-# include "scene.h"
 
 enum e_material_type
 {
