@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/07 21:11:02 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/07 23:49:17 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,13 @@ typedef enum e_field_state
 {
 	EMPTY		= 0x0,
 	FILLED		= 0x1,
-	REQUIRED	= 0x2
+	REQUIRED	= 0x2,
+	HIDDEN		= 0x4
 }	t_f_state;
 
 typedef struct s_field
 {
-	const char	*prefix;
+	const char	*name;
 	void		*val;
 	t_f_type	type;
 	t_v2f		limit;
@@ -174,14 +175,14 @@ void		free_material(void *ptr);
 void		cleanup_scene(t_scene *scene);
 
 // field.c
-bool		is_field(const char *token, const char *field_name, const char **value);
+bool		is_field(const char *token, const char *field_name,
+				const char **value);
 bool		parse_fields(t_field *fields, int field_count, char **tokens);
 
 // material_utils.c
 t_mat		*find_or_create_material(t_vector *materials, const char *m_name);
 int			is_valid_material_name(const char *m_name);
-bool		assign_material(t_obj *obj, t_vector *materials, const char *m_name);
+bool		assign_material(t_obj *obj, t_vector *materials,
+				const char *m_name);
 t_mat_type	get_mat_type(const char *value);
-
-
 #endif

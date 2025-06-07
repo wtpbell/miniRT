@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/06 19:17:23 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/06 19:18:27 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/07 21:31:09 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ bool	assign_material(t_obj *obj, t_vector *materials, const char *m_name)
 	if (m_name == NULL)
 		m_name = "m_default";
 	if (!is_valid_material_name(m_name))
-		return (print_error(ERR_INV_MAT_NAME, "material" , m_name), false);
+		return (print_error(ERR_INV_MAT_NAME, "material", m_name), false);
 	obj->r.mat = find_or_create_material(materials, m_name);
 	return (obj->r.mat != NULL);
 }

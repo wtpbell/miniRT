@@ -6,20 +6,18 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/07 16:31:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/07 16:58:04 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/07 23:21:44 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-/* 
-DO NOT INCLUDE THIS FILE IN YOUR SOURCE FILES!
-
+/*******************************************************************************
+DO NOT INCLUDE THIS HEADER IN YOUR SOURCE FILES!
 Use the proper header files if you need access to any of these type definitions.
-*/
+*******************************************************************************/
+#ifndef RT_TYPES_H
+# define RT_TYPES_H
 
-#ifndef RT_TYPEDEF_H
-# define RT_TYPEDEF_H
-
-#include "vector.h"
+# include "vector.h"
 
 /* light */
 
@@ -55,6 +53,4 @@ typedef struct s_scene			t_scene;
 typedef int						(*t_intsct)(t_obj *obj, t_ray *ray,
 									t_v2f t, float *dst);
 typedef t_v3f					(*t_cnorm)(t_obj *obj, t_v3f point);
-
-
 #endif

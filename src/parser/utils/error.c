@@ -3,46 +3,46 @@
 /*                                                        ::::::::            */
 /*   error.c                                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/06 15:52:17 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/07 21:32:16 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #define STDERR STDERR_FILENO
 
+static const char *const	g_err_msg[ERR_COUNT] = {
+[ERR_NONE] = "No error",
+[ERR_NUM_ARGS] = "Invalid number of arguments",
+[ERR_FILE_FORMAT] = "Invalid file format",
+[ERR_RANGE] = "Value out of range",
+[ERR_MEM] = "Memory allocation failed",
+[ERR_FILE_READ] = "Error reading file",
+[ERR_UNKNOWN_TOKEN] = "Unknown token type",
+[ERR_FILE_NONEXIST] = "File does not exist",
+[ERR_STOI] = "Invalid integer value",
+[ERR_STOF] = "Invalid float value",
+[ERR_SPHERE_ARGS] = "Invalid sphere arguments",
+[ERR_TOKEN_COUNT] = "Invalid number of tokens",
+[ERR_DUPLICATE] = "Duplicate identifier",
+[ERR_INVALID_VALUE] = "Invalid value",
+[ERR_V3F] = "Error v3f parsing",
+[ERR_POSITIVE_VALUE] = "Value must be positive",
+[ERR_PARSE_FAIL] = "Map parsing failed",
+[ERR_MISSING_COMPONENT] = "Component is missing",
+[ERR_FORMAT] = "Repeated comma between numbers",
+[ERR_INV_MAT_NAME] = "Invalid material name (must be ^m_[a-zA-Z0-9]+$)",
+[ERR_UNKNOWN_MAT_TYPE] = "Unknown material type",
+[ERR_UNKNOWN_FIELD] = "Unknown field (<field>:<value>)",
+[ERR_REQ_FIELD] = "Required field is missing"
+};
+
 static const char	*get_err_msg(t_error type)
 {
-	const char	*err_msg[ERR_COUNT] = {
-	[ERR_NONE] = "No error",
-	[ERR_NUM_ARGS] = "Invalid number of arguments",
-	[ERR_FILE_FORMAT] = "Invalid file format",
-	[ERR_RANGE] = "Value out of range",
-	[ERR_MEM] = "Memory allocation failed",
-	[ERR_FILE_READ] = "Error reading file",
-	[ERR_UNKNOWN_TOKEN] = "Unknown token type",
-	[ERR_FILE_NONEXIST] = "File does not exist",
-	[ERR_STOI] = "Invalid integer value",
-	[ERR_STOF] = "Invalid float value",
-	[ERR_SPHERE_ARGS] = "Invalid sphere arguments",
-	[ERR_TOKEN_COUNT] = "Invalid number of tokens",
-	[ERR_DUPLICATE] = "Duplicate identifier",
-	[ERR_INVALID_VALUE] = "Invalid value",
-	[ERR_V3F] = "Error v3f parsing",
-	[ERR_POSITIVE_VALUE] = "Value must be positive",
-	[ERR_PARSE_FAIL] = "Map parsing failed",
-	[ERR_MISSING_COMPONENT] = "Component is missing",
-	[ERR_FORMAT] = "Repeated comma between numbers",
-	[ERR_INV_MAT_NAME] = "Invalid material name (must be ^m_[a-zA-Z0-9]+$)",
-	[ERR_UNKNOWN_MAT_TYPE] = "Unknown material type",
-	[ERR_UNKNOWN_FIELD] = "Unknown field (<field>:<value>)",
-	[ERR_REQ_FIELD] = "Required field is missing"
-	};
-
 	if (type >= 0 && type < ERR_COUNT)
-		return (err_msg[type]);
+		return (g_err_msg[type]);
 	return ("Unknown error");
 }
 

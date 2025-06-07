@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/07 19:27:01 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/07 21:52:42 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,15 @@ static bool	parse_height(float *out, const char *str)
 
 	height_range = init_v2f(MIN_HEIGHT, MAX_HEIGHT);
 	return (parse_float(out, str, height_range, "parse height"));
+}
+
+static inline void	cylinder_init(t_obj *obj, t_v2f dm)
+{
+	obj->type = OBJ_CYLINDER;
+	obj->t.up = init_v3f(0.0f, 1.0f, 0.0f);
+	obj->cy = (t_cy){.radius = dm.x, .height = dm.y};
+	obj->calc_norm = cylinder_normal;
+	obj->intersect = cylinder_intersect;
 }
 
 bool	parse_cylinder(char **tokens, t_scene *scene)
@@ -42,11 +51,7 @@ bool	parse_cylinder(char **tokens, t_scene *scene)
 	obj->r.color = color;
 	if (!assign_material(obj, &scene->shared_materials, tokens[6]))
 		return (free(obj), false);
-	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
-	obj->type = OBJ_CYLINDER;
-	obj->cy = (t_cy){.radius = dm.x, .height = dm.y};
-	obj->calc_norm = cylinder_normal;
-	obj->intersect = cylinder_intersect;
+	cylinder_init(obj, dm);
 	init_object_matrices(obj);
 	if (!vector_add(&scene->objects, obj))
 		return (free(obj), false);
