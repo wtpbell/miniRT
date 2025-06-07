@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/06 16:55:22 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/07 19:27:01 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ bool	parse_diameter(float *out, const char *str)
 	t_v2f	radius_range;
 
 	radius_range = init_v2f(MIN_RADIUS, MAX_RADIUS);
-	return (parse_and_validate_float(out, str, radius_range, "parse diameter"));
+	return (parse_float(out, str, radius_range, "parse diameter"));
 }
 
 static inline t_sp	create_sphere(float diameter)
@@ -29,7 +29,6 @@ static inline t_sp	create_sphere(float diameter)
 	});
 }
 
-//0.0 ≤ transmittance ≤ 1.0
 bool	parse_sphere(char **tokens, t_scene *scene)
 {
 	t_v3f	pos;

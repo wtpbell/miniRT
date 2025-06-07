@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/06 16:54:35 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/07 19:27:01 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static bool	parse_height(float *out, const char *str)
 	t_v2f	height_range;
 
 	height_range = init_v2f(MIN_HEIGHT, MAX_HEIGHT);
-	return (parse_and_validate_float(out, str, height_range, "parse height"));
+	return (parse_float(out, str, height_range, "parse height"));
 }
 
 bool	parse_cylinder(char **tokens, t_scene *scene)

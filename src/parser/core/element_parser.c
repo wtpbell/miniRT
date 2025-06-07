@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   element_parser.c                                   :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/06 15:01:38 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/07 18:59:38 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 static t_parser	get_parser(const char *type)
 {
-	if (!type)
-		return (NULL);
 	if (ft_strcmp(type, "sp") == 0)
 		return (parse_sphere);
 	else if (ft_strcmp(type, "pl") == 0)

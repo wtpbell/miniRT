@@ -42,7 +42,8 @@ static void	init_scene_and_vector(t_scene *scene)
 {
 	ft_bzero(scene, sizeof(t_scene));
 	if (!vector_init(&scene->objects, 8) || !vector_init(&scene->lights, 8)
-		|| !create_default_materials(scene))
+		|| !vector_init(&scene->shared_materials, 8)
+		|| !create_default_materials(&scene->shared_materials))
 	{
 		perror("init_scene_and_vector");
 		cleanup_scene(scene);

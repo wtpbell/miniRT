@@ -6,13 +6,15 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/31 23:53:11 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/06 13:10:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/07 17:20:39 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "scene.h"
 #include "rt_math.h"
+
+#define DFLT_MAT_COUNT 3
 
 t_mat	*init_material(t_mat_type type, const char *name)
 {
@@ -41,40 +43,24 @@ t_mat	*init_material(t_mat_type type, const char *name)
 	return (mat);
 }
 
-t_mat	*create_lambertian(t_v3f albedo, float specular, float shininess)
+bool	create_default_materials(t_vector *shared_materials)
 {
-	t_mat	*mat;
+	const char * const	default_names[DFLT_MAT_COUNT] = {"m_default",
+		"m_metal", "m_dielectric"
+	};
+	const t_mat_type	types[DFLT_MAT_COUNT] = {MAT_LAMBERTIAN,
+		MAT_METAL, MAT_DIELECTRIC
+	};
+	t_mat				*mat;
+	int					i;
 
-	mat = init_material(MAT_LAMBERTIAN, "m_default");
-	if (!mat)
-		return (NULL);
-	mat->albedo = albedo;
-	mat->lamb.specular = specular;
-	mat->lamb.shininess = shininess;
-	return (mat);
-}
-
-t_mat	*create_metal(t_v3f albedo, float fuzz)
-{
-	t_mat	*mat;
-
-	mat = init_material(MAT_METAL, "m_metal");
-	if (!mat)
-		return (NULL);
-	mat->albedo = albedo;
-	mat->metal.fuzz = fuzz;
-	return (mat);
-}
-
-t_mat	*create_dielectric(t_v3f albedo, float ir, float transmittance)
-{
-	t_mat	*mat;
-
-	mat = init_material(MAT_DIELECTRIC, "m_dielectric");
-	if (!mat)
-		return (NULL);
-	mat->albedo = albedo;
-	mat->diel.ir = ir;
-	mat->diel.transmittance = ft_clampf01(transmittance);
-	return (mat);
+	i = 0;
+	while (i < DFLT_MAT_COUNT)
+	{
+		mat = init_material(types[i], default_names[i]);
+		if (mat == NULL || !vector_add(shared_materials, mat))
+			return (free(mat), false);
+		++i;
+	}
+	return (true);
 }

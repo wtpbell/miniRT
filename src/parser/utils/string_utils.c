@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   string_utils.c                                     :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 17:38:38 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/07 18:52:39 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ void	clean_spaces(char *str)
 		{
 			while (str[i + 1] && ft_strchr(" \f\n\r\t\v", str[i + 1]))
 				i++;
-			if (!prev_space && str[i + 1] && str[i + 1] != ',')
+			if (!prev_space && str[i + 1] && (str[i + 1] != ',' || str[i + 1] != ':'))
 				str[pos++] = ' ';
 		}
 		else
 		{
 			str[pos++] = str[i];
-			prev_space = (str[i] == ',');
+			prev_space = (str[i] == ',' || str[i] == ':');
 		}
 		i++;
 	}
@@ -45,8 +45,6 @@ size_t	token_count_in_str(const char *str)
 	size_t	count;
 	bool	in_token;
 
-	if (!str)
-		return (0);
 	count = 0;
 	in_token = false;
 	while (*str)
