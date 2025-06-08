@@ -3,52 +3,40 @@
 /*                                                        ::::::::            */
 /*   token_utils.c                                      :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 18:31:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/29 14:09:36 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/07 20:45:54 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-size_t	get_expected_token_count(const char *type)
+static int	has_expected_token_count(const char *type, size_t token_count)
 {
-	if (ft_strcmp(type, "sp") == 0
-		|| ft_strcmp(type, "pl") == 0
-		|| ft_strcmp(type, "C") == 0
-		|| ft_strcmp(type, "L") == 0)
-		return (4);
-	if (ft_strcmp(type, "cy") == 0)
-		return (6);
-	if (ft_strcmp(type, "tri") == 0)
-		return (5);
 	if (ft_strcmp(type, "A") == 0)
-		return (3);
-	return (0);
-}
-
-char	*get_first_token(const char *str)
-{
-	return (ft_substr(str, 0, ft_strchrnul(str, ' ') - str));
+		return (token_count == 3);
+	else if (ft_strcmp(type, "C") == 0 || ft_strcmp(type, "L") == 0)
+		return (token_count == 4);
+	else if (ft_strcmp(type, "sp") == 0 || ft_strcmp(type, "pl") == 0)
+		return (token_count == 4 || token_count == 5);
+	else if (ft_strcmp(type, "tri") == 0)
+		return (token_count == 5 || token_count == 6);
+	else if (ft_strcmp(type, "cy") == 0)
+		return (token_count == 6 || token_count == 7);
+	else if (ft_strncmp(type, "m_", 2) == 0)
+		return (token_count > 2);
+	return (-1);
 }
 
 bool	validate_tokens(const char *first_token, const char *line)
 {
-	size_t	expected;
-	size_t	count;
+	int	cond;
 
-	expected = get_expected_token_count(first_token);
-	if (expected == 0)
-	{
-		print_error(ERR_UNKNOWN_TOKEN, "token", first_token);
-		return (false);
-	}
-	count = token_count_in_str(line);
-	if (count != expected)
-	{
-		print_error(ERR_TOKEN_COUNT, "token", line);
-		return (false);
-	}
+	cond = has_expected_token_count(first_token, token_count_in_str(line));
+	if (cond == -1)
+		return (print_error(ERR_UNKNOWN_TOKEN, "token", first_token), false);
+	else if (cond == 0)
+		return (print_error(ERR_TOKEN_COUNT, "token", line), false);
 	return (true);
 }

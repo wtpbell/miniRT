@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/03 12:11:35 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/08 11:43:27 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,10 @@
 
 void	init_object_matrices(t_obj *obj)
 {
-	t_v3f	up;
-
-	up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	if (obj->t.up.x != 0 || obj->t.up.y != 0 || obj->t.up.z != 0)
-		up = obj->t.up;
-	obj_to_world(obj->t.to_world, obj->t.pos, obj->t.dir, up);
+		obj_to_world(obj->t.to_world, obj->t.pos, obj->t.dir, obj->t.up);
+	else
+		obj_to_world(obj->t.to_world, obj->t.pos, obj->t.dir, g_v3f_up);
 	invert_m4x4(obj->t.to_obj, obj->t.to_world);
 }
 
@@ -78,7 +76,7 @@ static t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info)
 	int		i;
 
 	total_light = init_v3f(0.0f, 0.0f, 0.0f);
-	obj_albedo = hit_info->obj->r.mat->albedo;
+	obj_albedo = hit_info->obj->r.color;
 	i = 0;
 	while (i < scene->lights.size)
 	{
@@ -143,9 +141,9 @@ static t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 	indirect = blend_color(sc, hit, depth, get_refraction_ratio(hit));
 	kd = 1.0f - hit->obj->r.mat->diel.transmittance - 0.2f;  // Diffuse weight = 1.0 - transmittance - 0.2f(small bias)
 	final = (t_v3f){{
-		.x = (direct.x * kd + indirect.x * (1.0f - kd)) * hit->obj->r.mat->albedo.x,
-		.y = (direct.y * kd + indirect.y * (1.0f - kd)) * hit->obj->r.mat->albedo.y,
-		.z = (direct.z * kd + indirect.z * (1.0f - kd)) * hit->obj->r.mat->albedo.z
+		.x = (direct.x * kd + indirect.x * (1.0f - kd)) * hit->obj->r.color.x,
+		.y = (direct.y * kd + indirect.y * (1.0f - kd)) * hit->obj->r.color.y,
+		.z = (direct.z * kd + indirect.z * (1.0f - kd)) * hit->obj->r.color.z
 	}};
 	return (final);
 }

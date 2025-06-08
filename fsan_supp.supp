@@ -1,0 +1,8 @@
+# leaks.supp
+
+leak:libLLVM-15
+leak:__interceptor_strdup
+leak:operator new
+leak:__interceptor_calloc
+#leak:__interceptor_malloc
+leak:libz3

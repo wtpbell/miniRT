@@ -30,8 +30,9 @@ bool	parse_plane(char **tokens, t_scene *scene)
 	obj->t.pos = pos;
 	obj->t.dir = dir;
 	obj->r.color = color;
-	obj->r.mat = create_lambertian(color, 0.95f, 256.0f);
-	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
+	if (!assign_material(obj, &scene->shared_materials, tokens[4]))
+		return (free(obj), false);
+	obj->t.up = g_v3f_up;
 	obj->pl = (t_pl){};
 	obj->type = OBJ_PLANE;
 	obj->intersect = plane_intersect;

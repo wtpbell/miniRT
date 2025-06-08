@@ -5,27 +5,33 @@
 # pl [position (x,y,z float)] [normal (x,y,z float)] [color (R,G,B in 0–255)]
 # cy [position (x,y,z float)] [axis (x,y,z float)] [diameter (float)] [height (float)] [color (R,G,B in 0–255)]
 # tri [v0 (x,y,z float)] [v1 (x,y,z float)] [v2 (x,y,z float)] [color (R,G,B in 0–255)]
+# m_<name> type:<lambertian|metal|dielectric> fuz:<float> shi:<float> spc:<float> ir:<float> tr:<float> alb:<color (R,G,B in 0-255)>
 
-C 0,2,5     0,0,1  100
-
-A 0.3 255,255,255
-
-L -3,5,2 0.70 0,255,255
-
-pl 0,-1,0	0,1,0		0,255,0
-pl 0,10,0	0,-1,0		150,150,255  
-pl -5,0,0	1,0,0		200,150,150  
-pl 5,0,0	-1,0,0		150,200,150  
-pl 0,0,10	0,0,-1		255,255,255  
-pl 0,0,-10	0,0,1		200,200,255
+m_red		type:lambertian		spc:.5 		shi:1
+m_glass		type:dielectric		ir:.3		tr:.9		alb:200,200,0
+m_yellow	type:lambertian		shi:0.2		spc:1.0		alb:200,200,0
+m_mirror	type:metal			fuz:1.0
+m_crazy		type:dielectric		fuz:1.0		spc:.1	shi:.1 ir:3 tr:1
 
 
-sp 0,1,0 1.5 255,255,255
+C	0,2,5	0,0,1	90
+A			0.30	255,255,255
+L	-3,5,2	0.70	0,255,255
 
-sp 2,1,2 0.5 255,100,100 
-sp -2,1,2 0.5 100,255,100 
-sp 0,3,1 0.4 100,100,255
+pl	0,-1,0	0,1,0		0,255,0
+pl	0,10,0	0,-1,0		150,150,255		
+pl	-5,0,0	1,0,0		200,150,150		
+pl	5,0,0	-1,0,0		150,200,150		m_default
+pl	0,0,10	0,0,-1		255,255,255		m_mirror
+pl	0,0,-10	0,0,1		200,200,255		m_mirror
 
 
-cy 3,0,0 0,1,0 0.5 2 255,200,0 
-cy 0,0,0 0,1,0 0.5 2 255,0,200
+sp	0,1,0	1.5	255,255,255	m_glass
+
+sp	2,3,2	0.5	242,99,187 m_crazy
+sp	-2,1,2	0.5	100,255,100 
+sp	0,3,1	0.4	255,250,0	m_yellow
+
+
+cy	3,0,0	0,1,0	0.5		2	255,50,50	m_red
+cy	0,0,0	0,1,0	0.5		2	50,50,200

@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   camera.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 12:05:02 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/31 15:54:42 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   camera.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/07 23:40:34 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <math.h>
+#include "rt_math.h"
 #include "parser.h"
 
 static bool	parse_fov(float *fov, const char *str)
@@ -45,10 +46,9 @@ bool	parse_camera(char **tokens, t_scene *scene)
 	dir.z = -dir.z;
 	scene->camera.t.dir = v3f_norm(dir);
 	if (fabsf(dir.y) > 0.999f)
-		up = (t_v3f){.x = 0.0f, .y = 0.0f, .z = -1.0f + 2.0f * (dir.y < 0.0f)};
+		up = v3f_scale(g_v3f_back, ft_signf(dir.y));
 	else
-		up = v3f_norm(v3f_cross(v3f_cross(
-						dir, (t_v3f){.x = 0.0f, .y = 1.0f, .z = 0.0f}), dir));
+		up = v3f_norm(v3f_cross(v3f_cross(dir, g_v3f_up), dir));
 	scene->camera.t.up = up;
 	scene->camera.fov = fov;
 	scene->scene_flags |= SCENE_CAMERA;

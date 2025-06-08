@@ -1,46 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   material.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/29 13:47:23 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/01 16:43:23 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   material.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/08 00:22:46 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MATERIAL_H
 # define MATERIAL_H
 
-# include "scene.h"
+# include "rt_types.h"
 
-typedef enum e_material_type
+enum e_material_type
 {
+	MAT_UNKNOWN,
 	MAT_LAMBERTIAN,
 	MAT_METAL,
 	MAT_DIELECTRIC
-}	t_mat_type;
+};
 
-typedef struct s_lambertian
+struct s_lambertian
 {
 	float	specular;
 	float	shininess;
-}	t_lamb;
+};
 
-typedef struct s_metal
+struct s_metal
 {
 	float	fuzz;
-}	t_metal;
+};
 
-typedef struct s_dielectric
+struct s_dielectric
 {
 	float	ir;
 	float	transmittance;
-}	t_diel;
+};
 
-typedef struct s_material
+struct s_material
 {
+	char		*name;
 	t_mat_type	type;
 	t_v3f		albedo;
 	union
@@ -49,11 +51,11 @@ typedef struct s_material
 		t_metal	metal;
 		t_diel	diel;
 	};
-}	t_mat;
+};
 
-t_mat	*init_material(t_mat_type type);
-t_mat	*create_lambertian(t_v3f albedo, float specular, float shininess);
-t_mat	*create_metal(t_v3f albedo, float fuzz);
-t_mat	*create_dielectric(t_v3f albedo, float ir, float transmittance);
+t_mat	*init_material(t_mat_type type, const char *name);
+bool	create_default_materials(t_vector *shared_materials);
+t_mat	*find_or_create_material(t_vector *materials, const char *m_name);
+bool	assign_material(t_obj *obj, t_vector *materials, const char *m_name);
 
 #endif

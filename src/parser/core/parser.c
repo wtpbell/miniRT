@@ -3,23 +3,16 @@
 /*                                                        ::::::::            */
 /*   parser.c                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 18:03:06 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/07 18:55:21 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static bool	get_type_and_validate(char *processed, char *out_type)
-{
-	if (!validate_tokens(out_type, processed))
-		return (false);
-	return (true);
-}
-
-bool	parse_line(t_scene *scene, char *line)
+static bool	parse_line(t_scene *scene, char *line)
 {
 	char	**tokens;
 	bool	result;
@@ -34,9 +27,44 @@ bool	parse_line(t_scene *scene, char *line)
 	tokens = ft_split(line, ' ');
 	if (!tokens)
 		return (perror("parse_line"), false);
-	if (!get_type_and_validate(line, *tokens))
+	if (!validate_tokens(*tokens, line))
 		return (free_tokens(tokens), false);
 	result = parse_scene_element(*tokens, tokens, scene);
 	free_tokens(tokens);
+	return (result);
+}
+
+static bool	parse_file_lines(t_scene *scene, int fd)
+{
+	char	*line;
+
+	while (true)
+	{
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		if (*line != '#' && *line != '\n' && !parse_line(scene, line))
+			return (cleanup_gnl(line, fd), false);
+		free(line);
+	}
+	return (cleanup_gnl(line, fd), true);
+}
+
+bool	parse_map(t_scene *scene, const char *file)
+{
+	int		fd;
+	bool	result;
+
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
+	{
+		perror("parse_map");
+		cleanup_scene(scene);
+		return (false);
+	}
+	result = parse_file_lines(scene, fd);
+	close(fd);
+	if (!result)
+		cleanup_scene(scene);
 	return (result);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   triangle.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/29 12:00:31 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/01 17:06:48 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   triangle.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/29 12:00:31 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/08 11:40:00 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,12 @@ bool	parse_triangle(char **tokens, t_scene *scene)
 	obj = ft_calloc(1, sizeof(t_obj));
 	if (obj == NULL)
 		return (false);
-	obj->t.up = init_v3f(0.0f, 1.0f, 0.0f);
+	obj->t.up = g_v3f_up;
 	obj->t.pos = get_mid_point(tri.v0, tri.v1, tri.v2);
 	obj->t.dir = get_normal(tri.v0, tri.v1, tri.v2);
 	obj->r.color = color;
-	obj->r.mat = create_lambertian(color, 0.95f, 256.0f);
+	if (!assign_material(obj, &scene->shared_materials, tokens[5]))
+		return (free(obj), false);
 	obj->tri = tri;
 	obj->intersect = triangle_intersect;
 	obj->calc_norm = triangle_normal;

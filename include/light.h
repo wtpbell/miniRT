@@ -13,9 +13,10 @@
 #ifndef LIGHT_H
 # define LIGHT_H
 
+# include "rt_types.h"
 # include "minirt.h"
 
-typedef struct s_lighting
+struct s_lighting
 {
 	t_v3f	light_dir;
 	t_v3f	view_dir;
@@ -27,7 +28,7 @@ typedef struct s_lighting
 	float	distance;
 	float	diffuse;
 	float	specular;
-}	t_lighting;
+};
 
 void	init_lighting(t_lighting *lighting, t_ray_hit *hit,
 			t_light *light, t_v3f view_pos);

@@ -17,7 +17,7 @@ static bool	parse_light_ratio(float *ratio, const char *str)
 	t_v2f	light_ratio_range;
 
 	light_ratio_range = init_v2f(MIN_LIGHT_RATIO, MAX_LIGHT_RATIO);
-	return (parse_and_validate_float(ratio, str, light_ratio_range,
+	return (parse_float(ratio, str, light_ratio_range,
 			"parse light ratio"));
 }
 
