@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   rt_material.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/06/02 11:16:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/06 09:24:00 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   rt_material.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/02 11:16:23 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/08 14:06:03 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info)
 		light = (t_light *)scene->lights.items[i];
 		if (light->type == LIGHT_POINT)
 			total_light = v3f_add(total_light, apply_point(scene, hit_info, light));
-		else if (light->type == LIGHT_AMBIENT)
+			else if (light->type == LIGHT_AMBIENT)
 			total_light = v3f_add(total_light, apply_ambient(obj_albedo, light));
 		i++;
 	}
@@ -97,23 +97,31 @@ t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 {
 	t_ray	reflected_ray;
 	t_v3f	reflected_dir;
-	t_v3f	random_fuzz;
-	t_metal	metal_data;
-	t_v3f	result;
+	int		sample;
+	int		valid_sample;
+	t_v3f	res;
 
-	metal_data = hit->obj->r.mat->metal;
-	reflected_dir = v3f_refl(v3f_norm(hit->ray->direction), hit->normal);
-	if (metal_data.fuzz > 0.0f) //random only when perfect mirror
+	sample = (hit->obj->r.mat->metal.fuzz > 0.0f) * 16 + 1;
+	valid_sample = 0;
+	res = g_v3f_zero;
+	while (--sample >= 0)
 	{
-		// random_fuzz = v3f_scale(random_in_hemisphere(hit->normal), metal_data.fuzz);
-		random_fuzz = v3f_scale(random_direction(), metal_data.fuzz);
-		reflected_dir = v3f_add(reflected_dir, random_fuzz);
+		reflected_dir = v3f_refl(v3f_norm(hit->ray->direction), hit->normal);
+		if (hit->obj->r.mat->metal.fuzz > 0.0f)
+		{
+			reflected_dir = v3f_add(reflected_dir, v3f_scale(random_in_hemisphere(hit->normal),
+				hit->obj->r.mat->metal.fuzz));
+			reflected_dir = v3f_norm(reflected_dir);
+		}
+		if (v3f_dot(reflected_dir, hit->normal) > 0.0f)
+		{
+			reflected_ray.origin = v3f_add(hit->hit, v3f_scale(hit->normal, BIAS));
+			reflected_ray.direction = reflected_dir;
+			res = v3f_add(res, trace(&reflected_ray, sc, depth - 1));
+			valid_sample++;
+		}
 	}
-	if (v3f_dot(reflected_dir, hit->normal) <= 0.0f)
-		return (g_v3f_zero); //discard invalid bounce
-	reflected_ray.origin = v3f_add(hit->hit, v3f_scale(hit->normal, BIAS));
-	reflected_ray.direction = v3f_norm(reflected_dir);
-	result = trace(&reflected_ray, sc, depth - 1);
-	// return (v3f_mul(hit->obj->r.mat->albedo, result));
-	return (result);
+	if (valid_sample > 0) // just make sure all samples are valid
+		return (v3f_scale(res, 1.0f / valid_sample));
+	return (g_v3f_zero);
 }

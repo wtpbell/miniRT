@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   rt_light.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/31 19:11:17 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/06 09:23:23 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   rt_light.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/31 19:11:17 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/08 12:58:11 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ float	calculate_diffuse(t_lighting *lighting)
 				lighting->light_dir) * 0.9f);
 	energy = 1.0f - (0.3f * lighting->specular);
 	return (ft_maxf(0.0f, n_dot_l * energy * 0.95f));
-	// return (ft_maxf(0.0f, v3f_dot(lighting->normal, lighting->light_dir)));
 }
 
 float	calculate_specular(t_lighting *lighting,
