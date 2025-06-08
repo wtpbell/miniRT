@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   print_var.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 09:34:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/31 23:34:59 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   print_var.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/06 16:48:59 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@ void	float_print(float f, int spaces, const char *prefix)
 	printf("%*s%s(flt) <%.2f>\n", spaces, "", prefix, f);
 }
 
+void	str_print(const char *str, int spaces, const char *prefix)
+{
+	printf("%*s%s %s\n", spaces, "", prefix, str);
+}
+
 void	mat4x4_print(t_mat4x4 m, int spaces, const char *prefix)
 {
 	printf("%*s%s\n", spaces, "", prefix);
@@ -71,7 +76,6 @@ void	plane_print(t_obj *pl, int spaces)
 {
 	printf("%*s%s", spaces, "","PLANE:\n");
 	transform_print(&pl->t, spaces + 2);
-	col32_print(pl->r.color, spaces + 2, "COLOR");
 }
 
 void	sphere_print(t_obj *sp, int spaces)
@@ -79,7 +83,6 @@ void	sphere_print(t_obj *sp, int spaces)
 	printf("%*s%s", spaces, "","SPHERE:\n");
 	transform_print(&sp->t, spaces + 2);
 	float_print(sp->sp.radius, spaces + 2, "RADIUS");
-	col32_print(sp->r.color, spaces + 2, "COLOR");
 }
 
 void	cylinder_print(t_obj *cy, int spaces)
@@ -88,7 +91,6 @@ void	cylinder_print(t_obj *cy, int spaces)
 	transform_print(&cy->t, spaces + 2);
 	float_print(cy->cy.radius, spaces + 2, "RADIUS");
 	float_print(cy->cy.height, spaces + 2, "HEIGHT");
-	col32_print(cy->r.color, spaces + 2, "COLOR");
 }
 
 void	triangle_print(t_obj *tri, int spaces)
@@ -98,7 +100,6 @@ void	triangle_print(t_obj *tri, int spaces)
 	v3f_print(tri->tri.v0, spaces + 2, "v0");
 	v3f_print(tri->tri.v1, spaces + 2, "v1");
 	v3f_print(tri->tri.v2, spaces + 2, "v2");
-	col32_print(tri->r.color, spaces + 2, "COLOR");
 }
 
 void	objects_print(t_vector	objects, int spaces, const char *prefix)
@@ -119,6 +120,42 @@ void	objects_print(t_vector	objects, int spaces, const char *prefix)
 			cylinder_print(obj, spaces + 2);
 		else if (obj->type == OBJ_TRIANGLE)
 			triangle_print(obj, spaces + 2);
+		col32_print(obj->r.color, spaces + 2, "COLOR");
+		str_print(obj->r.mat->name, spaces + 2, "MATERIAL");
+		
+		++i;
+	}
+}
+
+void	materials_print(t_vector materials, int spaces, const char *prefix)
+{
+	int		i;
+	t_mat	*mat;
+
+	i = 0;
+	printf("%*s%s <%i/%i>\n", spaces, "", prefix, materials.size, materials.capacity);
+	while (i < materials.size)
+	{
+		mat = (t_mat *)materials.items[i];
+		str_print(mat->name, spaces + 2, "");
+		if (mat->type == MAT_LAMBERTIAN)
+		{
+			str_print("Lambertian", spaces + 4, "type:");
+			float_print(mat->lamb.specular, spaces + 4, "specular");
+			float_print(mat->lamb.shininess, spaces + 4, "shininess");
+		}
+		else if (mat->type == MAT_METAL)
+		{
+			str_print("Metal", spaces + 4, "type:");
+			float_print(mat->metal.fuzz, spaces + 4, "fuzz");
+		}
+		else if (mat->type == MAT_DIELECTRIC)
+		{
+			str_print("Dielectric", spaces + 4, "type:");
+			float_print(mat->diel.ir, spaces + 4, "ir");
+			float_print(mat->diel.transmittance, spaces + 4, "transmittance");
+		}
+		col32_print(mat->albedo, spaces + 4, "albedo");
 		++i;
 	}
 }
@@ -130,6 +167,7 @@ void	scene_print(t_scene *scene)
 	printf("===SCENE===\n");
 	camera_print(&scene->camera, spaces + 2);
 	objects_print(scene->objects, spaces + 2, "OBJECTS");
+	materials_print(scene->shared_materials, spaces + 2, "MATERIALS");
 	printf("===END SCENE===\n");
 }
 

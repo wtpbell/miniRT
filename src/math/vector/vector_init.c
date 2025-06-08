@@ -6,13 +6,20 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:35:46 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/03 12:15:54 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/07 23:39:37 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vector.h"
 
-const t_v3f	g_v3f_zero = (t_v3f){.x = 0.0f, .y = 0.0f, .z = 0.0f};
+const t_v3f	g_v3f_zero		= (t_v3f){.x = 0.0f, .y = 0.0f, .z = 0.0f};
+const t_v3f	g_v3f_one		= (t_v3f){.x = 1.0f, .y = 1.0f, .z = 1.0f};
+const t_v3f	g_v3f_foward	= (t_v3f){.x = 0.0f, .y = 0.0f, .z = 1.0f};
+const t_v3f	g_v3f_back		= (t_v3f){.x = 0.0f, .y = 0.0f, .z = -1.0f};
+const t_v3f	g_v3f_up		= (t_v3f){.x = 0.0f, .y = 1.0f, .z = 0.0f};
+const t_v3f	g_v3f_down		= (t_v3f){.x = 0.0f, .y = -1.0f, .z = 0.0f};
+const t_v3f	g_v3f_right		= (t_v3f){.x = 1.0f, .y = 0.0f, .z = 0.0f};
+const t_v3f	g_v3f_left		= (t_v3f){.x = -1.0f, .y = 0.0f, .z = 0.0f};
 
 inline t_v2f	init_v2f(float x, float y)
 {

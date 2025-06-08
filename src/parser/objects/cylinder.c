@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   cylinder.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/14 12:05:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/05 10:43:01 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   cylinder.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/14 12:05:06 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/08 17:46:05 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,16 @@ static bool	parse_height(float *out, const char *str)
 	t_v2f	height_range;
 
 	height_range = init_v2f(MIN_HEIGHT, MAX_HEIGHT);
-	return (parse_and_validate_float(out, str, height_range, "parse height"));
+	return (parse_float(out, str, height_range, "parse height"));
+}
+
+static inline void	cylinder_init(t_obj *obj, t_v2f dm)
+{
+	obj->type = OBJ_CYLINDER;
+	obj->t.up = g_v3f_up;
+	obj->cy = (t_cy){.radius = dm.x, .height = dm.y};
+	obj->calc_norm = cylinder_normal;
+	obj->intersect = cylinder_intersect;
 }
 
 bool	parse_cylinder(char **tokens, t_scene *scene)
@@ -40,14 +49,9 @@ bool	parse_cylinder(char **tokens, t_scene *scene)
 	obj->t.pos = pos;
 	obj->t.dir = dir;
 	obj->r.color = color;
-	// obj->r.mat = create_lambertian(color, 0.95f, 256.0f);
-	obj->r.mat = create_dielectric(color, 2.5f, 1.0f);
-	// obj->r.mat = create_metal(color, 1.0f);
-	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
-	obj->type = OBJ_CYLINDER;
-	obj->calc_norm = cylinder_normal;
-	obj->cy = (t_cy){.radius = dm.x, .height = dm.y};
-	obj->intersect = cylinder_intersect;
+	if (!assign_material(obj, &scene->shared_materials, tokens[6]))
+		return (free(obj), false);
+	cylinder_init(obj, dm);
 	init_object_matrices(obj);
 	if (!vector_add(&scene->objects, obj))
 		return (free(obj), false);

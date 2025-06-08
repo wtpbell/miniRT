@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 11:16:23 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/08 14:06:03 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/08 17:48:00 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,8 @@ t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 
 	direct = handle_lambertian(sc, hit);
 	indirect = blend_color(sc, hit, depth, get_refraction_ratio(hit));
-	kd = 1.0f - hit->obj->r.mat->diel.transmittance - BIAS;  // Diffuse weight = 1.0 - transmittance - 0.2f(small bias) bias is removed
-	return (v3f_mul(
-			v3f_add(v3f_scale(direct, kd), v3f_scale(indirect, (1.0f - kd)))
-			, hit->obj->r.mat->albedo));
+	kd = 1.0f - hit->obj->r.mat->diel.transmittance;  // Diffuse weight = 1.0 - transmittance - 0.2f(small bias) bias is removed
+	return (v3f_add(v3f_scale(direct, kd), v3f_scale(indirect, (1.0f - kd))));
 }
 
 t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info)
@@ -79,7 +77,7 @@ t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info)
 	int		i;
 
 	total_light = g_v3f_zero;
-	obj_albedo = hit_info->obj->r.mat->albedo;
+	obj_albedo = hit_info->obj->r.color;
 	i = 0;
 	while (i < scene->lights.size)
 	{

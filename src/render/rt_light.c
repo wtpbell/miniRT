@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 19:11:17 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/08 12:58:11 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/08 17:45:45 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	init_lighting(t_lighting *lighting, t_ray_hit *hit,
 	lighting->hit_point = hit->hit;
 	lighting->normal = hit->normal;
 	lighting->light_color = light->color;
-	lighting->obj_color = hit->obj->r.mat->albedo;
+	lighting->obj_color = hit->obj->r.color;
 	lighting->inten = light->intensity;
 	lighting->dist = v3f_mag(v3f_sub(light->pos, hit->hit));
 }
@@ -57,9 +57,9 @@ float	calculate_specular(t_lighting *lighting,
 	return (spec * specular_strength);
 }
 
-/**quadratic falloff: intensity / (1 + a*d + b*d²)
+/**quadratic falloff: inten / (1 + a*d + b*d²)
 combines diffuse and specular, multiplies by albedo and light
-color and intensity, finally clamps to 0-1 **/
+color and inten, finally clamps to 0-1 **/
 t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 {
 	t_ray		ray;
@@ -86,8 +86,7 @@ t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 	}
 	else
 		lt.specular = 0.0f;
-	color = v3f_scale(v3f_mul(hit->obj->r.mat->albedo, light->color),
-			lt.diffuse);
+	color = v3f_scale(v3f_mul(lt.obj_color, light->color), lt.diffuse);
 	return (v3f_clampf01(v3f_scale(v3f_add(
 					color, v3f_scale(light->color, lt.specular)), inten)));
 }

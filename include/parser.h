@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   parser.h                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/29 12:12:19 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/07 23:49:17 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,18 +69,42 @@ typedef enum e_error
 	ERR_INF,
 	ERR_MISSING_COMPONENT,
 	ERR_FORMAT,
+	ERR_INV_MAT_NAME,
+	ERR_UNKNOWN_MAT_TYPE,
+	ERR_UNKNOWN_FIELD,
+	ERR_REQ_FIELD,
 	ERR_COUNT
 }	t_error;
 
+typedef enum e_field_type
+{
+	FIELD_INT,
+	FIELD_FLOAT,
+	FIELD_V3F,
+	FIELD_COL
+}	t_f_type;
+
+typedef enum e_field_state
+{
+	EMPTY		= 0x0,
+	FILLED		= 0x1,
+	REQUIRED	= 0x2,
+	HIDDEN		= 0x4
+}	t_f_state;
+
+typedef struct s_field
+{
+	const char	*name;
+	void		*val;
+	t_f_type	type;
+	t_v2f		limit;
+	t_f_state	state;
+}	t_field;
+
 // Token utilities
 bool		validate_tokens(const char *first_token, const char *line);
-char		*get_first_token(const char *str);
-size_t		get_expected_token_count(const char *type);
 
 /* ---------------------Core--------------------- */
-// parser.c
-bool		parse_line(t_scene *scene, char *line);
-
 // file_parser.c
 bool		parse_map(t_scene *scene, const char *file);
 
@@ -93,11 +117,13 @@ bool		parse_scene_element(const char *type,
 bool		parse_camera(char **tokens, t_scene *scene);
 // light.c
 bool		parse_light(char **tokens, t_scene *scene);
+// material.c
+bool		parse_material(char **tokens, t_scene *scene);
 
 /* ---------------------Objects--------------------- */
 // sphere.c
-bool		parse_sphere(char **tokens, t_scene *scene);
 bool		parse_diameter(float *out, const char *str);
+bool		parse_sphere(char **tokens, t_scene *scene);
 // plane.c
 bool		parse_plane(char **tokens, t_scene *scene);
 // cylinder.c
@@ -133,7 +159,9 @@ bool		validate_scene(const t_scene *scene);
 bool		validate_scene(const t_scene *scene);
 bool		split_and_validate(const char *str, char ***out_tokens,
 				size_t expected_count, const char *ctx);
-bool		parse_and_validate_float(float *out, const char *str,
+bool		parse_float(float *out, const char *str,
+				t_v2f range, const char *token);
+bool		parse_int(int *out, const char *str,
 				t_v2f range, const char *token);
 
 // error.c
@@ -143,5 +171,18 @@ void		exit_err(t_error type, const char *ctx, const char *value);
 // cleanup.c
 void		free_tokens(char **tokens);
 void		cleanup_gnl(char *line, int fd);
+void		free_material(void *ptr);
 void		cleanup_scene(t_scene *scene);
+
+// field.c
+bool		is_field(const char *token, const char *field_name,
+				const char **value);
+bool		parse_fields(t_field *fields, int field_count, char **tokens);
+
+// material_utils.c
+t_mat		*find_or_create_material(t_vector *materials, const char *m_name);
+int			is_valid_material_name(const char *m_name);
+bool		assign_material(t_obj *obj, t_vector *materials,
+				const char *m_name);
+t_mat_type	get_mat_type(const char *value);
 #endif

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   minirt.h                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/02 11:30:58 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   minirt.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 11:37:50 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/08 17:11:28 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,6 @@ typedef struct s_game
 	mlx_t	*mlx;
 	/* TODO: Add more members here for access during a MLX hook */
 }	t_game;
-
-typedef struct s_tri_var
-{
-	t_v3f	v0v1;
-	t_v3f	v0v2;
-	t_v3f	pvec;
-	float	det;
-}	t_tri_var;
 
 int		game(t_scene *scene);
 void	quit_on_escape(mlx_key_data_t keydata, void *param);
