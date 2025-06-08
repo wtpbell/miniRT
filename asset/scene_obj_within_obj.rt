@@ -13,7 +13,7 @@ m_yellow	type:lambertian		shi:0.2		spc:1.0		alb:200,200,0
 m_mirror	type:metal			fuz:1.0
 m_crazy		type:dielectric		fuz:1.0		spc:.1	shi:.1 ir:3 tr:1
 
-cy -1,1.5,0 0,1,0 3 4 255,200,0 
+cy -1,1.5,0 0,1,0 1 2 255,200,0 
 
 C	0,2,5	0,0,1	90
 A			0.30	255,255,255

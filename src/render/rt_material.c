@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 11:16:23 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/08 17:48:00 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/08 17:56:58 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info)
 		light = (t_light *)scene->lights.items[i];
 		if (light->type == LIGHT_POINT)
 			total_light = v3f_add(total_light, apply_point(scene, hit_info, light));
-			else if (light->type == LIGHT_AMBIENT)
+		else if (light->type == LIGHT_AMBIENT)
 			total_light = v3f_add(total_light, apply_ambient(obj_albedo, light));
 		i++;
 	}

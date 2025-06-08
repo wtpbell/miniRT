@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/08 17:30:26 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/08 18:10:23 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ static void	compute_ray(float x, float y, t_cam *cam, t_ray *ray)
 	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
 }
 
-#define SAMPLES_PER_PIXEL 4
+#define SAMPLES_PER_PIXEL 1
 
 static t_v3f	anti_aliasing(t_scene *scene, t_ray *ray,
 		uint32_t x, uint32_t y)

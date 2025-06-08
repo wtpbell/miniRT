@@ -79,13 +79,13 @@ t_v3f	random_in_hemisphere(t_v3f normal)
 	float	len_sq;
 
 	len_sq = 2.0f;
-	while (len_sq >= 1.0f || len_sq == 0.0f) 
+	while (len_sq >= 1.0f || len_sq == 0.0f)
 	{
-			v = init_v3f(
-			frandom() * 2.0f - 1.0f,
-			frandom() * 2.0f - 1.0f,
-			frandom() * 2.0f - 1.0f
-		);
+		v = init_v3f(
+				frandom() * 2.0f - 1.0f,
+				frandom() * 2.0f - 1.0f,
+				frandom() * 2.0f - 1.0f
+				);
 		len_sq = v3f_dot(v, v);
 	}
 	if (v3f_dot(v, normal) > 0.0f)
