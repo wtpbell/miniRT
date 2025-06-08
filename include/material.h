@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   material.h                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/08 00:22:46 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   material.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/29 13:47:23 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/08 17:40:45 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,8 @@ t_mat	*init_material(t_mat_type type, const char *name);
 bool	create_default_materials(t_vector *shared_materials);
 t_mat	*find_or_create_material(t_vector *materials, const char *m_name);
 bool	assign_material(t_obj *obj, t_vector *materials, const char *m_name);
+t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth);
+t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info);
+t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth);
 
 #endif

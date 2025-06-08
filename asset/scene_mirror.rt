@@ -1,0 +1,66 @@
+# A [ratio (float 0.0–1.0)] [color (R,G,B in 0–255)]
+# C [position (x,y,z float)] [direction (x,y,z float)] [FOV (float 0–180)]
+# L [position (x,y,z float)] [brightness ratio (float 0.0–1.0)] [color (R,G,B in 0–255)]
+# sp [position (x,y,z float)] [diameter (float)] [color (R,G,B in 0–255)]
+# pl [position (x,y,z float)] [normal (x,y,z float)] [color (R,G,B in 0–255)]
+# cy [position (x,y,z float)] [axis (x,y,z float)] [diameter (float)] [height (float)] [color (R,G,B in 0–255)]
+# tri [v0 (x,y,z float)] [v1 (x,y,z float)] [v2 (x,y,z float)] [color (R,G,B in 0–255)]
+
+# Camera position and settings
+C 0,4,12     0,0,1  70
+
+# Ambient light
+A 0.3 255,255,255
+
+# Light sources
+L -5,8,5 0.8 255,255,255
+# L 5,5,5 0.4 255,220,180   
+# L -3,3,3 0.3 180,220,255  
+
+# Room walls (slightly transparent for better visualization)
+pl 0,-1,0	0,1,0		255,255,255  
+pl 0,10,0	0,-1,0		255,255,255 
+pl -10,0,0	1,0,0		255,255,255  
+pl 10,0,0	-1,0,0		255,255,255  
+pl 0,0,-15	0,0,1		255,255,255 
+pl 0,0,20	0,0,-1		255,255,255  
+
+# Atomic Nucleus (central sphere) - much larger
+sp 0,4,0 2.5 100,200,255
+
+# First electron shell (larger, fewer electrons)
+sp 0,4,4 0.8 255,100,100
+sp 0,4,-4 0.8 255,100,100
+
+# Second electron shell (fewer, larger electrons)
+sp 5,4,0 0.7 150,255,150
+sp -5,4,0 0.7 150,255,150
+sp 0,4,5 0.7 150,255,150
+sp 0,4,-5 0.7 150,255,150
+
+# Electron orbits (fewer, larger rings)
+cy 0,4,0 0,1,0 4.0 0.15 255,255,255
+cy 0,4,0 1,0,0 5.0 0.15 255,255,255
+
+# Nucleus details (larger, fewer particles)
+sp 0.6,4.8,0.3 0.6 255,100,100
+sp -0.4,3.5,-0.4 0.5 100,200,255
+
+# Fewer cloud particles, but larger
+sp 2.0,3.5,2.5 0.4 200,200,255
+# sp -2.5,4.5,1.5 0.4 200,200,255
+
+
+# pl	-6,0,0		-1,0,0				255,0,0					
+# pl	6,0,0		1,0,0				0,255,0					
+# pl	0,-4,0		0,1,0				55,55,255				
+# pl	0,6,0		0,1,0				0,0,0					
+# pl	0,0,6		0,0,1				255,255,0				
+# pl	0,0,-6		0,0,-1				255,255,255				
+
+# sp	-2.5,-1,2	3					255,55,55				
+# sp	2.5,-1,2	3					55,255,55				
+
+# C	0,0,-5		0,0,-1		50
+# L	0,4,2		1					255,255,155		
+# A	0								255,255,255

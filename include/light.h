@@ -24,8 +24,8 @@ struct s_lighting
 	t_v3f	normal;
 	t_v3f	light_color;
 	t_v3f	obj_color;
-	float	intensity;
-	float	distance;
+	float	inten;
+	float	dist;
 	float	diffuse;
 	float	specular;
 };

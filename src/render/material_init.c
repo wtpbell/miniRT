@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   material_init.c                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/31 23:53:11 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/07 17:20:39 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   material_init.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/31 23:53:11 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/08 18:17:04 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_mat	*init_material(t_mat_type type, const char *name)
 
 bool	create_default_materials(t_vector *shared_materials)
 {
-	const char * const	default_names[DFLT_MAT_COUNT] = {"m_default",
+	const char *const	default_names[DFLT_MAT_COUNT] = {"m_default",
 		"m_metal", "m_dielectric"
 	};
 	const t_mat_type	types[DFLT_MAT_COUNT] = {MAT_LAMBERTIAN,

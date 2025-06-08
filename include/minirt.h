@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   minirt.h                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/07 16:56:22 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   minirt.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 11:37:50 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/08 17:11:28 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,5 @@ t_v3f	plane_normal(t_obj *obj, t_v3f point);
 t_v3f	cylinder_normal(t_obj *obj, t_v3f point);
 t_v3f	triangle_normal(t_obj *obj, t_v3f point);
 void	debug_scene_setup(t_scene *scene);
+
 #endif
