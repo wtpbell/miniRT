@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/07 19:27:01 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/08 11:39:45 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ bool	parse_sphere(char **tokens, t_scene *scene)
 	obj->r.color = color;
 	if (!assign_material(obj, &scene->shared_materials, tokens[4]))
 		return (free(obj), false);
-	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
+	obj->t.up = g_v3f_up;
 	obj->type = OBJ_SPHERE;
 	obj->sp = create_sphere(diameter);
 	obj->intersect = sphere_intersect;

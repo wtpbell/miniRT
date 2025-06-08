@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 12:00:31 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/06 16:55:59 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/08 11:40:00 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ bool	parse_triangle(char **tokens, t_scene *scene)
 	obj = ft_calloc(1, sizeof(t_obj));
 	if (obj == NULL)
 		return (false);
-	obj->t.up = init_v3f(0.0f, 1.0f, 0.0f);
+	obj->t.up = g_v3f_up;
 	obj->t.pos = get_mid_point(tri.v0, tri.v1, tri.v2);
 	obj->t.dir = get_normal(tri.v0, tri.v1, tri.v2);
 	obj->r.color = color;

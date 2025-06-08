@@ -32,7 +32,7 @@ bool	parse_plane(char **tokens, t_scene *scene)
 	obj->r.color = color;
 	if (!assign_material(obj, &scene->shared_materials, tokens[4]))
 		return (free(obj), false);
-	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
+	obj->t.up = g_v3f_up;
 	obj->pl = (t_pl){};
 	obj->type = OBJ_PLANE;
 	obj->intersect = plane_intersect;

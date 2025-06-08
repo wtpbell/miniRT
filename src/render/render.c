@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/06 17:18:15 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/08 11:43:27 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,10 @@
 
 void	init_object_matrices(t_obj *obj)
 {
-	t_v3f	up;
-
-	up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	if (obj->t.up.x != 0 || obj->t.up.y != 0 || obj->t.up.z != 0)
-		up = obj->t.up;
-	obj_to_world(obj->t.to_world, obj->t.pos, obj->t.dir, up);
+		obj_to_world(obj->t.to_world, obj->t.pos, obj->t.dir, obj->t.up);
+	else
+		obj_to_world(obj->t.to_world, obj->t.pos, obj->t.dir, g_v3f_up);
 	invert_m4x4(obj->t.to_obj, obj->t.to_world);
 }
 
