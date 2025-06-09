@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   material.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/05 14:04:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/08 17:12:21 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   material.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/09 20:04:26 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ static inline t_field	init_field(const char *name, void *mem, t_f_type type,
 static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
 {
 	const t_v2f	lim_01 = init_v2f(0.0f, 1.0f);
-	const t_v2f	lim_spc = init_v2f(0.0f, 5000.0f);
+	const t_v2f	lim_shi = init_v2f(0.0f, 5000.0f);
 	const t_v2f	lim_ir = init_v2f(0.0f, 100.0f);
 	t_field		fields[6];
 
 	mat->type = type;
-	fields[0] = init_field("spc", &mat->lamb.specular, FIELD_FLOAT, lim_spc);
-	fields[1] = init_field("shi", &mat->lamb.shininess, FIELD_FLOAT, lim_01);
+	fields[0] = init_field("spc", &mat->lamb.specular, FIELD_FLOAT, lim_01);
+	fields[1] = init_field("shi", &mat->lamb.shininess, FIELD_FLOAT, lim_shi);
 	fields[2] = init_field("fuz", &mat->metal.fuzz, FIELD_FLOAT, lim_01);
 	fields[3] = init_field("ir", &mat->diel.ir, FIELD_FLOAT, lim_ir);
 	fields[4] = init_field("tr", &mat->diel.transmittance, FIELD_FLOAT, lim_01);
