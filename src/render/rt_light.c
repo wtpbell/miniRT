@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_light.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/31 19:11:17 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/08 18:17:53 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_light.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/31 19:11:17 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/09 14:48:20 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 	init_lighting(&lt, hit, light, scene->camera.t.pos);
 	inten = lt.inten / (1.0f + 0.02f
 			* lt.dist + 0.0002f * lt.dist * lt.dist);
+	ray.origin = lt.hit_point;
 	ray.direction = v3f_sub(light->pos, hit->hit);
 	shadow_dist = lt.dist;
 	if (find_intersection(&ray, scene, &shadow_dist) && shadow_dist < 1.0f)
