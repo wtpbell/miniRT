@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/05 16:57:43 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/09 11:11:26 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,16 @@
 #include "random.h"
 #include "light.h"
 #include "material.h"
+#include "material.h"
 
 #define MAX_DEPTH	5
 
 void	init_object_matrices(t_obj *obj)
 {
-	t_v3f	up;
-
-	up = (t_v3f){.x = 0, .y = 1, .z = 0};
 	if (obj->t.up.x != 0 || obj->t.up.y != 0 || obj->t.up.z != 0)
-		up = obj->t.up;
-	obj_to_world(obj->t.to_world, obj->t.pos, obj->t.dir, up);
+		obj_to_world(obj->t.to_world, obj->t.pos, obj->t.dir, obj->t.up);
+	else
+		obj_to_world(obj->t.to_world, obj->t.pos, obj->t.dir, g_v3f_up);
 	invert_m4x4(obj->t.to_obj, obj->t.to_world);
 }
 
@@ -71,6 +70,7 @@ t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t)
 	return (hit);
 }
 
+
 static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 {
 	hit_info->hit = v3f_add(ray->origin, v3f_scale(ray->direction, t));
@@ -88,17 +88,9 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	t_obj		*hit;
 	t_ray_hit	hit_info;
 	t_v3f		color;
-	t_obj		*direct_hit;
 
 	if (depth <= 0)
-	{
-		direct_hit = find_intersection(ray, scene, &t);
-		if (direct_hit == NULL)
-			return (g_v3f_zero);
-		init_hit_info(&hit_info, direct_hit, ray, t);
-		hit_info.ray = ray;
-		return (handle_lambertian(scene, &hit_info));
-	}
+		return (g_v3f_zero);
 	hit = find_intersection(ray, scene, &t);
 	if (hit == NULL)
 		return (g_v3f_zero);
@@ -129,7 +121,7 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 // 	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
 // }
 
-#define SAMPLES_PER_PIXEL 18 // Number of samples per pixel
+#define SAMPLES_PER_PIXEL 4 // Number of samples per pixel
 
 //u = x / (width - 1)
 // v = 1 - y / (height - 1)
@@ -183,3 +175,4 @@ void	render(t_scene *scene)
 	}
 	debug_scene_setup(scene);
 }
+

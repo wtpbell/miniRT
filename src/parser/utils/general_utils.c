@@ -16,8 +16,6 @@ size_t	token_count(char **tokens)
 {
 	size_t	count;
 
-	if (!tokens)
-		return (0);
 	count = 0;
 	while (tokens[count])
 		count++;

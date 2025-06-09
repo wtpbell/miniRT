@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minirt.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 11:37:50 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/04 16:49:55 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   minirt.h                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/09 09:57:56 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,6 @@ typedef struct s_game
 	mlx_t	*mlx;
 	/* TODO: Add more members here for access during a MLX hook */
 }	t_game;
-
-typedef struct s_tri_var
-{
-	t_v3f	v0v1;
-	t_v3f	v0v2;
-	t_v3f	pvec;
-	float	det;
-}	t_tri_var;
 
 int		game(t_scene *scene);
 void	quit_on_escape(mlx_key_data_t keydata, void *param);
@@ -51,4 +43,6 @@ t_v3f	cylinder_normal(t_obj *obj, t_v3f point);
 t_v3f	triangle_normal(t_obj *obj, t_v3f point);
 void	debug_scene_setup(t_scene *scene);
 
+t_ray	get_ray_with_dof(t_cam *cam, float u, float v);
+void	update_camera_view(t_cam *cam);
 #endif

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/05 17:03:49 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/09 11:16:11 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	update_camera_view(t_cam *cam)
 // 	};
 // }
 
-void concentric_sample_disk(float u1, float u2, float *dx, float *dy)
+static void	concentric_sample_disk(float u1, float u2, float *dx, float *dy)
 {
 	float sx = 2.0f * u1 - 1.0f;
 	float sy = 2.0f * u2 - 1.0f;
@@ -124,7 +124,7 @@ void concentric_sample_disk(float u1, float u2, float *dx, float *dy)
 }
 
 
-t_ray get_ray_with_dof(t_cam *cam, float u, float v)
+t_ray	get_ray_with_dof(t_cam *cam, float u, float v)
 {
 	t_v3f viewport_point;
 	t_v3f ray_dir;
@@ -144,7 +144,7 @@ t_ray get_ray_with_dof(t_cam *cam, float u, float v)
 	focal_point = v3f_add(cam->t.pos, v3f_scale(ray_dir, cam->focus_dist));
 	concentric_sample_disk(frandom(), frandom(), &lens_dx, &lens_dy);
 	r = sqrtf(lens_dx * lens_dx + lens_dy * lens_dy); //falloff
-	weight = 1.0f - r * r;
+	weight = 1.0f - r;
 	lens_dx *= weight;
 	lens_dy *= weight;
 	lens_dx *= cam->aperture * 0.5f;
@@ -156,6 +156,14 @@ t_ray get_ray_with_dof(t_cam *cam, float u, float v)
 			v3f_scale(cam->v, lens_dy)
 		)
 	);
+	focal_point = v3f_add(cam->lower_left,
+	v3f_add(
+		v3f_scale(cam->horizontal, u),
+		v3f_scale(cam->vertical, v)
+	)
+);
+direction = v3f_sub(focal_point, origin); // Recalculate after aperture shift
+
 	direction = v3f_sub(focal_point, origin);
 	return (t_ray){
 		.origin = origin,

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   sphere.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/04 17:19:55 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   sphere.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/09 09:58:45 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ bool	parse_diameter(float *out, const char *str)
 	t_v2f	radius_range;
 
 	radius_range = init_v2f(MIN_RADIUS, MAX_RADIUS);
-	return (parse_and_validate_float(out, str, radius_range, "parse diameter"));
+	return (parse_float(out, str, radius_range, "parse diameter"));
 }
 
 static inline t_sp	create_sphere(float diameter)
@@ -29,7 +29,6 @@ static inline t_sp	create_sphere(float diameter)
 	});
 }
 
-//0.0 ≤ transmittance ≤ 1.0
 bool	parse_sphere(char **tokens, t_scene *scene)
 {
 	t_v3f	pos;
@@ -45,10 +44,9 @@ bool	parse_sphere(char **tokens, t_scene *scene)
 		return (false);
 	obj->t.pos = pos;
 	obj->r.color = color;
-	// obj->r.mat = create_dielectric(color, 2.5f, 1.0f);
-	obj->r.mat = create_lambertian(color, 0.95f, 256.0f);
-	// obj->r.mat = create_metal(color, 0.9f);
-	obj->t.up = (t_v3f){.x = 0, .y = 1, .z = 0};
+	if (!assign_material(obj, &scene->shared_materials, tokens[4]))
+		return (free(obj), false);
+	obj->t.up = g_v3f_up;
 	obj->type = OBJ_SPHERE;
 	obj->sp = create_sphere(diameter);
 	obj->intersect = sphere_intersect;

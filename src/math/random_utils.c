@@ -72,40 +72,24 @@ t_v3f	random_direction(void)
 	return (v3f_norm(dir));
 }
 
-// random unit vector for diffuse reflection 
+// random unit vector for diffuse reflection, create smooth no noise surface
 t_v3f	random_in_hemisphere(t_v3f normal)
 {
-	t_v3f v;
+	t_v3f	v;
+	float	len_sq;
 
-	v = init_v3f(0.0f, 0.0f, 0.0f);
-	while (v3f_dot(v, v) >= 1.0f) // repeat until v inside unit sphere
-		v = init_v3f(
-			frandom() * 2.0f - 1.0f,
-			frandom() * 2.0f - 1.0f,
-			frandom() * 2.0f - 1.0f
-		);
-	if (v3f_dot(v, normal) > 0.0f)
-		return v3f_norm(v); // in same hemisphere as normal
-	else
-		return v3f_scale(v3f_norm(v), -1.0f); // in opposite hemisphere
-}
-
-
-t_v3f random_in_unit_disk(void)
-{
-	t_v3f p;
-
-	// Initialize p to a point outside the unit circle
-	p = (t_v3f){{2.0f, 2.0f, 0.0f}};
-
-	// Keep generating points until we get one inside the unit circle
-	while (v3f_dot(p, p) >= 1.0f)
+	len_sq = 2.0f;
+	while (len_sq >= 1.0f || len_sq == 0.0f)
 	{
-		p = (t_v3f){{
-			frandom() * 2.0f - 1.0f,  // Random x in [-1, 1]
-			frandom() * 2.0f - 1.0f,  // Random y in [-1, 1]
-			0.0f
-		}};
+		v = init_v3f(
+				frandom() * 2.0f - 1.0f,
+				frandom() * 2.0f - 1.0f,
+				frandom() * 2.0f - 1.0f
+				);
+		len_sq = v3f_dot(v, v);
 	}
-	return p;
+	if (v3f_dot(v, normal) > 0.0f)
+		return (v3f_norm(v));
+	else
+		return (v3f_scale(v3f_norm(v), -1.0f));
 }

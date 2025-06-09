@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/03 12:14:14 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/07 23:35:28 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,13 @@ typedef union s_vector3
 }	t_v3f;
 
 extern const t_v3f	g_v3f_zero;
+extern const t_v3f	g_v3f_one;
+extern const t_v3f	g_v3f_foward;
+extern const t_v3f	g_v3f_back;
+extern const t_v3f	g_v3f_up;
+extern const t_v3f	g_v3f_down;
+extern const t_v3f	g_v3f_right;
+extern const t_v3f	g_v3f_left;
 
 t_v2f	init_v2f(float x, float y);
 t_v3f	init_v3f(float x, float y, float z);

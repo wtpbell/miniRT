@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   scene.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 18:55:45 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/04 16:55:41 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   scene.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/09 09:55:53 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,29 @@
 # define SCENE_H
 
 # include "MLX42/MLX42.h"
+# include "libft.h"
+# include "rt_types.h"
+# include "container.h"
 # include "matrix.h"
 # include "vector.h"
 # include "material.h"
 # include "color.h"
-# include "libft.h"
-# include "container.h"
-# include "ray.h"
+# include "material.h"
 
-typedef struct s_object	t_obj;
-// typedef struct s_ray	t_ray;
-typedef int				(*t_intsct)(t_obj *obj, t_ray *ray,
-							t_v2f t, float *dst);
-typedef t_v3f			(*t_cnorm)(t_obj *obj, t_v3f point);
-
-typedef enum e_object_type
+enum e_object_type
 {
 	OBJ_SPHERE,
 	OBJ_CYLINDER,
 	OBJ_CONE,
 	OBJ_PLANE,
 	OBJ_TRIANGLE
-}	t_obj_type;
+};
 
-typedef enum e_light_type
+enum e_light_type
 {
 	LIGHT_AMBIENT,
 	LIGHT_POINT,
-}	t_light_type;
+};
 
 typedef enum e_scene_flags
 {
@@ -51,16 +46,16 @@ typedef enum e_scene_flags
 	SCENE_CAMERA = 2 << 2
 }	t_scene_flags;
 
-typedef struct s_transform
+struct s_transform
 {
 	t_v3f		pos;
 	t_v3f		dir;
 	t_v3f		up;
 	t_mat4x4	to_world;
 	t_mat4x4	to_obj;
-}	t_trans;
+};
 
-typedef struct s_camera
+struct s_camera
 {
 	t_trans		t;
 	float		fov;
@@ -82,43 +77,59 @@ typedef struct s_camera
 	t_v3f	horizontal;      // Horizontal viewport vector
 	t_v3f	vertical;        // Vertical viewport vector
 	t_v3f	lower_left;      // Lower left corner of viewport
-}	t_cam;
+};
 
-typedef struct s_render
+struct s_render
 {
 	t_mat	*mat;
 	t_v3f	color;
-}	t_ren;
+};
 
-typedef struct s_plane
+struct s_plane
 {
-}	t_pl;
+};
 
-typedef struct s_sphere
+struct s_sphere
 {
 	float		radius;
-}	t_sp;
+};
 
-typedef struct s_cylinder
+struct s_cylinder
 {
 	float		radius;
 	float		height;
-}	t_cy;
+};
 
-typedef struct s_triangle
+struct s_triangle
 {
 	t_v3f	v0;
 	t_v3f	v1;
 	t_v3f	v2;
-}	t_tri;
+};
 
-typedef struct s_light
+struct s_light
 {
 	t_v3f			pos;
 	t_v3f			color;
 	t_light_type	type;
 	float			intensity;
-}	t_light;
+};
+
+struct s_ray
+{
+	t_v3f	origin;
+	t_v3f	direction;
+};
+
+struct s_ray_hit
+{
+	t_v3f	hit;
+	t_v3f	normal;
+	float	distance;
+	bool	front_face;
+	t_obj	*obj;
+	t_ray	*ray;
+};
 
 struct s_object
 {
@@ -136,18 +147,22 @@ struct s_object
 	t_cnorm		calc_norm;
 };
 
-typedef struct s_scene
+struct s_tri_var
+{
+	t_v3f	v0v1;
+	t_v3f	v0v2;
+	t_v3f	pvec;
+	float	det;
+};
+
+struct s_scene
 {
 	t_vector	objects;
 	t_vector	lights;
+	t_vector	shared_materials;
 	t_cam		camera;
 	int			scene_flags;
 	uint32_t	frame_num;
-}	t_scene;
-
-// Function declarations
-t_ray   get_ray_with_dof(t_cam *cam, float u, float v);
-void    update_camera_view(t_cam *cam);
-void    auto_dof_settings(t_scene *scene, t_cam *cam);
+};
 
 #endif
