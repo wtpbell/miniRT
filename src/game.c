@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/09 09:26:05 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/09 19:18:12 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static bool	cam_init(t_cam *cam, mlx_t *mlx)
 	
 	// Set DoF parameters - increased for more pronounced effect
 	cam->aperture = 0.11f;  // Increased from 0.1f for stronger blur
-	cam->focus_dist = 30.0f;  // Focus distance to match red sphere at z=-10
+	cam->focus_dist = 3.0f;  // Focus distance to match red sphere at z=-10
 	
 	// Debug print camera setup
 	printf("\n--- Camera Setup ---\n");

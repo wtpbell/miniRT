@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/02 11:16:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/09 09:25:21 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/09 18:59:32 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,31 +95,49 @@ t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 {
 	t_ray	reflected_ray;
 	t_v3f	reflected_dir;
-	int		sample;
-	int		valid_sample;
-	t_v3f	res;
+	t_v3f	fuzz_dir;
+	float	fuzz;
 
-	sample = (hit->obj->r.mat->metal.fuzz > 0.0f) * 16 + 1;
-	valid_sample = 0;
-	res = g_v3f_zero;
-	while (--sample >= 0)
+	fuzz = hit->obj->r.mat->metal.fuzz;
+	reflected_dir = v3f_refl(v3f_norm(hit->ray->direction), hit->normal);
+
+	if (fuzz > 0.0f)
 	{
-		reflected_dir = v3f_refl(v3f_norm(hit->ray->direction), hit->normal);
-		if (hit->obj->r.mat->metal.fuzz > 0.0f)
-		{
-			reflected_dir = v3f_add(reflected_dir, v3f_scale(random_in_hemisphere(hit->normal),
-				hit->obj->r.mat->metal.fuzz));
-			reflected_dir = v3f_norm(reflected_dir);
-		}
-		if (v3f_dot(reflected_dir, hit->normal) > 0.0f)
-		{
-			reflected_ray.origin = v3f_add(hit->hit, v3f_scale(hit->normal, BIAS));
-			reflected_ray.direction = reflected_dir;
-			res = v3f_add(res, trace(&reflected_ray, sc, depth - 1));
-			valid_sample++;
-		}
+		fuzz_dir = random_in_hemisphere(hit->normal);
+		reflected_dir = v3f_add(reflected_dir, v3f_scale(fuzz_dir, fuzz));
+		reflected_dir = v3f_norm(reflected_dir);
 	}
-	if (valid_sample > 0) // just make sure all samples are valid
-		return (v3f_scale(res, 1.0f / valid_sample));
-	return (g_v3f_zero);
+	if (v3f_dot(reflected_dir, hit->normal) > 0.0f)
+	{
+		reflected_ray.origin = v3f_add(hit->hit, v3f_scale(hit->normal, BIAS));
+		reflected_ray.direction = reflected_dir;
+		return trace(&reflected_ray, sc, depth - 1);
+	}
+	return g_v3f_zero;
 }
+
+
+// t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth)
+// {
+// 	t_ray	reflected_ray;
+// 	t_v3f	reflected_dir;
+// 	t_v3f	random_fuzz;
+// 	t_metal	metal_data;
+// 	t_v3f	result;
+
+// 	metal_data = hit->obj->r.mat->metal;
+// 	reflected_dir = v3f_refl(v3f_norm(hit->ray->direction), hit->normal);
+// 	if (metal_data.fuzz > 0.0f) //random only when perfect mirror
+// 	{
+// 		random_fuzz = v3f_scale(random_in_hemisphere(hit->normal), metal_data.fuzz);
+// 		// random_fuzz = v3f_scale(random_direction(), metal_data.fuzz);
+// 		reflected_dir = v3f_add(reflected_dir, random_fuzz);
+// 	}
+// 	if (v3f_dot(reflected_dir, hit->normal) <= 0.0f)
+// 		return (g_v3f_zero); //discard invalid bounce
+// 	reflected_ray.origin = v3f_add(hit->hit, v3f_scale(hit->normal, BIAS));
+// 	reflected_ray.direction = v3f_norm(reflected_dir);
+// 	result = trace(&reflected_ray, sc, depth - 1);
+// 	// return (v3f_mul(hit->obj->r.mat->albedo, result));
+// 	return (result);
+// }

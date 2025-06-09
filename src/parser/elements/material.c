@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/09 09:23:01 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/09 19:21:09 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
 	t_field		fields[6];
 
 	mat->type = type;
-	fields[0] = init_field("spc", &mat->lamb.specular, FIELD_FLOAT, lim_spc);
-	fields[1] = init_field("shi", &mat->lamb.shininess, FIELD_FLOAT, lim_01);
+	fields[0] = init_field("spc", &mat->lamb.specular, FIELD_FLOAT, lim_01);
+	fields[1] = init_field("shi", &mat->lamb.shininess, FIELD_FLOAT, lim_spc);
 	fields[2] = init_field("fuz", &mat->metal.fuzz, FIELD_FLOAT, lim_01);
 	fields[3] = init_field("ir", &mat->diel.ir, FIELD_FLOAT, lim_ir);
 	fields[4] = init_field("tr", &mat->diel.transmittance, FIELD_FLOAT, lim_01);

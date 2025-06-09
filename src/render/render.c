@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/09 11:11:26 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/09 19:58:34 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 // 	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
 // }
 
-#define SAMPLES_PER_PIXEL 4 // Number of samples per pixel
+#define SAMPLES_PER_PIXEL 128 // Number of samples per pixel
 
 //u = x / (width - 1)
 // v = 1 - y / (height - 1)
