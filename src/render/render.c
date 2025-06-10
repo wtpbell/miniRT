@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/10 10:24:45 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/10 23:59:25 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,10 @@ t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t)
 	return (hit);
 }
 
+// TODO: Remove this.. duh...
+t_v2f	plane_texcoord(t_obj *obj, t_v3f point);
+t_v2f	sphere_texcoord(t_obj *obj, t_v3f point);
+t_v2f	triangle_texcoord(t_obj *obj, t_v3f world_point);
 
 static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 {
@@ -59,6 +63,20 @@ static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 	hit_info->obj = obj;
 	if (!hit_info->front_face)
 		hit_info->normal = v3f_scale(hit_info->normal, -1.0f);
+
+	if (obj->type == OBJ_PLANE)
+		hit_info->texcoord = plane_texcoord(obj, hit_info->hit);
+	else if (obj->type == OBJ_SPHERE)
+		hit_info->texcoord = sphere_texcoord(obj, hit_info->hit);
+	else if (obj->type == OBJ_TRIANGLE)
+		hit_info->texcoord = triangle_texcoord(obj, hit_info->hit);
+	else
+		hit_info->texcoord = init_v2f(0.0f, 0.0f);
+
+	hit_info->hit_color = checkerboard_pattern(
+		hit_info->texcoord,
+		v3f_mul(obj->r.color, obj->r.mat->albedo),
+		g_v3f_right);
 }
 
 t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)

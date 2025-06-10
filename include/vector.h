@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/10 10:14:13 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/10 23:51:07 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ extern const t_v3f	g_v3f_right;
 extern const t_v3f	g_v3f_left;
 
 t_v2f	init_v2f(float x, float y);
+t_v2f	v2f_rotate(t_v2f v, float angle);
 t_v3f	init_v3f(float x, float y, float z);
 t_v3f	v3f_add(t_v3f a, t_v3f b);
 t_v3f	v3f_sub(t_v3f a, t_v3f b);
@@ -68,4 +69,5 @@ float	v3f_dot(t_v3f a, t_v3f b);
 float	v3f_mag(t_v3f v);
 float	v3f_sqr_mag(t_v3f v);
 float	v3f_dist(t_v3f a, t_v3f b);
+
 #endif

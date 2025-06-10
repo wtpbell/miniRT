@@ -1,37 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ray.h                                              :+:    :+:            */
+/*   procedural_texturing.c                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/06/02 11:37:29 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/10 10:39:35 by jboon         ########   odam.nl         */
+/*   Created: 2025/06/10 23:49:31 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/10 23:56:36 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RAY_H
-# define RAY_H
+#include "rt_math.h"
+#include "scene.h"
 
-# include "vector.h"
-# include "rt_types.h"
-
-struct s_ray
+t_v3f	checkerboard_pattern(t_v2f texcoord, t_v3f obj_col, t_v3f alt_col)
 {
-	t_v3f	origin;
-	t_v3f	direction;
-};
+	const float	scale_u = 2.0f;
+	const float	scale_v = 2.0f;
+	float		pattern;
 
-struct s_ray_hit
-{
-	t_v3f	hit;
-	t_v3f	normal;
-	t_v2f	texcoord;
-	t_v3f	hit_color;
-	float	distance;
-	bool	front_face;
-	t_obj	*obj;
-	t_ray	*ray;
-};
-
-#endif
+	pattern = (modulo(texcoord.u * scale_u) < .5f) ^ (modulo(texcoord.v * scale_v) < .5f);
+	return (v3f_lerp(obj_col, alt_col, pattern));
+}

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/31 19:11:17 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/10 10:28:48 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/11 00:07:01 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	init_lighting(t_lighting *lighting, t_ray_hit *hit,
 	lighting->hit_point = hit->hit;
 	lighting->normal = hit->normal;
 	lighting->light_color = light->color;
-	lighting->obj_color = hit->obj->r.color;
+	lighting->obj_color = hit->hit_color;
 	lighting->inten = light->intensity;
 	lighting->dist = v3f_mag(v3f_sub(light->pos, hit->hit));
 }

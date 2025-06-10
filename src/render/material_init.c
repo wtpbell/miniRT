@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   material_init.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/31 23:53:11 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/08 18:17:04 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   material_init.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/31 23:53:11 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/10 10:36:38 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_mat	*init_material(t_mat_type type, const char *name)
 	if (mat->name == NULL)
 		return (free(mat), NULL);
 	mat->type = type;
-	mat->albedo = init_v3f(1.0f, 1.0f, 1.0f);
+	mat->albedo = g_v3f_one;
 	if (type == MAT_LAMBERTIAN)
 	{
 		mat->lamb.specular = 0.7f;

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/02 11:16:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/10 10:27:41 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/11 00:07:08 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info)
 	int		i;
 
 	total_light = g_v3f_zero;
-	obj_albedo = hit_info->obj->r.color;
+	obj_albedo = hit_info->hit_color;
 	i = 0;
 	while (i < scene->lights.size)
 	{

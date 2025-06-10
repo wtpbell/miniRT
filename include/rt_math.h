@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_math.h                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 18:51:03 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/01 19:01:28 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_math.h                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 18:51:03 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/10 23:50:22 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include "matrix.h"
 
 # define PI			3.14159265358979323846f
+# define TAU		6.28318530717958647692f
 # define RADTODEG	57.2957795131f
 # define DEGTORAD	0.01745329251f
 # define FLT_MAX	3.40282347e+38f
@@ -33,4 +34,5 @@ int		fapprox(float n);
 float	ft_clampf(float value, float min, float max);
 float	ft_clampf01(float val);
 float	schlick(float cosin, float ref_idx);
+float	modulo(const float x);
 #endif

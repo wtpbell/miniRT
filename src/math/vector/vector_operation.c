@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:38:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/03 12:16:32 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/10 23:50:45 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,12 @@ t_v3f	v3f_mul(t_v3f a, t_v3f b)
 		.y = a.y * b.y,
 		.z = a.z * b.z
 	});
+}
+
+t_v2f	v2f_rotate(t_v2f v, float angle)
+{
+	return (init_v2f(
+		v.x * cosf(angle) - v.y * sinf(angle),
+		v.y * cosf(angle) + v.x * sinf(angle)
+	));
 }

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 14:00:37 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/10 10:26:41 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/11 00:02:47 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,61 @@ t_v3f	triangle_normal(t_obj *obj, t_v3f point)
 	return (obj->t.dir);
 }
 
+// TODO: Instead of re-calculating the barycentric-coordinates, store them somewhere when checking for intersection
+t_v2f	triangle_texcoord(t_obj *obj, t_v3f world_point)
+{
+	t_tri	*tri;
+	
+	t_v3f	v0v1;
+	t_v3f	v0v2;
+	t_v3f	v1v2;
+	
+	t_v3f	v1p;
+	t_v3f	v2p;
+
+	t_v3f	n;
+	float	area2;
+
+	float	w;
+	float	u;
+	float	v;
+
+	tri = &obj->tri;
+
+	t_v2f	vt[3] = {
+		init_v2f(0.0f, 0.0f),
+		init_v2f(1.0f, 0.0f),
+		init_v2f(0.5f, 1.0f),
+	};
+
+	// (p - v0) = u * v0v1 + v * v0v2
+	// (v0p) = u * v0v1 + v * v0v2
+
+	// parallelogram area = |(edge0) x (edge1)|
+	//					  = |(edge0) x (edge1)| * .5f;
+	// v0p = v3f_sub(world_point, tri->v0);
+	v0v1 = v3f_sub(tri->v1, tri->v0);
+	v0v2 = v3f_sub(tri->v2, tri->v0);
+	v1v2 = v3f_sub(tri->v2, tri->v1);
+
+	v1p = v3f_sub(world_point, tri->v1);
+	v2p = v3f_sub(world_point, tri->v2);
+
+	n = v3f_cross(v0v1, v0v2);
+	area2 = 1.0f / v3f_sqr_mag(n);
+
+	u = v3f_dot(n, v3f_cross(v1v2, v1p)) * area2;
+	v = v3f_dot(n, v3f_cross(v3f_scale(v0v2, -1.0f), v2p)) * area2;
+	w = 1.0f - u - v;
+
+	t_v2f	coord;
+	coord = init_v2f(
+		u * vt[0].x + v * vt[1].x + w * vt[2].x, 
+		u * vt[0].y + v * vt[1].y + w * vt[2].y
+	);
+	return (coord);
+}
+
 static int	is_within_triangle(t_tri *tri, t_ray *ray, t_tri_var *vars,
 	float *dst)
 {
@@ -33,11 +88,11 @@ static int	is_within_triangle(t_tri *tri, t_ray *ray, t_tri_var *vars,
 	vars->det = 1.0f / vars->det;
 	tvec = v3f_sub(ray->origin, tri->v0);
 	u = v3f_dot(tvec, vars->pvec) * vars->det;
-	if (u < 0 || u > 1)
+	if (u < 0.0f || u > 1.0f)
 		return (0);
 	qvec = v3f_cross(tvec, vars->v0v1);
 	v = v3f_dot(ray->direction, qvec) * vars->det;
-	if (v < 0 || (u + v) > 1.0f)
+	if (v < 0.0f || (u + v) > 1.0f)
 		return (0);
 	*dst = v3f_dot(vars->v0v2, qvec) * vars->det;
 	return (1);

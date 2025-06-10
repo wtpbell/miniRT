@@ -43,6 +43,21 @@ t_v3f	sphere_normal(t_obj *obj, t_v3f point)
 	return (v3f_norm(v3f_sub(point, obj->t.pos)));
 }
 
+// TODO: Needs to move to texture space
+t_v2f	sphere_texcoord(t_obj *obj, t_v3f world_point)
+{
+	t_v3f	local_point;
+	float	theta;
+	float	phi;
+
+	local_point = v3f_sub(world_point, obj->t.pos);
+	theta = atan2f(local_point.z, local_point.x);
+	if (theta < 0.0f)
+		theta += TAU;
+	phi = acosf(ft_clampf(local_point.y / obj->sp.radius, -1.0f, 1.0f));
+	return (init_v2f(theta, phi));
+}
+
 int	sphere_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
 {
 	t_v3f		oc;
