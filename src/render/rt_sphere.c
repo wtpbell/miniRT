@@ -10,8 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
+#include "ray.h"
 #include "rt_math.h"
+#include "scene.h"
 
 bool	solve_quadratic(t_v3f *abc, float *x0, float *x1)
 {

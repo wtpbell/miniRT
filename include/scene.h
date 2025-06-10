@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   scene.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 18:55:45 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/08 17:11:54 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   scene.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/10 10:10:07 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,22 +99,6 @@ struct s_light
 	t_v3f			color;
 	t_light_type	type;
 	float			intensity;
-};
-
-struct s_ray
-{
-	t_v3f	origin;
-	t_v3f	direction;
-};
-
-struct s_ray_hit
-{
-	t_v3f	hit;
-	t_v3f	normal;
-	float	distance;
-	bool	front_face;
-	t_obj	*obj;
-	t_ray	*ray;
 };
 
 struct s_object

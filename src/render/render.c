@@ -1,50 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   render.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/08 18:10:23 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   render.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/10 10:24:45 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <math.h>
 #include <stdint.h>
 #include <stdio.h>
 
 #include "MLX42/MLX42.h"
-#include "libft.h"
-#include "minirt.h"
+
 #include "color.h"
-#include "scene.h"
-#include "rt_math.h"
-#include "random.h"
 #include "light.h"
 #include "material.h"
+#include "random.h"
+#include "ray.h"
+#include "rt_math.h"
+#include "scene.h"
 
-#define MAX_DEPTH	5
-
-void	init_object_matrices(t_obj *obj)
-{
-	if (obj->t.up.x != 0 || obj->t.up.y != 0 || obj->t.up.z != 0)
-		obj_to_world(obj->t.to_world, obj->t.pos, obj->t.dir, obj->t.up);
-	else
-		obj_to_world(obj->t.to_world, obj->t.pos, obj->t.dir, g_v3f_up);
-	invert_m4x4(obj->t.to_obj, obj->t.to_world);
-}
-
-static	t_v3f	normal_color(t_v3f norm)
-{
-	return (v3f_scale(v3f_add(norm, init_v3f(1.0f, 1.0f, 1.0f)), 0.5f));
-}
-
-t_v3f	gradient_color(t_v3f dir, t_v3f b)
-{
-	(void)b;
-	return (normal_color(dir));
-}
+#define MAX_DEPTH			5
+#define SAMPLES_PER_PIXEL	1
 
 t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t)
 {
@@ -119,8 +99,6 @@ static void	compute_ray(float x, float y, t_cam *cam, t_ray *ray)
 	camera_space.z = -1.0f;
 	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
 }
-
-#define SAMPLES_PER_PIXEL 1
 
 static t_v3f	anti_aliasing(t_scene *scene, t_ray *ray,
 		uint32_t x, uint32_t y)

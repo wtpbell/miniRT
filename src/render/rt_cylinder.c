@@ -1,20 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_cylinder.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/17 11:59:52 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/31 23:18:17 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_cylinder.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/17 11:59:52 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/10 10:30:24 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
-#include "rt_math.h"
 #include "minirt.h"
-#include <math.h>
-#include <stdio.h>
+#include "ray.h"
+#include "rt_math.h"
+#include "scene.h"
 
 t_v3f	cylinder_normal(t_obj *obj, t_v3f point)
 {

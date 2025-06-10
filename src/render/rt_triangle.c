@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_triangle.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/29 14:00:37 by jboon             #+#    #+#             */
-/*   Updated: 2025/05/31 23:29:11 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_triangle.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/29 14:00:37 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/10 10:26:41 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
+#include "ray.h"
 #include "rt_math.h"
-
-#include "minirt.h"
+#include "scene.h"
 
 // TODO: normal should be be based on the side (front/back) it hits of the
 //		 triangle. Now it always return the 'outside' normal.

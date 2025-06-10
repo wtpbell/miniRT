@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/07 23:35:28 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/10 10:14:13 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ typedef union s_vector2
 	{
 		float	x;
 		float	y;
+	};
+	struct
+	{
+		float	u;
+		float	v;
 	};
 	float	_axis[2];
 }	t_v2f;

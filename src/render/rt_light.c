@@ -3,17 +3,18 @@
 /*                                                        ::::::::            */
 /*   rt_light.c                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/31 19:11:17 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/09 14:48:20 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/10 10:28:48 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "light.h"
-#include "rt_math.h"
 #include "material.h"
 #include "minirt.h"
+#include "ray.h"
+#include "rt_math.h"
 
 t_v3f	apply_ambient(t_v3f base_col, t_light *light)
 {

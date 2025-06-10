@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_material.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/02 11:16:23 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/08 17:56:58 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_material.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/06/02 11:16:23 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/10 10:27:41 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
-#include "material.h"
 #include "light.h"
+#include "material.h"
 #include "minirt.h"
-#include "rt_math.h"
 #include "random.h"
-#include <stdlib.h>
+#include "ray.h"
+#include "rt_math.h"
+#include "scene.h"
 
 static float	get_refraction_ratio(t_ray_hit *hit_info)
 {
