@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   string_utils.c                                     :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/08 12:44:32 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   string_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 16:23:01 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/10 14:50:15 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,15 @@ bool	validate_commas(const char *str)
 		i++;
 	}
 	return (true);
+}
+
+bool	ft_strarr_has(char **arr, const char *prefix)
+{
+	while (*arr)
+	{
+		if (ft_strncmp(*arr, prefix, ft_strlen(prefix)) == 0)
+			return (true);
+		arr++;
+	}
+	return (false);
 }

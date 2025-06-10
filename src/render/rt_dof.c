@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   rt_dof.c                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/09 11:16:11 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   rt_dof.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/14 12:05:02 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/10 15:32:17 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,58 +42,12 @@ void	update_camera_view(t_cam *cam)
 		v3f_sub(focal_center, v3f_scale(cam->horizontal, 0.5f)),
 		v3f_scale(cam->vertical, 0.5f)
 	);
-	
-	// // Print camera view setup
 	printf("\nCamera View Setup:");
 	printf("\n  Position: (%.2f, %.2f, %.2f)", cam->t.pos.x, cam->t.pos.y, cam->t.pos.z);
 	printf("\n  Direction: (%.2f, %.2f, %.2f)", cam->t.dir.x, cam->t.dir.y, cam->t.dir.z);
 	printf("\n  Focus distance: %.2f", cam->focus_dist);
 	printf("\n  Aperture: %.4f\n", cam->aperture);
 }
-
-// Get a ray from the camera through the specified viewport coordinates with depth of field
-// t_ray	get_ray_with_dof(t_cam *cam, float u, float v)
-// {
-// 	// 1. Calculate the point on the viewport
-// 	t_v3f viewport_point;
-// 	t_v3f ray_dir;
-// 	t_v3f focal_point;
-// 	t_v3f lens_pt;
-// 	t_v3f origin;
-// 	t_v3f direction;
-// 	static int debug = 0;
-
-// 	if (debug++ < 5) {
-// 		printf("\n--- DoF Debug (sample %d) ---\n", debug);
-// 		printf("Camera pos: (%.2f, %.2f, %.2f)\n", cam->t.pos.x, cam->t.pos.y, cam->t.pos.z);
-// 		printf("Aperture: %.2f, Focus distance: %.2f\n", cam->aperture, cam->focus_dist);
-// 	}
-// 	viewport_point = v3f_add(
-// 		cam->lower_left,
-// 		v3f_add(
-// 			v3f_scale(cam->horizontal, u),
-// 			v3f_scale(cam->vertical, v)
-// 		)
-// 	);
-// 	ray_dir = v3f_sub(viewport_point, cam->t.pos);
-// 	focal_point = v3f_add(
-// 		cam->t.pos,
-// 		v3f_scale(v3f_norm(ray_dir), cam->focus_dist / fabsf(v3f_dot(cam->w, v3f_norm(ray_dir))))
-// 	);
-// 	// 4. Get a random point on the lens (in camera space, then transform to world space)
-// 	lens_pt = random_direction();
-// 	lens_pt = v3f_scale(lens_pt, cam->aperture * 0.5f);
-// 	origin = v3f_add(cam->t.pos,
-// 		v3f_add(
-// 			v3f_scale(cam->u, lens_pt.x),
-// 			v3f_scale(cam->v, lens_pt.y)
-// 		));
-// 	direction = v3f_sub(focal_point, origin);
-// 	return (t_ray){
-// 		.origin = origin,
-// 		.direction = v3f_norm(direction)
-// 	};
-// }
 
 static void	concentric_sample_disk(float u1, float u2, float *dx, float *dy)
 {

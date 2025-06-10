@@ -1,17 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   color.h                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 19:16:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/01 21:51:41 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   color.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 19:16:29 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/10 13:14:59 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COLOR_H
 # define COLOR_H
+
+# include "vector.h"
+
+typedef struct s_aces
+{
+    float a;
+    float b;
+    float c;
+    float d;
+    float e;
+}   t_aces;
+
+t_v3f  v3f_aces_tonemap(t_v3f color);
 
 # include <stdint.h>
 # include "vector.h"
@@ -30,8 +43,11 @@ int		get_g(t_col32 color);
 int		get_b(t_col32 color);
 int		get_a(t_col32 color);
 t_v3f	col32_to_v3f(t_col32 color);
+t_v3f	srgb_to_linear(t_v3f color);
+t_v3f	linear_to_srgb(t_v3f color);
 t_col32	v3f_to_col32(t_v3f color);
 t_col32	col32_lerp(t_col32 a, t_col32 b, float t);
 t_v3f	v3f_apply_gamma(t_v3f color, float gamma);
+t_v3f	v3f_aces_tonemap(t_v3f color);
 
 #endif

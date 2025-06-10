@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   print_var.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/06 16:48:59 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   print_var.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/14 09:34:02 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/10 20:48:38 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,11 +149,7 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 		mat = (t_mat *)materials.items[i];
 		str_print(mat->name, spaces + 2, "");
 		if (mat->type == MAT_LAMBERTIAN)
-		{
 			str_print("Lambertian", spaces + 4, "type:");
-			float_print(mat->lamb.specular, spaces + 4, "specular");
-			float_print(mat->lamb.shininess, spaces + 4, "shininess");
-		}
 		else if (mat->type == MAT_METAL)
 		{
 			str_print("Metal", spaces + 4, "type:");
@@ -165,6 +161,8 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 			float_print(mat->diel.ir, spaces + 4, "ir");
 			float_print(mat->diel.transmittance, spaces + 4, "transmittance");
 		}
+		else
+			str_print("Unknown", spaces + 4, "type:");
 		col32_print(mat->albedo, spaces + 4, "albedo");
 		++i;
 	}

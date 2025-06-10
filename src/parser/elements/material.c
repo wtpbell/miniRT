@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   material.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/09 19:21:09 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   material.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/05 14:04:02 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/10 20:50:17 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,29 +21,46 @@ static inline t_field	init_field(const char *name, void *mem, t_f_type type,
 static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
 {
 	const t_v2f	lim_01 = init_v2f(0.0f, 1.0f);
-	const t_v2f	lim_spc = init_v2f(0.0f, 5000.0f);
-	const t_v2f	lim_ir = init_v2f(0.0f, 100.0f);
-	t_field		fields[6];
+	const t_v2f	lim_shi = init_v2f(0.0f, 5000.0f);
+	const t_v2f	lim_ir = init_v2f(0.01f, 100.0f);
+	t_field		fields[10];
+	int			field_count;
 
 	mat->type = type;
-	fields[0] = init_field("spc", &mat->lamb.specular, FIELD_FLOAT, lim_01);
-	fields[1] = init_field("shi", &mat->lamb.shininess, FIELD_FLOAT, lim_spc);
-	fields[2] = init_field("fuz", &mat->metal.fuzz, FIELD_FLOAT, lim_01);
-	fields[3] = init_field("ir", &mat->diel.ir, FIELD_FLOAT, lim_ir);
-	fields[4] = init_field("tr", &mat->diel.transmittance, FIELD_FLOAT, lim_01);
-	fields[5] = init_field("alb", &mat->albedo, FIELD_COL, lim_01);
-	fields[0].state ^= (REQUIRED * (type != MAT_LAMBERTIAN));
-	fields[1].state ^= (REQUIRED * (type != MAT_LAMBERTIAN));
-	fields[2].state ^= (REQUIRED * (type != MAT_METAL));
-	fields[3].state ^= (REQUIRED * (type != MAT_DIELECTRIC));
-	fields[4].state ^= (REQUIRED * (type != MAT_DIELECTRIC));
-	fields[5].state ^= REQUIRED;
-	fields[0].state |= (HIDDEN * (type != MAT_LAMBERTIAN));
-	fields[1].state |= (HIDDEN * (type != MAT_LAMBERTIAN));
-	fields[2].state |= (HIDDEN * (type != MAT_METAL));
-	fields[3].state |= (HIDDEN * (type != MAT_DIELECTRIC));
-	fields[4].state |= (HIDDEN * (type != MAT_DIELECTRIC));
-	return (parse_fields(fields, 6, tokens));
+	field_count = 0;
+	
+	// Common fields
+	if (ft_strarr_has(tokens, "alb:"))
+		fields[field_count++] = init_field("alb", &mat->albedo, FIELD_COL, lim_01);
+
+	// Type-specific fields
+	if (type == MAT_LAMBERTIAN)
+	{
+		if (ft_strarr_has(tokens, "spc:"))
+			fields[field_count++] = init_field("spc", &mat->lamb.specular, FIELD_FLOAT, lim_01);
+		if (ft_strarr_has(tokens, "shi:"))
+			fields[field_count++] = init_field("shi", &mat->lamb.shininess, FIELD_FLOAT, lim_shi);
+		if (ft_strarr_has(tokens, "rough:"))
+			fields[field_count++] = init_field("rough", &mat->lamb.roughness, FIELD_FLOAT, lim_01);
+	}
+	else if (type == MAT_METAL)
+	{
+		if (ft_strarr_has(tokens, "fuz:"))
+			fields[field_count++] = init_field("fuz", &mat->metal.fuzz, FIELD_FLOAT, lim_01);
+		if (ft_strarr_has(tokens, "rough:"))
+			fields[field_count++] = init_field("rough", &mat->metal.roughness, FIELD_FLOAT, lim_01);
+	}
+	else if (type == MAT_DIELECTRIC)
+	{
+		if (ft_strarr_has(tokens, "ir:"))
+			fields[field_count++] = init_field("ir", &mat->diel.ir, FIELD_FLOAT, lim_ir);
+		if (ft_strarr_has(tokens, "tr:"))
+			fields[field_count++] = init_field("tr", &mat->diel.transmittance, FIELD_FLOAT, lim_01);
+		if (ft_strarr_has(tokens, "rough:"))
+			fields[field_count++] = init_field("rough", &mat->diel.roughness, FIELD_FLOAT, lim_01);
+	}
+
+	return (parse_fields(fields, field_count, tokens));
 }
 
 bool	parse_material(char **tokens, t_scene *scene)

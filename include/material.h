@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   material.h                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/09 09:17:40 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   material.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/29 13:47:23 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/10 19:45:31 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,37 +25,45 @@ enum e_material_type
 
 struct s_lambertian
 {
-	float	specular;
-	float	shininess;
+	float	specular;   // 0.0 = no specular, 1.0 = full specular
+	float	shininess;  // Higher values = tighter specular highlight
+	float	roughness;  // 0.0 = smooth, 1.0 = rough
 };
+
+typedef struct s_lambertian	t_lamb;
 
 struct s_metal
 {
-	float	fuzz;
+	float	fuzz;       // 0.0 = perfect mirror, 1.0 = very fuzzy
+	float	roughness;  // 0.0 = smooth, 1.0 = rough
 };
+
+typedef struct s_metal	t_metal;
 
 struct s_dielectric
 {
-	float	ir;
-	float	transmittance;
+	float	ir;            // Index of refraction
+	float	transmittance; // 0.0 = opaque, 1.0 = fully transparent
+	float	roughness;     // 0.0 = smooth, 1.0 = rough
 };
+
+typedef struct s_dielectric	t_diel;
 
 struct s_material
 {
 	char		*name;
 	t_mat_type	type;
-	t_v3f		albedo;
+	t_v3f		albedo;  // Base color
 	union
 	{
-		t_lamb	lamb;
-		t_metal	metal;
-		t_diel	diel;
+		t_lamb	lamb;    // Lambertian
+		t_metal	metal;   // Metal
+		t_diel	diel;    // Dielectric
 	};
 };
 
 t_mat	*init_material(t_mat_type type, const char *name);
 bool	create_default_materials(t_vector *shared_materials);
-t_mat	*find_or_create_material(t_vector *materials, const char *m_name);
 bool	assign_material(t_obj *obj, t_vector *materials, const char *m_name);
 t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth);
 t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info);

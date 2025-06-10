@@ -1,27 +1,26 @@
-m_glass		type:dielectric		ir:1.0		tr:.9		alb:200,200,0
-m_mirror	type:metal			fuz:1.0		alb:200,25,0
+# Material definitions
+m_dielectric type:dielectric  ir:1.5  tr:0.98  alb:255,255,255  rough:0.02
+m_mirror  type:metal  fuz:0.3  alb:255,50,0  rough:0.1
+m_red     type:lambertian  spc:0.3  shi:10.0  alb:200,0,0
 
 C 0,8,15     0,-0.1,1  70
 
-A 0.3 255,255,255
-
-L 15,20,15 0.8 255,255,255 
+A 0.5 255,255,255
+L -1.0,8.0,22.0 1.0 255,255,255
 
 # Background planes
-pl 0,0,-50 0,0,1 200,220,230  
-pl -50,0,0 1,0,0 230,220,220   
-pl 50,0,0 -1,0,0 220,230,220   
-pl 0,50,0 0,-1,0 220,220,230   
-
-# Ground plane 
-pl 0,-0.01,0 0,1,0 200,200,200
+pl 0,0,-50 0,0,1 180,200,210 m_red
+pl -50,0,0 1,0,0 200,180,180 m_red
+pl 50,0,0 -1,0,0 180,200,180 m_red
+pl 0,50,0 0,-1,0 180,180,200
+pl 0,-0.01,0 0,1,0 180,180,180
 
 
 # Base triangle 
-tri -6,0,-6 6,0,-6 0,0,6 255,255,255 m_glass
+tri -6,0,-6 6,0,-6 0,0,6 255,255,255 m_dielectric
 
-tri -6,0,-6 6,0,-6 0,12,0 255,255,255 m_glass  
-tri 6,0,-6 0,0,6 0,12,0 255,255,255 m_glass   
-tri 0,0,6 -6,0,-6 0,12,0 255,255,255 m_glass  
-
+tri -6,0,-6 6,0,-6 0,12,0 255,255,255 m_dielectric  
+tri 6,0,-6 0,0,6 0,12,0 255,255,255 m_dielectric   
+tri 0,0,6 -6,0,-6 0,12,0 255,255,255 m_dielectric
 sp 0,5,0 2.5 255,0,0 m_mirror
+

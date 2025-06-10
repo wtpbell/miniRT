@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   camera.c                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/09 09:22:11 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   camera.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/14 12:05:02 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/10 15:25:18 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,9 @@ bool	parse_camera(char **tokens, t_scene *scene)
 						dir, (t_v3f){.x = 0.0f, .y = 1.0f, .z = 0.0f}), dir));
 	scene->camera.t.up = up;
 	scene->camera.fov = fov;
-	// Only set default DoF values if they haven't been set yet
-	if (scene->camera.aperture <= 0.0f)
-		scene->camera.aperture = 0.6f;
-	if (scene->camera.focus_dist <= 0.0f)
-		scene->camera.focus_dist = 10.0f;
+	// Disable depth of field by default
+	scene->camera.aperture = 0.0f;
+	scene->camera.focus_dist = 0.0f;
 	id_m4x4(scene->camera.view_matrix);
 	scene->camera.view_matrix[15] = 1.0f;
 	printf("Camera DoF settings:\n");

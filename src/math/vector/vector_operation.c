@@ -96,3 +96,12 @@ t_v3f	v3f_mul(t_v3f a, t_v3f b)
 		.z = a.z * b.z
 	});
 }
+
+t_v3f	v3f_div(t_v3f a, t_v3f b)
+{
+	return ((t_v3f){
+		.x = a.x / b.x,
+		.y = a.y / b.y,
+		.z = a.z / b.z
+	});
+}

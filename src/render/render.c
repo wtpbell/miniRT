@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   render.c                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/09 19:58:34 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   render.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/10 15:32:16 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t)
 	return (hit);
 }
 
-
 static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 {
 	hit_info->hit = v3f_add(ray->origin, v3f_scale(ray->direction, t));
@@ -103,25 +102,11 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	else if (hit->r.mat->type == MAT_METAL)
 		color = handle_metal(scene, &hit_info, depth);
 	else
-		color = (init_v3f(1.0f, 1.0f, 1.0f));
-	return (v3f_clampf01(color));
+		color = (g_v3f_one);
+	return (color);
 }
 
-// static void	compute_ray(float x, float y, t_cam *cam, t_ray *ray)
-// {
-// 	t_v3f	camera_space;
-// 	float	view;
-
-// 	view = tanf(cam->fov * 0.5f * DEGTORAD);
-// 	camera_space.x = (2.0f * ((x + 0.5f) / cam->img_plane->width) - 1.0f)
-// 		* cam->aspect_ratio * view;
-// 	camera_space.y = (1.0f - 2.0f * ((y + 0.5f) / cam->img_plane->height))
-// 		* view;
-// 	camera_space.z = -1.0f;
-// 	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
-// }
-
-#define SAMPLES_PER_PIXEL 128 // Number of samples per pixel
+#define SAMPLES_PER_PIXEL 12 // Number of samples per pixel
 
 //u = x / (width - 1)
 // v = 1 - y / (height - 1)

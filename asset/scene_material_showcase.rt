@@ -1,0 +1,52 @@
+# Camera position, direction, FOV (moved closer to the scene)
+C 0,1.5,4     0,0,1  60
+
+# Ambient light (low to make material differences more visible)
+A 0.1 255,255,255
+
+# Main light (positioned to create good highlights)
+L 0,4,2 1.0 255,255,255
+
+# Room (slightly darker to make objects pop)
+pl 0,0,-3 0,0,1 150,150,150 
+pl -4,0,0 1,0,0 180,180,180 
+pl 4,0,0 -1,0,0 180,180,180 
+pl 0,4,0 0,-1,0 180,180,180 
+pl 0,-0.5,0 0,1,0 200,200,200 
+
+# Materials for metal spheres (fewer steps in fuzziness)
+m_metal_0 type:metal fuz:0.0 alb:255,255,255
+m_metal_1 type:metal fuz:0.3 alb:255,255,255
+m_metal_2 type:metal fuz:0.6 alb:255,255,255
+m_metal_3 type:metal fuz:1.0 alb:255,255,255
+
+# Materials for lambertian spheres (fewer steps in roughness)
+m_rough_0 type:lambertian rough:0.0 alb:255,0,0
+m_rough_1 type:lambertian rough:0.3 alb:0,255,0
+m_rough_2 type:lambertian rough:0.7 alb:0,0,255
+m_rough_3 type:lambertian rough:1.0 alb:255,255,0
+
+# Metal spheres (top row, increasing fuzziness from left to right)
+sp -2.5,2,0 0.8 255,255,255 m_metal_0
+sp -0.8,2,0 0.8 255,255,255 m_metal_1
+sp 0.8,2,0 0.8 255,255,255 m_metal_2
+sp 2.5,2,0 0.8 255,255,255 m_metal_3
+
+# Lambertian spheres (bottom row, increasing roughness from left to right)
+sp -2.5,0,0 0.8 255,0,0 m_rough_0
+sp -0.8,0,0 0.8 0,255,0 m_rough_1
+sp 0.8,0,0 0.8 0,0,255 m_rough_2
+sp 2.5,0,0 0.8 255,255,0 m_rough_3
+
+# Labels (using small spheres as markers)
+# Metal labels
+# sp -2.5,2.8,0 0.1 255,255,255
+# sp -0.8,2.8,0 0.1 255,255,255
+# sp 0.8,2.8,0 0.1 255,255,255
+# sp 2.5,2.8,0 0.1 255,255,255
+
+# Lambertian labels
+# sp -2.5,-0.8,0 0.1 255,0,0
+# sp -0.8,-0.8,0 0.1 0,255,0
+# sp 0.8,-0.8,0 0.1 0,0,255
+# sp 2.5,-0.8,0 0.1 255,255,0

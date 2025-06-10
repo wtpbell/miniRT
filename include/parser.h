@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   parser.h                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/07 23:49:17 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   parser.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 22:20:50 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/10 19:00:00 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ bool		parse_triangle(char **tokens, t_scene *scene);
 void		clean_spaces(char *str);
 size_t		token_count_in_str(const char *str);
 bool		validate_commas(const char *str);
+bool		ft_strarr_has(char **arr, const char *prefix);
 
 // vector_utils.c
 bool		parse_v3f(t_v3f *v3f, const char *str);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   rt_light.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/31 19:11:17 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/09 19:52:37 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   rt_light.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/31 19:11:17 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/10 21:13:50 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,47 +96,3 @@ t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 	return v3f_clampf01(v3f_scale(v3f_add(color, v3f_scale(light->color, lt.specular)), inten));
 }
 
-
-// static float	get_specular(t_lighting *lt, t_mat *mat)
-// {
-// 	float spec = 0.0f;
-
-// 	if (mat->type == MAT_LAMBERTIAN)
-// 	{
-// 		if (mat->lamb.specular > 0.0f)
-// 			spec = calculate_specular(lt, mat->lamb.shininess, mat->lamb.specular);
-// 	}
-// 	else if (mat->type == MAT_METAL)
-// 		spec = calculate_specular(lt, 100.0f, 1.0f);
-// 	else if (mat->type == MAT_DIELECTRIC)
-// 		spec = 0.0f;
-// 	else
-// 		spec = 0.0f;
-// 	return (spec);
-// }
-
-// t_v3f apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
-// {
-// 	t_ray ray;
-// 	t_lighting lt;
-// 	float inten;
-// 	float shadow_dist;
-// 	t_v3f color;
-// 	float spec;
-
-// 	ft_bzero(&lt, sizeof(t_lighting));
-// 	init_lighting(&lt, hit, light, scene->camera.t.pos);
-// 	inten = lt.inten / (1.0f + 0.02f * lt.dist + 0.0002f * lt.dist * lt.dist);
-// 	ray.origin = v3f_add(hit->hit, hit->normal);
-// 	ray.direction = v3f_sub(light->pos, hit->hit);
-// 	shadow_dist = lt.dist;
-// 	if (find_intersection(&ray, scene, &shadow_dist) && shadow_dist < 1.0f)
-// 		return (g_v3f_zero);
-// 	lt.diffuse = ft_maxf(0.1f, v3f_dot(lt.normal, lt.light_dir));
-// 	spec = get_specular(&lt, hit->obj->r.mat);
-// 	if (hit->obj->r.mat->type == MAT_DIELECTRIC)
-// 		spec *= schlick(v3f_dot(lt.normal, lt.view_dir), hit->obj->r.mat->diel.ir);
-// 	lt.specular = spec;
-// 	color = v3f_scale(v3f_mul(lt.obj_color, light->color), lt.diffuse);
-// 	return v3f_clampf01(v3f_scale(v3f_add(color, v3f_scale(light->color, lt.specular)), inten));
-// }
