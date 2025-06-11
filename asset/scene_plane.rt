@@ -1,0 +1,15 @@
+# Camera position and settings
+C 0,2,4     0,0,1  45
+
+# Ambient light
+A 0.3 255,255,255
+
+# Light sources
+L 0,4,0 0.7 255,255,255
+
+# plane
+
+pl 0,0,0	0,1,0	255,0,255
+sp 0,1,0	1		255,255,255
+
+tri -2,0,-4	2,0,-4	0,4,-4 175,175,25
