@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_light.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/31 19:11:17 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/10 21:13:50 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_light.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/31 19:11:17 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/11 15:53:56 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ float	calculate_specular(t_lighting *lighting,
 	return (spec * specular_strength);
 }
 
-#include <stdio.h>
 /**quadratic falloff: inten / (1 + a*d + b*d²)
 combines diffuse and specular, multiplies by albedo and light
 color and inten, finally clamps to 0-1 **/

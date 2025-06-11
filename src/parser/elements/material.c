@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   material.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/05 14:04:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/10 20:50:17 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   material.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/11 10:08:31 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,8 @@ static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
 
 	mat->type = type;
 	field_count = 0;
-	
-	// Common fields
 	if (ft_strarr_has(tokens, "alb:"))
 		fields[field_count++] = init_field("alb", &mat->albedo, FIELD_COL, lim_01);
-
-	// Type-specific fields
 	if (type == MAT_LAMBERTIAN)
 	{
 		if (ft_strarr_has(tokens, "spc:"))
@@ -59,7 +55,6 @@ static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
 		if (ft_strarr_has(tokens, "rough:"))
 			fields[field_count++] = init_field("rough", &mat->diel.roughness, FIELD_FLOAT, lim_01);
 	}
-
 	return (parse_fields(fields, field_count, tokens));
 }
 

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   camera.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 12:05:02 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/10 15:25:18 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   camera.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/11 14:37:46 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,10 @@ bool	parse_camera(char **tokens, t_scene *scene)
 						dir, (t_v3f){.x = 0.0f, .y = 1.0f, .z = 0.0f}), dir));
 	scene->camera.t.up = up;
 	scene->camera.fov = fov;
-	// Disable depth of field by default
 	scene->camera.aperture = 0.0f;
 	scene->camera.focus_dist = 0.0f;
 	id_m4x4(scene->camera.view_matrix);
 	scene->camera.view_matrix[15] = 1.0f;
-	printf("Camera DoF settings:\n");
-	printf("  Aperture: %.4f\n", scene->camera.aperture);
-	printf("  Focus distance: %.2f\n", scene->camera.focus_dist);
-	printf("  Camera up vector: (%.2f, %.2f, %.2f)\n", up.x, up.y, up.z);
 	scene->scene_flags |= SCENE_CAMERA;
 	return (true);
 }

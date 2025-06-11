@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_dof.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 12:05:02 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/10 15:32:17 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_dof.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/11 15:34:41 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,20 @@ void	update_camera_view(t_cam *cam)
 	printf("\n  Aperture: %.4f\n", cam->aperture);
 }
 
-static void	concentric_sample_disk(float u1, float u2, float *dx, float *dy)
+static void	concentric_sample_disk(float u1, float u2, t_v2f *lens)
 {
-	float sx = 2.0f * u1 - 1.0f;
-	float sy = 2.0f * u2 - 1.0f;
+	float	sx;
+	float	sy;
+	float	r;
+	float	theta;
 
+	sx = 2.0f * u1 - 1.0f;
+	sy = 2.0f * u2 - 1.0f;
 	if (sx == 0 && sy == 0)
 	{
-		*dx = 0.0f;
-		*dy = 0.0f;
-		return;
+		init_v2f(lens->x, lens->y);
+		return ;
 	}
-
-	float r, theta;
 	if (fabsf(sx) > fabsf(sy))
 	{
 		r = sx;
@@ -72,57 +73,35 @@ static void	concentric_sample_disk(float u1, float u2, float *dx, float *dy)
 		r = sy;
 		theta = (M_PI / 2.0f) - (M_PI / 4.0f) * (sx / sy);
 	}
-
-	*dx = r * cosf(theta);
-	*dy = r * sinf(theta);
+	lens->x = r * cosf(theta);
+	lens->y = r * sinf(theta);
 }
 
 
 t_ray	get_ray_with_dof(t_cam *cam, float u, float v)
 {
-	t_v3f viewport_point;
-	t_v3f ray_dir;
-	t_v3f focal_point;
-	t_v3f origin, direction;
-	float lens_dx, lens_dy;
-	float r, weight;
+	t_v3f	viewport_point;
+	t_v3f	ray_dir;
+	t_v3f	focal_point;
+	t_v3f	origin;
+	t_v2f	lens;
 
-	viewport_point = v3f_add(
-		cam->lower_left,
-		v3f_add(
-			v3f_scale(cam->horizontal, u),
-			v3f_scale(cam->vertical, v)
-		)
-	);
+	viewport_point = v3f_add(cam->lower_left,
+		v3f_add(v3f_scale(cam->horizontal, u), v3f_scale(cam->vertical, v)));
 	ray_dir = v3f_norm(v3f_sub(viewport_point, cam->t.pos));
 	focal_point = v3f_add(cam->t.pos, v3f_scale(ray_dir, cam->focus_dist));
-	concentric_sample_disk(frandom(), frandom(), &lens_dx, &lens_dy);
-	r = sqrtf(lens_dx * lens_dx + lens_dy * lens_dy); //falloff
-	weight = 1.0f - r;
-	lens_dx *= weight;
-	lens_dy *= weight;
-	lens_dx *= cam->aperture * 0.5f;
-	lens_dy *= cam->aperture * 0.5f;
-	origin = v3f_add(
-		cam->t.pos,
-		v3f_add(
-			v3f_scale(cam->u, lens_dx),
-			v3f_scale(cam->v, lens_dy)
-		)
-	);
+	concentric_sample_disk(frandom(), frandom(), &lens);
+	lens.x *= 1.0f - sqrtf(lens.x * lens.x + lens.y * lens.y);
+	lens.y *= 1.0f - sqrtf(lens.x * lens.x + lens.y * lens.y);
+	lens.x *= cam->aperture * 0.5f;
+	lens.y *= cam->aperture * 0.5f;
+	origin = v3f_add(cam->t.pos,
+		v3f_add(v3f_scale(cam->u, lens.x), v3f_scale(cam->v, lens.y)));
 	focal_point = v3f_add(cam->lower_left,
-	v3f_add(
-		v3f_scale(cam->horizontal, u),
-		v3f_scale(cam->vertical, v)
-	)
-);
-direction = v3f_sub(focal_point, origin); // Recalculate after aperture shift
-
-	direction = v3f_sub(focal_point, origin);
+		v3f_add(v3f_scale(cam->horizontal, u), v3f_scale(cam->vertical, v)));
 	return (t_ray){
 		.origin = origin,
-		.direction = v3f_norm(direction)
-	};
+		.direction = v3f_norm(v3f_sub(focal_point, origin))};
 }
 
 // weight = expf(-r * r * k); // k = sharpness, e.g. 2.0f
