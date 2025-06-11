@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 14:00:37 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/11 00:02:47 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/11 23:51:21 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,50 @@
 #include "rt_math.h"
 #include "scene.h"
 
-// TODO: normal should be be based on the side (front/back) it hits of the
-//		 triangle. Now it always return the 'outside' normal.
 t_v3f	triangle_normal(t_obj *obj, t_v3f point)
 {
 	(void)point;
 	return (obj->t.dir);
+}
+
+static t_v2f	get_offset(t_v2f vt[3])
+{
+	float	x;
+	float	y;
+
+	x = fminf(fminf(vt[0].x, vt[1].x), vt[2].x);
+	y = fminf(fminf(vt[0].y, vt[1].y), vt[2].y);
+	return (init_v2f(x, y));
+}
+
+/* Keyword: planar projection */
+void	generate_uv_vertices(t_v2f vt[3], t_tri *tri, t_v3f forw)
+{
+	int		i;
+	t_v3f	right;
+	t_v3f	up;
+	t_v2f	offset;
+
+	// TODO: Code duplication! Check plane_texcoord, obj_to_world, view_matrix
+	if (fabsf(v3f_dot(g_v3f_up, forw)) > .99f)
+		right = v3f_norm(v3f_cross(g_v3f_foward, forw));
+	else
+		right = v3f_norm(v3f_cross(g_v3f_up, forw));
+	up = v3f_cross(right, forw);
+
+	vt[0] = init_v2f(v3f_dot(tri->v0, right), v3f_dot(tri->v0, up));
+	vt[1] = init_v2f(v3f_dot(tri->v1, right), v3f_dot(tri->v1, up));
+	vt[2] = init_v2f(v3f_dot(tri->v2, right), v3f_dot(tri->v2, up));
+
+	i = 0;
+	offset = get_offset(vt);
+	while (i < 3)
+	{
+		vt[i].x -= offset.x;
+		vt[i].y -= offset.y;
+	}
+	// TODO: Normalize the coordinates
+	
 }
 
 // TODO: Instead of re-calculating the barycentric-coordinates, store them somewhere when checking for intersection

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/10 23:49:31 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/10 23:56:36 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/11 22:12:50 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 t_v3f	checkerboard_pattern(t_v2f texcoord, t_v3f obj_col, t_v3f alt_col)
 {
-	const float	scale_u = 2.0f;
-	const float	scale_v = 2.0f;
+	const float	scale_u = 5.0f;
+	const float	scale_v = 5.0f;
 	float		pattern;
 
 	pattern = (modulo(texcoord.u * scale_u) < .5f) ^ (modulo(texcoord.v * scale_v) < .5f);
