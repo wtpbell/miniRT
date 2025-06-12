@@ -1,52 +1,66 @@
-# Camera position, direction, FOV (moved closer to the scene)
+# Camera: Slightly closer, straight on
 C 0,1.5,4     0,0,1  60
 
-# Ambient light (low to make material differences more visible)
+# Ambient: Low to highlight differences
 A 0.1 255,255,255
 
-# Main light (positioned to create good highlights)
-L 0,4,2 1.0 255,255,255
+# Strong directional light from above
+L 0,4,2	 1.0 	255,255,255
 
-# Room (slightly darker to make objects pop)
+# Room setup
 pl 0,0,-3 0,0,1 150,150,150 
 pl -4,0,0 1,0,0 180,180,180 
 pl 4,0,0 -1,0,0 180,180,180 
 pl 0,4,0 0,-1,0 180,180,180 
 pl 0,-0.5,0 0,1,0 200,200,200 
 
-# Materials for metal spheres (fewer steps in fuzziness)
-m_metal_0 type:metal fuz:0.0 alb:255,255,255
-m_metal_1 type:metal fuz:0.3 alb:255,255,255
-m_metal_2 type:metal fuz:0.6 alb:255,255,255
-m_metal_3 type:metal fuz:1.0 alb:255,255,255
+# # Lambertian materials - ONLY ROUGHNESS
+# m_lamb_r0 type:lambertian rough:0.0 alb:255,0,0 spc:0.001 shi:0
+# m_lamb_r1 type:lambertian rough:0.3 alb:200,50,50 spc:0.001 shi:0
+# m_lamb_r2 type:lambertian rough:0.6 alb:150,0,0 spc:0.001 shi:0
+# m_lamb_r3 type:lambertian rough:1.0 alb:100,0,0 spc:0.001 shi:0
 
-# Materials for lambertian spheres (fewer steps in roughness)
-m_rough_0 type:lambertian rough:0.0 alb:255,0,0
-m_rough_1 type:lambertian rough:0.3 alb:0,255,0
-m_rough_2 type:lambertian rough:0.7 alb:0,0,255
-m_rough_3 type:lambertian rough:1.0 alb:255,255,0
+# # Lambertian materials - ROUGHNESS + SPECULAR (shininess effect)
+# m_lamb_rs0 type:lambertian rough:0.0 alb:0,0,255 spc:0.9 shi:128
+# m_lamb_rs1 type:lambertian rough:0.3 alb:0,50,200 spc:0.6 shi:64
+# m_lamb_rs2 type:lambertian rough:0.6 alb:0,100,150 spc:0.3 shi:16
+# m_lamb_rs3 type:lambertian rough:1.0 alb:0,150,100 spc:0.1 shi:8
 
-# Metal spheres (top row, increasing fuzziness from left to right)
-sp -2.5,2,0 0.8 255,255,255 m_metal_0
-sp -0.8,2,0 0.8 255,255,255 m_metal_1
-sp 0.8,2,0 0.8 255,255,255 m_metal_2
-sp 2.5,2,0 0.8 255,255,255 m_metal_3
+# # Top row: Roughness only (pure diffuse)
+# sp -2.5,2,0 0.8 255,255,255 m_lamb_r0
+# sp -0.8,2,0 0.8 255,255,255 m_lamb_r1
+# sp 0.8,2,0 0.8 255,255,255 m_lamb_r2
+# sp 2.5,2,0 0.8 255,255,255 m_lamb_r3
 
-# Lambertian spheres (bottom row, increasing roughness from left to right)
-sp -2.5,0,0 0.8 255,0,0 m_rough_0
-sp -0.8,0,0 0.8 0,255,0 m_rough_1
-sp 0.8,0,0 0.8 0,0,255 m_rough_2
-sp 2.5,0,0 0.8 255,255,0 m_rough_3
+# # Bottom row: Roughness + Shininess/Specular
+# sp -2.5,0,0 0.8 255,255,255 m_lamb_rs0
+# sp -0.8,0,0 0.8 255,255,255 m_lamb_rs1
+# sp 0.8,0,0 0.8 255,255,255 m_lamb_rs2
+# sp 2.5,0,0 0.8 255,255,255 m_lamb_rs3
 
-# Labels (using small spheres as markers)
-# Metal labels
-# sp -2.5,2.8,0 0.1 255,255,255
-# sp -0.8,2.8,0 0.1 255,255,255
-# sp 0.8,2.8,0 0.1 255,255,255
-# sp 2.5,2.8,0 0.1 255,255,255
 
-# Lambertian labels
-# sp -2.5,-0.8,0 0.1 255,0,0
-# sp -0.8,-0.8,0 0.1 0,255,0
-# sp 0.8,-0.8,0 0.1 0,0,255
-# sp 2.5,-0.8,0 0.1 255,255,0
+
+# Dielectric materials (Top row) - fully trparent, only roughness changes
+m_diel_r0 type:dielectric  ir:1.5 tr:1.0 rough:0.0 alb:255,255,255
+m_diel_r1 type:dielectric ir:1.5 tr:1.0 rough:0.3 alb:255,255,255 
+m_diel_r2 type:dielectric ir:1.5 tr:1.0 rough:0.6 alb:255,255,255
+m_diel_r3 type:dielectric ir:1.5 tr:1.0 rough:1.0 alb:255,255,255
+
+# Dielectric materials (Bottom row) - roughness + decreasing trparency
+m_diel_rt0 type:dielectric ir:1.5 tr:0.75 rough:0.0 alb:255,255,255
+m_diel_rt1 type:dielectric ir:1.5 tr:0.5  rough:0.3 alb:255,255,255
+m_diel_rt2 type:dielectric ir:1.5 tr:0.25 rough:0.6 alb:255,255,255
+m_diel_rt3 type:dielectric ir:1.5 tr:0.0  rough:1.0 alb:255,255,255
+
+# Top row: full trmittance (changing roughness only)
+sp -2.5,2,0 1.2 255,255,255 m_diel_r0
+sp -0.8,2,0 1.2 255,255,255 m_diel_r1
+sp 0.8,2,0 1.2 255,255,255 m_diel_r2
+sp 2.5,2,0 1.2 255,255,255 m_diel_r3
+
+# Bottom row: trmittance decreases as roughness increases
+sp -2.5,0,0 1.2 255,255,0 m_diel_rt0
+sp -0.8,0,0 1.2 255,255,0 m_diel_rt1
+sp 0.8,0,0 1.2 255,255,0 m_diel_rt2
+sp 2.5,0,0 1.2 255,255,0 m_diel_rt3
+

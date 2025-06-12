@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/06 19:14:48 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/07 23:10:11 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/12 13:55:29 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static bool	validate_fields(t_field *fields, int count)
 	i = 0;
 	while (i < count)
 	{
-		if ((fields[i].state & (FILLED | REQUIRED | HIDDEN)) == REQUIRED)
+		if ((fields[i].state & (FILLED | HIDDEN)) == REQUIRED)
 		{
 			print_error(ERR_REQ_FIELD, "material", fields[i].name);
 			return (false);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   material.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/29 13:47:23 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/10 19:45:31 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   material.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/12 11:56:42 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,42 +23,26 @@ enum e_material_type
 	MAT_DIELECTRIC
 };
 
-struct s_lambertian
-{
-	float	specular;   // 0.0 = no specular, 1.0 = full specular
-	float	shininess;  // Higher values = tighter specular highlight
-	float	roughness;  // 0.0 = smooth, 1.0 = rough
-};
-
-typedef struct s_lambertian	t_lamb;
-
-struct s_metal
-{
-	float	fuzz;       // 0.0 = perfect mirror, 1.0 = very fuzzy
-	float	roughness;  // 0.0 = smooth, 1.0 = rough
-};
-
-typedef struct s_metal	t_metal;
-
-struct s_dielectric
-{
-	float	ir;            // Index of refraction
-	float	transmittance; // 0.0 = opaque, 1.0 = fully transparent
-	float	roughness;     // 0.0 = smooth, 1.0 = rough
-};
-
-typedef struct s_dielectric	t_diel;
-
 struct s_material
 {
 	char		*name;
 	t_mat_type	type;
-	t_v3f		albedo;  // Base color
+	t_v3f		albedo;
 	union
 	{
-		t_lamb	lamb;    // Lambertian
-		t_metal	metal;   // Metal
-		t_diel	diel;    // Dielectric
+		struct {
+			float	specular;
+			float	shininess;
+			float	roughness;
+		}	lamb;
+		struct {
+			float	roughness;
+		}	metal;
+		struct {
+			float	ir;
+			float	transmittance;
+			float	roughness;
+		}	diel;
 	};
 };
 

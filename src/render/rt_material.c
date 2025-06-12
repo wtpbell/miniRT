@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/31 19:11:17 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/11 15:52:32 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/12 11:36:21 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static t_v3f	blend_color(t_scene *sc, t_ray_hit *h, uint32_t depth, float ior)
 	t_v3f	reflect_color;
 	t_v3f	refract_color;
 	float	fresnel;
+	t_v3f	refl;
 
 	ray.direction = v3f_norm(h->ray->direction);
 	reflect_dir = v3f_scale(ray.direction, -1.0f);
@@ -50,11 +51,14 @@ static t_v3f	blend_color(t_scene *sc, t_ray_hit *h, uint32_t depth, float ior)
 		h->front_face * 0.001f + !h->front_face * -0.001f));
 	fresnel = fminf(1.0f, v3f_dot(reflect_dir, h->normal));
 	fresnel = powf(schlick(fresnel, ior), 0.5f);
-	reflect_color = trace(&(t_ray){ray.origin, v3f_refl(ray.direction, h->normal)}, sc, depth - 1);
+	refl = v3f_refl(ray.direction, h->normal);
+	if (h->obj->r.mat->diel.roughness > 0.0f)
+		refl = v3f_norm(v3f_add(refl, v3f_scale(random_in_hemisphere(h->normal), h->obj->r.mat->diel.roughness)));
+	reflect_color = trace(&(t_ray){ray.origin, refl}, sc, depth - 1);
 	refract_color = g_v3f_zero;
 	if (ior * sqrtf(1.0f - powf(v3f_dot(reflect_dir, h->normal), 2)) <= 1.0f)
 		refract_color = trace(&(t_ray){ray.origin, v3f_refr(ray.direction, h->normal, ior)}, sc, depth - 1);
-	return (v3f_mul(v3f_lerp(refract_color, reflect_color, fresnel), h->obj->r.color));
+	return (v3f_mul(v3f_lerp(refract_color, reflect_color, fresnel), h->obj->r.mat->albedo));
 }
 
 // Handle dielectric material with proper transparency and refraction
@@ -86,7 +90,7 @@ t_v3f handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 				direct_light = v3f_add(direct_light, apply_point(sc, hit, light));
 			i++;
 		}
-		direct_light = v3f_mul(hit->obj->r.color, direct_light);
+		direct_light = v3f_mul(hit->obj->r.mat->albedo, direct_light);
 	}
 	if (hit->obj->r.mat->diel.transmittance >= 0.99f)
 		return (v3f_clampf01(indirect));
@@ -143,23 +147,24 @@ t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 	t_v3f	reflected_dir;
 	t_v3f	result;
 	t_v3f	albedo;
-	float	fuzz;
+	float	roughness;
 
 	if (hit->obj->r.mat && hit->obj->r.mat->type == MAT_METAL)
 	{
 		albedo = hit->obj->r.mat->albedo;
-		fuzz = hit->obj->r.mat->metal.fuzz;
+		roughness = hit->obj->r.mat->metal.roughness;
 	}
 	else
 	{
 		albedo = hit->obj->r.color;
-		fuzz = 0.05f;
+		roughness = 0.05f;
 	}
 	reflected_dir = v3f_refl(v3f_norm(hit->ray->direction), hit->normal);
-	if (fuzz > 0.0f)
-		reflected_dir = v3f_add(reflected_dir, v3f_scale(random_in_hemisphere(hit->normal), fuzz));
+	if (roughness > 0.0f)
+		reflected_dir = v3f_norm(v3f_add(reflected_dir,
+			v3f_scale(random_in_hemisphere(hit->normal), roughness)));
 	reflected_ray.origin = v3f_add(hit->hit, v3f_scale(hit->normal, 0.001f));
-	reflected_ray.direction = v3f_norm(reflected_dir);
+	reflected_ray.direction = reflected_dir;
 	if (v3f_dot(reflected_ray.direction, hit->normal) > 0.0f)
 	{
 		result = trace(&reflected_ray, sc, depth - 1);
@@ -167,3 +172,4 @@ t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 	}
 	return (g_v3f_zero);
 }
+

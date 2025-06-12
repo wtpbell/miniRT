@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/31 19:11:17 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/11 15:53:56 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/12 10:06:02 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 	ft_bzero(&lt, sizeof(t_lighting));
 	init_lighting(&lt, hit, light, scene->camera.t.pos);
 	inten = lt.inten / (1.0f + 0.02f * lt.dist + 0.0002f * lt.dist * lt.dist);
-	ray.origin = v3f_add(hit->hit, hit->normal);
+	ray.origin = hit->hit;
 	ray.direction = v3f_sub(light->pos, hit->hit);
 	shadow_dist = lt.dist;
 	if (find_intersection(&ray, scene, &shadow_dist) && shadow_dist < 1.0f)

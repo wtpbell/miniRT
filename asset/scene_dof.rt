@@ -19,6 +19,6 @@ sp  -1,0,17.0  1.5  100,255,100 m_metal
 m_default type:lambertian spc:1.0 shi:25.0
 m_yellow	type:lambertian	shi:32.0	spc:0.5	alb:255,255,0
 
-sp  1,0,15.0  2.0  255,0,0 
+sp  1,0,3.0  2.0  255,0,0 
 # sp  2,0,-10.0  2.0  255,100,100
 # sp  4,0,-10.0  2.0  255,100,100
