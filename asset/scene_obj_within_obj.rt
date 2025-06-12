@@ -11,10 +11,10 @@
 m_red		type:lambertian	spc:0.5	shi:1.0	alb:255,0,0
 m_glass		type:dielectric	ir:1.5	tr:0.9	alb:200,200,200
 m_yellow	type:lambertian	shi:0.1	spc:0.5	alb:255,255,0
-m_mirror	type:metal		fuz:0.0	
+m_mirror	type:metal		rough:0.0	
 m_crazy		type:dielectric	ir:1.7	tr:0.5
 m_green		type:lambertian	spc:0.3	shi:16.0	alb:0,255,0
-m_blue		type:metal		fuz:0.1	
+m_blue		type:metal		rough:0.1	
 
 # Camera, Ambient light, and Lights
 C	0,2,5	0,0,1	90

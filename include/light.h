@@ -16,6 +16,7 @@
 # include "rt_types.h"
 # include "minirt.h"
 
+
 struct s_lighting
 {
 	t_v3f	light_dir;

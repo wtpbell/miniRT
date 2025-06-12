@@ -52,6 +52,8 @@ m_diel_rt1 type:dielectric ir:1.5 tr:0.5  rough:0.3 alb:255,255,255
 m_diel_rt2 type:dielectric ir:1.5 tr:0.25 rough:0.6 alb:255,255,255
 m_diel_rt3 type:dielectric ir:1.5 tr:0.0  rough:1.0 alb:255,255,255
 
+m_metal type:dielectric rough:0.0 alb:255,255,0
+
 # Top row: full trmittance (changing roughness only)
 sp -2.5,2,0 1.2 255,255,255 m_diel_r0
 sp -0.8,2,0 1.2 255,255,255 m_diel_r1

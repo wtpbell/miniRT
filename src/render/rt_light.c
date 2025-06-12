@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/31 19:11:17 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/12 10:06:02 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/12 15:32:48 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,18 @@ float	calculate_specular(t_lighting *lighting,
 	return (spec * specular_strength);
 }
 
+static float	get_specular(t_lighting *lt, t_ray_hit *hit)
+{
+	if (hit->obj->r.mat->type == MAT_LAMBERTIAN && hit->obj->r.mat->lamb.specular > 0.0f)
+		return (calculate_specular(lt, hit->obj->r.mat->lamb.shininess, hit->obj->r.mat->lamb.specular));
+	if (hit->obj->r.mat->type == MAT_DIELECTRIC)
+		return (schlick(v3f_dot(lt->normal, lt->view_dir), hit->obj->r.mat->diel.ir));
+	if (hit->obj->r.mat->type == MAT_METAL)
+		return (calculate_specular(lt, 100.0f, 1.0f) * (1.0f - hit->obj->r.mat->metal.roughness));
+	return (0.0f);
+}
+
+
 /**quadratic falloff: inten / (1 + a*d + b*d²)
 combines diffuse and specular, multiplies by albedo and light
 color and inten, finally clamps to 0-1 **/
@@ -77,21 +89,11 @@ t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 	if (find_intersection(&ray, scene, &shadow_dist) && shadow_dist < 1.0f)
 		return (g_v3f_zero);
 	lt.diffuse = calculate_diffuse(&lt);
-	if (hit->obj->r.mat->type == MAT_LAMBERTIAN && hit->obj->r.mat->lamb.specular > 0.0f)
-		lt.specular = calculate_specular(&lt, hit->obj->r.mat->lamb.shininess, hit->obj->r.mat->lamb.specular);
-	else if (hit->obj->r.mat->type == MAT_DIELECTRIC)
-	{
-		float cos_theta = v3f_dot(lt.normal, lt.view_dir);
-		lt.specular = schlick(cos_theta, hit->obj->r.mat->diel.ir);
-	}
-	else if (hit->obj->r.mat->type == MAT_METAL)
-	{
-		lt.specular = calculate_specular(&lt, 100.0f, 1.0f);
-		lt.specular *= (1.0f - hit->obj->r.mat->metal.fuzz);
-	}
-	else
-		lt.specular = 0.0f;
+	lt.specular = get_specular(&lt, hit);
 	color = v3f_scale(v3f_mul(lt.obj_color, light->color), lt.diffuse);
-	return v3f_clampf01(v3f_scale(v3f_add(color, v3f_scale(light->color, lt.specular)), inten));
+	return (v3f_clampf01(v3f_scale(v3f_add(color, v3f_scale(light->color, lt.specular)), inten)));
 }
+
+
+
 

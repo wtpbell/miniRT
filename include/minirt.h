@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/09 09:57:56 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/12 14:45:56 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ t_v3f	sphere_normal(t_obj *obj, t_v3f point);
 t_v3f	plane_normal(t_obj *obj, t_v3f point);
 t_v3f	cylinder_normal(t_obj *obj, t_v3f point);
 t_v3f	triangle_normal(t_obj *obj, t_v3f point);
+t_v3f	compute_lighting(t_ray_hit *hit_info, t_scene *scene);
 void	debug_scene_setup(t_scene *scene);
 
 t_ray	get_ray_with_dof(t_cam *cam, float u, float v);

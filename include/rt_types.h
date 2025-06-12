@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/07 16:31:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/07 23:21:44 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/12 14:38:11 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,5 @@ typedef struct s_scene			t_scene;
 typedef int						(*t_intsct)(t_obj *obj, t_ray *ray,
 									t_v2f t, float *dst);
 typedef t_v3f					(*t_cnorm)(t_obj *obj, t_v3f point);
+
 #endif

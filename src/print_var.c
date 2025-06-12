@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   print_var.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 09:34:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/10 20:48:38 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   print_var.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/12 14:06:32 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 		else if (mat->type == MAT_METAL)
 		{
 			str_print("Metal", spaces + 4, "type:");
-			float_print(mat->metal.fuzz, spaces + 4, "fuzz");
+			float_print(mat->metal.roughness, spaces + 4, "fuzz");
 		}
 		else if (mat->type == MAT_DIELECTRIC)
 		{

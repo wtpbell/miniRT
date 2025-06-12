@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/31 19:11:17 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/12 11:36:21 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/12 15:34:28 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ static t_v3f	blend_color(t_scene *sc, t_ray_hit *h, uint32_t depth, float ior)
 	float	fresnel;
 	t_v3f	refl;
 
-	ray.direction = v3f_norm(h->ray->direction);
+	ray.direction = h->ray->direction;
 	reflect_dir = v3f_scale(ray.direction, -1.0f);
 	ior = get_refraction_ratio(h);
 	ray.origin = v3f_add(h->hit, v3f_scale(h->normal, 
-		h->front_face * 0.001f + !h->front_face * -0.001f));
+		h->front_face ? 0.001f : -0.001f));
 	fresnel = fminf(1.0f, v3f_dot(reflect_dir, h->normal));
 	fresnel = powf(schlick(fresnel, ior), 0.5f);
 	refl = v3f_refl(ray.direction, h->normal);
@@ -58,18 +58,18 @@ static t_v3f	blend_color(t_scene *sc, t_ray_hit *h, uint32_t depth, float ior)
 	refract_color = g_v3f_zero;
 	if (ior * sqrtf(1.0f - powf(v3f_dot(reflect_dir, h->normal), 2)) <= 1.0f)
 		refract_color = trace(&(t_ray){ray.origin, v3f_refr(ray.direction, h->normal, ior)}, sc, depth - 1);
-	return (v3f_mul(v3f_lerp(refract_color, reflect_color, fresnel), h->obj->r.mat->albedo));
+	refract_color = v3f_mul(refract_color, h->obj->r.mat->albedo);
+	return v3f_lerp(refract_color, reflect_color, fresnel);
 }
 
+
 // Handle dielectric material with proper transparency and refraction
-t_v3f handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth)
+t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 {
 	t_v3f	direct_light;
 	t_v3f	indirect;
 	t_v3f	result;
-	t_light	*light;
 	float	ior;
-	int		i;
 
 	direct_light = g_v3f_zero;
 	indirect = g_v3f_zero;
@@ -79,19 +79,7 @@ t_v3f handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 		ior = hit->obj->r.mat->diel.ir;
 	indirect = blend_color(sc, hit, depth, ior);
 	if (hit->obj->r.mat->diel.transmittance < 0.99f)
-	{
-		i = 0;
-		while (i < sc->lights.size)
-		{
-			light = (t_light *)sc->lights.items[i];
-			if (light->type == LIGHT_AMBIENT)
-				direct_light = v3f_scale(light->color, light->intensity);
-			else if (light->type == LIGHT_POINT)
-				direct_light = v3f_add(direct_light, apply_point(sc, hit, light));
-			i++;
-		}
-		direct_light = v3f_mul(hit->obj->r.mat->albedo, direct_light);
-	}
+		direct_light = v3f_mul(hit->obj->r.mat->albedo, compute_lighting(hit, sc));
 	if (hit->obj->r.mat->diel.transmittance >= 0.99f)
 		return (v3f_clampf01(indirect));
 	if (hit->obj->r.mat->diel.transmittance <= 0.01f)
@@ -100,45 +88,20 @@ t_v3f handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 		v3f_scale(direct_light, 1.0f - hit->obj->r.mat->diel.transmittance),
 		v3f_scale(indirect, hit->obj->r.mat->diel.transmittance)
 	);
-	return (v3f_clampf01(result));
+	return v3f_clampf01(result);
 }
+
 
 t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info)
 {
-	t_light		*light;
-	t_lighting	lighting;
-	t_v3f		total_light;
-	t_v3f		light_contribution;
-	t_ren		render;
-	int			i;
-	float		spec;
+	t_v3f	base_color;
+	t_v3f	lighting;
 
-	total_light = g_v3f_zero;
-	render = hit_info->obj->r;
-	if (hit_info->obj->r.mat && render.mat->type == MAT_LAMBERTIAN)
-		render.color = v3f_mul(render.color, render.mat->albedo);
-	i = 0;
-	while (i < scene->lights.size)
-	{
-		light = (t_light *)scene->lights.items[i];
-		if (light->type == LIGHT_POINT)
-		{
-			light_contribution = apply_point(scene, hit_info, light);
-			init_lighting(&lighting, hit_info, light, scene->camera.t.pos);
-			light_contribution = v3f_scale(light_contribution, 1.0f - (render.mat->lamb.roughness * 0.5f));
-			if (hit_info->obj->r.mat->lamb.specular > 0.0f)
-			{
-				spec = calculate_specular(&lighting, render.mat->lamb.shininess, render.mat->lamb.specular);
-				light_contribution = v3f_add(light_contribution, v3f_scale(light->color, spec * light->intensity));
-			}
-			
-			total_light = v3f_add(total_light, light_contribution);
-		}
-		else if (light->type == LIGHT_AMBIENT)
-			total_light = v3f_add(total_light, apply_ambient(render.color, light));
-		i++;
-	}
-	return (v3f_mul(render.color, v3f_clamp(total_light, 0.0f, 1.0f)));
+	if (!hit_info->obj->r.mat || hit_info->obj->r.mat->type != MAT_LAMBERTIAN)
+		return (g_v3f_zero);
+	base_color = v3f_mul(hit_info->obj->r.color, hit_info->obj->r.mat->albedo);
+	lighting = compute_lighting(hit_info, scene);
+	return (v3f_mul(base_color, lighting));
 }
 
 t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth)
@@ -161,15 +124,14 @@ t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 	}
 	reflected_dir = v3f_refl(v3f_norm(hit->ray->direction), hit->normal);
 	if (roughness > 0.0f)
-		reflected_dir = v3f_norm(v3f_add(reflected_dir,
-			v3f_scale(random_in_hemisphere(hit->normal), roughness)));
+		reflected_dir = v3f_norm(v3f_add(reflected_dir, v3f_scale(random_in_hemisphere(hit->normal), roughness)));
 	reflected_ray.origin = v3f_add(hit->hit, v3f_scale(hit->normal, 0.001f));
 	reflected_ray.direction = reflected_dir;
 	if (v3f_dot(reflected_ray.direction, hit->normal) > 0.0f)
 	{
 		result = trace(&reflected_ray, sc, depth - 1);
-		return (v3f_mul(albedo, result));
+		return v3f_mul(albedo, result);
 	}
-	return (g_v3f_zero);
+	return g_v3f_zero;
 }
 

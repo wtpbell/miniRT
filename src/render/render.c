@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/12 11:05:28 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/12 15:21:44 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 #include "material.h"
 
 #define MAX_DEPTH	5
+typedef t_v3f					(*t_light_handler_func)(t_light *light, t_ray_hit *hit_info,
+									t_scene *scene, t_v3f current_col);
 
 void	init_object_matrices(t_obj *obj)
 {
@@ -80,6 +82,41 @@ static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 	if (!hit_info->front_face)
 		hit_info->normal = v3f_scale(hit_info->normal, -1.0f);
 }
+static t_v3f	handle_ambient_light(t_light *light, t_ray_hit *hit_info, t_scene *scene, t_v3f current_col)
+{
+	(void)scene;
+
+	return (v3f_add(current_col, apply_ambient(hit_info->obj->r.color, light)));
+}
+
+static t_v3f handle_point_light(t_light *light, t_ray_hit *hit_info, t_scene *scene, t_v3f current_col)
+{
+	return (v3f_add(current_col, apply_point(scene, hit_info, light)));
+}
+
+static t_light_handler_func light_handlers[] = {
+	[LIGHT_AMBIENT] = handle_ambient_light,
+	[LIGHT_POINT] = handle_point_light,
+};
+
+t_v3f	compute_lighting(t_ray_hit *hit_info, t_scene *scene)
+{
+	t_v3f	final_col;
+	int		i;
+
+	i = 0;
+	final_col = g_v3f_zero;
+	while (i < scene->lights.size)
+	{
+		t_light *light = (t_light *)scene->lights.items[i];
+		if (light->type >= 0 && light->type 
+				< (int)(sizeof(light_handlers) / sizeof(light_handlers[0])) 
+				&& light_handlers[light->type])
+			final_col = light_handlers[light->type](light, hit_info, scene, final_col);
+		i++;
+	}
+	return (final_col);
+}
 
 t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 {
@@ -105,6 +142,7 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 		color = (g_v3f_one);
 	return (color);
 }
+
 
 #define SAMPLES_PER_PIXEL 12 // Number of samples per pixel
 
