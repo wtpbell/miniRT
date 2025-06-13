@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:55:45 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/10 14:24:52 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/13 17:16:07 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,20 +63,14 @@ struct s_camera
 	t_v3f		bg_color;
 	mlx_image_t	*img_plane;
 	t_mat4x4	view_matrix;
-
-	// Depth of field parameters
-	float		aperture;       // Controls the amount of blur (0 = no blur)
-	float		focus_dist;     // Distance to the focal plane
-
-	// Camera basis vectors
-	t_v3f	u;              // Right vector
-	t_v3f	v;              // Up vector
-	t_v3f	w;              // Forward vector (negative of view direction)
-
-	// Viewport vectors
-	t_v3f	horizontal;      // Horizontal viewport vector
-	t_v3f	vertical;        // Vertical viewport vector
-	t_v3f	lower_left;      // Lower left corner of viewport
+	float		aperture;
+	float		focus_dist;
+	t_v3f	u;
+	t_v3f	v;
+	t_v3f	w;
+	t_v3f	horizontal;
+	t_v3f	vertical;
+	t_v3f	lower_left;
 };
 
 struct s_render

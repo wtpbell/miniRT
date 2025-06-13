@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   rt_types.h                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/06/07 16:31:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/12 14:38:11 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   rt_types.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/07 16:31:03 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/13 18:00:45 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,10 @@ Use the proper header files if you need access to any of these type definitions.
 typedef struct s_lighting		t_lighting;
 
 /* materials */
-
 typedef enum e_material_type	t_mat_type;
-typedef struct s_lambertian		t_lamb;
-typedef struct s_metal			t_metal;
-typedef struct s_dielectric		t_diel;
 typedef struct s_material		t_mat;
 
 /* scene */
-
 typedef enum e_object_type		t_obj_type;
 typedef enum e_light_type		t_light_type;
 typedef enum e_scene_flags		t_scene_flags;
