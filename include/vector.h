@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   vector.h                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/07 23:35:28 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   vector.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 18:40:12 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/13 19:09:29 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ t_v3f	v3f_norm(t_v3f v);
 t_v3f	v3f_refl(t_v3f d, t_v3f n);
 t_v3f	v3f_refr(t_v3f uv, t_v3f n, float etai_over_etat);
 t_v3f	v3f_lerp(t_v3f a, t_v3f b, float t);
-float	v3f_length_squared(t_v3f v);
 t_v3f	v3f_mul(t_v3f a, t_v3f b);
 t_v3f	v3f_div(t_v3f a, t_v3f b);
 t_v3f	v3f_clamp(t_v3f v, float min, float max);
@@ -65,4 +64,6 @@ float	v3f_dot(t_v3f a, t_v3f b);
 float	v3f_mag(t_v3f v);
 float	v3f_sqr_mag(t_v3f v);
 float	v3f_dist(t_v3f a, t_v3f b);
+bool	v3f_equals(t_v3f a, t_v3f b, float epsilon);
+
 #endif

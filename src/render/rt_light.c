@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 19:11:17 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/13 12:30:09 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/13 19:00:27 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 	t_lighting	lt;
 	float		inten;
 	float		shadow_dist;
+	t_v3f		material_color;
 	t_v3f		color;
 
 	ft_bzero(&lt, sizeof(t_lighting));
@@ -80,7 +81,8 @@ t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 		return (g_v3f_zero);
 	lt.diffuse = calculate_diffuse(&lt);
 	lt.specular = get_specular(&lt, hit);
-	color = v3f_scale(v3f_mul(lt.obj_color, light->color), lt.diffuse);
-	return (v3f_clampf01(v3f_scale(v3f_add(
-					color, v3f_scale(light->color, lt.specular)), inten)));
+	material_color = get_material_color(hit->obj->r.mat->albedo, hit->obj->r.color);
+	color = v3f_scale(v3f_mul(material_color, light->color), lt.diffuse);
+	color = v3f_add(color, v3f_scale(v3f_mul(material_color, light->color), lt.specular));
+	return (v3f_clampf01(v3f_scale(color, inten)));
 }

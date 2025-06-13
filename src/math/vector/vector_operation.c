@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   vector_operation.c                                 :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 19:38:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/03 12:16:32 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   vector_operation.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 19:38:24 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/13 19:09:53 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,4 +104,11 @@ t_v3f	v3f_div(t_v3f a, t_v3f b)
 		.y = a.y / b.y,
 		.z = a.z / b.z
 	});
+}
+
+bool	v3f_equals(t_v3f a, t_v3f b, float epsilon)
+{
+	return (fabsf(a.x - b.x) < epsilon
+		&& fabsf(a.y - b.y) < epsilon
+		&& fabsf(a.z - b.z) < epsilon);
 }
