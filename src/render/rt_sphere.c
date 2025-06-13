@@ -65,7 +65,7 @@ t_v2f	sphere_texcoord(t_obj *obj, t_v3f world_point)
 	local_point = v3f_sub(world_point, obj->t.pos);
 	theta = atan2f(local_point.z, local_point.x);
 	phi = acosf(ft_clampf(local_point.y / obj->sp.radius, -1.0f, 1.0f));
-	return (init_v2f((theta + M_PI) / TAU, phi / PI));
+	return (init_v2f((theta + M_PI) / TAU, phi / TAU));
 }
 
 int	sphere_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)

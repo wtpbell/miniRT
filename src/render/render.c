@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/10 23:59:25 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/13 17:56:58 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t)
 t_v2f	plane_texcoord(t_obj *obj, t_v3f point);
 t_v2f	sphere_texcoord(t_obj *obj, t_v3f point);
 t_v2f	triangle_texcoord(t_obj *obj, t_v3f world_point);
+t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point);
 
 static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 {
@@ -70,6 +71,8 @@ static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 		hit_info->texcoord = sphere_texcoord(obj, hit_info->hit);
 	else if (obj->type == OBJ_TRIANGLE)
 		hit_info->texcoord = triangle_texcoord(obj, hit_info->hit);
+	else if (obj->type == OBJ_CYLINDER)
+		hit_info->texcoord = cylinder_texcoord(obj, hit_info->hit);
 	else
 		hit_info->texcoord = init_v2f(0.0f, 0.0f);
 

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 14:00:37 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/11 23:51:21 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/13 19:09:09 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,55 +20,83 @@ t_v3f	triangle_normal(t_obj *obj, t_v3f point)
 	return (obj->t.dir);
 }
 
-static t_v2f	get_offset(t_v2f vt[3])
+void	set_minmax(t_v2f vt[3], t_v2f *min, t_v2f *max)
 {
-	float	x;
-	float	y;
-
-	x = fminf(fminf(vt[0].x, vt[1].x), vt[2].x);
-	y = fminf(fminf(vt[0].y, vt[1].y), vt[2].y);
-	return (init_v2f(x, y));
+	min->x = fminf(fminf(vt[0].x, vt[1].x), vt[2].x);
+	min->y = fminf(fminf(vt[0].y, vt[1].y), vt[2].y);
+	max->x = fmaxf(fmaxf(vt[0].x, vt[1].x), vt[2].x);
+	max->y = fmaxf(fmaxf(vt[0].y, vt[1].y), vt[2].y);
 }
 
+t_v2f	project(const t_v3f *point, const t_v3f *orig, const t_v3f *u, const t_v3f *v)
+{
+	t_v3f	rel;
+
+	rel = v3f_sub(*point, *orig);
+	return (init_v2f(v3f_dot(rel, *u), v3f_dot(rel, *v)));
+}
+
+int	g_is_printed = 0;
+#include <stdio.h>
+
 /* Keyword: planar projection */
+// TODO: Generate this at init of the triangle
 void	generate_uv_vertices(t_v2f vt[3], t_tri *tri, t_v3f forw)
 {
 	int		i;
 	t_v3f	right;
 	t_v3f	up;
-	t_v2f	offset;
+	t_v2f	min;
+	t_v2f	max;
 
 	// TODO: Code duplication! Check plane_texcoord, obj_to_world, view_matrix
 	if (fabsf(v3f_dot(g_v3f_up, forw)) > .99f)
-		right = v3f_norm(v3f_cross(g_v3f_foward, forw));
+		right = v3f_norm(v3f_cross(forw, g_v3f_foward));
 	else
-		right = v3f_norm(v3f_cross(g_v3f_up, forw));
-	up = v3f_cross(right, forw);
+		right = v3f_norm(v3f_cross(forw, g_v3f_up));
+	up = v3f_cross(forw, right);
 
-	vt[0] = init_v2f(v3f_dot(tri->v0, right), v3f_dot(tri->v0, up));
-	vt[1] = init_v2f(v3f_dot(tri->v1, right), v3f_dot(tri->v1, up));
-	vt[2] = init_v2f(v3f_dot(tri->v2, right), v3f_dot(tri->v2, up));
+	vt[0] = project(&tri->v0, &tri->v0, &right, &up);
+	vt[1] = project(&tri->v1, &tri->v0, &right, &up);
+	vt[2] = project(&tri->v2, &tri->v0, &right, &up);
+
+	// vt[0] = init_v2f(v3f_dot(tri->v0, right), v3f_dot(tri->v0, up));
+	// vt[1] = init_v2f(v3f_dot(tri->v1, right), v3f_dot(tri->v1, up));
+	// vt[2] = init_v2f(v3f_dot(tri->v2, right), v3f_dot(tri->v2, up));
+
+	float	aspect;
+
+	aspect = (max.x - min.x) / (max.y - min.y);
 
 	i = 0;
-	offset = get_offset(vt);
+	set_minmax(vt, &min, &max);
+	// possible division by zero
 	while (i < 3)
 	{
-		vt[i].x -= offset.x;
-		vt[i].y -= offset.y;
+		vt[i].x = 1.0f - (vt[i].x - min.x) / (max.x - min.x);
+		vt[i].y = 1.0f - (vt[i].y - min.y) / (max.y - min.y);
+		++i;
 	}
-	// TODO: Normalize the coordinates
-	
+
+	if (g_is_printed == 0)
+	{
+		printf("vt0<%f, %f>, vt1<%f, %f>, vt2<%f, %f>\n",
+			vt[0].x, vt[0].y,
+			vt[1].x, vt[1].y,
+			vt[2].x, vt[2].y);
+		g_is_printed = 1;
+	}
 }
 
 // TODO: Instead of re-calculating the barycentric-coordinates, store them somewhere when checking for intersection
 t_v2f	triangle_texcoord(t_obj *obj, t_v3f world_point)
 {
 	t_tri	*tri;
-	
+
 	t_v3f	v0v1;
 	t_v3f	v0v2;
 	t_v3f	v1v2;
-	
+
 	t_v3f	v1p;
 	t_v3f	v2p;
 
@@ -81,11 +109,8 @@ t_v2f	triangle_texcoord(t_obj *obj, t_v3f world_point)
 
 	tri = &obj->tri;
 
-	t_v2f	vt[3] = {
-		init_v2f(0.0f, 0.0f),
-		init_v2f(1.0f, 0.0f),
-		init_v2f(0.5f, 1.0f),
-	};
+	t_v2f	vt[3];
+	generate_uv_vertices(vt, &obj->tri, obj->t.dir);
 
 	// (p - v0) = u * v0v1 + v * v0v2
 	// (v0p) = u * v0v1 + v * v0v2
@@ -109,7 +134,7 @@ t_v2f	triangle_texcoord(t_obj *obj, t_v3f world_point)
 
 	t_v2f	coord;
 	coord = init_v2f(
-		u * vt[0].x + v * vt[1].x + w * vt[2].x, 
+		u * vt[0].x + v * vt[1].x + w * vt[2].x,
 		u * vt[0].y + v * vt[1].y + w * vt[2].y
 	);
 	return (coord);

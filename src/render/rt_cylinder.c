@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/17 11:59:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/11 23:07:09 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/13 18:26:20 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_v3f	cylinder_normal(t_obj *obj, t_v3f point)
 	z is the distance (in a vertical direction) from the xy-plane to point p (height)
 
 	rho^2 = x^2 + y^2
-	phi = y/x
+	tan phi = y/x
 	z = z
 
 	By convention the z-axis is consider the up axis, but in our case it would be the y-axis
@@ -45,10 +45,13 @@ t_v3f	cylinder_normal(t_obj *obj, t_v3f point)
 
 t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point)
 {
-	(void) obj;
-	(void) point;
+	t_v3f	local_point;
+	t_v2f	texcoord;
 
-	return (init_v2f(0,0));
+	local_point = mul_v3_m4x4(point, obj->t.to_obj);
+	texcoord.x = (atan2f(local_point.z, local_point.x) + PI) / TAU;
+	texcoord.y = local_point.y / (obj->cy.height * PI);
+	return (texcoord);
 }
 
 static int	intersect_cylinder_disc(float r, float h, t_ray *ray, t_v2f *t_lim)
