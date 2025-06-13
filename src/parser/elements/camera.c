@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 12:05:02 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/13 15:18:47 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/13 19:21:12 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ static bool	parse_fov(float *fov, const char *str)
 static bool	parse_camera_fields(t_cam *cam, char **tokens, int token_count)
 {
 	t_field		fields[2];
-	int			i;
-	const char	*value;
 
 	if (token_count <= CAMERA_MIN_TOKENS)
 		return (true);
@@ -40,17 +38,6 @@ static bool	parse_camera_fields(t_cam *cam, char **tokens, int token_count)
 		(t_v2f){.x = 0.0f, .y = FLT_MAX});
 	fields[1] = init_field("fc", &cam->focus_dist, FIELD_FLOAT,
 		(t_v2f){.x = 0.1f, .y = FLT_MAX});
-	i = CAMERA_MIN_TOKENS;
-	while (i < token_count)
-	{
-		if (!is_field(tokens[i], "ap", &value) && !is_field(tokens[i], "fc", &value))
-		{
-			print_error(ERR_FORMAT, "Camera", 
-				"All camera parameters after FOV must be in key:value format (ap:value or fc:value)");
-			return (false);
-		}
-		i++;
-	}
 	return (parse_fields(fields, 2, tokens + CAMERA_MIN_TOKENS));
 }
 
@@ -75,10 +62,7 @@ bool	parse_camera(char **tokens, t_scene *scene)
 	if (!parse_camera_fields(&scene->camera, tokens, token_count(tokens)))
 		return (false);
 	if (scene->camera.focus_dist <= 0.0f)
-	{
-		print_error(ERR_RANGE, "Focus distance must be > 0", "");
-		return (false);
-	}
+		return (print_error(ERR_RANGE, "Focus distance must be > 0", ""),false);
 	scene->camera.t.pos = pos;
 	dir.z = -dir.z;
 	scene->camera.t.dir = v3f_norm(dir);

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 12:17:53 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/13 13:31:29 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/13 19:25:56 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_v3f	compute_lighting(t_ray_hit *hit_info, t_scene *scene)
 	t_v3f						col;
 	t_light						*light;
 	int							i;
-	const t_light_handler_func	handlers[] = {
+	const t_light_handler		handlers[] = {
 	[LIGHT_AMBIENT] = handle_ambient_light,
 	[LIGHT_POINT] = handle_point_light,
 	};
