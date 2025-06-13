@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   material_init.c                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/31 23:53:11 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/12 12:11:25 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   material_init.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/31 23:53:11 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/13 10:49:39 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ t_mat	*init_material(t_mat_type type, const char *name)
 	else if (type == MAT_DIELECTRIC)
 	{
 		mat->diel.ir = 1.5f;
-		mat->diel.transmittance = 0.8f;
-		mat->diel.roughness = 0.05f;
+		mat->diel.transmittance = 1.0f;
+		mat->diel.roughness = 0.0f;
 	}
 	return (mat);
 }

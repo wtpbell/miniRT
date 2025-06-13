@@ -1,6 +1,6 @@
 # Material definitions
-m_dielectric type:dielectric  ir:0.9  tr:0.98  alb:255,255,255  rough:0.02
-m_mirror  type:metal  alb:255,50,0  rough:0.1
+m_dielectric type:dielectric  ir:0.9  tr:0.98  alb:255,255,255  d_rough:0.02
+m_mirror  type:metal  alb:255,50,0  mt_rough:0.1
 m_red     type:lambertian  spc:0.3  shi:10.0  alb:200,0,0
 
 C 0,8,15     0,-0.1,1  70

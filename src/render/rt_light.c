@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   rt_light.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/31 19:11:17 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/12 15:32:48 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   rt_light.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/31 19:11:17 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/13 12:30:09 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,6 @@
 t_v3f	apply_ambient(t_v3f base_col, t_light *light)
 {
 	return (v3f_scale(v3f_mul(base_col, light->color), light->intensity));
-}
-
-void	init_lighting(t_lighting *lighting, t_ray_hit *hit,
-			t_light *light, t_v3f camera_pos)
-{
-	lighting->light_dir = v3f_norm(v3f_sub(light->pos, hit->hit));
-	lighting->view_dir = v3f_norm(v3f_sub(camera_pos, hit->hit));
-	lighting->hit_point = hit->hit;
-	lighting->normal = hit->normal;
-	lighting->light_color = light->color;
-	lighting->obj_color = hit->obj->r.color;
-	lighting->inten = light->intensity;
-	lighting->dist = v3f_mag(v3f_sub(light->pos, hit->hit));
 }
 
 float	calculate_diffuse(t_lighting *lighting)
@@ -59,15 +46,18 @@ float	calculate_specular(t_lighting *lighting,
 
 static float	get_specular(t_lighting *lt, t_ray_hit *hit)
 {
-	if (hit->obj->r.mat->type == MAT_LAMBERTIAN && hit->obj->r.mat->lamb.specular > 0.0f)
-		return (calculate_specular(lt, hit->obj->r.mat->lamb.shininess, hit->obj->r.mat->lamb.specular));
+	if (hit->obj->r.mat->type == MAT_LAMBERTIAN
+		&& hit->obj->r.mat->lamb.specular > 0.0f)
+		return (calculate_specular(lt, hit->obj->r.mat->lamb.shininess,
+				hit->obj->r.mat->lamb.specular));
 	if (hit->obj->r.mat->type == MAT_DIELECTRIC)
-		return (schlick(v3f_dot(lt->normal, lt->view_dir), hit->obj->r.mat->diel.ir));
+		return (schlick(v3f_dot(lt->normal, lt->view_dir),
+				hit->obj->r.mat->diel.ir));
 	if (hit->obj->r.mat->type == MAT_METAL)
-		return (calculate_specular(lt, 100.0f, 1.0f) * (1.0f - hit->obj->r.mat->metal.roughness));
+		return (calculate_specular(lt, 100.0f, 1.0f)
+			* (1.0f - hit->obj->r.mat->metal.roughness));
 	return (0.0f);
 }
-
 
 /**quadratic falloff: inten / (1 + a*d + b*d²)
 combines diffuse and specular, multiplies by albedo and light
@@ -91,9 +81,6 @@ t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 	lt.diffuse = calculate_diffuse(&lt);
 	lt.specular = get_specular(&lt, hit);
 	color = v3f_scale(v3f_mul(lt.obj_color, light->color), lt.diffuse);
-	return (v3f_clampf01(v3f_scale(v3f_add(color, v3f_scale(light->color, lt.specular)), inten)));
+	return (v3f_clampf01(v3f_scale(v3f_add(
+					color, v3f_scale(light->color, lt.specular)), inten)));
 }
-
-
-
-

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 22:20:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/10 19:00:00 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/13 10:18:38 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,7 @@ typedef enum e_field_state
 {
 	EMPTY		= 0x0,
 	FILLED		= 0x1,
-	REQUIRED	= 0x2,
-	HIDDEN		= 0x4
+	HIDDEN		= 0x2
 }	t_f_state;
 
 typedef struct s_field

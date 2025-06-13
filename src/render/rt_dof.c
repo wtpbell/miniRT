@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   rt_dof.c                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/11 15:34:41 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   rt_dof.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/14 12:05:02 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/13 10:17:58 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,10 @@ static void	concentric_sample_disk(float u1, float u2, t_v2f *lens)
 
 	sx = 2.0f * u1 - 1.0f;
 	sy = 2.0f * u2 - 1.0f;
+	lens->x = 0;
+	lens->y = 0;
 	if (sx == 0 && sy == 0)
-	{
-		init_v2f(lens->x, lens->y);
 		return ;
-	}
 	if (fabsf(sx) > fabsf(sy))
 	{
 		r = sx;

@@ -6,11 +6,12 @@
 # cy [position (x,y,z float)] [axis (x,y,z float)] [diameter (float)] [height (float)] [color (R,G,B in 0–255)]
 # tri [v0 (x,y,z float)] [v1 (x,y,z float)] [v2 (x,y,z float)] [color (R,G,B in 0–255)]
 m_yellow	type:lambertian	shi:32.0	spc:0.5	alb:255,255,0
+m_mirror  type:metal  alb:255,50,0  mt_rough:0.0
 
 C 0,2,5     0,0,1  100
 
 # Ambient light (reduced to make colors more saturated)
-A 0.05 255,255,255
+A 0.8 255,255,255
 
 # Main light (increased intensity for better highlights)
 L -3,5,5 1.0 255,255,255
@@ -25,14 +26,14 @@ pl 0,10,0 0,-1,0 100,100,100   m_yellow
 pl 0,-1,0 0,1,0 80,80,80
 
 # Red sphere with custom material for better color
-m_default type:lambertian spc:0.0 shi:0.0 rough:0.1
-m_diel_r0 type:dielectric  ir:1.5 tr:1.0 rough:0.0 alb:255,255,255
+m_default type:lambertian spc:0.0 shi:0.0 l_rough:0.1
+m_diel_r0 type:dielectric  ir:1.5 tr:1.0 d_rough:0.0
 # sp 0,1.5,0 3.0 255,0,0 m_default
 
 # Other objects
-# sp 1,0,0 3.0 255,255,255 m_dielectric
-# sp -1.0,0,0 3.0 0,0,255 m_dielectric
-sp -1.0,0,0 3.0 0,0,255 m_diel
+sp 1,0,0 3.0 255,0,0 m_mirror
+sp -1.0,0,0 3.0 0,0,255 m_dielectric
+sp 0,2,0 3.0 0,255,0 m_diel_r0
 
 # cy 3,0,0 0,1,0 0.5 2 255,200,0
 # cy 3.5,0,0 0,1,0 0.5 2 200,0,200

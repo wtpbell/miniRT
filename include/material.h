@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   material.h                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/12 11:56:42 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   material.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/29 13:47:23 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/13 10:19:15 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,19 @@ struct s_material
 	char		*name;
 	t_mat_type	type;
 	t_v3f		albedo;
-	union
-	{
-		struct {
-			float	specular;
-			float	shininess;
-			float	roughness;
-		}	lamb;
-		struct {
-			float	roughness;
-		}	metal;
-		struct {
-			float	ir;
-			float	transmittance;
-			float	roughness;
-		}	diel;
-	};
+	struct {
+		float	specular;
+		float	shininess;
+		float	roughness;
+	}	lamb;
+	struct {
+		float	roughness;
+	}	metal;
+	struct {
+		float	ir;
+		float	transmittance;
+		float	roughness;
+	}	diel;
 };
 
 t_mat	*init_material(t_mat_type type, const char *name);
