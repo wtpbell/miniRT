@@ -6,11 +6,16 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 19:14:48 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/13 10:18:54 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/13 15:16:02 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+
+t_field	init_field(const char *name, void *mem, t_f_type type, t_v2f lim)
+{
+	return ((t_field){name, mem, type, lim, EMPTY});
+}
 
 bool	is_field(const char *token, const char *field_name, const char **value)
 {

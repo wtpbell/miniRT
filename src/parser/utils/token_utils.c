@@ -16,8 +16,10 @@ static int	has_expected_token_count(const char *type, size_t token_count)
 {
 	if (ft_strcmp(type, "A") == 0)
 		return (token_count == 3);
-	else if (ft_strcmp(type, "C") == 0 || ft_strcmp(type, "L") == 0)
+	else if (ft_strcmp(type, "L") == 0)
 		return (token_count == 4);
+	else if (ft_strcmp(type, "C") == 0)
+		return (token_count >= 4);  // Camera can have 4+ tokens (position, direction, FOV, [key:value...])
 	else if (ft_strcmp(type, "sp") == 0 || ft_strcmp(type, "pl") == 0)
 		return (token_count == 4 || token_count == 5);
 	else if (ft_strcmp(type, "tri") == 0)

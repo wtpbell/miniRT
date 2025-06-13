@@ -168,11 +168,31 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 	}
 }
 
+void	print_camera_setup(t_cam *cam)
+{
+	printf("\n--- Camera Setup ---\n");
+	printf("Position: (%.2f, %.2f, %.2f)\n", 
+		cam->t.pos.x, cam->t.pos.y, cam->t.pos.z);
+	printf("Direction: (%.2f, %.2f, %.2f)\n", 
+		cam->t.dir.x, cam->t.dir.y, cam->t.dir.z);
+	printf("Up: (%.2f, %.2f, %.2f)\n", 
+		cam->t.up.x, cam->t.up.y, cam->t.up.z);
+	printf("U (right): (%.2f, %.2f, %.2f)\n", 
+		cam->u.x, cam->u.y, cam->u.z);
+	printf("V (up): (%.2f, %.2f, %.2f)\n", 
+		cam->v.x, cam->v.y, cam->v.z);
+	printf("W (forward): (%.2f, %.2f, %.2f)\n", 
+		cam->w.x, cam->w.y, cam->w.z);
+	printf("Aperture: %.2f (from scene file)\n", cam->aperture);
+	printf("Focus distance: %.2f (from scene file)\n", cam->focus_dist);
+}
+
 void	scene_print(t_scene *scene)
 {
 	int	spaces = 0;
 
 	printf("===SCENE===\n");
+	print_camera_setup(&scene->camera);
 	camera_print(&scene->camera, spaces + 2);
 	objects_print(scene->objects, spaces + 2, "OBJECTS");
 	materials_print(scene->shared_materials, spaces + 2, "MATERIALS");

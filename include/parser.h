@@ -175,6 +175,7 @@ void		free_material(void *ptr);
 void		cleanup_scene(t_scene *scene);
 
 // field.c
+t_field		init_field(const char *name, void *mem, t_f_type type, t_v2f lim);
 bool		is_field(const char *token, const char *field_name,
 				const char **value);
 bool		parse_fields(t_field *fields, int field_count, char **tokens);

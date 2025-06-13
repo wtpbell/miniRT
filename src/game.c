@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   game.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/09 19:18:12 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   game.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/13 16:11:42 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,22 +75,7 @@ static bool	cam_init(t_cam *cam, mlx_t *mlx)
 	cam->w = v3f_scale(cam->t.dir, -1.0f);  // Forward is negative Z
 	cam->u = v3f_norm(v3f_cross((t_v3f){{0,1,0}}, cam->w));  // Right
 	cam->v = v3f_cross(cam->w, cam->u);  // Up
-	
-	// Set DoF parameters - increased for more pronounced effect
-	cam->aperture = 0.11f;  // Increased from 0.1f for stronger blur
-	cam->focus_dist = 3.0f;  // Focus distance to match red sphere at z=-10
-	
-	// Debug print camera setup
-	printf("\n--- Camera Setup ---\n");
-	printf("Position: (%.2f, %.2f, %.2f)\n", cam->t.pos.x, cam->t.pos.y, cam->t.pos.z);
-	printf("Direction: (%.2f, %.2f, %.2f)\n", cam->t.dir.x, cam->t.dir.y, cam->t.dir.z);
-	printf("Up: (%.2f, %.2f, %.2f)\n", cam->t.up.x, cam->t.up.y, cam->t.up.z);
-	printf("U (right): (%.2f, %.2f, %.2f)\n", cam->u.x, cam->u.y, cam->u.z);
-	printf("V (up): (%.2f, %.2f, %.2f)\n", cam->v.x, cam->v.y, cam->v.z);
-	printf("W (forward): (%.2f, %.2f, %.2f)\n", cam->w.x, cam->w.y, cam->w.z);
-	printf("Aperture: %.2f\n", cam->aperture);
-	printf("Focus distance: %.2f\n", cam->focus_dist);
-	
+	print_camera_setup(cam);
 	view_matrix(cam->view_matrix, cam->t.pos, cam->t.dir, cam->t.up);
 	update_camera_view(cam);
 	return (true);

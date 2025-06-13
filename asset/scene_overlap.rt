@@ -8,7 +8,7 @@
 m_yellow	type:lambertian	shi:32.0	spc:0.5	alb:255,255,0
 m_mirror  type:metal  alb:255,50,0  mt_rough:0.0
 
-C 0,2,5     0,0,1  100
+C 0,2,5     0,0,1  100 ap:0.2 fc:17
 
 # Ambient light (reduced to make colors more saturated)
 A 0.8 255,255,255
