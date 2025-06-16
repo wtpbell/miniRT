@@ -18,7 +18,7 @@ INC			:= -I ./include -I $(MLX42_DIR)/include -I $(LIBFT_DIR)/include
 PARSER_CORE	:= parser.c element_parser.c camera.c light.c sphere.c plane.c\
 				cylinder.c string_utils.c vector_utils.c error.c cleanup.c\
 				string_to_num.c token_utils.c general_utils.c validate_utils.c\
-				triangle.c field.c material.c material_utils.c
+				triangle.c field.c material.c material_utils.c texture.c
 SRCS_MAIN	:= main.c vector_init.c vector_helper.c vector_operation.c\
 				vec_container.c vec_container_utils.c color.c render.c\
 				rt_math.c matrix.c game.c rt_sphere.c rt_plane.c rt_cylinder.c \

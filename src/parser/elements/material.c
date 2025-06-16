@@ -15,7 +15,7 @@
 static inline t_field	init_field(const char *name, void *mem, t_f_type type,
 	t_v2f lim)
 {
-	return ((t_field){name, mem, type, lim, EMPTY | REQUIRED});
+	return ((t_field){name, mem, type, lim, EMPTY | REQUIRED, {NULL}});
 }
 
 static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)

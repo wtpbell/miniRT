@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   material.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/29 13:47:23 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/08 17:40:45 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   material.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/16 10:19:54 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ enum e_material_type
 	MAT_METAL,
 	MAT_DIELECTRIC
 };
+
+typedef enum e_texture_type
+{
+	TEX_SOLID,
+	TEX_CHECKER,
+}	t_tex_type;
 
 struct s_lambertian
 {
@@ -40,11 +46,19 @@ struct s_dielectric
 	float	transmittance;
 };
 
+typedef struct s_texture
+{
+	t_tex_type	type;
+	t_v2f		scale_uv;
+	t_v3f		col;
+}	t_texture;
+
 struct s_material
 {
 	char		*name;
 	t_mat_type	type;
 	t_v3f		albedo;
+	t_texture	texture;
 	union
 	{
 		t_lamb	lamb;

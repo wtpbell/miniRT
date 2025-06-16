@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/07 23:49:17 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/16 11:32:55 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@
 # define RESET 			"\033[0m"
 
 typedef bool			(*t_parser)(char **, t_scene *);
+typedef bool			(*conv_to_enum)(int *val, const void *raw);
 
 typedef enum e_error
 {
@@ -81,7 +82,8 @@ typedef enum e_field_type
 	FIELD_INT,
 	FIELD_FLOAT,
 	FIELD_V3F,
-	FIELD_COL
+	FIELD_COL,
+	FIELD_ENUM
 }	t_f_type;
 
 typedef enum e_field_state
@@ -99,6 +101,10 @@ typedef struct s_field
 	t_f_type	type;
 	t_v2f		limit;
 	t_f_state	state;
+	union
+	{
+		conv_to_enum	to_enum;
+	};
 }	t_field;
 
 // Token utilities
@@ -119,6 +125,8 @@ bool		parse_camera(char **tokens, t_scene *scene);
 bool		parse_light(char **tokens, t_scene *scene);
 // material.c
 bool		parse_material(char **tokens, t_scene *scene);
+// texture.c
+bool		handle_texture_fields(t_texture *tex, char **tokens);
 
 /* ---------------------Objects--------------------- */
 // sphere.c
@@ -177,7 +185,7 @@ void		cleanup_scene(t_scene *scene);
 // field.c
 bool		is_field(const char *token, const char *field_name,
 				const char **value);
-bool		parse_fields(t_field *fields, int field_count, char **tokens);
+bool		parse_fields(t_field *fields, int count, char **tokens, char ***rem_tokens);
 
 // material_utils.c
 t_mat		*find_or_create_material(t_vector *materials, const char *m_name);

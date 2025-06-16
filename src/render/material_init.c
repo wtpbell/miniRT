@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/31 23:53:11 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/10 10:36:38 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/16 10:51:10 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ t_mat	*init_material(t_mat_type type, const char *name)
 		mat->diel.ir = 1.5f;
 		mat->diel.transmittance = 0.9f;
 	}
+	mat->texture = (t_texture) {TEX_SOLID, init_v2f(1.0f, 1.0f), g_v3f_one};
 	return (mat);
 }
 

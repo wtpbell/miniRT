@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 14:00:37 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/13 19:09:09 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/16 11:04:49 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	g_is_printed = 0;
 // TODO: Generate this at init of the triangle
 void	generate_uv_vertices(t_v2f vt[3], t_tri *tri, t_v3f forw)
 {
+	float	aspect;
 	int		i;
 	t_v3f	right;
 	t_v3f	up;
@@ -64,17 +65,14 @@ void	generate_uv_vertices(t_v2f vt[3], t_tri *tri, t_v3f forw)
 	// vt[1] = init_v2f(v3f_dot(tri->v1, right), v3f_dot(tri->v1, up));
 	// vt[2] = init_v2f(v3f_dot(tri->v2, right), v3f_dot(tri->v2, up));
 
-	float	aspect;
-
-	aspect = (max.x - min.x) / (max.y - min.y);
-
 	i = 0;
 	set_minmax(vt, &min, &max);
+	aspect = (max.y - min.y) / (max.x - min.x);
 	// possible division by zero
 	while (i < 3)
 	{
 		vt[i].x = 1.0f - (vt[i].x - min.x) / (max.x - min.x);
-		vt[i].y = 1.0f - (vt[i].y - min.y) / (max.y - min.y);
+		vt[i].y = (1.0f - (vt[i].y - min.y) / (max.y - min.y)) * aspect;
 		++i;
 	}
 
