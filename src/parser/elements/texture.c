@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/16 10:29:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/16 11:34:49 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/16 18:22:09 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,11 @@ bool	str_to_texture_type(int *val, const void *enum_name)
 	return (*val = -1, false);
 }
 
-bool	handle_texture_fields(t_texture *tex, char **tokens)
+void	init_texture_fields(t_field *tex_fields, t_texture *tex)
 {
-	t_field	tex_fields[4];
-
-	tex_fields[0] = init_field("type", &tex->type, FIELD_ENUM, init_v2f(0, 1));
+	tex_fields[0] = init_field("pat", &tex->type, FIELD_ENUM, init_v2f(0, 1));
 	tex_fields[0].to_enum = str_to_texture_type;
 	tex_fields[1] = init_field("su", &tex->scale_uv.u, FIELD_FLOAT, init_v2f(0, 1000));
 	tex_fields[2] = init_field("sv", &tex->scale_uv.v, FIELD_FLOAT, init_v2f(0, 1000));
 	tex_fields[3] = init_field("alt_col", &tex->col, FIELD_COL, init_v2f(0, 1));
-	return (parse_fields(tex_fields, 4, tokens, NULL));
 }

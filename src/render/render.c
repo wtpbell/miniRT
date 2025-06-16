@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/13 17:56:58 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/16 18:58:53 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,15 @@ static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 	else
 		hit_info->texcoord = init_v2f(0.0f, 0.0f);
 
-	hit_info->hit_color = checkerboard_pattern(
-		hit_info->texcoord,
+	if (obj->r.mat->texture.type == TEX_SOLID)
+		hit_info->hit_color = v3f_mul(obj->r.color, obj->r.mat->albedo);
+	else if (obj->r.mat->texture.type == TEX_CHECKER)
+	{
+		hit_info->hit_color = checkerboard_pattern(
+		hit_info->texcoord, obj->r.mat->texture.scale_uv,
 		v3f_mul(obj->r.color, obj->r.mat->albedo),
-		g_v3f_right);
+		obj->r.mat->texture.col);
+	}
 }
 
 t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
