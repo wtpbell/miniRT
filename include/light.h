@@ -16,9 +16,6 @@
 # include "rt_types.h"
 # include "minirt.h"
 
-typedef t_v3f	(*t_light_handler_func)(t_light *light, t_ray_hit *hit_info,
-				t_scene *scene, t_v3f current_col);
-
 struct s_lighting
 {
 	t_v3f	light_dir;

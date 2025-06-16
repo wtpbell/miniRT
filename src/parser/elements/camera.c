@@ -28,12 +28,10 @@ static bool	parse_fov(float *fov, const char *str)
 	return (true);
 }
 
-static bool	parse_camera_fields(t_cam *cam, char **tokens, int token_count)
+static bool	parse_camera_fields(t_cam *cam, char **tokens)
 {
 	t_field		fields[2];
 
-	if (token_count <= CAMERA_MIN_TOKENS)
-		return (true);
 	fields[0] = init_field("ap", &cam->aperture, FIELD_FLOAT,
 		(t_v2f){.x = 0.0f, .y = FLT_MAX});
 	fields[1] = init_field("fc", &cam->focus_dist, FIELD_FLOAT,
@@ -59,7 +57,7 @@ bool	parse_camera(char **tokens, t_scene *scene)
 	ft_bzero(&scene->camera, sizeof(t_cam));
 	scene->camera.aperture = 0.0f;
 	scene->camera.focus_dist = 10.0f;
-	if (!parse_camera_fields(&scene->camera, tokens, token_count(tokens)))
+	if (!parse_camera_fields(&scene->camera, tokens))
 		return (false);
 	if (scene->camera.focus_dist <= 0.0f)
 		return (print_error(ERR_RANGE, "Focus distance must be > 0", ""),false);
@@ -73,7 +71,6 @@ bool	parse_camera(char **tokens, t_scene *scene)
 	scene->camera.t.up = up;
 	scene->camera.fov = fov;
 	id_m4x4(scene->camera.view_matrix);
-	scene->camera.view_matrix[15] = 1.0f;
 	scene->scene_flags |= SCENE_CAMERA;
 	return (true);
 }

@@ -43,7 +43,7 @@ t_v3f	compute_lighting(t_ray_hit *hit_info, t_scene *scene)
 	t_v3f						col;
 	t_light						*light;
 	int							i;
-	const t_light_handler		handlers[] = {
+	const t_apply_light		handlers[] = {
 	[LIGHT_AMBIENT] = handle_ambient_light,
 	[LIGHT_POINT] = handle_point_light,
 	};

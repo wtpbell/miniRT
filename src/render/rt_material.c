@@ -70,10 +70,7 @@ t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 		ior = hit->obj->r.mat->diel.ir;
 	indirect = blend_color(sc, hit, depth, ior);
 	if (hit->obj->r.mat->diel.transmittance < 0.99f)
-	{
-		t_v3f material_color = get_material_color(hit->obj->r.mat->albedo, hit->obj->r.color);
-		direct_light = v3f_mul(compute_lighting(hit, sc), material_color);
-	}
+		direct_light = v3f_mul(compute_lighting(hit, sc), hit->obj->r.color);
 	if (hit->obj->r.mat->diel.transmittance >= 0.99f)
 		return (v3f_clampf01(indirect));
 	if (hit->obj->r.mat->diel.transmittance <= 0.01f)
@@ -88,11 +85,9 @@ t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info)
 {
 	t_v3f	lighting;
-	t_v3f	material_color;
 
-	material_color = get_material_color(hit_info->obj->r.mat->albedo, hit_info->obj->r.color);
 	lighting = compute_lighting(hit_info, scene);
-	return (v3f_clampf01(v3f_mul(material_color, lighting)));
+	return (v3f_clampf01(v3f_mul(hit_info->obj->r.color, lighting)));
 }
 
 t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth)
@@ -100,9 +95,7 @@ t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 	t_ray	reflected_ray;
 	t_v3f	reflected_dir;
 	t_v3f	result;
-	t_v3f	material_color;
 
-	material_color = get_material_color(hit->obj->r.mat->albedo, hit->obj->r.color);
 	reflected_dir = v3f_refl(v3f_norm(hit->ray->direction), hit->normal);
 	if (hit->obj->r.mat->metal.roughness > 0.0f)
 		reflected_dir = v3f_norm(v3f_add(reflected_dir,
@@ -113,7 +106,7 @@ t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 	if (v3f_dot(reflected_ray.direction, hit->normal) > 0.0f)
 	{
 		result = trace(&reflected_ray, sc, depth - 1);
-		return (v3f_mul(material_color, result));
+		return (v3f_mul(hit->obj->r.color, result));
 	}
 	return (g_v3f_zero);
 }

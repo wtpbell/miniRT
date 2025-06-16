@@ -62,10 +62,3 @@ t_v3f	v3f_apply_gamma(t_v3f color, float gamma)
 			.z = fminf(powf(color.z, inv_gamma), 1.0f)
 		}});
 }
-
-t_v3f	get_material_color(t_v3f albedo, t_v3f obj_color)
-{
-	if (v3f_equals(albedo, g_v3f_one, 0.001f))
-		return (obj_color);
-	return (albedo);
-}

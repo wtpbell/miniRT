@@ -49,9 +49,6 @@ struct s_material
 t_mat	*init_material(t_mat_type type, const char *name);
 bool	create_default_materials(t_vector *shared_materials);
 bool	assign_material(t_obj *obj, t_vector *materials, const char *m_name);
-// float	get_refraction_ratio(t_ray_hit *hit);
-// t_v3f	get_reflect_color(t_scene *sc, t_ray_hit *h, uint32_t depth);
-// t_v3f	calculate_refr(t_scene *sc, t_ray_hit *h, float ior, uint32_t depth);
 t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth);
 t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info);
 t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth);
