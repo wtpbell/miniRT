@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   material.c                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/16 18:24:03 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/17 21:54:25 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
 	const t_v2f	lim_shi = init_v2f(0.0f, 5000.0f);
 	const t_v2f	lim_ir = init_v2f(0.0f, 100.0f);
 	t_field		fields[10];
-	char		**rem_tokens;
 
 	mat->type = type;
 	fields[0] = init_field("spc", &mat->lamb.specular, FIELD_FLOAT, lim_01);
@@ -46,7 +45,7 @@ static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
 	fields[4].state |= (HIDDEN * (type != MAT_DIELECTRIC));
 
 	init_texture_fields(fields + 6, &mat->texture);
-	return (parse_fields(fields, 10, tokens, &rem_tokens));
+	return (parse_fields(fields, 10, tokens));
 }
 
 bool	parse_material(char **tokens, t_scene *scene)

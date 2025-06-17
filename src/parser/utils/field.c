@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/06 19:14:48 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/16 11:29:59 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/17 21:54:14 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ bool	parse_enum(int *val, const char *str, const char *token, conv_to_enum to_en
 	return (false);
 }
 
-bool	parse_fields(t_field *fields, int count, char **tokens, char ***rem_tokens)
+bool	parse_fields(t_field *fields, int count, char **tokens)
 {
 	const char	*value;
 	t_field		*field;
@@ -90,7 +90,5 @@ bool	parse_fields(t_field *fields, int count, char **tokens, char ***rem_tokens)
 		}
 		++tokens;
 	}
-	if (rem_tokens != NULL)
-		*rem_tokens = tokens;
 	return (validate_fields(fields, count));
 }

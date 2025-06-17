@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/16 18:10:23 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/17 21:55:00 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ void		cleanup_scene(t_scene *scene);
 // field.c
 bool		is_field(const char *token, const char *field_name,
 				const char **value);
-bool		parse_fields(t_field *fields, int count, char **tokens, char ***rem_tokens);
+bool		parse_fields(t_field *fields, int count, char **tokens);
 
 // material_utils.c
 t_mat		*find_or_create_material(t_vector *materials, const char *m_name);
