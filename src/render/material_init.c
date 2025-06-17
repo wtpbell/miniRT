@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 23:53:11 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/08 18:17:04 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/13 18:50:44 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,20 @@ t_mat	*init_material(t_mat_type type, const char *name)
 	if (mat->name == NULL)
 		return (free(mat), NULL);
 	mat->type = type;
-	mat->albedo = init_v3f(1.0f, 1.0f, 1.0f);
+	mat->albedo = g_v3f_one;
 	if (type == MAT_LAMBERTIAN)
 	{
-		mat->lamb.specular = 0.7f;
-		mat->lamb.shininess = 64.0f;
+		mat->lamb.specular = 0.1f;
+		mat->lamb.shininess = 32.0f;
+		mat->lamb.roughness = 1.0f;
 	}
 	else if (type == MAT_METAL)
-		mat->metal.fuzz = 0.1f;
+		mat->metal.roughness = 0.1f;
 	else if (type == MAT_DIELECTRIC)
 	{
 		mat->diel.ir = 1.5f;
-		mat->diel.transmittance = 0.9f;
+		mat->diel.transmittance = 1.0f;
+		mat->diel.roughness = 0.0f;
 	}
 	return (mat);
 }

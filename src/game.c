@@ -6,13 +6,14 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/08 17:12:06 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/13 16:11:42 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "MLX42/MLX42.h"
 #include "minirt.h"
 #include "debug/rt_debug.h"
+#include <math.h>
 
 #define WIDTH	1600
 #define HEIGHT	900
@@ -64,13 +65,13 @@ void	view_matrix(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up)
 static bool	cam_init(t_cam *cam, mlx_t *mlx)
 {
 	cam->img_plane = mlx_new_image(mlx, mlx->width, mlx->height);
-	if (cam->img_plane == NULL
-		|| mlx_image_to_window(mlx, cam->img_plane, 0, 0) == -1)
+	if (cam->img_plane == NULL || mlx_image_to_window(mlx, cam->img_plane, 0, 0) == -1)
 		return (false);
 	cam->aspect_ratio = cam->img_plane->width / (float)cam->img_plane->height;
 	cam->bg_color = (t_v3f){{0.5f, 0.0f, 0.5f}};
 	cam->t.dir = v3f_norm(cam->t.dir);
-	view_matrix(cam->view_matrix, cam->t.pos, cam->t.dir, cam->t.up);
+	print_camera_setup(cam);
+	update_camera_view(cam);
 	return (true);
 }
 

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   vector.h                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/07 23:35:28 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   vector.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 18:40:12 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/13 19:14:03 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,5 @@ t_v3f	v3f_clampf01(t_v3f v);
 float	v3f_dot(t_v3f a, t_v3f b);
 float	v3f_mag(t_v3f v);
 float	v3f_sqr_mag(t_v3f v);
-float	v3f_dist(t_v3f a, t_v3f b);
+bool	v3f_equals(t_v3f a, t_v3f b, float epsilon);
 #endif

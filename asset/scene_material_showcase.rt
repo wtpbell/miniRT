@@ -1,0 +1,67 @@
+# Camera: Slightly closer, straight on
+C 0,1.5,4     0,0,1  60
+
+# Ambient: Low to highlight differences
+A 0.1 255,255,255
+
+# Strong directional light from above
+L 0,4,2	 1.0 	255,255,255
+
+# Room setup
+pl 0,0,-3 0,0,1 150,150,150 
+pl -4,0,0 1,0,0 180,180,180 
+pl 4,0,0 -1,0,0 180,180,180 
+pl 0,4,0 0,-1,0 180,180,180 
+pl 0,-0.5,0 0,1,0 200,200,200 
+
+# # Lambertian materials - ONLY ROUGHNESS
+# m_lamb_r0 type:lambertian rough:0.0 alb:255,0,0 spc:0.001 shi:0
+# m_lamb_r1 type:lambertian rough:0.3 alb:200,50,50 spc:0.001 shi:0
+# m_lamb_r2 type:lambertian rough:0.6 alb:150,0,0 spc:0.001 shi:0
+# m_lamb_r3 type:lambertian rough:1.0 alb:100,0,0 spc:0.001 shi:0
+
+# # Lambertian materials - ROUGHNESS + SPECULAR (shininess effect)
+# m_lamb_rs0 type:lambertian rough:0.0 alb:0,0,255 spc:0.9 shi:128
+# m_lamb_rs1 type:lambertian rough:0.3 alb:0,50,200 spc:0.6 shi:64
+# m_lamb_rs2 type:lambertian rough:0.6 alb:0,100,150 spc:0.3 shi:16
+# m_lamb_rs3 type:lambertian rough:1.0 alb:0,150,100 spc:0.1 shi:8
+
+# # Top row: Roughness only (pure diffuse)
+# sp -2.5,2,0 0.8 255,255,255 m_lamb_r0
+# sp -0.8,2,0 0.8 255,255,255 m_lamb_r1
+# sp 0.8,2,0 0.8 255,255,255 m_lamb_r2
+# sp 2.5,2,0 0.8 255,255,255 m_lamb_r3
+
+# # Bottom row: Roughness + Shininess/Specular
+# sp -2.5,0,0 0.8 255,255,255 m_lamb_rs0
+# sp -0.8,0,0 0.8 255,255,255 m_lamb_rs1
+# sp 0.8,0,0 0.8 255,255,255 m_lamb_rs2
+# sp 2.5,0,0 0.8 255,255,255 m_lamb_rs3
+
+
+
+# Dielectric materials (Top row) - fully transparent, only roughness changes
+m_diel_r0 type:dielectric ir:1.5 tr:1.0 d_rough:0.0 alb:255,255,255
+m_diel_r1 type:dielectric ir:1.5 tr:1.0 d_rough:0.3 alb:255,255,255
+m_diel_r2 type:dielectric ir:1.5 tr:1.0 d_rough:0.6 alb:255,255,255
+m_diel_r3 type:dielectric ir:1.5 tr:1.0 d_rough:1.0 alb:255,255,255
+
+# Dielectric materials (Bottom row) - roughness + decreasing transparency
+m_diel_rt0 type:dielectric ir:1.5 tr:1.0 d_rough:0.0 alb:255,0,0 
+m_diel_rt1 type:dielectric ir:1.5 tr:0.6 d_rough:0.0 alb:255,0,0 
+m_diel_rt2 type:dielectric ir:1.5 tr:0.3 d_rough:0.0 alb:255,0,0 
+m_diel_rt3 type:dielectric ir:1.5 tr:0.0 d_rough:0.0 alb:255,0,0 
+
+m_metal type:dielectric d_rough:0.0 alb:255,255,0
+
+# Top row: full trmittance (changing roughness only)
+sp -2.5,2.5,0 1.5 255,255,255 m_diel_r0
+sp -0.8,2.5,0 1.5 255,255,255 m_diel_r1
+sp 0.8,2.5,0 1.5 255,255,255 m_diel_r2
+sp 2.5,2.5,0 1.5 255,255,255 m_diel_r3
+
+# Bottom row: Glass with increasing roughness and tint
+sp -2.5,0.3,0 1.5 255,255,255 m_diel_rt0
+sp -0.8,0.3,0 1.5 255,255,255 m_diel_rt1
+sp 0.8,0.3,0 1.5 255,200,200 m_diel_rt2
+sp 2.5,0.3,0 1.5 255,150,150 m_diel_rt3

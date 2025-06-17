@@ -1,16 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   field.c                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/06/06 19:14:48 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/07 23:10:11 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   field.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/06 19:14:48 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/13 15:16:02 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+
+t_field	init_field(const char *name, void *mem, t_f_type type, t_v2f lim)
+{
+	return ((t_field){name, mem, type, lim, EMPTY});
+}
 
 bool	is_field(const char *token, const char *field_name, const char **value)
 {
@@ -40,23 +45,6 @@ static t_field	*get_field(t_field *fields, int count, char *token,
 	return (NULL);
 }
 
-static bool	validate_fields(t_field *fields, int count)
-{
-	int	i;
-
-	i = 0;
-	while (i < count)
-	{
-		if ((fields[i].state & (FILLED | REQUIRED | HIDDEN)) == REQUIRED)
-		{
-			print_error(ERR_REQ_FIELD, "material", fields[i].name);
-			return (false);
-		}
-		++i;
-	}
-	return (true);
-}
-
 bool	parse_fields(t_field *fields, int count, char **tokens)
 {
 	const char	*value;
@@ -81,5 +69,5 @@ bool	parse_fields(t_field *fields, int count, char **tokens)
 		}
 		++tokens;
 	}
-	return (validate_fields(fields, count));
+	return (true);
 }

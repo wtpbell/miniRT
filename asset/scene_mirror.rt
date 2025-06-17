@@ -7,7 +7,7 @@
 # tri [v0 (x,y,z float)] [v1 (x,y,z float)] [v2 (x,y,z float)] [color (R,G,B in 0–255)]
 
 # Camera position and settings
-C 0,4,12     0,0,1  70
+C -1,4,12     0,0,1  70
 
 # Ambient light
 A 0.3 255,255,255
@@ -18,11 +18,11 @@ L -5,8,5 0.8 255,255,255
 # L -3,3,3 0.3 180,220,255  
 
 # Room walls (slightly transparent for better visualization)
-pl 0,-1,0	0,1,0		255,255,255  
+pl 0,-1,0	0,1,0		255,255,255  m_metal
 pl 0,10,0	0,-1,0		255,255,255 
 pl -10,0,0	1,0,0		255,255,255  
 pl 10,0,0	-1,0,0		255,255,255  
-pl 0,0,-15	0,0,1		255,255,255 
+pl 0,0,-15	0,0,1		255,255,255  m_metal
 pl 0,0,20	0,0,-1		255,255,255  
 
 # Atomic Nucleus (central sphere) - much larger
@@ -39,8 +39,8 @@ sp 0,4,5 0.7 150,255,150
 sp 0,4,-5 0.7 150,255,150
 
 # Electron orbits (fewer, larger rings)
-cy 0,4,0 0,1,0 4.0 0.15 255,255,255
-cy 0,4,0 1,0,0 5.0 0.15 255,255,255
+cy 0,4,0 0,1,0 4.0 0.15 255,255,255 m_dielectric
+cy 0,4,0 1,0,0 5.0 0.15 255,255,255 m_dielectric
 
 # Nucleus details (larger, fewer particles)
 sp 0.6,4.8,0.3 0.6 255,100,100
