@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 14:00:37 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/16 11:04:49 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/17 21:33:13 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,128 +14,61 @@
 #include "rt_math.h"
 #include "scene.h"
 
+static void	set_minmax(t_tri *tri, t_v2f *min, t_v2f *max)
+{
+	min->x = fminf(fminf(tri->vt0.x, tri->vt1.x), tri->vt2.x);
+	min->y = fminf(fminf(tri->vt0.y, tri->vt1.y), tri->vt2.y);
+	max->x = fmaxf(fmaxf(tri->vt0.x, tri->vt1.x), tri->vt2.x);
+	max->y = fmaxf(fmaxf(tri->vt0.y, tri->vt1.y), tri->vt2.y);
+}
+
 t_v3f	triangle_normal(t_obj *obj, t_v3f point)
 {
 	(void)point;
 	return (obj->t.dir);
 }
 
-void	set_minmax(t_v2f vt[3], t_v2f *min, t_v2f *max)
-{
-	min->x = fminf(fminf(vt[0].x, vt[1].x), vt[2].x);
-	min->y = fminf(fminf(vt[0].y, vt[1].y), vt[2].y);
-	max->x = fmaxf(fmaxf(vt[0].x, vt[1].x), vt[2].x);
-	max->y = fmaxf(fmaxf(vt[0].y, vt[1].y), vt[2].y);
-}
-
-t_v2f	project(const t_v3f *point, const t_v3f *orig, const t_v3f *u, const t_v3f *v)
-{
-	t_v3f	rel;
-
-	rel = v3f_sub(*point, *orig);
-	return (init_v2f(v3f_dot(rel, *u), v3f_dot(rel, *v)));
-}
-
-int	g_is_printed = 0;
-#include <stdio.h>
-
-/* Keyword: planar projection */
-// TODO: Generate this at init of the triangle
-void	generate_uv_vertices(t_v2f vt[3], t_tri *tri, t_v3f forw)
+void	generate_uv_vertices(t_tri *tri, t_mat4x4 local)
 {
 	float	aspect;
-	int		i;
-	t_v3f	right;
-	t_v3f	up;
 	t_v2f	min;
 	t_v2f	max;
+	t_v2f	size;
 
-	// TODO: Code duplication! Check plane_texcoord, obj_to_world, view_matrix
-	if (fabsf(v3f_dot(g_v3f_up, forw)) > .99f)
-		right = v3f_norm(v3f_cross(forw, g_v3f_foward));
-	else
-		right = v3f_norm(v3f_cross(forw, g_v3f_up));
-	up = v3f_cross(forw, right);
-
-	vt[0] = project(&tri->v0, &tri->v0, &right, &up);
-	vt[1] = project(&tri->v1, &tri->v0, &right, &up);
-	vt[2] = project(&tri->v2, &tri->v0, &right, &up);
-
-	// vt[0] = init_v2f(v3f_dot(tri->v0, right), v3f_dot(tri->v0, up));
-	// vt[1] = init_v2f(v3f_dot(tri->v1, right), v3f_dot(tri->v1, up));
-	// vt[2] = init_v2f(v3f_dot(tri->v2, right), v3f_dot(tri->v2, up));
-
-	i = 0;
-	set_minmax(vt, &min, &max);
-	aspect = (max.y - min.y) / (max.x - min.x);
-	// possible division by zero
-	while (i < 3)
-	{
-		vt[i].x = 1.0f - (vt[i].x - min.x) / (max.x - min.x);
-		vt[i].y = (1.0f - (vt[i].y - min.y) / (max.y - min.y)) * aspect;
-		++i;
-	}
-
-	if (g_is_printed == 0)
-	{
-		printf("vt0<%f, %f>, vt1<%f, %f>, vt2<%f, %f>\n",
-			vt[0].x, vt[0].y,
-			vt[1].x, vt[1].y,
-			vt[2].x, vt[2].y);
-		g_is_printed = 1;
-	}
+	tri->vt0 = mul_v3_m4x4(tri->v0, local);
+	tri->vt1 = mul_v3_m4x4(tri->v1, local);
+	tri->vt2 = mul_v3_m4x4(tri->v2, local);
+	ft_swapf(&tri->vt0.y, &tri->vt0.z);
+	ft_swapf(&tri->vt1.y, &tri->vt1.z);
+	ft_swapf(&tri->vt2.y, &tri->vt2.z);
+	set_minmax(tri, &min, &max);
+	size.x = 1.0f / (max.x - min.x);
+	size.y = 1.0f / (max.y - min.y);
+	aspect = size.x / size.y;
+	tri->vt0 = v3f_mul_v2f(v3f_sub_v2f(tri->vt0, min), size);
+	tri->vt1 = v3f_mul_v2f(v3f_sub_v2f(tri->vt1, min), size);
+	tri->vt2 = v3f_mul_v2f(v3f_sub_v2f(tri->vt2, min), size);
+	tri->vt0.y = (1.0f - tri->vt0.y) * aspect;
+	tri->vt1.y = (1.0f - tri->vt1.y) * aspect;
+	tri->vt2.y = (1.0f - tri->vt2.y) * aspect;
 }
 
-// TODO: Instead of re-calculating the barycentric-coordinates, store them somewhere when checking for intersection
 t_v2f	triangle_texcoord(t_obj *obj, t_v3f world_point)
 {
-	t_tri	*tri;
-
-	t_v3f	v0v1;
-	t_v3f	v0v2;
-	t_v3f	v1v2;
-
-	t_v3f	v1p;
-	t_v3f	v2p;
-
-	t_v3f	n;
-	float	area2;
-
 	float	w;
 	float	u;
 	float	v;
+	t_tri	*tri;
 
+	(void)world_point;
 	tri = &obj->tri;
-
-	t_v2f	vt[3];
-	generate_uv_vertices(vt, &obj->tri, obj->t.dir);
-
-	// (p - v0) = u * v0v1 + v * v0v2
-	// (v0p) = u * v0v1 + v * v0v2
-
-	// parallelogram area = |(edge0) x (edge1)|
-	//					  = |(edge0) x (edge1)| * .5f;
-	// v0p = v3f_sub(world_point, tri->v0);
-	v0v1 = v3f_sub(tri->v1, tri->v0);
-	v0v2 = v3f_sub(tri->v2, tri->v0);
-	v1v2 = v3f_sub(tri->v2, tri->v1);
-
-	v1p = v3f_sub(world_point, tri->v1);
-	v2p = v3f_sub(world_point, tri->v2);
-
-	n = v3f_cross(v0v1, v0v2);
-	area2 = 1.0f / v3f_sqr_mag(n);
-
-	u = v3f_dot(n, v3f_cross(v1v2, v1p)) * area2;
-	v = v3f_dot(n, v3f_cross(v3f_scale(v0v2, -1.0f), v2p)) * area2;
+	u = tri->weight.u;
+	v = tri->weight.v;
 	w = 1.0f - u - v;
-
-	t_v2f	coord;
-	coord = init_v2f(
-		u * vt[0].x + v * vt[1].x + w * vt[2].x,
-		u * vt[0].y + v * vt[1].y + w * vt[2].y
-	);
-	return (coord);
+	return (init_v2f(
+		w * tri->vt0.x + u * tri->vt1.x + v * tri->vt2.x,
+		w * tri->vt0.y + u * tri->vt1.y + v * tri->vt2.y
+	));
 }
 
 static int	is_within_triangle(t_tri *tri, t_ray *ray, t_tri_var *vars,
@@ -155,6 +88,7 @@ static int	is_within_triangle(t_tri *tri, t_ray *ray, t_tri_var *vars,
 	v = v3f_dot(ray->direction, qvec) * vars->det;
 	if (v < 0.0f || (u + v) > 1.0f)
 		return (0);
+	tri->weight = init_v2f(u, v);
 	*dst = v3f_dot(vars->v0v2, qvec) * vars->det;
 	return (1);
 }

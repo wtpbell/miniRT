@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/16 18:59:02 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/17 18:57:25 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,6 @@ t_v3f	cylinder_normal(t_obj *obj, t_v3f point);
 t_v3f	triangle_normal(t_obj *obj, t_v3f point);
 void	debug_scene_setup(t_scene *scene);
 t_v3f	checkerboard_pattern(t_v2f texcoord, t_v2f scale, t_v3f obj_col, t_v3f alt_col);
+void	generate_uv_vertices(t_tri *tri, t_mat4x4 local);
 
 #endif

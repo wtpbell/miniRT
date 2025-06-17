@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   triangle.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/29 12:00:31 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/08 17:12:41 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   triangle.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/29 12:00:31 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/17 21:45:07 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ bool	parse_triangle(char **tokens, t_scene *scene)
 	obj->intersect = triangle_intersect;
 	obj->calc_norm = triangle_normal;
 	obj->type = OBJ_TRIANGLE;
+	init_object_matrices(obj);
+	generate_uv_vertices(&obj->tri, obj->t.to_obj);
 	if (!vector_add(&scene->objects, obj))
 		return (false);
 	return (true);
