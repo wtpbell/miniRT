@@ -70,13 +70,7 @@ static bool	cam_init(t_cam *cam, mlx_t *mlx)
 	cam->aspect_ratio = cam->img_plane->width / (float)cam->img_plane->height;
 	cam->bg_color = (t_v3f){{0.5f, 0.0f, 0.5f}};
 	cam->t.dir = v3f_norm(cam->t.dir);
-	
-	// Set up camera coordinate system
-	cam->w = v3f_scale(cam->t.dir, -1.0f);  // Forward is negative Z
-	cam->u = v3f_norm(v3f_cross((t_v3f){{0,1,0}}, cam->w));  // Right
-	cam->v = v3f_cross(cam->w, cam->u);  // Up
 	print_camera_setup(cam);
-	view_matrix(cam->view_matrix, cam->t.pos, cam->t.dir, cam->t.up);
 	update_camera_view(cam);
 	return (true);
 }

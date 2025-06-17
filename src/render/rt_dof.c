@@ -21,20 +21,18 @@
 
 void	update_camera_view(t_cam *cam)
 {
-	float		theta;
-	float		half_height;
-	float		half_width;
+	float		height;
+	float		width;
 	t_v3f		focal_center;
 
 	view_matrix(cam->view_matrix, cam->t.pos, cam->t.dir, cam->t.up);
 	cam->w = v3f_scale(cam->t.dir, -1.0f);// Forward is negative Z, away from camera
 	cam->u = v3f_norm(v3f_cross(cam->t.up, cam->w));// Right
 	cam->v = v3f_norm(v3f_cross(cam->w, cam->u));// Up 
-	theta = cam->fov * M_PI / 180.0f;//FOV -> radians
-	half_height = tanf(theta * 0.5f) * cam->focus_dist;
-	half_width = half_height * cam->aspect_ratio;
-	cam->horizontal = v3f_scale(cam->u, 2.0f * half_width);
-	cam->vertical = v3f_scale(cam->v, 2.0f * half_height);
+	height = tanf(cam->fov * 0.5f * DEGTORAD) * cam->focus_dist * 2.0f;
+	width = height * cam->aspect_ratio;
+	cam->horizontal = v3f_scale(cam->u, width);
+	cam->vertical = v3f_scale(cam->v, height);
 	focal_center = v3f_add(cam->t.pos, v3f_scale(cam->w, -cam->focus_dist));
 	cam->lower_left = v3f_sub(
 			v3f_sub(focal_center, v3f_scale(cam->horizontal, 0.5f)),

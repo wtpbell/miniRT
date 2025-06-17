@@ -6,16 +6,14 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 13:47:23 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/13 18:07:29 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/17 14:05:36 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MATERIAL_H
 # define MATERIAL_H
 
-# include <stdint.h>
 # include "rt_types.h"
-# include "minirt.h"
 # include "container.h"
 
 enum e_material_type

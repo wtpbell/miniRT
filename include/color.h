@@ -26,5 +26,4 @@ t_v3f	col32_to_v3f(t_col32 color);
 t_col32	v3f_to_col32(t_v3f color);
 t_col32	col32_lerp(t_col32 a, t_col32 b, float t);
 t_v3f	v3f_apply_gamma(t_v3f color, float gamma);
-t_v3f	get_material_color(t_v3f albedo, t_v3f obj_color);
 #endif
