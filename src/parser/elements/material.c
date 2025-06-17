@@ -61,3 +61,4 @@ bool	parse_material(char **tokens, t_scene *scene)
 		return (print_error(ERR_MEM, "material", NULL), false);
 	return (parse_type_material(mat, mat_type, tokens + 2));
 }
+
