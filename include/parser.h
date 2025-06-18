@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 14:04:12 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 16:11:59 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@
 # define RESET 			"\033[0m"
 
 typedef bool			(*t_parser)(char **, t_scene *);
-typedef bool			(*conv_to_enum)(int *val, const void *raw);
+typedef bool			(*t_conv_to_enum)(int *val, const void *raw);
 
 typedef enum e_error
 {
@@ -103,7 +103,7 @@ typedef struct s_field
 	t_f_state	state;
 	union
 	{
-		conv_to_enum	to_enum;
+		t_conv_to_enum	to_enum;
 	};
 }	t_field;
 

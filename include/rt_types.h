@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/07 16:31:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 14:27:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 16:11:06 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,6 @@ typedef int						(*t_intsct)(t_obj *obj, t_ray *ray,
 									t_v2f t, float *dst);
 typedef t_v3f					(*t_cnorm)(t_obj *obj, t_v3f point);
 typedef t_v2f					(*t_texcoord)(t_obj *obj, t_v3f point);
-typedef t_v3f					(*t_texcol)(const t_v2f *texcoord, const t_tex *tex, t_v3f prim_col);
+typedef t_v3f					(*t_texcol)(const t_v2f *texcoord,
+											const t_tex *tex, t_v3f prim_col);
 #endif

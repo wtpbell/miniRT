@@ -46,14 +46,16 @@ t_v3f	sphere_normal(t_obj *obj, t_v3f point)
 /*
 	Spherical Coordinates (p, theta, phi)
 	p (rho) = distance between point and the origin (radius)
-	theta = angle counter clockwise from the polar/positive x-axis in the xy-plane
+	theta = angle counter clockwise from the polar/positive x-axis in the
+	xy-plane
 	phi = the angle between the positive z-axis and the point
 
 	p^2 = x^2 + y^2 + z^2
 	tan theta = y/x
 	cos phi = z / (sqrt(p^2))
 
-	By convention the z-axis is considered the up axis, but our ray tracer it will be the y-axis
+	By convention the z-axis is consider the up axis, but in our case it would
+	be the y-axis
 */
 t_v2f	sphere_texcoord(t_obj *obj, t_v3f world_point)
 {

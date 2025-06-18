@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 15:06:34 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 16:13:24 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_v2f	plane_texcoord(t_obj *obj, t_v3f point);
 t_v2f	sphere_texcoord(t_obj *obj, t_v3f point);
 t_v2f	triangle_texcoord(t_obj *obj, t_v3f world_point);
 t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point);
-t_v3f	checker_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f prim_col);
-t_v3f	solid_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f prim_col);
+t_v3f	checker_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
+t_v3f	solid_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
 
 #endif

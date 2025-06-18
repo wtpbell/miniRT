@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 12:00:31 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 14:12:16 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 16:40:18 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,15 @@ static inline t_v3f	get_normal(t_v3f v0, t_v3f v1, t_v3f v2)
 	return (v3f_norm(v3f_cross(v3f_sub(v1, v0), v3f_sub(v2, v0))));
 }
 
+static void	triangle_init(t_obj *obj, t_tri *tri)
+{
+	obj->type = OBJ_TRIANGLE;
+	obj->tri = *tri;
+	obj->intersect = triangle_intersect;
+	obj->calc_norm = triangle_normal;
+	generate_uv_vertices(&obj->tri, obj->t.to_obj);
+}
+
 bool	parse_triangle(char **tokens, t_scene *scene)
 {
 	t_obj	*obj;
@@ -35,19 +44,13 @@ bool	parse_triangle(char **tokens, t_scene *scene)
 	obj = ft_calloc(1, sizeof(t_obj));
 	if (obj == NULL)
 		return (false);
-	obj->t.up = g_v3f_up;
-	obj->t.pos = get_mid_point(tri.v0, tri.v1, tri.v2);
-	obj->t.dir = get_normal(tri.v0, tri.v1, tri.v2);
-	obj->r.color = color;
+	init_obj_transform(obj, get_mid_point(tri.v0, tri.v1, tri.v2),
+		get_normal(tri.v0, tri.v1, tri.v2),
+		g_v3f_up);
+	init_obj_renderer(obj, color, triangle_texcoord);
+	triangle_init(obj, &tri);
 	if (!assign_material(obj, &scene->shared_materials, tokens[5]))
 		return (free(obj), false);
-	obj->tri = tri;
-	obj->intersect = triangle_intersect;
-	obj->calc_norm = triangle_normal;
-	obj->type = OBJ_TRIANGLE;
-	init_object_matrices(obj);
-	generate_uv_vertices(&obj->tri, obj->t.to_obj);
-	obj->r.get_texcoord = triangle_texcoord;
 	if (!vector_add(&scene->objects, obj))
 		return (false);
 	return (true);

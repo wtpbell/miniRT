@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 14:25:25 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 16:27:33 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static bool	parse_height(float *out, const char *str)
 static inline void	cylinder_init(t_obj *obj, t_v2f dm)
 {
 	obj->type = OBJ_CYLINDER;
-	obj->t.up = g_v3f_up;
 	obj->cy = (t_cy){.radius = dm.x, .height = dm.y};
 	obj->calc_norm = cylinder_normal;
 	obj->intersect = cylinder_intersect;
@@ -46,14 +45,11 @@ bool	parse_cylinder(char **tokens, t_scene *scene)
 	obj = ft_calloc(1, sizeof(t_obj));
 	if (!obj)
 		return (false);
-	obj->t.pos = pos;
-	obj->t.dir = dir;
-	obj->r.color = color;
+	init_obj_transform(obj, pos, dir, g_v3f_up);
+	init_obj_renderer(obj, color, cylinder_texcoord);
+	cylinder_init(obj, dm);
 	if (!assign_material(obj, &scene->shared_materials, tokens[6]))
 		return (free(obj), false);
-	cylinder_init(obj, dm);
-	init_object_matrices(obj);
-	obj->r.get_texcoord = cylinder_texcoord;
 	if (!vector_add(&scene->objects, obj))
 		return (free(obj), false);
 	return (true);

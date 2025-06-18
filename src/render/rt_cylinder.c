@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/17 11:59:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/17 15:50:20 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 16:42:45 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,15 @@ t_v3f	cylinder_normal(t_obj *obj, t_v3f point)
 	Cylindrical coordinates (rho, phi, z)
 	rho is the distance from the z-axis to the point (radius)
 	phi is the angle starting from the x-axis on the xy-plane.
-	z is the distance (in a vertical direction) from the xy-plane to point p (height)
+	z is the distance (in a vertical direction) from the xy-plane to point p
+	(height)
 
 	rho^2 = x^2 + y^2
 	tan phi = y/x
 	z = z
 
-	By convention the z-axis is consider the up axis, but in our case it would be the y-axis
+	By convention the z-axis is consider the up axis, but in our case it would
+	be the y-axis
 */
 
 t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point)

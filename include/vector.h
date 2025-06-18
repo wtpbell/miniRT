@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 14:59:00 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 16:14:12 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ typedef union s_vector3
 		float	v;
 		float	theta;
 	};
-	
 	float	_axis[3];
 }	t_v3f;
 

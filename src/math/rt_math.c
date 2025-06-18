@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/13 13:40:09 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/10 23:50:08 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 16:06:18 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ float	schlick(float cosin, float ref_idx)
 	return (r0 + (1 - r0) * powf(1 - cosin, 5));
 }
 
-inline float	modulo(const float x)
+inline float	modulo(float x)
 {
 	return (x - floorf(x));
 }

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:51:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/10 23:50:22 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 16:06:26 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,5 @@ int		fapprox(float n);
 float	ft_clampf(float value, float min, float max);
 float	ft_clampf01(float val);
 float	schlick(float cosin, float ref_idx);
-float	modulo(const float x);
+float	modulo(float x);
 #endif
