@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/16 18:58:53 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 14:30:45 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,6 @@ t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t)
 	return (hit);
 }
 
-// TODO: Remove this.. duh...
-t_v2f	plane_texcoord(t_obj *obj, t_v3f point);
-t_v2f	sphere_texcoord(t_obj *obj, t_v3f point);
-t_v2f	triangle_texcoord(t_obj *obj, t_v3f world_point);
-t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point);
-
 static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 {
 	hit_info->hit = v3f_add(ray->origin, v3f_scale(ray->direction, t));
@@ -64,27 +58,9 @@ static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 	hit_info->obj = obj;
 	if (!hit_info->front_face)
 		hit_info->normal = v3f_scale(hit_info->normal, -1.0f);
-
-	if (obj->type == OBJ_PLANE)
-		hit_info->texcoord = plane_texcoord(obj, hit_info->hit);
-	else if (obj->type == OBJ_SPHERE)
-		hit_info->texcoord = sphere_texcoord(obj, hit_info->hit);
-	else if (obj->type == OBJ_TRIANGLE)
-		hit_info->texcoord = triangle_texcoord(obj, hit_info->hit);
-	else if (obj->type == OBJ_CYLINDER)
-		hit_info->texcoord = cylinder_texcoord(obj, hit_info->hit);
-	else
-		hit_info->texcoord = init_v2f(0.0f, 0.0f);
-
-	if (obj->r.mat->texture.type == TEX_SOLID)
-		hit_info->hit_color = v3f_mul(obj->r.color, obj->r.mat->albedo);
-	else if (obj->r.mat->texture.type == TEX_CHECKER)
-	{
-		hit_info->hit_color = checkerboard_pattern(
-		hit_info->texcoord, obj->r.mat->texture.scale_uv,
-		v3f_mul(obj->r.color, obj->r.mat->albedo),
-		obj->r.mat->texture.col);
-	}
+	hit_info->texcoord = obj->r.get_texcoord(obj, hit_info->hit);
+	hit_info->hit_color = obj->r.mat->get_texcol(&hit_info->texcoord,
+			&obj->r.mat->texture, v3f_mul(obj->r.color, obj->r.mat->albedo));
 }
 
 t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)

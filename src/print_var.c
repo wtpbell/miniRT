@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/16 18:55:46 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 14:04:12 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 {
 	int			i;
 	t_mat		*mat;
-	t_texture	*tex;
+	t_tex	*tex;
 
 	i = 0;
 	printf("%*s%s <%i/%i>\n", spaces, "", prefix, materials.size, materials.capacity);

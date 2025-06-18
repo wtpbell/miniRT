@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   material.h                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/16 10:19:54 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 14:26:28 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,19 +46,20 @@ struct s_dielectric
 	float	transmittance;
 };
 
-typedef struct s_texture
+struct s_texture
 {
 	t_tex_type	type;
 	t_v2f		scale_uv;
 	t_v3f		col;
-}	t_texture;
+};
 
 struct s_material
 {
 	char		*name;
 	t_mat_type	type;
 	t_v3f		albedo;
-	t_texture	texture;
+	t_tex		texture;
+	t_texcol	get_texcol;
 	union
 	{
 		t_lamb	lamb;
@@ -74,5 +75,12 @@ bool	assign_material(t_obj *obj, t_vector *materials, const char *m_name);
 t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth);
 t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info);
 t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth);
+
+t_v2f	plane_texcoord(t_obj *obj, t_v3f point);
+t_v2f	sphere_texcoord(t_obj *obj, t_v3f point);
+t_v2f	triangle_texcoord(t_obj *obj, t_v3f world_point);
+t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point);
+t_v3f	checker_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f prim_col);
+t_v3f	solid_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f prim_col);
 
 #endif

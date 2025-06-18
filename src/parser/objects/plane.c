@@ -38,6 +38,7 @@ bool	parse_plane(char **tokens, t_scene *scene)
 	obj->intersect = plane_intersect;
 	obj->calc_norm = plane_normal;
 	init_object_matrices(obj);
+	obj->r.get_texcoord = plane_texcoord;
 	if (!vector_add(&scene->objects, obj))
 		return (free(obj), false);
 	return (true);

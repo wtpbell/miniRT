@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 12:00:31 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/17 21:45:07 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 14:12:16 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ bool	parse_triangle(char **tokens, t_scene *scene)
 	obj->type = OBJ_TRIANGLE;
 	init_object_matrices(obj);
 	generate_uv_vertices(&obj->tri, obj->t.to_obj);
+	obj->r.get_texcoord = triangle_texcoord;
 	if (!vector_add(&scene->objects, obj))
 		return (false);
 	return (true);

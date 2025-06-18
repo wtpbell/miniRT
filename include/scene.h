@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/17 17:35:24 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 14:22:56 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,9 @@ struct s_camera
 
 struct s_render
 {
-	t_mat	*mat;
-	t_v3f	color;
+	t_mat		*mat;
+	t_v3f		color;
+	t_texcoord	get_texcoord;
 };
 
 struct s_plane

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/17 21:54:25 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 14:21:58 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@ static inline t_field	init_field(const char *name, void *mem, t_f_type type,
 	t_v2f lim)
 {
 	return ((t_field){name, mem, type, lim, EMPTY | REQUIRED, {NULL}});
+}
+
+static void	set_texture_pattern(t_mat *mat)
+{
+	if (mat->texture.type == TEX_CHECKER)
+		mat->get_texcol = checker_pattern;
+	else
+		mat->get_texcol = solid_pattern;
 }
 
 static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
@@ -68,5 +76,8 @@ bool	parse_material(char **tokens, t_scene *scene)
 	mat = find_or_create_material(&scene->shared_materials, tokens[0]);
 	if (mat == NULL)
 		return (print_error(ERR_MEM, "material", NULL), false);
-	return (parse_type_material(mat, mat_type, tokens + 2));
+	if (!parse_type_material(mat, mat_type, tokens + 2))
+		return (free_material(mat), false);
+	set_texture_pattern(mat);
+	return (true);
 }

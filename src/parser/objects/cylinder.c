@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cylinder.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 12:05:06 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/08 17:46:05 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   cylinder.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/14 12:05:06 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/18 14:25:25 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ bool	parse_cylinder(char **tokens, t_scene *scene)
 		return (free(obj), false);
 	cylinder_init(obj, dm);
 	init_object_matrices(obj);
+	obj->r.get_texcoord = cylinder_texcoord;
 	if (!vector_add(&scene->objects, obj))
 		return (free(obj), false);
 	return (true);

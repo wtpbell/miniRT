@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/17 21:55:00 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 14:04:12 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ bool		parse_light(char **tokens, t_scene *scene);
 // material.c
 bool		parse_material(char **tokens, t_scene *scene);
 // texture.c
-void		init_texture_fields(t_field *tex_fields, t_texture *tex);
+void		init_texture_fields(t_field *tex_fields, t_tex *tex);
 
 /* ---------------------Objects--------------------- */
 // sphere.c
