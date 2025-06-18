@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 18:12:25 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 18:18:31 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ bool	parse_camera(char **tokens, t_scene *scene)
 	t_v3f	pos;
 	t_v3f	dir;
 	float	fov;
-	t_v3f	up;
 
 	if (scene->scene_flags & SCENE_CAMERA)
 	{
