@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/31 23:53:11 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 15:06:20 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 15:29:06 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ t_mat	*init_material(t_mat_type type, const char *name)
 		mat->diel.transmittance = 0.9f;
 	}
 	mat->texture = (t_tex) {TEX_SOLID, init_v3f(1.0f, 1.0f, 0.0f), g_v3f_one};
+	mat->get_texcol = solid_pattern;
 	return (mat);
 }
 
