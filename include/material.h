@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 16:13:24 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 16:57:19 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MATERIAL_H
 
 # include "rt_types.h"
+# include "container.h"
 
 enum e_material_type
 {
@@ -29,23 +30,6 @@ typedef enum e_texture_type
 	TEX_CHECKER,
 }	t_tex_type;
 
-struct s_lambertian
-{
-	float	specular;
-	float	shininess;
-};
-
-struct s_metal
-{
-	float	fuzz;
-};
-
-struct s_dielectric
-{
-	float	ir;
-	float	transmittance;
-};
-
 struct s_texture
 {
 	t_tex_type	type;
@@ -60,17 +44,23 @@ struct s_material
 	t_v3f		albedo;
 	t_tex		texture;
 	t_texcol	get_texcol;
-	union
-	{
-		t_lamb	lamb;
-		t_metal	metal;
-		t_diel	diel;
-	};
+	struct {
+		float	specular;
+		float	shininess;
+		float	roughness;
+	}	lamb;
+	struct {
+		float	roughness;
+	}	metal;
+	struct {
+		float	ir;
+		float	transmittance;
+		float	roughness;
+	}	diel;
 };
 
 t_mat	*init_material(t_mat_type type, const char *name);
 bool	create_default_materials(t_vector *shared_materials);
-t_mat	*find_or_create_material(t_vector *materials, const char *m_name);
 bool	assign_material(t_obj *obj, t_vector *materials, const char *m_name);
 t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth);
 t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info);

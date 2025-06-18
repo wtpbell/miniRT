@@ -6,11 +6,16 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/06 19:14:48 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 16:40:55 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 17:32:08 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+
+t_field	init_field(const char *name, void *mem, t_f_type type, t_v2f lim)
+{
+	return ((t_field){name, mem, type, lim, EMPTY, {NULL}});
+}
 
 bool	is_field(const char *token, const char *field_name, const char **value)
 {
@@ -38,23 +43,6 @@ static t_field	*get_field(t_field *fields, int count, char *token,
 		++i;
 	}
 	return (NULL);
-}
-
-static bool	validate_fields(t_field *fields, int count)
-{
-	int	i;
-
-	i = 0;
-	while (i < count)
-	{
-		if ((fields[i].state & (FILLED | REQUIRED | HIDDEN)) == REQUIRED)
-		{
-			print_error(ERR_REQ_FIELD, "material", fields[i].name);
-			return (false);
-		}
-		++i;
-	}
-	return (true);
 }
 
 bool	parse_enum(int *val, const char *str, const char *token,
@@ -92,5 +80,5 @@ bool	parse_fields(t_field *fields, int count, char **tokens)
 		}
 		++tokens;
 	}
-	return (validate_fields(fields, count));
+	return (true);
 }

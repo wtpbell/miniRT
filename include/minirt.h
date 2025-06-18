@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 16:28:05 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 16:57:58 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	init_obj_transform(t_obj *obj, t_v3f pos, t_v3f dir, t_v3f up);
 void	init_obj_renderer(t_obj *obj, t_v3f col, t_texcoord coord);
 void	render(t_scene *scene);
 bool	solve_quadratic(t_v3f *abc, float *x0, float *x1);
+void	view_matrix(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up);
 void	obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up);
 int		sphere_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
 int		plane_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
@@ -43,6 +44,8 @@ t_v3f	plane_normal(t_obj *obj, t_v3f point);
 t_v3f	cylinder_normal(t_obj *obj, t_v3f point);
 t_v3f	triangle_normal(t_obj *obj, t_v3f point);
 void	debug_scene_setup(t_scene *scene);
+t_ray	get_ray_with_dof(t_cam *cam, float u, float v);
+void	update_camera_view(t_cam *cam);
 void	generate_uv_vertices(t_tri *tri, t_mat4x4 local);
 
 #endif

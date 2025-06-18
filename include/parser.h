@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 16:11:59 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 16:58:21 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,7 @@ typedef enum e_field_state
 {
 	EMPTY		= 0x0,
 	FILLED		= 0x1,
-	REQUIRED	= 0x2,
-	HIDDEN		= 0x4
+	HIDDEN		= 0x2
 }	t_f_state;
 
 typedef struct s_field
@@ -183,6 +182,7 @@ void		free_material(void *ptr);
 void		cleanup_scene(t_scene *scene);
 
 // field.c
+t_field		init_field(const char *name, void *mem, t_f_type type, t_v2f lim);
 bool		is_field(const char *token, const char *field_name,
 				const char **value);
 bool		parse_fields(t_field *fields, int count, char **tokens);

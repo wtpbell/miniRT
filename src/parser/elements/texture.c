@@ -6,17 +6,11 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/16 10:29:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 16:16:56 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 17:32:57 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-static inline t_field	init_field(const char *name, void *mem, t_f_type type,
-	t_v2f lim)
-{
-	return ((t_field){name, mem, type, lim, EMPTY, {NULL}});
-}
 
 bool	str_to_texture_type(int *val, const void *enum_name)
 {

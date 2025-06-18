@@ -6,15 +6,13 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 15:23:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 17:48:40 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdint.h>
 
 #include "MLX42/MLX42.h"
-
-#include "color.h"
 #include "light.h"
 #include "material.h"
 #include "random.h"
@@ -22,8 +20,8 @@
 #include "rt_math.h"
 #include "scene.h"
 
-#define MAX_DEPTH			5
-#define SAMPLES_PER_PIXEL	1
+#define MAX_DEPTH			8
+#define SAMPLES_PER_PIXEL	12
 
 t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t)
 {
@@ -84,66 +82,54 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	else if (hit->r.mat->type == MAT_METAL)
 		color = handle_metal(scene, &hit_info, depth);
 	else
-		color = (init_v3f(1.0f, 1.0f, 1.0f));
-	return (v3f_clampf01(color));
+		color = (g_v3f_one);
+	return (color);
 }
 
-static void	compute_ray(float x, float y, t_cam *cam, t_ray *ray)
+//u = x / (width - 1)
+// v = 1 - y / (height - 1)
+static t_v3f	sample_pixel(t_scene *scene, float x, float y)
 {
-	t_v3f	camera_space;
-	float	view;
+	t_v3f	color;
+	t_ray	ray;
+	float	u;
+	float	v;
+	int		i;
+	float	jitter_x;
+	float	jitter_y;
 
-	view = tanf(cam->fov * 0.5f * DEGTORAD);
-	camera_space.x = (2.0f * ((x + 0.5f) / cam->img_plane->width) - 1.0f)
-		* cam->aspect_ratio * view;
-	camera_space.y = (1.0f - 2.0f * ((y + 0.5f) / cam->img_plane->height))
-		* view;
-	camera_space.z = -1.0f;
-	ray->direction = v3f_norm(mul_dir_m4x4(camera_space, cam->view_matrix));
-}
-
-static t_v3f	anti_aliasing(t_scene *scene, t_ray *ray,
-		uint32_t x, uint32_t y)
-{
-	const float	size = 1.0f;
-	const float	offset = size / 2.0f;
-	t_v3f		color;
-	t_v3f		final_color;
-	uint32_t	s;
-
-	s = 0;
-	final_color = g_v3f_zero;
-	while (s < SAMPLES_PER_PIXEL)
+	color = g_v3f_zero;
+	i = 0;
+	while (i < SAMPLES_PER_PIXEL)
 	{
-		seed_rand(get_rngstate(x, y, s));
-		compute_ray((float)x + frandom() * size - offset,
-			(float)y + frandom() * size - offset, &scene->camera, ray);
-		color = trace(ray, scene, MAX_DEPTH);
-		final_color = v3f_add(final_color, color);
-		++s;
+		jitter_x = frandom_norm_distribution() - 0.5f;  // -0.5 to 0.5
+		jitter_y = frandom_norm_distribution() - 0.5f;  // -0.5 to 0.5
+		u = (x + 0.5f + jitter_x) / (float)(scene->camera.img_plane->width - 1);
+		v = 1.0f - (y + 0.5f + jitter_y) / (float)(scene->camera.img_plane->height - 1);
+		ray = get_ray_with_dof(&scene->camera, u, v);
+		color = v3f_add(color, trace(&ray, scene, MAX_DEPTH));
+		++i;
 	}
-	return (v3f_scale(final_color, 1.0f / (float)SAMPLES_PER_PIXEL));
+	return (v3f_scale(color, 1.0f / (float)SAMPLES_PER_PIXEL));
 }
 
 void	render(t_scene *scene)
 {
 	uint32_t	x;
 	uint32_t	y;
-	t_ray		ray;
-	mlx_image_t	*img;
-	t_mat4x4	inv;
 	t_v3f		color;
+	mlx_image_t	*img;
+
+	img = scene->camera.img_plane;
+	update_camera_view(&scene->camera);
 
 	y = 0;
-	img = scene->camera.img_plane;
-	invert_m4x4(inv, scene->camera.view_matrix);
-	ray.origin = mul_v3_m4x4(g_v3f_zero, inv);
 	while (y < img->height)
 	{
 		x = 0;
 		while (x < img->width)
 		{
-			color = anti_aliasing(scene, &ray, x, y);
+			color = sample_pixel(scene, (float)x, (float)y);
 			color = v3f_apply_gamma(color, GAMMA);
 			mlx_put_pixel(img, x, y, v3f_to_col32(color));
 			++x;

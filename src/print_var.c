@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 15:21:27 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 17:00:52 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,16 @@ void	camera_print(t_cam *cam, int spaces)
 	mat4x4_print(cam->view_matrix, spaces + 2, "view_matrix");
 	float_print(cam->fov, spaces + 2, "FOV");
 	col32_print(cam->bg_color, spaces + 2, "bg_color");
+	
+	// Print DoF parameters
+	float_print(cam->aperture, spaces + 2, "APERTURE");
+	float_print(cam->focus_dist, spaces + 2, "FOCUS_DIST");
+	v3f_print(cam->u, spaces + 2, "U (right)");
+	v3f_print(cam->v, spaces + 2, "V (up)");
+	v3f_print(cam->w, spaces + 2, "W (forward)");
+	v3f_print(cam->horizontal, spaces + 2, "HORIZONTAL");
+	v3f_print(cam->vertical, spaces + 2, "VERTICAL");
+	v3f_print(cam->lower_left, spaces + 2, "LOWER_LEFT");
 }
 
 void	plane_print(t_obj *pl, int spaces)
@@ -156,15 +166,11 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 		mat = (t_mat *)materials.items[i];
 		str_print(mat->name, spaces + 2, "");
 		if (mat->type == MAT_LAMBERTIAN)
-		{
 			str_print("Lambertian", spaces + 4, "type:");
-			float_print(mat->lamb.specular, spaces + 4, "specular");
-			float_print(mat->lamb.shininess, spaces + 4, "shininess");
-		}
 		else if (mat->type == MAT_METAL)
 		{
 			str_print("Metal", spaces + 4, "type:");
-			float_print(mat->metal.fuzz, spaces + 4, "fuzz");
+			float_print(mat->metal.roughness, spaces + 4, "fuzz");
 		}
 		else if (mat->type == MAT_DIELECTRIC)
 		{
@@ -172,6 +178,8 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 			float_print(mat->diel.ir, spaces + 4, "ir");
 			float_print(mat->diel.transmittance, spaces + 4, "transmittance");
 		}
+		else
+			str_print("Unknown", spaces + 4, "type:");
 		col32_print(mat->albedo, spaces + 4, "albedo");
 
 		tex = &mat->texture;
@@ -187,11 +195,31 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 	}
 }
 
+void	print_camera_setup(t_cam *cam)
+{
+	printf("\n--- Camera Setup ---\n");
+	printf("Position: (%.2f, %.2f, %.2f)\n", 
+		cam->t.pos.x, cam->t.pos.y, cam->t.pos.z);
+	printf("Direction: (%.2f, %.2f, %.2f)\n", 
+		cam->t.dir.x, cam->t.dir.y, cam->t.dir.z);
+	printf("Up: (%.2f, %.2f, %.2f)\n", 
+		cam->t.up.x, cam->t.up.y, cam->t.up.z);
+	printf("U (right): (%.2f, %.2f, %.2f)\n", 
+		cam->u.x, cam->u.y, cam->u.z);
+	printf("V (up): (%.2f, %.2f, %.2f)\n", 
+		cam->v.x, cam->v.y, cam->v.z);
+	printf("W (forward): (%.2f, %.2f, %.2f)\n", 
+		cam->w.x, cam->w.y, cam->w.z);
+	printf("Aperture: %.2f (from scene file)\n", cam->aperture);
+	printf("Focus distance: %.2f (from scene file)\n", cam->focus_dist);
+}
+
 void	scene_print(t_scene *scene)
 {
 	int	spaces = 0;
 
 	printf("===SCENE===\n");
+	print_camera_setup(&scene->camera);
 	camera_print(&scene->camera, spaces + 2);
 	objects_print(scene->objects, spaces + 2, "OBJECTS");
 	materials_print(scene->shared_materials, spaces + 2, "MATERIALS");

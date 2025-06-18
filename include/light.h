@@ -37,5 +37,5 @@ float	calculate_specular(t_lighting *lighting, float shininess,
 			float specular_strength);
 t_v3f	apply_ambient(t_v3f base_col, t_light *light);
 t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light);
-
+t_v3f	compute_lighting(t_ray_hit *hit_info, t_scene *scene);
 #endif

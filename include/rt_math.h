@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:51:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 16:06:26 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 16:59:02 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # define FLT_EPI	1.19209290e-7f
 # define FLT_SML	1e-5f
 # define BIAS		1e-2f
-# define GAMMA		1.8f
+# define GAMMA		2.2f
 
 float	ft_maxf(float a, float b);
 float	ft_signf(float a);

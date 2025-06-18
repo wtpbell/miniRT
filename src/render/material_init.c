@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/31 23:53:11 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 16:43:13 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 17:06:38 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,17 @@ t_mat	*init_material(t_mat_type type, const char *name)
 	mat->albedo = g_v3f_one;
 	if (type == MAT_LAMBERTIAN)
 	{
-		mat->lamb.specular = 0.7f;
-		mat->lamb.shininess = 64.0f;
+		mat->lamb.specular = 0.1f;
+		mat->lamb.shininess = 32.0f;
+		mat->lamb.roughness = 1.0f;
 	}
 	else if (type == MAT_METAL)
-		mat->metal.fuzz = 0.1f;
+		mat->metal.roughness = 0.1f;
 	else if (type == MAT_DIELECTRIC)
 	{
 		mat->diel.ir = 1.5f;
-		mat->diel.transmittance = 0.9f;
+		mat->diel.transmittance = 1.0f;
+		mat->diel.roughness = 0.0f;
 	}
 	mat->texture = (t_tex){TEX_SOLID, init_v3f(1.0f, 1.0f, 0.0f), g_v3f_one};
 	mat->get_texcol = solid_pattern;
