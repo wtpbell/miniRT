@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 16:58:21 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 17:59:29 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ typedef enum e_error
 typedef enum e_field_type
 {
 	FIELD_INT,
-	FIELD_FLOAT,
+	FIELD_FLT,
 	FIELD_V3F,
 	FIELD_COL,
 	FIELD_ENUM

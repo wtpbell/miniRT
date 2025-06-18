@@ -32,7 +32,6 @@ bool	parse_plane(char **tokens, t_scene *scene)
 	if (!parse_v3f(&pos, tokens[1]) || !parse_dir(&dir, tokens[2])
 		|| !parse_col(&color, tokens[3]))
 		return (false);
-
 	obj = ft_calloc(1, sizeof(t_obj));
 	if (!obj)
 		return (false);

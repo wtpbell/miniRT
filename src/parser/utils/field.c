@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/06 19:14:48 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 17:32:08 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 17:59:29 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ bool	parse_fields(t_field *fields, int count, char **tokens)
 			return (print_error(ERR_UNKNOWN_FIELD, "field", *tokens), false);
 		if ((field->state & HIDDEN) != HIDDEN)
 		{
-			if ((field->type == FIELD_FLOAT
+			if ((field->type == FIELD_FLT
 					&& !parse_float(field->val, value, field->limit, *tokens))
 				|| (field->type == FIELD_INT
 					&& !parse_int(field->val, value, field->limit, *tokens))

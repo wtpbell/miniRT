@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 16:57:19 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 17:54:34 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,22 @@ struct s_material
 	t_v3f		albedo;
 	t_tex		texture;
 	t_texcol	get_texcol;
-	struct {
+	struct s_lambertian
+	{
 		float	specular;
 		float	shininess;
 		float	roughness;
-	}	lamb;
-	struct {
+	}			lamb;
+	struct s_metal
+	{
 		float	roughness;
-	}	metal;
-	struct {
+	}			metal;
+	struct s_dielectric
+	{
 		float	ir;
 		float	transmittance;
 		float	roughness;
-	}	diel;
+	}			diel;
 };
 
 t_mat	*init_material(t_mat_type type, const char *name);

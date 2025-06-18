@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 17:00:15 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 17:53:09 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,12 @@ struct s_camera
 	t_mat4x4	view_matrix;
 	float		aperture;
 	float		focus_dist;
-	t_v3f	u;
-	t_v3f	v;
-	t_v3f	w;
-	t_v3f	horizontal;
-	t_v3f	vertical;
-	t_v3f	lower_left;
+	t_v3f		u;
+	t_v3f		v;
+	t_v3f		w;
+	t_v3f		horizontal;
+	t_v3f		vertical;
+	t_v3f		lower_left;
 };
 
 struct s_render

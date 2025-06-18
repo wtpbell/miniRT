@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 17:39:24 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 18:00:12 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,20 @@ static void	set_texture_pattern(t_mat *mat)
 
 static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
 {
-	const t_v2f	lim_01 = init_v2f(0.0f, 1.0f);
+	const t_v2f	lim01 = init_v2f(0.0f, 1.0f);
 	const t_v2f	lim_shi = init_v2f(0.0f, 5000.0f);
 	const t_v2f	lim_ir = init_v2f(0.0f, 100.0f);
 	t_field		fields[13];
 
 	mat->type = type;
-	fields[0] = init_field("spc", &mat->lamb.specular, FIELD_FLOAT, lim_01);
-	fields[1] = init_field("shi", &mat->lamb.shininess, FIELD_FLOAT, lim_shi);
-	fields[2] = init_field("l_rough", &mat->lamb.roughness, FIELD_FLOAT, lim_01);
-	fields[3] = init_field("mt_rough", &mat->metal.roughness, FIELD_FLOAT, lim_01);
-	fields[4] = init_field("ir", &mat->diel.ir, FIELD_FLOAT, lim_ir);
-	fields[5] = init_field("tr", &mat->diel.transmittance, FIELD_FLOAT, lim_01);
-	fields[6] = init_field("d_rough", &mat->diel.roughness, FIELD_FLOAT, lim_01);
-	fields[7] = init_field("alb", &mat->albedo, FIELD_COL, lim_01);
+	fields[0] = init_field("spc", &mat->lamb.specular, FIELD_FLT, lim01);
+	fields[1] = init_field("shi", &mat->lamb.shininess, FIELD_FLT, lim_shi);
+	fields[2] = init_field("l_rough", &mat->lamb.roughness, FIELD_FLT, lim01);
+	fields[3] = init_field("mt_rough", &mat->metal.roughness, FIELD_FLT, lim01);
+	fields[4] = init_field("ir", &mat->diel.ir, FIELD_FLT, lim_ir);
+	fields[5] = init_field("tr", &mat->diel.transmittance, FIELD_FLT, lim01);
+	fields[6] = init_field("d_rough", &mat->diel.roughness, FIELD_FLT, lim01);
+	fields[7] = init_field("alb", &mat->albedo, FIELD_COL, lim01);
 	fields[0].state |= (HIDDEN * (type != MAT_LAMBERTIAN));
 	fields[1].state |= (HIDDEN * (type != MAT_LAMBERTIAN));
 	fields[2].state |= (HIDDEN * (type != MAT_LAMBERTIAN));

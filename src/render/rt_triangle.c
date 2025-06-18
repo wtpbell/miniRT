@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 14:00:37 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 16:46:35 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 18:16:14 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ t_v2f	triangle_texcoord(t_obj *obj, t_v3f world_point)
 	w = 1.0f - u - v;
 	return (init_v2f(
 			w * tri->vt0.x + u * tri->vt1.x + v * tri->vt2.x,
-			w * tri->vt0.y + u * tri->vt1.y + v * tri->vt2.y
-	));
+			w * tri->vt0.y + u * tri->vt1.y + v * tri->vt2.y)
+	);
 }
 
 static int	is_within_triangle(t_tri *tri, t_ray *ray, t_tri_var *vars,
