@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/10 23:49:31 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 14:19:35 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 15:00:30 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ t_v3f	checker_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f prim_col)
 {
 	float	pattern;
 
-	pattern = (modulo(texcoord->u * tex->scale_uv.u) < .5f)
-		^ (modulo(texcoord->v * tex->scale_uv.v) < .5f);
+	pattern = (modulo(texcoord->u * tex->scale_rot.u) < .5f)
+		^ (modulo(texcoord->v * tex->scale_rot.v) < .5f);
 	return (v3f_lerp(prim_col, tex->col, pattern));
 }
 

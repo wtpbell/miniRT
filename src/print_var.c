@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 14:04:12 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 15:07:55 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 		else
 			str_print("UNKNOWN", spaces + 4, "texture type:");
 		col32_print(tex->col, spaces + 4, "alt col");
-		floats_print(tex->scale_uv._axis, 2, spaces + 5, "uv scale");
+		floats_print(tex->scale_rot._axis, 2, spaces + 5, "uv scale rot");
 		++i;
 	}
 }

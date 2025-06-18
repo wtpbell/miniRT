@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 14:26:28 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 15:06:34 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ struct s_dielectric
 struct s_texture
 {
 	t_tex_type	type;
-	t_v2f		scale_uv;
+	t_v3f		scale_rot;
 	t_v3f		col;
 };
 

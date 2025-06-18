@@ -6,12 +6,11 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 14:30:45 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 15:05:27 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdint.h>
-#include <stdio.h>
 
 #include "MLX42/MLX42.h"
 
@@ -58,7 +57,8 @@ static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 	hit_info->obj = obj;
 	if (!hit_info->front_face)
 		hit_info->normal = v3f_scale(hit_info->normal, -1.0f);
-	hit_info->texcoord = obj->r.get_texcoord(obj, hit_info->hit);
+	hit_info->texcoord = v2f_rotate(obj->r.get_texcoord(obj, hit_info->hit),
+		obj->r.mat->texture.scale_rot.theta * DEGTORAD);
 	hit_info->hit_color = obj->r.mat->get_texcol(&hit_info->texcoord,
 			&obj->r.mat->texture, v3f_mul(obj->r.color, obj->r.mat->albedo));
 }
