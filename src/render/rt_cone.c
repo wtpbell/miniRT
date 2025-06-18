@@ -34,35 +34,22 @@ t_v3f	cone_normal(t_obj *obj, t_v3f point)
 		)));
 }
 
-static int	intersect_cone_base(t_ray *ray, float r, float h, t_v2f *t)
-{
-	float	t_intersect;
-	t_v3f	p;
-
-	if (fabsf(ray->direction.y) < FLT_SML)
-		return (0);
-	t_intersect = (h - ray->origin.y) / ray->direction.y;
-	if (t_intersect > t->x && t_intersect < t->y)
-	{
-		p = v3f_add(ray->origin, v3f_scale(ray->direction, t_intersect));
-		if ((p.x * p.x + p.z * p.z) <= r * r)
-			return (t->y = t_intersect, 1);
-	}
-	return (0);
-}
-
 static int check_cone_body(t_v3f coeff, t_ray *ray, float h, t_v2f *t)
 {
 	t_v3f	p;
 	float	t0;
 	float	t1;
+	float	min_y;
+	float	max_y;
 
 	if (!solve_quadratic(&coeff, &t0, &t1))
 		return (0);
+	min_y = fminf(0.0f, h);
+	max_y = fmaxf(0.0f, h);
 	if (t0 > t->x && t0 < t->y)
 	{
 		p = v3f_add(ray->origin, v3f_scale(ray->direction, t0));
-		if (p.y >= 0 && p.y <= h)
+		if (p.y >= min_y && p.y <= max_y)
 			return (t->y = t0, 1);
 	}
 	return (0);
@@ -101,7 +88,7 @@ int	cone_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
 	l_ray.origin = mul_v3_m4x4(ray->origin, obj->t.to_obj);
 	l_ray.direction = mul_dir_m4x4(ray->direction, obj->t.to_obj);
 	if ((intersect_cone_body(obj, &l_ray, &t)
-		| intersect_cone_base(&l_ray, obj->cone.radius, obj->cone.height, &t)) == 1)
+		| intersect_disc(obj->cone.radius, obj->cone.height, &l_ray, &t)) == 1)
 		return (*dst = t.y, 1);
 	return (0);
 }

@@ -36,6 +36,7 @@ int		plane_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
 int		cylinder_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
 int		triangle_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
 int		cone_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
+int		intersect_disc(float r, float h, t_ray *ray, t_v2f *t_lim);
 t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t);
 t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth);
 t_v3f	sphere_normal(t_obj *obj, t_v3f point);

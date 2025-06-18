@@ -31,7 +31,7 @@ t_v3f	cylinder_normal(t_obj *obj, t_v3f point)
 				obj->t.to_world)));
 }
 
-static int	intersect_cylinder_disc(float r, float h, t_ray *ray, t_v2f *t_lim)
+int	intersect_disc(float r, float h, t_ray *ray, t_v2f *t_lim)
 {
 	float	t;
 	t_v3f	p;
@@ -96,8 +96,8 @@ int	cylinder_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
 	l_ray.origin = mul_v3_m4x4(ray->origin, obj->t.to_obj);
 	l_ray.direction = mul_dir_m4x4(ray->direction, obj->t.to_obj);
 	if ((intersect_cylinder_body(obj, &l_ray, &t)
-			| intersect_cylinder_disc(r, h, &l_ray, &t)
-			| intersect_cylinder_disc(r, -h, &l_ray, &t)) == 1)
+			| intersect_disc(r, h, &l_ray, &t)
+			| intersect_disc(r, -h, &l_ray, &t)) == 1)
 		return (*dst = t.y, 1);
 	return (0);
 }
