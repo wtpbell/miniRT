@@ -6,7 +6,7 @@
 
 m_checker		type:lambertian	spc:1.0	shi:50.0			pat:checker	su:2	sv:0	rot:-45	alt_col:0,0,0
 m_sp_checker	type:lambertian	spc:.4 shi:200.0	fuz:.4	pat:checker	su:20	sv:10			alt_col:185,0,0
-m_cy_checker	type:lambertian	spc:1.0	shi:50.0			pat:checker	su:12	sv:16			alt_col:0,0,0
+m_cy_checker	type:lambertian	spc:1.0	shi:50.0			pat:checker	su:32	sv:16			alt_col:0,0,0
 m_tri_checker	type:lambertian spc:1.0 shi:500.0			pat:checker	su:4	sv:4	rot:65	alt_col:255,255,255
 m_tri_checker2	type:lambertian spc:1.0	shi:200.0			pat:checker	su:10	sv:10			alt_col:0,0,255
 
@@ -38,4 +38,4 @@ sp -6,0,-8	3		255,255,255 m_sp_checker
 tri	2,0,-4.01		6,0,-4.01		4,0,-8		0,255,0		m_tri_checker2
 tri	0,10,-4			6,10,-4			6,1,-4		175,175,25	m_tri_checker
 
-cy 0,0,-8	0,1,0	3	5	0,0,255 m_cy_checker
+cy 0,0,-8	0,1,0	2	5	0,0,255 m_cy_checker
