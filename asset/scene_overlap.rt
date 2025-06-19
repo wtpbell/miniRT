@@ -38,7 +38,7 @@ sp 0,2,0 3.0 0,255,0 m_red
 # cy 3,0,0 0,1,0 0.5 2 255,200,0
 # cy 3.5,0,0 0,1,0 0.5 2 200,0,200
 
-co 0,6,0  0,-1,0  2.0  3.0  255,0,0  m_default
+co 0,6,2  0,-1,0  2.0  3.0  255,0,0  m_default
 
-# Cone pointing up
-co 3,0,1  0,1,0  3.0  5.0  0,0,255  m_dielectric
+# Cone with base facing camera
+co -5,3,-2  0.5,-0.4,1.0  2.0  4.0  0,200,255  m_default
