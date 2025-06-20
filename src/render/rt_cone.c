@@ -27,7 +27,7 @@ t_v3f	cone_normal(t_obj *obj, t_v3f point)
 
 	obj_p = mul_v3_m4x4(point, obj->t.to_obj);
 	if (fabsf(obj_p.y - obj->cone.height) < FLT_SML)
-		return (v3f_norm(mul_dir_m4x4(init_v3f(0, 1, 0), obj->t.to_world)));
+		return (v3f_norm(mul_dir_m4x4(g_v3f_up, obj->t.to_world)));
 	k_sq = -(obj->cone.radius / obj->cone.height)
 		* (obj->cone.radius / obj->cone.height);
 	return (v3f_norm(mul_dir_m4x4(

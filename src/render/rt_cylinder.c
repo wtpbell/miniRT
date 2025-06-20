@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_cylinder.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/17 11:59:52 by bewong            #+#    #+#             */
-/*   Updated: 2025/05/31 23:18:17 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_cylinder.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/17 11:59:52 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/20 10:13:51 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ t_v3f	cylinder_normal(t_obj *obj, t_v3f point)
 	if (fabsf(obj_p.y) >= obj->cy.height * 0.5f - FLT_SML)
 	{
 		if (obj_p.y > 0)
-			return (v3f_norm(mul_dir_m4x4(init_v3f(0, 1, 0), obj->t.to_world)));
-		return (v3f_norm(mul_dir_m4x4(init_v3f(0, -1, 0), obj->t.to_world)));
+			return (v3f_norm(mul_dir_m4x4(g_v3f_up, obj->t.to_world)));
+		return (v3f_norm(mul_dir_m4x4(g_v3f_down, obj->t.to_world)));
 	}
 	return (v3f_norm(mul_dir_m4x4(init_v3f(obj_p.x, 0, obj_p.z),
 				obj->t.to_world)));
