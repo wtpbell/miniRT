@@ -10,8 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
+#include "ray.h"
 #include "rt_math.h"
+#include "scene.h"
 
 bool	solve_quadratic(t_v3f *abc, float *x0, float *x1)
 {
@@ -40,6 +41,37 @@ bool	solve_quadratic(t_v3f *abc, float *x0, float *x1)
 t_v3f	sphere_normal(t_obj *obj, t_v3f point)
 {
 	return (v3f_norm(v3f_sub(point, obj->t.pos)));
+}
+
+/*
+	Spherical Coordinates (p, theta, phi)
+	p (rho) = distance between point and the origin (radius)
+	theta = angle counter clockwise from the polar/positive x-axis in the
+	xy-plane
+	phi = the angle between the positive z-axis and the point
+
+	p^2 = x^2 + y^2 + z^2
+	tan theta = y/x
+	cos phi = z / (sqrt(p^2))
+
+	By convention the z-axis is consider the up axis, but in our case it would
+	be the y-axis
+*/
+t_v2f	sphere_texcoord(t_obj *obj, t_v3f world_point)
+{
+	t_v3f	local_point;
+	float	theta;
+	float	phi;
+	float	r;
+
+	local_point = v3f_sub(world_point, obj->t.pos);
+	r = v3f_mag(local_point);
+	theta = atan2f(local_point.z, local_point.x);
+	phi = acosf(ft_clampf(local_point.y / r, -1.0f, 1.0f));
+	theta = theta / TAU;
+	theta = 1.0f - (theta + 0.5f);
+	phi = 1.0f - phi / PI;
+	return (init_v2f(theta, phi));
 }
 
 int	sphere_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)

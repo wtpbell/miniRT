@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   scene.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 18:55:45 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/17 15:01:24 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   scene.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/18 17:53:09 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,18 +65,19 @@ struct s_camera
 	t_mat4x4	view_matrix;
 	float		aperture;
 	float		focus_dist;
-	t_v3f	u;
-	t_v3f	v;
-	t_v3f	w;
-	t_v3f	horizontal;
-	t_v3f	vertical;
-	t_v3f	lower_left;
+	t_v3f		u;
+	t_v3f		v;
+	t_v3f		w;
+	t_v3f		horizontal;
+	t_v3f		vertical;
+	t_v3f		lower_left;
 };
 
 struct s_render
 {
-	t_mat	*mat;
-	t_v3f	color;
+	t_mat		*mat;
+	t_v3f		color;
+	t_texcoord	get_texcoord;
 };
 
 struct s_plane
@@ -105,6 +106,10 @@ struct s_triangle
 	t_v3f	v0;
 	t_v3f	v1;
 	t_v3f	v2;
+	t_v3f	vt0;
+	t_v3f	vt1;
+	t_v3f	vt2;
+	t_v2f	weight;
 };
 
 struct s_light
@@ -113,22 +118,6 @@ struct s_light
 	t_v3f			color;
 	t_light_type	type;
 	float			intensity;
-};
-
-struct s_ray
-{
-	t_v3f	origin;
-	t_v3f	direction;
-};
-
-struct s_ray_hit
-{
-	t_v3f	hit;
-	t_v3f	normal;
-	float	distance;
-	bool	front_face;
-	t_obj	*obj;
-	t_ray	*ray;
 };
 
 struct s_object

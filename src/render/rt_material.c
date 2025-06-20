@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_material.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/31 19:11:17 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/13 19:10:13 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_material.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/06/02 11:16:23 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/18 17:46:01 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
-#include "material.h"
 #include "light.h"
+#include "material.h"
 #include "minirt.h"
-#include "rt_math.h"
 #include "random.h"
-#include <stdlib.h>
+#include "ray.h"
+#include "rt_math.h"
+#include "scene.h"
 
 static float	get_refraction_ratio(t_ray_hit *hit)
 {
@@ -70,7 +70,7 @@ t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 		ior = hit->obj->r.mat->diel.ir;
 	indirect = blend_color(sc, hit, depth, ior);
 	if (hit->obj->r.mat->diel.transmittance < 0.99f)
-		direct_light = v3f_mul(compute_lighting(hit, sc), hit->obj->r.color);
+		direct_light = v3f_mul(compute_lighting(hit, sc), hit->hit_color);
 	if (hit->obj->r.mat->diel.transmittance >= 0.99f)
 		return (v3f_clampf01(indirect));
 	if (hit->obj->r.mat->diel.transmittance <= 0.01f)
@@ -87,7 +87,7 @@ t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info)
 	t_v3f	lighting;
 
 	lighting = compute_lighting(hit_info, scene);
-	return (v3f_clampf01(v3f_mul(hit_info->obj->r.color, lighting)));
+	return (v3f_clampf01(v3f_mul(hit_info->hit_color, lighting)));
 }
 
 t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth)
@@ -106,7 +106,7 @@ t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 	if (v3f_dot(reflected_ray.direction, hit->normal) > 0.0f)
 	{
 		result = trace(&reflected_ray, sc, depth - 1);
-		return (v3f_mul(hit->obj->r.color, result));
+		return (v3f_mul(hit->hit_color, result));
 	}
 	return (g_v3f_zero);
 }

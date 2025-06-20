@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   vector_operation.c                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 19:38:24 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/13 19:14:08 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   vector_operation.c                                 :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 19:38:24 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/18 17:01:16 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +97,21 @@ bool	v3f_equals(t_v3f a, t_v3f b, float epsilon)
 	return (fabsf(a.x - b.x) < epsilon
 		&& fabsf(a.y - b.y) < epsilon
 		&& fabsf(a.z - b.z) < epsilon);
+}
+
+t_v2f	v2f_rotate(t_v2f v, float angle)
+{
+	return (init_v2f(v.x * cosf(angle) - v.y * sinf(angle),
+			v.y * cosf(angle) + v.x * sinf(angle))
+	);
+}
+
+t_v3f	v3f_sub_v2f(t_v3f a, t_v2f b)
+{
+	return (init_v3f(a.x - b.x, a.y - b.y, a.z));
+}
+
+t_v3f	v3f_mul_v2f(t_v3f a, t_v2f b)
+{
+	return (init_v3f(a.x * b.x, a.y * b.y, a.z));
 }

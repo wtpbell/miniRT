@@ -1,0 +1,33 @@
+m_checker		type:lambertian	spc:1.0	shi:50.0			pat:checker	su:2	sv:2	rot:0	alt_col:0,0,0
+m_rot_checker	type:lambertian	spc:1.0	shi:50.0			pat:checker	su:2	sv:2	rot:45	alt_col:255,255,255
+m_sp_checker	type:lambertian	spc:1.0	shi:50.0			pat:checker	su:8	sv:12	rot:45	alt_col:214,232,19
+m_metal			type:metal		mt_rough:0.0
+m_dielectric	type:dielectric	ir:1.55	tr:.8
+
+# FRONT VIEW
+C 2,2.5,9     0,0,1  30
+
+# Ambient light
+A 0.3 255,255,255
+
+# Light sources
+L 4,5,8 0.7 255,255,255
+
+# OBJECTS
+sp 0,2.5,0	5		255,255,255 m_metal
+sp 7,4,7	6		255,255,255 m_dielectric
+sp 7,5,-7	3		255,255,255 m_metal
+
+sp 4,1,-3	1		0,0,255	m_sp_checker
+
+# plane FLOOR/CEIL
+pl 0,0,0	0,1,0	255,255,255 m_checker
+pl 0,0,0	0,1,0	255,255,255 m_checker
+
+# plane FRONT/BACK
+pl 0,0,10	0,0,1	255,0,0 m_rot_checker
+pl 0,0,-10	0,0,-1	0,255,0 m_checker
+
+# plane LEFT/RIGHT
+pl -10,0,0	-1,0,0	0,255,0 m_checker
+pl 10,0,0	1,0,0	255,255,0 m_checker

@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_dof.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 12:05:02 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/13 16:38:00 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_dof.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/18 17:30:35 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <math.h>
 #include "scene.h"
 #include "vector.h"
 #include "rt_math.h"
 #include "random.h"
+#include "ray.h"
 #include "matrix.h"
 #include "minirt.h"
-#include <stdio.h>
-#include <math.h>
 
 void	update_camera_view(t_cam *cam)
 {

@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   print_var.c                                        :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/12 14:06:32 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/18 17:00:52 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,22 @@ void	mat4x4_rot_print(t_mat4x4 m)
 void	v3f_print(t_v3f v, int spaces, const char *prefix)
 {
 	printf("%*s%s(v3f) <%.4f, %.4f, %.4f>\n", spaces, "", prefix, v.x, v.y, v.z);
+}
+
+void	floats_print(float *f, int size, int spaces, const char *prefix)
+{
+	int	i;
+
+	i = 0;
+	printf("%*s%s(v%if) <", spaces, "", prefix, size);
+	while (i < size)
+	{
+		printf("%.4f", f[i]);
+		if (i < size - 1)
+			printf(", ");
+		++i;
+	}
+	printf(">\n");
 }
 
 void	col32_print(t_v3f c, int spaces, const char *prefix)
@@ -142,15 +158,16 @@ void	objects_print(t_vector	objects, int spaces, const char *prefix)
 			cone_print(obj, spaces + 2);
 		col32_print(obj->r.color, spaces + 2, "COLOR");
 		str_print(obj->r.mat->name, spaces + 2, "MATERIAL");
-		
+
 		++i;
 	}
 }
 
 void	materials_print(t_vector materials, int spaces, const char *prefix)
 {
-	int		i;
-	t_mat	*mat;
+	int			i;
+	t_mat		*mat;
+	t_tex	*tex;
 
 	i = 0;
 	printf("%*s%s <%i/%i>\n", spaces, "", prefix, materials.size, materials.capacity);
@@ -174,6 +191,16 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 		else
 			str_print("Unknown", spaces + 4, "type:");
 		col32_print(mat->albedo, spaces + 4, "albedo");
+
+		tex = &mat->texture;
+		if (tex->type == TEX_SOLID)
+			str_print("SOLID", spaces + 4, "texture type:");
+		else if (tex->type == TEX_CHECKER)
+			str_print("CHECKER", spaces + 4, "texture type:");
+		else
+			str_print("UNKNOWN", spaces + 4, "texture type:");
+		col32_print(tex->col, spaces + 4, "alt col");
+		floats_print(tex->scale_rot._axis, 3, spaces + 5, "uv scale rot");
 		++i;
 	}
 }
@@ -211,16 +238,16 @@ void	scene_print(t_scene *scene)
 
 void debug_scene_setup(t_scene *scene) {
 	printf("\n=== SCENE SETUP DEBUG ===\n");
-	printf("Camera position: (%.2f, %.2f, %.2f)\n", 
+	printf("Camera position: (%.2f, %.2f, %.2f)\n",
 			scene->camera.t.pos.x, scene->camera.t.pos.y, scene->camera.t.pos.z);
-	printf("Camera direction: (%.2f, %.2f, %.2f)\n", 
+	printf("Camera direction: (%.2f, %.2f, %.2f)\n",
 			scene->camera.t.dir.x, scene->camera.t.dir.y, scene->camera.t.dir.z);
 	printf("FOV: %.2f\n", scene->camera.fov);
 	printf("\nObjects (%d):\n", scene->objects.size);
 	for (int i = 0; i < scene->objects.size; i++) {
 		t_obj *obj = (t_obj *)scene->objects.items[i];
 		printf("  [%d] Type: %d, Pos: (%.2f, %.2f, %.2f), Dir: (%.2f, %.2f, %.2f)\n",
-				i, obj->type, 
+				i, obj->type,
 				obj->t.pos.x, obj->t.pos.y, obj->t.pos.z,
 				obj->t.dir.x, obj->t.dir.y, obj->t.dir.z);
 		if (obj->r.mat) {

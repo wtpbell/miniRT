@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   vector.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 18:40:12 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/13 19:14:03 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   vector.h                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/18 17:00:40 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ typedef union s_vector2
 		float	x;
 		float	y;
 	};
+	struct
+	{
+		float	u;
+		float	v;
+	};
 	float	_axis[2];
 }	t_v2f;
 
@@ -33,6 +38,12 @@ typedef union s_vector3
 		float	x;
 		float	y;
 		float	z;
+	};
+	struct
+	{
+		float	u;
+		float	v;
+		float	theta;
 	};
 	float	_axis[3];
 }	t_v3f;
@@ -47,6 +58,7 @@ extern const t_v3f	g_v3f_right;
 extern const t_v3f	g_v3f_left;
 
 t_v2f	init_v2f(float x, float y);
+t_v2f	v2f_rotate(t_v2f v, float angle);
 t_v3f	init_v3f(float x, float y, float z);
 t_v3f	v3f_add(t_v3f a, t_v3f b);
 t_v3f	v3f_sub(t_v3f a, t_v3f b);
@@ -63,4 +75,7 @@ float	v3f_dot(t_v3f a, t_v3f b);
 float	v3f_mag(t_v3f v);
 float	v3f_sqr_mag(t_v3f v);
 bool	v3f_equals(t_v3f a, t_v3f b, float epsilon);
+t_v3f	v3f_sub_v2f(t_v3f a, t_v2f b);
+t_v3f	v3f_mul_v2f(t_v3f a, t_v2f b);
+
 #endif

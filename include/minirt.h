@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minirt.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 11:37:50 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/17 18:40:53 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   minirt.h                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/18 16:57:58 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ typedef struct s_game
 int		game(t_scene *scene);
 void	quit_on_escape(mlx_key_data_t keydata, void *param);
 void	init_object_matrices(t_obj *obj);
+void	init_obj_transform(t_obj *obj, t_v3f pos, t_v3f dir, t_v3f up);
+void	init_obj_renderer(t_obj *obj, t_v3f col, t_texcoord coord);
 void	render(t_scene *scene);
 bool	solve_quadratic(t_v3f *abc, float *x0, float *x1);
 void	view_matrix(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up);
@@ -47,4 +49,6 @@ t_v3f	cone_normal(t_obj *obj, t_v3f point);
 void	debug_scene_setup(t_scene *scene);
 t_ray	get_ray_with_dof(t_cam *cam, float u, float v);
 void	update_camera_view(t_cam *cam);
+void	generate_uv_vertices(t_tri *tri, t_mat4x4 local);
+
 #endif

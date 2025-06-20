@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_light.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/31 19:11:17 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/13 19:00:27 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_light.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/31 19:11:17 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/18 17:46:18 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "light.h"
-#include "rt_math.h"
 #include "material.h"
 #include "minirt.h"
+#include "ray.h"
+#include "rt_math.h"
 
 t_v3f	apply_ambient(t_v3f base_col, t_light *light)
 {
@@ -80,7 +81,7 @@ t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 		return (g_v3f_zero);
 	lt.diffuse = calculate_diffuse(&lt);
 	lt.specular = get_specular(&lt, hit);
-	color = v3f_scale(v3f_mul(hit->obj->r.color, light->color), lt.diffuse);
-	color = v3f_add(color, v3f_scale(v3f_mul(hit->obj->r.color, light->color), lt.specular));
+	color = v3f_scale(v3f_mul(hit->hit_color, light->color), lt.diffuse);
+	color = v3f_add(color, v3f_scale(v3f_mul(hit->hit_color, light->color), lt.specular));
 	return (v3f_clampf01(v3f_scale(color, inten)));
 }

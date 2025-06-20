@@ -1,51 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   render.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/13 16:14:13 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   render.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/18 17:48:40 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <math.h>
 #include <stdint.h>
-#include <stdio.h>
 
 #include "MLX42/MLX42.h"
-#include "libft.h"
-#include "minirt.h"
-#include "color.h"
-#include "scene.h"
-#include "rt_math.h"
-#include "random.h"
 #include "light.h"
 #include "material.h"
-#include "material.h"
+#include "random.h"
+#include "ray.h"
+#include "rt_math.h"
+#include "scene.h"
 
-#define MAX_DEPTH	5
-
-void	init_object_matrices(t_obj *obj)
-{
-	if (obj->t.up.x != 0 || obj->t.up.y != 0 || obj->t.up.z != 0)
-		obj_to_world(obj->t.to_world, obj->t.pos, obj->t.dir, obj->t.up);
-	else
-		obj_to_world(obj->t.to_world, obj->t.pos, obj->t.dir, g_v3f_up);
-	invert_m4x4(obj->t.to_obj, obj->t.to_world);
-}
-
-static	t_v3f	normal_color(t_v3f norm)
-{
-	return (v3f_scale(v3f_add(norm, init_v3f(1.0f, 1.0f, 1.0f)), 0.5f));
-}
-
-t_v3f	gradient_color(t_v3f dir, t_v3f b)
-{
-	(void)b;
-	return (normal_color(dir));
-}
+#define MAX_DEPTH			8
+#define SAMPLES_PER_PIXEL	12
 
 t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t)
 {
@@ -79,6 +55,10 @@ static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 	hit_info->obj = obj;
 	if (!hit_info->front_face)
 		hit_info->normal = v3f_scale(hit_info->normal, -1.0f);
+	hit_info->texcoord = v2f_rotate(obj->r.get_texcoord(obj, hit_info->hit),
+		obj->r.mat->texture.scale_rot.theta * DEGTORAD);
+	hit_info->hit_color = obj->r.mat->get_texcol(&hit_info->texcoord,
+			&obj->r.mat->texture, v3f_mul(obj->r.color, obj->r.mat->albedo));
 }
 
 t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
@@ -105,9 +85,6 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 		color = (g_v3f_one);
 	return (color);
 }
-
-
-#define SAMPLES_PER_PIXEL 4 // Number of samples per pixel
 
 //u = x / (width - 1)
 // v = 1 - y / (height - 1)
@@ -161,4 +138,3 @@ void	render(t_scene *scene)
 	}
 	debug_scene_setup(scene);
 }
-

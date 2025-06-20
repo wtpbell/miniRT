@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_math.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/13 13:40:09 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/03 21:27:32 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_math.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/13 13:40:09 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/18 16:06:18 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,9 @@ float	schlick(float cosin, float ref_idx)
 	r0 = (1 - ref_idx) / (1 + ref_idx);
 	r0 = r0 * r0;
 	return (r0 + (1 - r0) * powf(1 - cosin, 5));
+}
+
+inline float	modulo(float x)
+{
+	return (x - floorf(x));
 }

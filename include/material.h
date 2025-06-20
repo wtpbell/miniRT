@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   material.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/29 13:47:23 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/17 14:05:36 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   material.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/18 17:54:34 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,42 @@ enum e_material_type
 	MAT_DIELECTRIC
 };
 
+typedef enum e_texture_type
+{
+	TEX_SOLID,
+	TEX_CHECKER,
+}	t_tex_type;
+
+struct s_texture
+{
+	t_tex_type	type;
+	t_v3f		scale_rot;
+	t_v3f		col;
+};
+
 struct s_material
 {
 	char		*name;
 	t_mat_type	type;
 	t_v3f		albedo;
-	struct {
+	t_tex		texture;
+	t_texcol	get_texcol;
+	struct s_lambertian
+	{
 		float	specular;
 		float	shininess;
 		float	roughness;
-	}	lamb;
-	struct {
+	}			lamb;
+	struct s_metal
+	{
 		float	roughness;
-	}	metal;
-	struct {
+	}			metal;
+	struct s_dielectric
+	{
 		float	ir;
 		float	transmittance;
 		float	roughness;
-	}	diel;
+	}			diel;
 };
 
 t_mat	*init_material(t_mat_type type, const char *name);
@@ -50,5 +68,12 @@ bool	assign_material(t_obj *obj, t_vector *materials, const char *m_name);
 t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth);
 t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info);
 t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth);
+
+t_v2f	plane_texcoord(t_obj *obj, t_v3f point);
+t_v2f	sphere_texcoord(t_obj *obj, t_v3f point);
+t_v2f	triangle_texcoord(t_obj *obj, t_v3f world_point);
+t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point);
+t_v3f	checker_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
+t_v3f	solid_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
 
 #endif

@@ -3,18 +3,17 @@
 /*                                                        ::::::::            */
 /*   rt_cylinder.c                                      :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/17 11:59:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/20 10:13:51 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/18 16:42:45 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
-#include "rt_math.h"
 #include "minirt.h"
-#include <math.h>
-#include <stdio.h>
+#include "ray.h"
+#include "rt_math.h"
+#include "scene.h"
 
 t_v3f	cylinder_normal(t_obj *obj, t_v3f point)
 {
@@ -31,7 +30,36 @@ t_v3f	cylinder_normal(t_obj *obj, t_v3f point)
 				obj->t.to_world)));
 }
 
-int	intersect_disc(float r, float h, t_ray *ray, t_v2f *t_lim)
+/*
+	Cylindrical coordinates (rho, phi, z)
+	rho is the distance from the z-axis to the point (radius)
+	phi is the angle starting from the x-axis on the xy-plane.
+	z is the distance (in a vertical direction) from the xy-plane to point p
+	(height)
+
+	rho^2 = x^2 + y^2
+	tan phi = y/x
+	z = z
+
+	By convention the z-axis is consider the up axis, but in our case it would
+	be the y-axis
+*/
+
+t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point)
+{
+	t_v3f	local_point;
+	float	theta;
+	float	y;
+
+	local_point = mul_v3_m4x4(point, obj->t.to_obj);
+	if (fabsf(local_point.y) >= obj->cy.height * 0.5f - FLT_SML)
+		return (init_v2f(0.0f, 0.0f));
+	theta = atan2f(local_point.z, local_point.x) / TAU;
+	y = (local_point.y / obj->cy.height);
+	return (init_v2f(1.0f - (theta + 0.5f), y + 0.5f));
+}
+
+static int	intersect_cylinder_disc(float r, float h, t_ray *ray, t_v2f *t_lim)
 {
 	float	t;
 	t_v3f	p;
