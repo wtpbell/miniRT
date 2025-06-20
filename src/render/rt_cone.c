@@ -13,6 +13,7 @@
 #include "scene.h"
 #include "rt_math.h"
 #include "minirt.h"
+#include "ray.h"
 
 /**
 	f(x,y,z) = x² + z² - (k·y)² = 0

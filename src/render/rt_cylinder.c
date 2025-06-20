@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/17 11:59:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 16:42:45 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/20 14:34:30 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point)
 	return (init_v2f(1.0f - (theta + 0.5f), y + 0.5f));
 }
 
-static int	intersect_cylinder_disc(float r, float h, t_ray *ray, t_v2f *t_lim)
+int	intersect_disc(float r, float h, t_ray *ray, t_v2f *t_lim)
 {
 	float	t;
 	t_v3f	p;
