@@ -119,6 +119,14 @@ void	cylinder_print(t_obj *cy, int spaces)
 	float_print(cy->cy.height, spaces + 2, "HEIGHT");
 }
 
+void	cone_print(t_obj *co, int spaces)
+{
+	printf("%*s%s", spaces, "","CONE:\n");
+	transform_print(&co->t, spaces + 2);
+	float_print(co->cone.radius, spaces + 2, "RADIUS");
+	float_print(co->cone.height, spaces + 2, "HEIGHT");
+}
+
 void	triangle_print(t_obj *tri, int spaces)
 {
 	printf("%*s%s", spaces, "","TRIANGLE:\n");
@@ -146,6 +154,8 @@ void	objects_print(t_vector	objects, int spaces, const char *prefix)
 			cylinder_print(obj, spaces + 2);
 		else if (obj->type == OBJ_TRIANGLE)
 			triangle_print(obj, spaces + 2);
+		else if (obj->type == OBJ_CONE)
+			cone_print(obj, spaces + 2);
 		col32_print(obj->r.color, spaces + 2, "COLOR");
 		str_print(obj->r.mat->name, spaces + 2, "MATERIAL");
 

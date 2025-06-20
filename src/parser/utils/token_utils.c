@@ -24,7 +24,7 @@ static int	has_expected_token_count(const char *type, size_t token_count)
 		return (token_count == 4 || token_count == 5);
 	else if (ft_strcmp(type, "tri") == 0)
 		return (token_count == 5 || token_count == 6);
-	else if (ft_strcmp(type, "cy") == 0)
+	else if (ft_strcmp(type, "cy") == 0 || ft_strcmp(type, "co") == 0)
 		return (token_count == 6 || token_count == 7);
 	else if (ft_strncmp(type, "m_", 2) == 0)
 		return (token_count > 2);

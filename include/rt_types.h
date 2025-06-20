@@ -39,6 +39,7 @@ typedef struct s_plane			t_pl;
 typedef struct s_sphere			t_sp;
 typedef struct s_cylinder		t_cy;
 typedef struct s_triangle		t_tri;
+typedef struct s_cone			t_cone;
 typedef struct s_light			t_light;
 typedef struct s_ray			t_ray;
 typedef struct s_ray_hit		t_ray_hit;

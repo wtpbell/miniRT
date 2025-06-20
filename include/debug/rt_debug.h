@@ -23,6 +23,7 @@ void	mat4x4_print(t_mat4x4 m, int spaces, const char *prefix);
 void	col32_print(t_v3f c, int spaces, const char *prefix);
 void	v3f_print(t_v3f v, int spaces, const char *prefix);
 void	float_print(float f, int spaces, const char *prefix);
+void	cone_print(t_obj *co, int spaces);
 void	scene_print(t_scene *scene);
 void	print_camera_setup(t_cam *cam);
 

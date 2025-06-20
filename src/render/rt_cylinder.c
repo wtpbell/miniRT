@@ -23,8 +23,8 @@ t_v3f	cylinder_normal(t_obj *obj, t_v3f point)
 	if (fabsf(obj_p.y) >= obj->cy.height * 0.5f - FLT_SML)
 	{
 		if (obj_p.y > 0)
-			return (v3f_norm(mul_dir_m4x4(init_v3f(0, 1, 0), obj->t.to_world)));
-		return (v3f_norm(mul_dir_m4x4(init_v3f(0, -1, 0), obj->t.to_world)));
+			return (v3f_norm(mul_dir_m4x4(g_v3f_up, obj->t.to_world)));
+		return (v3f_norm(mul_dir_m4x4(g_v3f_down, obj->t.to_world)));
 	}
 	return (v3f_norm(mul_dir_m4x4(init_v3f(obj_p.x, 0, obj_p.z),
 				obj->t.to_world)));
@@ -55,7 +55,7 @@ t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point)
 	if (fabsf(local_point.y) >= obj->cy.height * 0.5f - FLT_SML)
 		return (init_v2f(0.0f, 0.0f));
 	theta = atan2f(local_point.z, local_point.x) / TAU;
-	y = local_point.y / obj->cy.height;
+	y = (local_point.y / obj->cy.height);
 	return (init_v2f(1.0f - (theta + 0.5f), y + 0.5f));
 }
 
@@ -124,8 +124,8 @@ int	cylinder_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
 	l_ray.origin = mul_v3_m4x4(ray->origin, obj->t.to_obj);
 	l_ray.direction = mul_dir_m4x4(ray->direction, obj->t.to_obj);
 	if ((intersect_cylinder_body(obj, &l_ray, &t)
-			| intersect_cylinder_disc(r, h, &l_ray, &t)
-			| intersect_cylinder_disc(r, -h, &l_ray, &t)) == 1)
+			| intersect_disc(r, h, &l_ray, &t)
+			| intersect_disc(r, -h, &l_ray, &t)) == 1)
 		return (*dst = t.y, 1);
 	return (0);
 }
