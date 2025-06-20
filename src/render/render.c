@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 17:48:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/20 16:26:40 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #include "scene.h"
 
 #define MAX_DEPTH			8
-#define SAMPLES_PER_PIXEL	12
+#define SAMPLES_PER_PIXEL	8
 
 t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t)
 {

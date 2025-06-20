@@ -37,6 +37,20 @@ t_v3f	cone_normal(t_obj *obj, t_v3f point)
 		)));
 }
 
+t_v2f	cone_texcoord(t_obj *obj, t_v3f point)
+{
+	t_v3f	local_point;
+	float	theta;
+	float	y;
+
+	local_point = mul_v3_m4x4(point, obj->t.to_obj);
+	// if (fabsf(local_point.y) >= obj->cy.height * 0.5f - FLT_SML)
+	// 	return (init_v2f(0.0f, 0.0f));
+	theta = atan2f(local_point.z, local_point.x) / TAU;
+	y = (local_point.y / obj->cone.height);
+	return (init_v2f(1.0f - (theta + 0.5f), ft_clampf01(y)));
+}
+
 static int check_cone_body(t_v3f coeff, t_ray *ray, float h, t_v2f *t)
 {
 	t_v3f	p;
@@ -95,3 +109,5 @@ int	cone_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
 		return (*dst = t.y, 1);
 	return (0);
 }
+
+

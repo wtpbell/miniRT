@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 17:54:34 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/20 14:50:46 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ bool	assign_material(t_obj *obj, t_vector *materials, const char *m_name);
 t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth);
 t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info);
 t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth);
-
+t_v2f	cone_texcoord(t_obj *obj, t_v3f point);
 t_v2f	plane_texcoord(t_obj *obj, t_v3f point);
 t_v2f	sphere_texcoord(t_obj *obj, t_v3f point);
 t_v2f	triangle_texcoord(t_obj *obj, t_v3f world_point);
