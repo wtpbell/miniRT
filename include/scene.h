@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:55:45 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/13 17:16:07 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/17 15:01:24 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,12 @@ struct s_cylinder
 	float		radius;
 	float		height;
 };
+	
+struct s_cone
+{
+	float		radius;
+	float		height;
+};
 
 struct s_triangle
 {
@@ -135,6 +141,7 @@ struct s_object
 		t_pl	pl;
 		t_cy	cy;
 		t_tri	tri;
+		t_cone	cone;
 	} ;
 	t_obj_type	type;
 	t_intsct	intersect;

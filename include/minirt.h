@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   minirt.h                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/12 14:45:56 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   minirt.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 11:37:50 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/17 18:40:53 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,15 @@ int		sphere_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
 int		plane_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
 int		cylinder_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
 int		triangle_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
+int		cone_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
+int		intersect_disc(float r, float h, t_ray *ray, t_v2f *t_lim);
 t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t);
 t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth);
 t_v3f	sphere_normal(t_obj *obj, t_v3f point);
 t_v3f	plane_normal(t_obj *obj, t_v3f point);
 t_v3f	cylinder_normal(t_obj *obj, t_v3f point);
 t_v3f	triangle_normal(t_obj *obj, t_v3f point);
+t_v3f	cone_normal(t_obj *obj, t_v3f point);
 void	debug_scene_setup(t_scene *scene);
 t_ray	get_ray_with_dof(t_cam *cam, float u, float v);
 void	update_camera_view(t_cam *cam);

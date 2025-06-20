@@ -127,6 +127,8 @@ bool		parse_sphere(char **tokens, t_scene *scene);
 bool		parse_plane(char **tokens, t_scene *scene);
 // cylinder.c
 bool		parse_cylinder(char **tokens, t_scene *scene);
+// cone.c
+bool		parse_cone(char **tokens, t_scene *scene);
 // triangle.c
 bool		parse_triangle(char **tokens, t_scene *scene);
 

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/13 16:11:42 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/17 19:02:09 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void	obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up)
 	x_axis = v3f_norm(v3f_cross(up, y_axis));
 	z_axis = v3f_cross(x_axis, y_axis);
 	id_m4x4(trans);
-	trans_m4x4(trans, pos);
 	rotate_m4x4(rot, x_axis, y_axis, z_axis);
+	trans_m4x4(trans, pos);
 	mul_col_mat4x4(dst, trans, rot);
 }
 

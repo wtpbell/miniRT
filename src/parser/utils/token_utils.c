@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   token_utils.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/11 18:31:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/07 20:45:54 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   token_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 18:31:01 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/17 18:21:13 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ static int	has_expected_token_count(const char *type, size_t token_count)
 	else if (ft_strcmp(type, "L") == 0)
 		return (token_count == 4);
 	else if (ft_strcmp(type, "C") == 0)
-		return (token_count >= 4);  // Camera can have 4+ tokens (position, direction, FOV, [key:value...])
+		return (token_count >= 4);
 	else if (ft_strcmp(type, "sp") == 0 || ft_strcmp(type, "pl") == 0)
 		return (token_count == 4 || token_count == 5);
 	else if (ft_strcmp(type, "tri") == 0)
 		return (token_count == 5 || token_count == 6);
-	else if (ft_strcmp(type, "cy") == 0)
+	else if (ft_strcmp(type, "cy") == 0 || ft_strcmp(type, "co") == 0)
 		return (token_count == 6 || token_count == 7);
 	else if (ft_strncmp(type, "m_", 2) == 0)
 		return (token_count > 2);
