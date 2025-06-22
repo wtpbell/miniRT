@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/21 14:20:16 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/22 11:25:38 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static t_parser	get_parser(const char *type)
 	else if (ft_strcmp(type, "tri") == 0)
 		return (parse_triangle);
 	else if (ft_strcmp(type, "L") == 0 || ft_strcmp(type, "A") == 0
-		|| ft_strcmp(type, "spl") == 0)
+		|| ft_strcmp(type, "spl") == 0 || ft_strcmp(type, "l") == 0)
 		return (parse_light);
 	else if (ft_strcmp(type, "C") == 0)
 		return (parse_camera);
