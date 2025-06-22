@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/31 19:11:17 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 17:46:18 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/22 10:40:28 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 	float		shadow_dist;
 	t_v3f		color;
 
-	ft_bzero(&lt, sizeof(t_lighting));
 	init_lighting(&lt, hit, light, scene->camera.t.pos);
 	inten = lt.inten / (1.0f + 0.02f * lt.dist + 0.0002f * lt.dist * lt.dist);
 	ray.origin = hit->hit;
@@ -84,4 +83,18 @@ t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 	color = v3f_scale(v3f_mul(hit->hit_color, light->color), lt.diffuse);
 	color = v3f_add(color, v3f_scale(v3f_mul(hit->hit_color, light->color), lt.specular));
 	return (v3f_clampf01(v3f_scale(color, inten)));
+}
+
+t_v3f	apply_spot(t_scene *scene, t_ray_hit *hit, t_light *light)
+{
+	float	att;
+	float	l_dot_wi;
+	t_v3f	wi;
+
+	wi = v3f_norm(v3f_sub(hit->hit, light->pos));
+	l_dot_wi = v3f_dot(light->spot.dir, wi);
+	if (l_dot_wi < light->spot.outer)
+		return (g_v3f_zero);
+	att = ft_clampf01((l_dot_wi - light->spot.outer) / (light->spot.inner - light->spot.outer));
+	return (v3f_scale(apply_point(scene, hit, light), att * att));
 }

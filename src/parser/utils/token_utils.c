@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 18:31:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 18:01:41 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/22 10:41:57 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static int	has_expected_token_count(const char *type, size_t token_count)
 		return (token_count == 4);
 	else if (ft_strcmp(type, "C") == 0)
 		return (token_count >= 4);
+	else if (ft_strcmp(type, "spl") == 0)
+		return (token_count == 7);
 	else if (ft_strcmp(type, "sp") == 0 || ft_strcmp(type, "pl") == 0)
 		return (token_count == 4 || token_count == 5);
 	else if (ft_strcmp(type, "tri") == 0)

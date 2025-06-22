@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 17:53:09 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/22 10:40:09 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ enum e_light_type
 {
 	LIGHT_AMBIENT,
 	LIGHT_POINT,
+	LIGHT_SPOT,
 };
 
 typedef enum e_scene_flags
@@ -118,6 +119,12 @@ struct s_light
 	t_v3f			color;
 	t_light_type	type;
 	float			intensity;
+	struct s_spotlight
+	{
+		t_v3f		dir;
+		float		inner;
+		float		outer;
+	}				spot;
 };
 
 struct s_object

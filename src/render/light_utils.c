@@ -6,12 +6,14 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/13 12:17:53 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 17:46:28 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/22 09:35:28 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "light.h"
 #include "ray.h"
+
+#define LU_MAX_SIZE	3
 
 void	init_lighting(t_lighting *lighting, t_ray_hit *hit,
 	t_light *light, t_v3f camera_pos)
@@ -24,6 +26,8 @@ void	init_lighting(t_lighting *lighting, t_ray_hit *hit,
 	lighting->obj_color = hit->hit_color;
 	lighting->inten = light->intensity;
 	lighting->dist = v3f_mag(v3f_sub(light->pos, hit->hit));
+	lighting->diffuse = 0.0f;
+	lighting->specular = 0.0f;
 }
 
 static t_v3f	handle_ambient_light(t_light *light, t_ray_hit *hit_info,
@@ -39,14 +43,21 @@ static t_v3f	handle_point_light(t_light *light, t_ray_hit *hit_info,
 	return (v3f_add(current_col, apply_point(scene, hit_info, light)));
 }
 
+static t_v3f	handle_spot_light(t_light *light, t_ray_hit *hit_info,
+			t_scene *scene, t_v3f current_col)
+{
+	return (v3f_add(current_col, apply_spot(scene, hit_info, light)));
+}
+
 t_v3f	compute_lighting(t_ray_hit *hit_info, t_scene *scene)
 {
-	t_v3f						col;
-	t_light						*light;
-	int							i;
-	const t_apply_light		handlers[] = {
+	t_v3f				col;
+	t_light				*light;
+	int					i;
+	const t_apply_light	handlers[LU_MAX_SIZE] = {
 	[LIGHT_AMBIENT] = handle_ambient_light,
 	[LIGHT_POINT] = handle_point_light,
+	[LIGHT_SPOT] = handle_spot_light,
 	};
 
 	i = 0;
@@ -54,8 +65,7 @@ t_v3f	compute_lighting(t_ray_hit *hit_info, t_scene *scene)
 	while (i < scene->lights.size)
 	{
 		light = (t_light *)scene->lights.items[i];
-		if (light->type >= 0 && light->type
-			< (int)(sizeof(handlers) / sizeof(handlers[0]))
+		if (light->type >= 0 && light->type < LU_MAX_SIZE
 			&& handlers[light->type])
 			col = handlers[light->type](light, hit_info, scene, col);
 		i++;

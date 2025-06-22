@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   element_parser.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:23:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/17 18:14:15 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   element_parser.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/21 14:20:16 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ static t_parser	get_parser(const char *type)
 		return (parse_cone);
 	else if (ft_strcmp(type, "tri") == 0)
 		return (parse_triangle);
-	else if (ft_strcmp(type, "L") == 0 || ft_strcmp(type, "A") == 0)
+	else if (ft_strcmp(type, "L") == 0 || ft_strcmp(type, "A") == 0
+		|| ft_strcmp(type, "spl") == 0)
 		return (parse_light);
 	else if (ft_strcmp(type, "C") == 0)
 		return (parse_camera);
