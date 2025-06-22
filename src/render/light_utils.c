@@ -6,69 +6,50 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/13 12:17:53 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/22 09:35:28 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/22 11:59:22 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "light.h"
+#include "material.h"
 #include "ray.h"
+#include "rt_math.h"
 
-#define LU_MAX_SIZE	3
-
-void	init_lighting(t_lighting *lighting, t_ray_hit *hit,
-	t_light *light, t_v3f camera_pos)
+static float	calculate_specular(t_lighting *lighting,
+			float shininess, float specular_strength)
 {
-	lighting->light_dir = v3f_norm(v3f_sub(light->pos, hit->hit));
-	lighting->view_dir = v3f_norm(v3f_sub(camera_pos, hit->hit));
-	lighting->hit_point = hit->hit;
-	lighting->normal = hit->normal;
-	lighting->light_color = light->color;
-	lighting->obj_color = hit->hit_color;
-	lighting->inten = light->intensity;
-	lighting->dist = v3f_mag(v3f_sub(light->pos, hit->hit));
-	lighting->diffuse = 0.0f;
-	lighting->specular = 0.0f;
+	t_v3f	refl_dir;
+	float	spec;
+
+	refl_dir = v3f_refl(v3f_scale(
+				lighting->light_dir, -1.0f), lighting->normal);
+	spec = powf(ft_maxf(0.0f, v3f_dot(
+					lighting->view_dir, refl_dir)), shininess);
+	return (spec * specular_strength);
 }
 
-static t_v3f	handle_ambient_light(t_light *light, t_ray_hit *hit_info,
-			t_scene *scene, t_v3f current_col)
+float	calculate_diffuse(t_lighting *lighting)
 {
-	(void)scene;
-	return (v3f_add(current_col, apply_ambient(hit_info->hit_color, light)));
+	float	n_dot_l;
+	float	energy;
+
+	n_dot_l = ft_clampf01(v3f_dot(lighting->normal,
+				lighting->light_dir) * 0.9f);
+	energy = 1.0f - (0.3f * lighting->specular);
+	return (ft_maxf(0.0f, n_dot_l * energy * 0.95f));
 }
 
-static t_v3f	handle_point_light(t_light *light, t_ray_hit *hit_info,
-			t_scene *scene, t_v3f current_col)
+float	get_specular(t_lighting *lt, t_ray_hit *hit)
 {
-	return (v3f_add(current_col, apply_point(scene, hit_info, light)));
-}
-
-static t_v3f	handle_spot_light(t_light *light, t_ray_hit *hit_info,
-			t_scene *scene, t_v3f current_col)
-{
-	return (v3f_add(current_col, apply_spot(scene, hit_info, light)));
-}
-
-t_v3f	compute_lighting(t_ray_hit *hit_info, t_scene *scene)
-{
-	t_v3f				col;
-	t_light				*light;
-	int					i;
-	const t_apply_light	handlers[LU_MAX_SIZE] = {
-	[LIGHT_AMBIENT] = handle_ambient_light,
-	[LIGHT_POINT] = handle_point_light,
-	[LIGHT_SPOT] = handle_spot_light,
-	};
-
-	i = 0;
-	col = g_v3f_zero;
-	while (i < scene->lights.size)
-	{
-		light = (t_light *)scene->lights.items[i];
-		if (light->type >= 0 && light->type < LU_MAX_SIZE
-			&& handlers[light->type])
-			col = handlers[light->type](light, hit_info, scene, col);
-		i++;
-	}
-	return (col);
+	if (hit->obj->r.mat->type == MAT_LAMBERTIAN
+		&& hit->obj->r.mat->lamb.specular > 0.0f)
+		return (calculate_specular(lt, hit->obj->r.mat->lamb.shininess,
+				hit->obj->r.mat->lamb.specular));
+	if (hit->obj->r.mat->type == MAT_DIELECTRIC)
+		return (schlick(v3f_dot(lt->normal, lt->view_dir),
+				hit->obj->r.mat->diel.ir));
+	if (hit->obj->r.mat->type == MAT_METAL)
+		return (calculate_specular(lt, 100.0f, 1.0f)
+			* (1.0f - hit->obj->r.mat->metal.roughness));
+	return (0.0f);
 }
