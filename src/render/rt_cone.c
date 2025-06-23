@@ -32,9 +32,9 @@ t_v3f	cone_normal(t_obj *obj, t_v3f point)
 	k_sq = -(obj->cone.radius / obj->cone.height)
 		* (obj->cone.radius / obj->cone.height);
 	return (v3f_norm(mul_dir_m4x4(
-			init_v3f(obj_p.x, k_sq * obj_p.y, obj_p.z),
-			obj->t.to_world
-		)));
+				init_v3f(obj_p.x, k_sq * obj_p.y, obj_p.z),
+				obj->t.to_world
+			)));
 }
 
 t_v2f	cone_texcoord(t_obj *obj, t_v3f point)
@@ -44,14 +44,12 @@ t_v2f	cone_texcoord(t_obj *obj, t_v3f point)
 	float	y;
 
 	local_point = mul_v3_m4x4(point, obj->t.to_obj);
-	// if (fabsf(local_point.y) >= obj->cy.height * 0.5f - FLT_SML)
-	// 	return (init_v2f(0.0f, 0.0f));
 	theta = atan2f(local_point.z, local_point.x) / TAU;
 	y = (local_point.y / obj->cone.height);
 	return (init_v2f(1.0f - (theta + 0.5f), ft_clampf01(y)));
 }
 
-static int check_cone_body(t_v3f coeff, t_ray *ray, float h, t_v2f *t)
+static int	check_cone_body(t_v3f coeff, t_ray *ray, float h, t_v2f *t)
 {
 	t_v3f	p;
 	float	t0;
@@ -90,8 +88,8 @@ static int	intersect_cone_body(t_obj *obj, t_ray *ray, t_v2f *t)
 		+ ray->direction.z * ray->direction.z
 		- k_sq * ray->direction.y * ray->direction.y;
 	coeff.y = 2 * (ray->origin.x * ray->direction.x
-		+ ray->origin.z * ray->direction.z
-		- k_sq * ray->origin.y * ray->direction.y);
+			+ ray->origin.z * ray->direction.z
+			- k_sq * ray->origin.y * ray->direction.y);
 	coeff.z = ray->origin.x * ray->origin.x
 		+ ray->origin.z * ray->origin.z
 		- k_sq * ray->origin.y * ray->origin.y;
@@ -104,10 +102,8 @@ int	cone_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
 
 	l_ray.origin = mul_v3_m4x4(ray->origin, obj->t.to_obj);
 	l_ray.direction = mul_dir_m4x4(ray->direction, obj->t.to_obj);
-	if ((intersect_cone_body(obj, &l_ray, &t)
-		| intersect_disc(obj->cone.radius, obj->cone.height, &l_ray, &t)) == 1)
+	if ((intersect_cone_body(obj, &l_ray, &t) | intersect_disc(
+				obj->cone.radius, obj->cone.height, &l_ray, &t)) == 1)
 		return (*dst = t.y, 1);
 	return (0);
 }
-
-

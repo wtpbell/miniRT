@@ -39,7 +39,8 @@ bool	parse_cone(char **tokens, t_scene *scene)
 	t_v2f	dm;
 
 	if (!parse_v3f(&pos, tokens[1]) || !parse_dir(&dir, tokens[2])
-		|| !parse_diameter(&dm.x, tokens[3]) || !parse_cone_height(&dm.y, tokens[4])
+		|| !parse_diameter(&dm.x, tokens[3])
+		|| !parse_cone_height(&dm.y, tokens[4])
 		|| !parse_col(&color, tokens[5]))
 		return (false);
 	obj = ft_calloc(1, sizeof(t_obj));
