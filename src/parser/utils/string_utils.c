@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   string_utils.c                                     :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/12 12:10:47 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/23 23:28:40 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,27 +39,6 @@ void	clean_spaces(char *str)
 		i++;
 	}
 	str[pos] = '\0';
-}
-
-size_t	token_count_in_str(const char *str)
-{
-	size_t	count;
-	bool	in_token;
-
-	count = 0;
-	in_token = false;
-	while (*str)
-	{
-		if (ft_strchr(" \f\n\r\t\v", *str))
-			in_token = false;
-		else if (!in_token)
-		{
-			count++;
-			in_token = true;
-		}
-		str++;
-	}
-	return (count);
 }
 
 bool	validate_commas(const char *str)

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/23 14:46:31 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/23 23:31:49 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@
 # define BLUE 			"\033[34m"
 # define RESET 			"\033[0m"
 
-typedef bool			(*t_parser)(char **, t_scene *);
+typedef bool			(*t_parser)(char **tokens, t_scene *scene);
 typedef bool			(*t_conv_to_enum)(int *val, const void *raw);
 
 typedef enum e_error
@@ -107,27 +107,21 @@ typedef struct s_field
 	};
 }	t_field;
 
-typedef bool	(*t_parse_fn)(char **, t_scene *);
-
 typedef struct s_element
 {
 	const char		*spec;
 	t_scene_flags	sc_flag;
 	int				min_cnt;
 	int				max_cnt;
-	t_parse_fn		parse_fn;
+	t_parser		parse_fn;
 }	t_ele;
-
-// Token utilities
-bool		validate_tokens(const char *first_token, const char *line);
 
 /* ---------------------Core--------------------- */
 // file_parser.c
 bool		parse_map(t_scene *scene, const char *file);
 
 // element_parser.c
-bool		parse_scene_element(const char *type,
-				char **tokens, t_scene *scene);
+t_parser	element_parser(char **tokens, t_scene *scene, const char *line);
 
 /* ---------------------Elements--------------------- */
 // camera.c
@@ -158,7 +152,6 @@ bool		parse_triangle(char **tokens, t_scene *scene);
 /* ---------------------Utils--------------------- */
 // string_utils.c
 void		clean_spaces(char *str);
-size_t		token_count_in_str(const char *str);
 bool		validate_commas(const char *str);
 
 // vector_utils.c
