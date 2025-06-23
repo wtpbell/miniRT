@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/21 14:04:51 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/23 14:46:31 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,17 @@ typedef struct s_field
 	};
 }	t_field;
 
+typedef bool	(*t_parse_fn)(char **, t_scene *);
+
+typedef struct s_element
+{
+	const char		*spec;
+	t_scene_flags	sc_flag;
+	int				min_cnt;
+	int				max_cnt;
+	t_parse_fn		parse_fn;
+}	t_ele;
+
 // Token utilities
 bool		validate_tokens(const char *first_token, const char *line);
 
@@ -122,7 +133,10 @@ bool		parse_scene_element(const char *type,
 // camera.c
 bool		parse_camera(char **tokens, t_scene *scene);
 // light.c
-bool		parse_light(char **tokens, t_scene *scene);
+bool		parse_ambient_light(char **tokens, t_scene *scene);
+bool		parse_point_light(char **tokens, t_scene *scene);
+bool		parse_spot_light(char **tokens, t_scene *scene);
+
 // material.c
 bool		parse_material(char **tokens, t_scene *scene);
 // texture.c
@@ -196,4 +210,5 @@ int			is_valid_material_name(const char *m_name);
 bool		assign_material(t_obj *obj, t_vector *materials,
 				const char *m_name);
 t_mat_type	get_mat_type(const char *value);
+
 #endif

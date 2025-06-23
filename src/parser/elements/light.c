@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:04 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/22 11:31:57 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/23 13:58:06 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static bool	parse_light_ratio(float *ratio, const char *str)
 			"parse light ratio"));
 }
 
-static bool	parse_ambient_light(char **tokens, t_scene *scene)
+bool	parse_ambient_light(char **tokens, t_scene *scene)
 {
 	t_light	*ambient_light;
 
@@ -40,7 +40,7 @@ static bool	parse_ambient_light(char **tokens, t_scene *scene)
 	return (true);
 }
 
-static bool	parse_point_light(char **tokens, t_scene *scene)
+bool	parse_point_light(char **tokens, t_scene *scene)
 {
 	t_light	*point_light;
 	int		is_main_light;
@@ -62,7 +62,7 @@ static bool	parse_point_light(char **tokens, t_scene *scene)
 	return (true);
 }
 
-static bool	parse_spot_light(char **tokens, t_scene *scene)
+bool	parse_spot_light(char **tokens, t_scene *scene)
 {
 	const t_v2f	lim_ang = init_v2f(0.0f, 180.0f);
 	t_light		*spot_light;
