@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 17:59:29 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/21 14:04:51 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include "container.h"
 # include "vector.h"
 # include "get_next_line.h"
+# include "rt_math.h"
 
 # define MAX_POS			10000.0f
 # define MAX_RADIUS			1000.0f
