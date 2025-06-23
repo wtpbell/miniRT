@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/17 11:59:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/20 14:52:12 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/23 12:33:04 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point)
 	float	y;
 
 	local_point = mul_v3_m4x4(point, obj->t.to_obj);
-	// if (fabsf(local_point.y) >= obj->cy.height * 0.5f - FLT_SML)
-	// 	return (init_v2f(0.0f, 0.0f));
 	theta = atan2f(local_point.z, local_point.x) / TAU;
 	y = (local_point.y / obj->cy.height);
 	return (init_v2f(1.0f - (theta + 0.5f), ft_clampf01(y + 0.5f)));
