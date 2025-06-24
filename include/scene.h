@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/22 11:38:10 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/24 16:36:54 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,7 @@ struct s_object
 	t_obj_type	type;
 	t_intsct	intersect;
 	t_cnorm		calc_norm;
+	t_uv_map	uv_map;
 };
 
 struct s_tri_var

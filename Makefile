@@ -24,7 +24,8 @@ SRCS_MAIN	:= main.c vector_init.c vector_helper.c vector_operation.c\
 				rt_math.c matrix.c game.c rt_sphere.c rt_plane.c rt_cylinder.c \
 				color_utils.c random_utils.c rt_light.c rt_dof.c \
 				quit.c rt_triangle.c rt_material.c material_init.c light_utils.c\
-				material_utils.c obj_utils.c procedural_texturing.c rt_cone.c
+				material_utils.c obj_utils.c procedural_texturing.c rt_cone.c \
+				bump_map.c
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE)
 OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)
@@ -37,7 +38,7 @@ debug: all
 
 val: C_FLAGS += -g3
 val: clean all
-	@valgrind --leak-check=full --track-origins=yes --suppressions=mlx42.supp ./$(NAME) $(ARG)
+	@valgrind --leak-check=full --track-origins=yes --suppressions=mlx42.supp ./$(NAME) $(ARG) 
 
 bonus: all
 

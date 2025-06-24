@@ -28,6 +28,7 @@ static inline void	cone_init(t_obj *obj, t_v2f dm)
 	obj->cone = (t_cone){.radius = dm.x * 0.5f, .height = dm.y};
 	obj->calc_norm = cone_normal;
 	obj->intersect = cone_intersect;
+	obj->uv_map = cone_texcoord;
 }
 
 bool	parse_cone(char **tokens, t_scene *scene)

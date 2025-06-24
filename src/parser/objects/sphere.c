@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 17:03:54 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/24 14:46:51 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static void	sphere_init(t_obj *obj, float diameter)
 	obj->sp = (t_sp){.radius = diameter * 0.5f};
 	obj->intersect = sphere_intersect;
 	obj->calc_norm = sphere_normal;
+	obj->uv_map = sphere_texcoord;
 }
 
 bool	parse_sphere(char **tokens, t_scene *scene)

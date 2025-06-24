@@ -20,6 +20,7 @@ static void	plane_init(t_obj *obj)
 	obj->type = OBJ_PLANE;
 	obj->intersect = plane_intersect;
 	obj->calc_norm = plane_normal;
+	obj->uv_map = plane_texcoord;
 }
 
 bool	parse_plane(char **tokens, t_scene *scene)

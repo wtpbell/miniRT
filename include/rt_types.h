@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/07 16:31:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/22 11:57:46 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/24 14:52:47 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,7 @@ typedef t_v3f					(*t_apply_light)(t_scene *scene,
 typedef t_v2f					(*t_texcoord)(t_obj *obj, t_v3f point);
 typedef t_v3f					(*t_texcol)(const t_v2f *texcoord,
 											const t_tex *tex, t_v3f prim_col);
+typedef t_v2f 					(*t_uv_map)(struct s_object *obj, t_v3f point);
+
+
 #endif

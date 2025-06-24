@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 17:03:42 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/24 14:46:04 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static inline void	cylinder_init(t_obj *obj, t_v2f dm)
 	obj->cy = (t_cy){.radius = dm.x, .height = dm.y};
 	obj->calc_norm = cylinder_normal;
 	obj->intersect = cylinder_intersect;
+	obj->uv_map = cylinder_texcoord;
 }
 
 bool	parse_cylinder(char **tokens, t_scene *scene)

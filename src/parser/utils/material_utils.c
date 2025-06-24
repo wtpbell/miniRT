@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   material_utils.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/06 19:17:23 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/10 18:59:01 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   material_utils.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/06/06 19:17:23 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/24 14:35:08 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,23 @@ int	is_valid_material_name(const char *m_name)
 	return (*m_name == '\0');
 }
 
+static bool	load_bump_map(t_mat *mat)
+{
+	char			path[256];
+	mlx_texture_t	*bump_map;
+
+	bump_map = mlx_load_png(path);
+	if (bump_map)
+	{
+		if (mat->bump_map)
+			mlx_delete_texture(mat->bump_map);
+		mat->bump_map = bump_map;
+		mat->bump_scale = 0.1f;
+		return (true);
+	}
+	return (false);
+}
+
 bool	assign_material(t_obj *obj, t_vector *materials, const char *m_name)
 {
 	if (m_name == NULL)
@@ -47,6 +64,7 @@ bool	assign_material(t_obj *obj, t_vector *materials, const char *m_name)
 	if (!is_valid_material_name(m_name))
 		return (print_error(ERR_INV_MAT_NAME, "material", m_name), false);
 	obj->r.mat = find_or_create_material(materials, m_name);
+	load_bump_map(obj->r.mat);
 	return (obj->r.mat != NULL);
 }
 

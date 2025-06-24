@@ -6,13 +6,14 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/20 14:50:46 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/24 16:54:19 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MATERIAL_H
 # define MATERIAL_H
 
+# include "MLX42/MLX42.h"
 # include "rt_types.h"
 # include "container.h"
 
@@ -32,34 +33,36 @@ typedef enum e_texture_type
 
 struct s_texture
 {
-	t_tex_type	type;
-	t_v3f		scale_rot;
-	t_v3f		col;
+	t_tex_type		type;
+	t_v3f			scale_rot;
+	t_v3f			col;
 };
 
 struct s_material
 {
-	char		*name;
-	t_mat_type	type;
-	t_v3f		albedo;
-	t_tex		texture;
-	t_texcol	get_texcol;
+	char			*name;
+	t_mat_type		type;
+	t_v3f			albedo;
+	t_tex			texture;
+	t_texcol		get_texcol;
+	mlx_texture_t	*bump_map;
+	float			bump_scale;
 	struct s_lambertian
 	{
-		float	specular;
-		float	shininess;
-		float	roughness;
-	}			lamb;
+		float		specular;
+		float		shininess;
+		float		roughness;
+	}				lamb;
 	struct s_metal
 	{
-		float	roughness;
-	}			metal;
+		float		roughness;
+	}				metal;
 	struct s_dielectric
 	{
-		float	ir;
-		float	transmittance;
-		float	roughness;
-	}			diel;
+		float		ir;
+		float		transmittance;
+		float		roughness;
+	}				diel;
 };
 
 t_mat	*init_material(t_mat_type type, const char *name);
@@ -75,5 +78,6 @@ t_v2f	triangle_texcoord(t_obj *obj, t_v3f world_point);
 t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point);
 t_v3f	checker_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
 t_v3f	solid_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
+t_v3f	perturb_normal(t_obj *obj, t_v3f normal, t_v3f point, const t_mat *mat);
 
 #endif

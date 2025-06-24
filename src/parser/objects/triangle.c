@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 12:00:31 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 17:04:01 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/24 14:48:40 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static void	triangle_init(t_obj *obj, t_tri *tri)
 	obj->tri = *tri;
 	obj->intersect = triangle_intersect;
 	obj->calc_norm = triangle_normal;
+	obj->uv_map = triangle_texcoord;
 	generate_uv_vertices(&obj->tri, obj->t.to_obj);
 }
 
