@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/23 23:39:01 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/24 10:07:05 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static bool	parse_line(t_scene *scene, char *line)
 	if (!tokens)
 		return (perror("parse_line"), false);
 	parse_element = element_parser(tokens, scene, line);
-	if (parse_element)
+	if (!parse_element)
 		return (free_tokens(tokens), false);
 	result = parse_element(tokens, scene);
 	free_tokens(tokens);
