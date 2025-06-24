@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:23:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/10 15:22:25 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   parser.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/24 10:07:05 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 static bool	parse_line(t_scene *scene, char *line)
 {
-	char	**tokens;
-	bool	result;
+	char		**tokens;
+	bool		result;
+	t_parser	parse_element;
 
 	while (*line && ft_strchr(" \f\n\r\t\v", *line))
 		++line;
@@ -27,9 +28,10 @@ static bool	parse_line(t_scene *scene, char *line)
 	tokens = ft_split(line, ' ');
 	if (!tokens)
 		return (perror("parse_line"), false);
-	if (!validate_tokens(*tokens, line))
+	parse_element = element_parser(tokens, scene, line);
+	if (!parse_element)
 		return (free_tokens(tokens), false);
-	result = parse_scene_element(*tokens, tokens, scene);
+	result = parse_element(tokens, scene);
 	free_tokens(tokens);
 	return (result);
 }

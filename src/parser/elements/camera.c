@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 18:18:31 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/23 23:34:27 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,6 @@ bool	parse_camera(char **tokens, t_scene *scene)
 	t_v3f	dir;
 	float	fov;
 
-	if (scene->scene_flags & SCENE_CAMERA)
-	{
-		print_error(ERR_DUPLICATE, "Camera", "Multiple cameras not allowed");
-		return (false);
-	}
 	if (!parse_v3f(&pos, tokens[1]) || !parse_dir(&dir, tokens[2])
 		|| !parse_fov(&fov, tokens[3]))
 		return (false);
