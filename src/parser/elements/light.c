@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:04 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/23 23:43:38 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/24 10:29:46 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ bool	parse_point_light(char **tokens, t_scene *scene)
 	point_light->type = LIGHT_POINT;
 	if (!vector_add(&scene->lights, point_light))
 		return (free(point_light), false);
-	scene->scene_flags |= (SCENE_POINT_LIGHT * (ft_strcmp(*tokens, "L") == 0));
+	scene->scene_flags |= (SCENE_POINT_LIGHT * (**tokens == 'L'));
 	return (true);
 }
 
