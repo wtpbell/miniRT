@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/02 19:05:35 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/24 11:56:52 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef enum e_texture_type
 	TEX_SOLID,
 	TEX_CHECKER,
 	TEX_IMAGE
+	TEX_PERLIN
 }	t_tex_type;
 
 struct s_texture
@@ -104,5 +105,8 @@ t_v3f	perturb_normal(const t_mat *mat, const t_v2f texcoord,
 t_v3f	sample_texture(const mlx_texture_t *tex, const t_v2f uv,
 			const t_v3f mod);
 t_v3f	display_normal(t_ray_hit *hit_info);
+
+//	temporary
+t_v3f	value_noise_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
 
 #endif

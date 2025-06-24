@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/01 18:58:07 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/01 19:06:00 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/24 12:01:42 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,30 @@ t_v3f	v3f_lerp(t_v3f a, t_v3f b, float t)
 		.y = a.y + (b.y - a.y) * t,
 		.z = a.z + (b.z - a.z) * t
 	});
+}
+
+t_v2f	v2f_scale(t_v2f v, float f)
+{
+	return (init_v2f(
+		v.x * f,
+		v.y * f
+	));
+}
+
+t_v2f	v2f_mul(t_v2f a, t_v2f b)
+{
+	return (init_v2f(
+		a.x * b.x,
+		a.y * b.y
+	));
+}
+
+t_v2f	v2f_mul_v3f(t_v2f a, t_v3f b)
+{
+	return (init_v2f(
+		a.x * b.x,
+		a.y * b.y
+	));
 }
 
 t_v3f	v3f_sub_v2f(t_v3f a, t_v2f b)

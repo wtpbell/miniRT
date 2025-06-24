@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/02 22:35:13 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/24 12:02:04 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ static void	set_texture_pattern(t_mat *mat)
 		mat->get_texcol = checker_pattern;
 	else if (mat->texture.type == TEX_IMAGE)
 		mat->get_texcol = image_pattern;
+	else if (mat->texture.type == TEX_PERLIN)
+		mat->get_texcol = value_noise_pattern;
 	else
 		mat->get_texcol = solid_pattern;
 }

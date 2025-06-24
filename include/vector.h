@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/30 09:42:37 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/24 11:58:06 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,16 @@ typedef union s_vector2
 	float	_axis[2];
 }	t_v2f;
 
+typedef union s_v2i
+{
+	struct
+	{
+		int	x;
+		int	y;
+	};
+	int	_axis[2];
+}	t_v2i;
+
 typedef union s_vector3
 {
 	struct
@@ -43,10 +53,22 @@ typedef union s_vector3
 	{
 		float	u;
 		float	v;
-		float	theta;
+		float	w;
 	};
 	float	_axis[3];
 }	t_v3f;
+
+typedef union s_v4f
+{
+	struct
+	{
+		float	x;
+		float	y;
+		float	z;
+		float	w;
+	};
+	float	_axis[4];
+}	t_v4f;
 
 extern const t_v3f	g_v3f_zero;
 extern const t_v3f	g_v3f_one;
@@ -79,6 +101,8 @@ float	v3f_sqr_mag(t_v3f v);
 bool	v3f_equals(t_v3f a, t_v3f b, float epsilon);
 t_v3f	v3f_sub_v2f(t_v3f a, t_v2f b);
 t_v3f	v3f_mul_v2f(t_v3f a, t_v2f b);
+t_v2f	v2f_scale(t_v2f v, float f);
+t_v2f	v2f_mul(t_v2f a, t_v2f b);
 t_v2f	v2f_mul_v3f(t_v2f a, t_v3f b);
 
 #endif

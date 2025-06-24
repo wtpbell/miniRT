@@ -1,0 +1,11 @@
+C 	0,16,20	0,-.5,1	60
+A					.1	255,255,255
+L	0,10,0			.8	255,255,255
+
+m_perl		type:lambertian	shi:50	spc:1.0	pat:perlin	su:16	sv:8	rot:0	alt_col:255,255,255
+m_pl_perl	type:lambertian	shi:50	spc:1.0	pat:perlin	su:0.5	sv:0.5	rot:0	alt_col:255,255,255
+
+sp	0,3,0			6	0,0,0		m_perl
+pl	0,0,0	0,1,0		0,0,0		m_pl_perl
+
+#156,134,103 => 82,71,55
