@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   rt_debug.h                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/15 10:18:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 15:43:06 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   rt_debug.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/15 10:18:24 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/25 22:35:32 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,5 @@ void	float_print(float f, int spaces, const char *prefix);
 void	cone_print(t_obj *co, int spaces);
 void	scene_print(t_scene *scene);
 void	print_camera_setup(t_cam *cam);
-
-/* Debug cleanup functions */
-void	debug_cleanup_start(void);
-void	debug_cleanup_directory(const char *dir_path);
-void	debug_cleanup_objects(int count);
-void	debug_cleanup_lights(int count);
-void	debug_cleanup_materials(int count);
-void	debug_cleanup_material(const char *name);
-void	debug_cleanup_texture(void *addr);
-void	debug_cleanup_complete(void);
 
 #endif

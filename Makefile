@@ -26,14 +26,13 @@ SRCS_MAIN	:= main.c vector_init.c vector_helper.c vector_operation.c\
 				quit.c rt_triangle.c rt_material.c material_init.c light_utils.c\
 				material_utils.c obj_utils.c procedural_texturing.c rt_cone.c \
 				bump_map.c 
-SRCS_DEBUG	:= print_var.c debug_utils.c
+SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE)
 OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)
 
 all: $(LIBFT) $(MLX42) $(NAME)
 
 debug: C_FLAGS += -g3 -fsanitize=address,undefined
-debug: LDFLAGS += -fsanitize=address,undefined
 debug: all
 # LSAN_OPTIONS="suppressions=fsan_supp.supp" ./miniRT asset/scene.rt
 
