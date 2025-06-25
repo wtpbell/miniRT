@@ -1,23 +1,92 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   material.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 18:00:12 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   material.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/05 14:04:02 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/25 21:33:27 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "rt_math.h"
+#include "scene.h"
+#include "material.h"
+#include "libft.h"
 
-static void	set_texture_pattern(t_mat *mat)
+static bool	parse_path(int *ctx, const void *raw)
 {
-	if (mat->texture.type == TEX_CHECKER)
+	const char	*path = raw;
+	char		**dest;
+	char		*new_path;
+
+	dest = (char **)ctx;
+	if (!path || !*path || !dest)
+		return (false);
+	new_path = ft_strdup(path);
+	if (!new_path)
+		return (false);
+	if (*dest)
+		free(*dest);
+	*dest = new_path;
+	return (true);
+}
+
+static bool	try_load_bump_map(t_mat *mat)
+{
+	if (mat->bump_path != NULL && mat->bump_path[0] != '\0')
+	{
+		if (load_bump_map(mat, mat->bump_path))
+			return (true);
+	}
+	if (mat->texture.type == TEX_IMAGE && mat->tex_path != NULL)
+	{
+		mat->bump_map = mlx_load_png(mat->tex_path);
+		return (mat->bump_map != NULL);
+	}
+	return (false);
+}
+
+static bool	set_texture_pattern(t_mat *mat)
+{
+	if (mat->tex_path != NULL && mat->tex_path[0] != '\0')
+	{
+		mat->texture.type = TEX_IMAGE;
+		if (!load_texture(&mat->texture, mat->tex_path))
+			mat->texture.type = TEX_SOLID;
+	}
+	if (mat->texture.type == TEX_IMAGE)
+		mat->get_texcol = image_pattern;
+	else if (mat->texture.type == TEX_CHECKER)
 		mat->get_texcol = checker_pattern;
 	else
 		mat->get_texcol = solid_pattern;
+	if (mat->bump_scale > 0.0f)
+		try_load_bump_map(mat);
+	return (true);
+}
+
+static void	init_bump_fields(t_field *fields, int *field_count, t_mat *mat)
+{
+	const t_field	field_defs[] = {
+		{"tex", &mat->tex_path, FIELD_ENUM, g_v2f_zero, FILLED, {.to_enum = parse_path}},
+		{"pat", &mat->texture.type, FIELD_ENUM, g_v2f_zero, FILLED, {.to_enum = str_to_texture_type}},
+		{"bump", &mat->bump_path, FIELD_ENUM, g_v2f_zero, FILLED, {.to_enum = parse_path}},
+		{NULL, NULL, 0, g_v2f_zero, 0, {0}}
+	};
+	int	i;
+
+	if (!fields || !field_count || !mat)
+		return ;
+	i = 0;
+	while (field_defs[i].name != NULL)
+	{
+		fields[*field_count] = field_defs[i];
+		(*field_count)++;
+		i++;
+	}
 }
 
 static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
@@ -25,17 +94,21 @@ static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
 	const t_v2f	lim01 = init_v2f(0.0f, 1.0f);
 	const t_v2f	lim_shi = init_v2f(0.0f, 5000.0f);
 	const t_v2f	lim_ir = init_v2f(0.0f, 100.0f);
-	t_field		fields[13];
+	int			field_count;
+	t_field		fields[20];
 
+	field_count = 0;
 	mat->type = type;
-	fields[0] = init_field("spc", &mat->lamb.specular, FIELD_FLT, lim01);
-	fields[1] = init_field("shi", &mat->lamb.shininess, FIELD_FLT, lim_shi);
-	fields[2] = init_field("l_rough", &mat->lamb.roughness, FIELD_FLT, lim01);
-	fields[3] = init_field("mt_rough", &mat->metal.roughness, FIELD_FLT, lim01);
-	fields[4] = init_field("ir", &mat->diel.ir, FIELD_FLT, lim_ir);
-	fields[5] = init_field("tr", &mat->diel.transmittance, FIELD_FLT, lim01);
-	fields[6] = init_field("d_rough", &mat->diel.roughness, FIELD_FLT, lim01);
-	fields[7] = init_field("alb", &mat->albedo, FIELD_COL, lim01);
+	fields[field_count++] = init_field("spc", &mat->lamb.specular, FIELD_FLT, lim01);
+	fields[field_count++] = init_field("shi", &mat->lamb.shininess, FIELD_FLT, lim_shi);
+	fields[field_count++] = init_field("l_rough", &mat->lamb.roughness, FIELD_FLT, lim01);
+	fields[field_count++] = init_field("mt_rough", &mat->metal.roughness, FIELD_FLT, lim01);
+	fields[field_count++] = init_field("ir", &mat->diel.ir, FIELD_FLT, lim_ir);
+	fields[field_count++] = init_field("tr", &mat->diel.transmittance, FIELD_FLT, lim01);
+	fields[field_count++] = init_field("d_rough", &mat->diel.roughness, FIELD_FLT, lim01);
+	fields[field_count++] = init_field("alb", &mat->albedo, FIELD_COL, lim01);
+	init_bump_fields(fields, &field_count, mat);
+	fields[field_count++] = init_field("bump_scale", &mat->bump_scale, FIELD_FLT, init_v2f(0.0f, 100.0f));
 	fields[0].state |= (HIDDEN * (type != MAT_LAMBERTIAN));
 	fields[1].state |= (HIDDEN * (type != MAT_LAMBERTIAN));
 	fields[2].state |= (HIDDEN * (type != MAT_LAMBERTIAN));
@@ -44,8 +117,13 @@ static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
 	fields[5].state |= (HIDDEN * (type != MAT_DIELECTRIC));
 	fields[6].state |= (HIDDEN * (type != MAT_DIELECTRIC));
 	fields[7].state = FILLED;
-	init_texture_fields(fields + 8, &mat->texture);
-	return (parse_fields(fields, 13, tokens));
+	init_texture_fields(fields + field_count, &mat->texture);
+	field_count += 5;
+	if (!parse_fields(fields, field_count, tokens))
+		return (false);
+	if (mat->tex_path == NULL && mat->texture.type != TEX_CHECKER)
+		mat->texture.type = TEX_SOLID;
+	return (true);
 }
 
 bool	parse_material(char **tokens, t_scene *scene)
@@ -61,15 +139,13 @@ bool	parse_material(char **tokens, t_scene *scene)
 		return (print_error(ERR_REQ_FIELD, "material", "type:<value>"), false);
 	mat_type = get_mat_type(str_type);
 	if (mat_type == MAT_UNKNOWN)
-	{
-		print_error(ERR_UNKNOWN_MAT_TYPE, "material", tokens[1]);
-		return (false);
-	}
+		return (print_error(ERR_UNKNOWN_MAT_TYPE, "material", tokens[1]), false);
 	mat = find_or_create_material(&scene->shared_materials, tokens[0]);
 	if (mat == NULL)
 		return (print_error(ERR_MEM, "material", NULL), false);
 	if (!parse_type_material(mat, mat_type, tokens + 2))
 		return (false);
-	set_texture_pattern(mat);
+	if (!set_texture_pattern(mat))
+		return (false);
 	return (true);
 }

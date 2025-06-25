@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   parser.h                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/21 14:04:51 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   parser.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 22:20:50 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/25 17:46:53 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@
 # define BLUE 			"\033[34m"
 # define RESET 			"\033[0m"
 
-typedef bool			(*t_parser)(char **, t_scene *);
+typedef bool			(*t_parser)(char **tokens, t_scene *scene);
 typedef bool			(*t_conv_to_enum)(int *val, const void *raw);
 
 typedef enum e_error
@@ -75,6 +75,7 @@ typedef enum e_error
 	ERR_UNKNOWN_MAT_TYPE,
 	ERR_UNKNOWN_FIELD,
 	ERR_REQ_FIELD,
+	ERR_LOAD_TEXTURE,
 	ERR_COUNT
 }	t_error;
 
@@ -107,22 +108,30 @@ typedef struct s_field
 	};
 }	t_field;
 
-// Token utilities
-bool		validate_tokens(const char *first_token, const char *line);
+typedef struct s_element
+{
+	const char		*spec;
+	t_scene_flags	sc_flag;
+	int				min_cnt;
+	int				max_cnt;
+	t_parser		parse_fn;
+}	t_ele;
 
 /* ---------------------Core--------------------- */
 // file_parser.c
 bool		parse_map(t_scene *scene, const char *file);
 
 // element_parser.c
-bool		parse_scene_element(const char *type,
-				char **tokens, t_scene *scene);
+t_parser	element_parser(char **tokens, t_scene *scene, const char *line);
 
 /* ---------------------Elements--------------------- */
 // camera.c
 bool		parse_camera(char **tokens, t_scene *scene);
 // light.c
-bool		parse_light(char **tokens, t_scene *scene);
+bool		parse_ambient_light(char **tokens, t_scene *scene);
+bool		parse_point_light(char **tokens, t_scene *scene);
+bool		parse_spot_light(char **tokens, t_scene *scene);
+
 // material.c
 bool		parse_material(char **tokens, t_scene *scene);
 // texture.c
@@ -144,7 +153,6 @@ bool		parse_triangle(char **tokens, t_scene *scene);
 /* ---------------------Utils--------------------- */
 // string_utils.c
 void		clean_spaces(char *str);
-size_t		token_count_in_str(const char *str);
 bool		validate_commas(const char *str);
 
 // vector_utils.c
@@ -178,6 +186,9 @@ bool		parse_int(int *out, const char *str,
 void		print_error(t_error type, const char *ctx, const char *value);
 void		exit_err(t_error type, const char *ctx, const char *value);
 
+// texture.c
+bool		str_to_texture_type(int *val, const void *enum_name);
+
 // cleanup.c
 void		free_tokens(char **tokens);
 void		cleanup_gnl(char *line, int fd);
@@ -193,7 +204,7 @@ bool		parse_fields(t_field *fields, int count, char **tokens);
 // material_utils.c
 t_mat		*find_or_create_material(t_vector *materials, const char *m_name);
 int			is_valid_material_name(const char *m_name);
-bool		assign_material(t_obj *obj, t_vector *materials,
-				const char *m_name);
+bool		assign_material(t_obj *obj, t_vector *materials, const char *m_name);
 t_mat_type	get_mat_type(const char *value);
+
 #endif

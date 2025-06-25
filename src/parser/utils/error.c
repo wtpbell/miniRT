@@ -36,7 +36,8 @@ static const char *const	g_err_msg[ERR_COUNT] = {
 [ERR_INV_MAT_NAME] = "Invalid material name (must be ^m_[a-zA-Z0-9]+$)",
 [ERR_UNKNOWN_MAT_TYPE] = "Unknown material type",
 [ERR_UNKNOWN_FIELD] = "Unknown field (<field>:<value>)",
-[ERR_REQ_FIELD] = "Required field is missing"
+[ERR_REQ_FIELD] = "Required field is missing",
+[ERR_LOAD_TEXTURE] = "Failed to load texture"
 };
 
 static const char	*get_err_msg(t_error type)

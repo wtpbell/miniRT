@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   scene.h                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/24 16:36:54 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   scene.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 18:55:45 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/25 20:23:37 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef enum e_scene_flags
 	SCENE_NONE = 0,
 	SCENE_AMBIENT = 1 << 0,
 	SCENE_POINT_LIGHT = 1 << 1,
-	SCENE_CAMERA = 2 << 2
+	SCENE_CAMERA = 1 << 3,
 }	t_scene_flags;
 
 struct s_transform

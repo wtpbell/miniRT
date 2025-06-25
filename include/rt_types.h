@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   rt_types.h                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/06/07 16:31:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/24 14:52:47 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   rt_types.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/07 16:31:03 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/25 11:36:18 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_lighting		t_lighting;
 typedef enum e_material_type	t_mat_type;
 typedef struct s_material		t_mat;
 typedef struct s_texture		t_tex;
+typedef struct s_bump_context	t_bump;
 
 /* scene */
 typedef enum e_object_type		t_obj_type;

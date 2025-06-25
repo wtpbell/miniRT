@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:04 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/22 11:31:57 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/24 10:29:46 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,10 @@ static bool	parse_light_ratio(float *ratio, const char *str)
 			"parse light ratio"));
 }
 
-static bool	parse_ambient_light(char **tokens, t_scene *scene)
+bool	parse_ambient_light(char **tokens, t_scene *scene)
 {
 	t_light	*ambient_light;
 
-	if (scene->scene_flags & SCENE_AMBIENT)
-		return (print_error(ERR_DUPLICATE, "ambient light", tokens[0]), false);
 	ambient_light = ft_calloc(1, sizeof(t_light));
 	if (!ambient_light)
 		return (perror("parse_ambient_light"), false);
@@ -40,14 +38,10 @@ static bool	parse_ambient_light(char **tokens, t_scene *scene)
 	return (true);
 }
 
-static bool	parse_point_light(char **tokens, t_scene *scene)
+bool	parse_point_light(char **tokens, t_scene *scene)
 {
 	t_light	*point_light;
-	int		is_main_light;
 
-	is_main_light = ft_strcmp(*tokens, "L") == 0;
-	if (scene->scene_flags & SCENE_POINT_LIGHT && is_main_light)
-		return (print_error(ERR_DUPLICATE, "point light", tokens[0]), false);
 	point_light = ft_calloc(1, sizeof(t_light));
 	if (!point_light)
 		return (perror("parse_point_light"), false);
@@ -58,11 +52,11 @@ static bool	parse_point_light(char **tokens, t_scene *scene)
 	point_light->type = LIGHT_POINT;
 	if (!vector_add(&scene->lights, point_light))
 		return (free(point_light), false);
-	scene->scene_flags |= (SCENE_POINT_LIGHT * is_main_light);
+	scene->scene_flags |= (SCENE_POINT_LIGHT * (**tokens == 'L'));
 	return (true);
 }
 
-static bool	parse_spot_light(char **tokens, t_scene *scene)
+bool	parse_spot_light(char **tokens, t_scene *scene)
 {
 	const t_v2f	lim_ang = init_v2f(0.0f, 180.0f);
 	t_light		*spot_light;
@@ -83,12 +77,4 @@ static bool	parse_spot_light(char **tokens, t_scene *scene)
 	if (!vector_add(&scene->lights, spot_light))
 		return (free(spot_light), false);
 	return (true);
-}
-
-bool	parse_light(char **tokens, t_scene *scene)
-{
-	return ((ft_strcmp(*tokens, "A") == 0 && parse_ambient_light(tokens, scene))
-		|| ((ft_strcmp(*tokens, "L") == 0 || ft_strcmp(*tokens, "l") == 0)
-			&& parse_point_light(tokens, scene))
-		|| (ft_strcmp(*tokens, "spl") == 0 && parse_spot_light(tokens, scene)));
 }

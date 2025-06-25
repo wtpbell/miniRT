@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   vector.h                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 17:00:40 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   vector.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 18:40:12 by jboon             #+#    #+#             */
+/*   Updated: 2025/06/25 11:45:59 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ extern const t_v3f	g_v3f_up;
 extern const t_v3f	g_v3f_down;
 extern const t_v3f	g_v3f_right;
 extern const t_v3f	g_v3f_left;
+extern const t_v2f	g_v2f_zero;
+extern const t_v2f	g_v2f_one;
 
 t_v2f	init_v2f(float x, float y);
 t_v2f	v2f_rotate(t_v2f v, float angle);

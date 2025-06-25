@@ -14,6 +14,7 @@
 # define RANDOM_H
 
 # include <stdint.h>
+# include "vector.h"
 
 void		seed_rand(uint32_t seed);
 uint32_t	get_rngstate(uint32_t x, uint32_t y, uint32_t frame);

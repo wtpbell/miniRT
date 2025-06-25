@@ -20,6 +20,9 @@ bool	validate_scene(const t_scene *scene)
 	if (!(scene->scene_flags & SCENE_POINT_LIGHT))
 		return (print_error(ERR_MISSING_COMPONENT,
 				"Missing point light (L)", NULL), false);
+	if (!(scene->scene_flags & SCENE_AMBIENT))
+		return (print_error(ERR_MISSING_COMPONENT,
+				"Missing ambient light (A)", NULL), false);
 	return (true);
 }
 

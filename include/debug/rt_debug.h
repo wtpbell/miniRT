@@ -27,4 +27,14 @@ void	cone_print(t_obj *co, int spaces);
 void	scene_print(t_scene *scene);
 void	print_camera_setup(t_cam *cam);
 
+/* Debug cleanup functions */
+void	debug_cleanup_start(void);
+void	debug_cleanup_directory(const char *dir_path);
+void	debug_cleanup_objects(int count);
+void	debug_cleanup_lights(int count);
+void	debug_cleanup_materials(int count);
+void	debug_cleanup_material(const char *name);
+void	debug_cleanup_texture(void *addr);
+void	debug_cleanup_complete(void);
+
 #endif

@@ -12,6 +12,9 @@
 
 #include "debug/rt_debug.h"
 #include "minirt.h"
+#include <stdio.h>
+#include "parser.h"
+#include "material.h"
 
 void	mat4x4_rot_print(t_mat4x4 m)
 {
@@ -197,6 +200,8 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 			str_print("SOLID", spaces + 4, "texture type:");
 		else if (tex->type == TEX_CHECKER)
 			str_print("CHECKER", spaces + 4, "texture type:");
+		else if (tex->type == TEX_IMAGE)
+			str_print("IMAGE", spaces + 4, "texture type:");
 		else
 			str_print("UNKNOWN", spaces + 4, "texture type:");
 		col32_print(tex->col, spaces + 4, "alt col");
@@ -226,18 +231,55 @@ void	print_camera_setup(t_cam *cam)
 
 void	scene_print(t_scene *scene)
 {
-	int	spaces = 0;
-
-	printf("===SCENE===\n");
-	print_camera_setup(&scene->camera);
-	camera_print(&scene->camera, spaces + 2);
-	objects_print(scene->objects, spaces + 2, "OBJECTS");
-	materials_print(scene->shared_materials, spaces + 2, "MATERIALS");
-	printf("===END SCENE===\n");
+	if (!scene)
+		return ;
+	camera_print(&scene->camera, 0);
+	objects_print(scene->objects, 0, "OBJECTS:");
+	materials_print(scene->shared_materials, 0, "MATERIALS:");
 }
 
-void debug_scene_setup(t_scene *scene) {
-	printf("\n=== SCENE SETUP DEBUG ===\n");
+void	debug_cleanup_start(void)
+{
+	printf("[DEBUG] Cleaning up scene resources\n");
+}
+
+void	debug_cleanup_directory(const char *dir_path)
+{
+	printf("[DEBUG] Freeing scene directory: %s\n", dir_path);
+}
+
+void	debug_cleanup_objects(int count)
+{
+	printf("[DEBUG] Freeing %d objects\n", count);
+}
+
+void	debug_cleanup_lights(int count)
+{
+	printf("[DEBUG] Freeing %d lights\n", count);
+}
+
+void	debug_cleanup_materials(int count)
+{
+	printf("[DEBUG] Freeing %d materials\n", count);
+}
+
+void	debug_cleanup_material(const char *name)
+{
+	printf("[DEBUG] Freeing material: %s\n", name ? name : "unnamed");
+}
+
+void	debug_cleanup_texture(void *addr)
+{
+	printf("[DEBUG] Freeing texture at %p\n", addr);
+}
+
+void	debug_cleanup_complete(void)
+{
+	printf("[DEBUG] Scene cleanup complete\n");
+}
+
+void	debug_scene_setup(t_scene *scene) {
+	// Scene setup debug information
 	printf("Camera position: (%.2f, %.2f, %.2f)\n",
 			scene->camera.t.pos.x, scene->camera.t.pos.y, scene->camera.t.pos.z);
 	printf("Camera direction: (%.2f, %.2f, %.2f)\n",

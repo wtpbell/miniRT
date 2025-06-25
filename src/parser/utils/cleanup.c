@@ -1,16 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   cleanup.c                                          :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/11 16:44:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/06 17:08:26 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 16:44:01 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/25 20:23:58 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "material.h"
+#include "debug/rt_debug.h"
 
 void	free_tokens(char **tokens)
 {
@@ -35,7 +37,30 @@ void	cleanup_gnl(char *line, int fd)
 
 void	free_material(void *ptr)
 {
-	free(((t_mat *)ptr)->name);
+	t_mat	*mat;
+
+	mat = (t_mat *)ptr;
+	if (mat->name)
+	{
+		free(mat->name);
+		mat->name = NULL;
+	}
+	if (mat->tex_path)
+	{
+		free(mat->tex_path);
+		mat->tex_path = NULL;
+	}
+	if (mat->bump_path)
+	{
+		free(mat->bump_path);
+		mat->bump_path = NULL;
+	}
+	if (mat->bump_map)
+	{
+		mlx_delete_texture(mat->bump_map);
+		mat->bump_map = NULL;
+	}
+	cleanup_texture(&mat->texture);
 	free(ptr);
 }
 

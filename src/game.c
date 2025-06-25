@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/17 19:02:09 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/25 20:20:05 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,22 @@ static bool	cam_init(t_cam *cam, mlx_t *mlx)
 	if (cam->img_plane == NULL || mlx_image_to_window(mlx, cam->img_plane, 0, 0) == -1)
 		return (false);
 	cam->aspect_ratio = cam->img_plane->width / (float)cam->img_plane->height;
-	cam->bg_color = (t_v3f){{0.5f, 0.0f, 0.5f}};
+	cam->bg_color = init_v3f(0.5f, 0.0f, 0.5f);
 	cam->t.dir = v3f_norm(cam->t.dir);
 	print_camera_setup(cam);
 	update_camera_view(cam);
 	return (true);
+}
+
+static void cleanup_mlx(t_game *game)
+{
+	if (!game)
+		return;
+	if (game->mlx)
+	{
+		mlx_terminate(game->mlx);
+		game->mlx = NULL;
+	}
 }
 
 int	game(t_scene *scene)
@@ -80,13 +91,14 @@ int	game(t_scene *scene)
 	t_game	game;
 
 	game.mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
-	if (cam_init(&scene->camera, game.mlx))
-	{
-		scene_print(scene);
-		mlx_key_hook(game.mlx, quit_on_escape, &game);
-		render(scene);
-		mlx_loop(game.mlx);
-	}
-	mlx_terminate(game.mlx);
+	if (!game.mlx)
+		return (1);
+	if (!cam_init(&scene->camera, game.mlx))
+		return (cleanup_mlx(&game), 1);
+	scene_print(scene);
+	mlx_key_hook(game.mlx, quit_on_escape, &game);
+	render(scene);
+	mlx_loop(game.mlx);
+	cleanup_mlx(&game);
 	return (0);
 }
