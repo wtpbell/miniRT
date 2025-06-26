@@ -160,7 +160,6 @@ struct s_scene
 	t_vector	shared_materials;
 	t_cam		camera;
 	int			scene_flags;
-	uint32_t	frame_num;
 };
 
 #endif

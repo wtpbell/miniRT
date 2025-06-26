@@ -52,7 +52,7 @@ t_v3f	v3f_refr(t_v3f uv, t_v3f n, float etai_over_etat)
 	t_v3f	r_out_perp;
 	t_v3f	r_out_parallel;
 
-	cos_theta = fminf(v3f_dot(v3f_scale(uv, -1.0f), n), 1.0f);
+	cos_theta = ft_clampf(v3f_dot(v3f_scale(uv, -1.0f), n), -1.0f, 1.0f);
 	r_out_perp = v3f_scale(v3f_add(uv, v3f_scale(n, cos_theta)),
 			etai_over_etat);
 	r_out_parallel = v3f_scale(n, -sqrtf(fabsf(

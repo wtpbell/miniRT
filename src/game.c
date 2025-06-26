@@ -90,9 +90,11 @@ int	game(t_scene *scene)
 {
 	t_game	game;
 
+	ft_bzero(&game, sizeof(t_game));
 	game.mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
 	if (!game.mlx)
 		return (1);
+	// game.scene = scene;
 	if (!cam_init(&scene->camera, game.mlx))
 		return (cleanup_mlx(&game), 1);
 	scene_print(scene);

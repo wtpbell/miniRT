@@ -31,6 +31,7 @@ static t_mat	*create_base_material(const char *name)
 	mat->bump_path = NULL;
 	mat->bump_map = NULL;
 	mat->bump_scale = 1.0f;
+	mat->debug_bump = false;
 	return (mat);
 }
 
@@ -42,7 +43,6 @@ static void	init_texture(t_mat *mat)
 	mat->texture.tex = NULL;
 	mat->get_texcol = sample_texture;
 }
-
 
 t_mat	*init_material(t_mat_type type, const char *name)
 {

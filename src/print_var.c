@@ -11,10 +11,15 @@
 /* ************************************************************************** */
 
 #include "debug/rt_debug.h"
-#include "minirt.h"
+#include "material.h"
 #include <stdio.h>
 #include "parser.h"
-#include "material.h"
+
+#ifndef RT_DEBUG
+# define RT_DEBUG 0  // Default to debug off if not defined
+#endif
+#include "minirt.h"
+#include "MLX42/MLX42.h"
 
 void	mat4x4_rot_print(t_mat4x4 m)
 {
@@ -233,9 +238,64 @@ void	scene_print(t_scene *scene)
 {
 	if (!scene)
 		return ;
+	objects_print(scene->objects, 0, "OBJECTS");
+	if (scene->shared_materials.size > 0)
+		materials_print(scene->shared_materials, 0, "MATERIALS");
 	camera_print(&scene->camera, 0);
-	objects_print(scene->objects, 0, "OBJECTS:");
-	materials_print(scene->shared_materials, 0, "MATERIALS:");
+	printf("=========================\n");
+}
+
+void	debug_bump_uv(const char *stage, t_v2f uv, float u_scale, float v_scale, float theta)
+{
+	if (!RT_DEBUG)
+		return;
+	printf("Bump %s: UV=(%.6f,%.6f)", stage, uv.u, uv.v);
+	if (u_scale != 1.0f || v_scale != 1.0f || theta != 0.0f) {
+		printf(", Scale=(%.2f,%.2f)", u_scale, v_scale);
+		if (theta != 0.0f)
+			printf(", Rot=%.1f°", theta);
+	}
+	printf("\n");
+}
+
+void	debug_bump_sample(mlx_texture_t *bump_map, t_v2f uv, int sample_idx)
+{
+	if (!RT_DEBUG || sample_idx >= 5)
+		return;
+	
+	t_col32 tx = (t_col32)(uv.u * (bump_map->width - 1));
+	t_col32 ty = (t_col32)(uv.v * (bump_map->height - 1));
+	t_col32 idx = (ty * bump_map->width + tx) * bump_map->bytes_per_pixel;
+	
+	printf("Bump Sample #%d: UV(%.3f,%.3f) -> Texel(%d,%d) -> ", 
+		sample_idx + 1, uv.u, uv.v, tx, ty);
+	
+	if (bump_map->bytes_per_pixel >= 3) {
+		printf("RGB(%d,%d,%d)", 
+			bump_map->pixels[idx],
+			bump_map->pixels[idx + 1],
+			bump_map->pixels[idx + 2]);
+	} else {
+		printf("Gray(%d)", bump_map->pixels[idx]);
+	}
+	printf("\n");
+}
+
+void	debug_bump_normal(t_v3f old_normal, t_v3f new_normal)
+{
+	if (!RT_DEBUG)
+		return;
+	printf("Bump normal: (%.3f,%.3f,%.3f) -> (%.3f,%.3f,%.3f)\n",
+		old_normal.x, old_normal.y, old_normal.z,
+		new_normal.x, new_normal.y, new_normal.z);
+}
+
+void	debug_bump_texture_info(mlx_texture_t *bump_map, float delta)
+{
+	if (!RT_DEBUG)
+		return;
+	printf("Bump map: Texture size: %dx%d, BPP: %d, Delta: %f\n",
+		bump_map->width, bump_map->height, bump_map->bytes_per_pixel, delta);
 }
 
 void	debug_cleanup_start(void)

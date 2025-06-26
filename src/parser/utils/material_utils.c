@@ -6,23 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 19:17:23 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/25 20:00:26 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/26 14:23:43 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <errno.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <limits.h>  // For PATH_MAX
-#include <dirent.h>  // For directory operations
-#include <fcntl.h>   // For open()
-#include <stdio.h>   // For printf and fprintf
-#include <stdlib.h>  // For free, malloc
-#include <string.h>  // For strdup, strndup, strlen
 #include "parser.h"
-#include "material.h"
-#include "rt_math.h"
+#include "minirt.h"
 
 t_mat	*find_or_create_material(t_vector *materials, const char *m_name)
 {
@@ -52,12 +41,11 @@ int	is_valid_material_name(const char *m_name)
 	return (*m_name == '\0');
 }
 
-
 bool	load_bump_map(t_mat *mat, const char *bump_path)
 {
 	mlx_texture_t	*bump_map;
 	
-	if (!mat || !bump_path || !*bump_path)	
+	if (!mat || !bump_path || !*bump_path)
 		return (print_error(ERR_INV_MAT_NAME, "material", bump_path), false);
 	bump_map = load_png_texture(bump_path);
 	if (!bump_map)
@@ -66,7 +54,7 @@ bool	load_bump_map(t_mat *mat, const char *bump_path)
 		mlx_delete_texture(mat->bump_map);
 	mat->bump_map = bump_map;
 	if (mat->bump_scale <= 0.0f)
-		mat->bump_scale = 0.1f;
+		mat->bump_scale = 5.0f;
 	return (true);
 }
 

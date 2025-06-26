@@ -17,6 +17,8 @@
 # include "rt_types.h"
 # include "container.h"
 
+
+
 typedef struct s_material t_mat;
 
 enum e_material_type
@@ -44,13 +46,13 @@ struct s_texture
 
 typedef struct s_bump_context 
 {
-	t_v3f		n;				// Surface normal
-	t_v3f		t;				// Tangent
-	t_v3f		b;				// Bitangent
+	t_v3f		n;			// Surface normal
+	t_v3f		t;			// Tangent
+	t_v3f		b;			// Bitangent
 	t_v3f		heights[3];	// Height samples (center, u+delta, v+delta)
-	t_v3f		p;			// Perturbed normal
-	float		delta;		// Delta for sampling (scaled by material's bump_scale)
-	const t_mat	*mat;		// Material (contains bump_scale)
+	t_v3f		p;		// Perturbed normal
+	float		delta;		// Delta for sampling
+	const t_mat	*mat;	// Material (contains bump_scale)
 } t_bump;
 
 struct s_material
@@ -64,6 +66,7 @@ struct s_material
 	char			*tex_path;
 	mlx_texture_t	*bump_map;
 	float			bump_scale;
+	bool			debug_bump; // Toggle bump map visualization
 	struct s_lambertian
 	{
 		float		specular;
@@ -98,6 +101,7 @@ t_v3f	solid_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
 t_v3f	image_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
 t_v3f	perturb_normal(t_obj *obj, t_v3f normal, t_v3f point, const t_mat *mat);
 t_v3f	sample_texture(const t_v2f *texcoord, const t_tex *tex, t_v3f prim_col);
+void	toggle_bump_debug(t_mat *mat);
 void	cleanup_texture(t_tex *tex);
 bool	load_texture(t_tex *tex, const char *path);
 bool	load_bump_map(t_mat *mat, const char *bump_path);

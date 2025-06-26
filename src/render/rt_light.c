@@ -65,6 +65,7 @@ static t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 	return (v3f_clampf01(v3f_scale(color, inten)));
 }
 
+
 static t_v3f	apply_spot(t_scene *scene, t_ray_hit *hit, t_light *light)
 {
 	float	att;

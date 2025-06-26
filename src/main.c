@@ -6,13 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:21:05 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/25 20:19:32 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/26 14:35:03 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "minirt.h"
-#include "debug_utils.h"
 
 static bool	valid_file_format(const char *file)
 {

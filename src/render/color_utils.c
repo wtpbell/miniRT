@@ -57,8 +57,8 @@ t_v3f	v3f_apply_gamma(t_v3f color, float gamma)
 
 	inv_gamma = 1.0f / gamma;
 	return ((t_v3f){{
-			.x = fminf(powf(color.x, inv_gamma), 1.0f),
-			.y = fminf(powf(color.y, inv_gamma), 1.0f),
-			.z = fminf(powf(color.z, inv_gamma), 1.0f)
+			.x = ft_clampf(powf(color.x, inv_gamma), 0.0f, 1.0f),
+			.y = ft_clampf(powf(color.y, inv_gamma), 0.0f, 1.0f),
+			.z = ft_clampf(powf(color.z, inv_gamma), 0.0f, 1.0f)
 		}});
 }

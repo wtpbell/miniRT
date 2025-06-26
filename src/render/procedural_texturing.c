@@ -6,13 +6,14 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 23:49:31 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/25 20:12:23 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/26 12:25:19 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt_math.h"
 #include "scene.h"
 #include "color.h"
+#include <stdio.h>
 
 t_v3f	solid_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a)
 {
@@ -39,12 +40,8 @@ t_v3f	image_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a)
 	t_col32	idx;
 
 	(void)col_a;
-	u = fmodf(texcoord->u * tex->scale_rot.u, 1.0f);
-	v = fmodf(texcoord->v * tex->scale_rot.v, 1.0f);
-	if (u < 0)
-		u += 1.0f;
-	if (v < 0)
-		v += 1.0f;
+	u = ft_clampf01(texcoord->u * tex->scale_rot.u - floorf(texcoord->u * tex->scale_rot.u));
+	v = ft_clampf01(texcoord->v * tex->scale_rot.v - floorf(texcoord->v * tex->scale_rot.v));
 	x = (t_col32)(u * (tex->tex->width - 1));
 	y = (t_col32)(v * (tex->tex->height - 1));
 	idx = (y * tex->tex->width + x) * tex->tex->bytes_per_pixel;;
