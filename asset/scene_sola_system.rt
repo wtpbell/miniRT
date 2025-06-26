@@ -1,5 +1,5 @@
 # Camera and lighting - positioned to see all planets
-C	20,5,15	0,-0.3,1		80
+C	20,5,15	0,-0.3,1		40
 A					0.3		20,20,40
 L 0,20,60 1.0 255,255,200
 
@@ -16,7 +16,7 @@ m_grass type:lambertian pat:image tex:textures/grassblock.png su:1.0 sv:1.0
 # Materials with bump maps
 # Using the existing normal.png which is a proper normal map (bluish/purple)
 m_earth type:metal mt_rough:0.2 spc:1.5 shi:150.0 pat:image tex:textures/earth.png bump:textures/normal.png bump_scale: 25.0
-m_normals type:lambertian spc:1.0 shi:100.0 pat:image tex:textures/sky.png
+m_normals type:lambertian spc:1.0 shi:100.0 pat:image tex:textures/wave.png bump:textures/wave_normal.png bump_scale: 25.0
 m_dots type:metal mt_rough:0.0 pat:image tex:textures/uv2.png bump:textures/normal.png bump_scale: 20.0
 
 

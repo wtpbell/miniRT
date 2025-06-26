@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 23:49:31 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/26 17:04:15 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/26 21:45:38 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,10 @@ t_v3f	checker_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a)
 	return (v3f_lerp(col_a, tex->col, pattern));
 }
 
+// texture tiling: texture can be repeated multiple times on the object
+// 1. scale the UVs to repeat the texture multiple times on the object
+// 2. use fractional part to sample within the single texture
+// e.g.UV: 0.9, 0.95, 1.0, 1.05, 1.1 Fractional: 0.9, 0.95, 0.0, 0.05, 0.1
 t_v3f	image_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a)
 {
 	float	u;
@@ -41,7 +45,7 @@ t_v3f	image_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a)
 
 	(void)col_a;
 	u = ft_clampf01(texcoord->u * tex->scale_rot.u
-			- floorf(texcoord->u * tex->scale_rot.u));
+			- floorf(texcoord->u * tex->scale_rot.u)); // - floor fives the fractional part
 	v = ft_clampf01(texcoord->v * tex->scale_rot.v
 			- floorf(texcoord->v * tex->scale_rot.v));
 	x = (t_col32)(u * (tex->tex->width - 1));

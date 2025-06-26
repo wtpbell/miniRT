@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/26 14:33:01 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/26 19:04:43 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up)
 
 	y_axis = v3f_norm(dir);
 	if (fabs(v3f_dot(y_axis, up)) > .99f)
-		up = g_v3f_foward;
+		up = g_v3f_forward;
 	x_axis = v3f_norm(v3f_cross(up, y_axis));
 	z_axis = v3f_cross(x_axis, y_axis);
 	id_m4x4(trans);
@@ -45,7 +45,7 @@ void	view_matrix(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up)
 
 	id_m4x4(mat);
 	if (fabs(v3f_dot(dir, up)) > .99f)
-		up = g_v3f_foward;
+		up = g_v3f_forward;
 	x_axis = v3f_norm(v3f_cross(dir, up));
 	y_axis = v3f_cross(x_axis, dir);
 	mat[0] = x_axis.x;

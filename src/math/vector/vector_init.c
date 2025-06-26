@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:35:46 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/25 11:45:44 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/26 19:04:43 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 const t_v3f	g_v3f_zero = (t_v3f){.x = 0.0f, .y = 0.0f, .z = 0.0f};
 const t_v3f	g_v3f_one = (t_v3f){.x = 1.0f, .y = 1.0f, .z = 1.0f};
-const t_v3f	g_v3f_foward = (t_v3f){.x = 0.0f, .y = 0.0f, .z = 1.0f};
+const t_v3f	g_v3f_forward = (t_v3f){.x = 0.0f, .y = 0.0f, .z = 1.0f};
 const t_v3f	g_v3f_back = (t_v3f){.x = 0.0f, .y = 0.0f, .z = -1.0f};
 const t_v3f	g_v3f_up = (t_v3f){.x = 0.0f, .y = 1.0f, .z = 0.0f};
 const t_v3f	g_v3f_down = (t_v3f){.x = 0.0f, .y = -1.0f, .z = 0.0f};

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:40:12 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/25 11:45:59 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/26 19:04:43 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef union s_vector3
 
 extern const t_v3f	g_v3f_zero;
 extern const t_v3f	g_v3f_one;
-extern const t_v3f	g_v3f_foward;
+extern const t_v3f	g_v3f_forward;
 extern const t_v3f	g_v3f_back;
 extern const t_v3f	g_v3f_up;
 extern const t_v3f	g_v3f_down;
