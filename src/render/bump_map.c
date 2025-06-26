@@ -6,10 +6,11 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 09:15:29 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/26 15:13:37 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/26 17:05:47 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include "rt_math.h"
 #include "scene.h"
 #include "color.h"
