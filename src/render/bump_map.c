@@ -105,4 +105,3 @@ t_v3f	perturb_normal(t_obj *obj, t_v3f normal, t_v3f point, const t_mat *mat)
 	ctx.delta = 1.0f / mat->bump_map->width;
 	return (apply_bump(&ctx, uv));
 }
-

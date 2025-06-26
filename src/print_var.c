@@ -175,7 +175,7 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 {
 	int			i;
 	t_mat		*mat;
-	t_tex	*tex;
+	t_tex		*tex;
 
 	i = 0;
 	printf("%*s%s <%i/%i>\n", spaces, "", prefix, materials.size, materials.capacity);
@@ -198,6 +198,21 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 		}
 		else
 			str_print("Unknown", spaces + 4, "type:");
+		
+		// Print bump map information
+		if (mat->bump_map)
+		{
+			str_print("Bump Map", spaces + 4, "");
+			if (mat->bump_path)
+				str_print(mat->bump_path, spaces + 6, "path:");
+			printf("%*sdimensions: %dx%d\n", spaces + 6, "", 
+				mat->bump_map->width, mat->bump_map->height);
+			printf("%*sscale: %.2f\n", spaces + 6, "", mat->bump_scale);
+		}
+		else if (mat->bump_path)
+		{
+			printf("%*sBump Map (failed to load): %s\n", spaces + 4, "", mat->bump_path);
+		}
 		col32_print(mat->albedo, spaces + 4, "albedo");
 
 		tex = &mat->texture;
