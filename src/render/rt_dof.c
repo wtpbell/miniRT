@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   rt_dof.c                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 17:30:35 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   rt_dof.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/14 12:05:02 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/26 17:08:58 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ void	update_camera_view(t_cam *cam)
 	t_v3f		focal_center;
 
 	view_matrix(cam->view_matrix, cam->t.pos, cam->t.dir, cam->t.up);
-	cam->w = v3f_scale(cam->t.dir, -1.0f);// Forward is negative Z, away from camera
-	cam->u = v3f_norm(v3f_cross(cam->t.up, cam->w));// Right
-	cam->v = v3f_norm(v3f_cross(cam->w, cam->u));// Up 
+	cam->w = v3f_scale(cam->t.dir, -1.0f);
+	cam->u = v3f_norm(v3f_cross(cam->t.up, cam->w));
+	cam->v = v3f_norm(v3f_cross(cam->w, cam->u));
 	height = tanf(cam->fov * 0.5f * DEGTORAD) * cam->focus_dist * 2.0f;
 	width = height * cam->aspect_ratio;
 	cam->horizontal = v3f_scale(cam->u, width);
@@ -79,7 +79,7 @@ t_ray	get_ray_with_dof(t_cam *cam, float u, float v)
 	ray_dir = v3f_norm(v3f_sub(viewport_point, cam->t.pos));
 	focal_point = v3f_add(cam->t.pos, v3f_scale(ray_dir, cam->focus_dist));
 	concentric_sample_disk(frandom(), frandom(), &lens);
-	lens.x *= (1.0f - sqrtf(lens.x * lens.x + lens.y * lens.y)); //falloff from center to edge
+	lens.x *= (1.0f - sqrtf(lens.x * lens.x + lens.y * lens.y));
 	lens.y *= (1.0f - sqrtf(lens.x * lens.x + lens.y * lens.y));
 	lens.x *= cam->aperture * 0.5f;
 	lens.y *= cam->aperture * 0.5f;

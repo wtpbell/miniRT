@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   rt_material.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/06/02 11:16:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 17:46:01 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   rt_material.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/02 11:16:23 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/26 17:05:12 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ static t_v3f	blend_color(t_scene *sc, t_ray_hit *h,
 	fresnel = powf(fresnel, 0.5f);
 	reflect_dir = v3f_refl(ray.direction, h->normal);
 	if (h->obj->r.mat->diel.roughness > 0.0f)
-		reflect_dir = v3f_norm(v3f_add(reflect_dir, v3f_scale(random_in_hemisphere(h->normal),
-			h->obj->r.mat->diel.roughness)));
+		reflect_dir = v3f_norm(v3f_add(reflect_dir,
+			v3f_scale(random_in_hemisphere(h->normal), h->obj->r.mat->diel.roughness)));
 	reflect_color = v3f_mul(trace(&(t_ray){ray.origin, reflect_dir}, sc, depth - 1),
 		h->obj->r.mat->albedo);
 	refract_color = g_v3f_zero;

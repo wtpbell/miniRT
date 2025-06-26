@@ -31,11 +31,13 @@ static bool	parse_fov(float *fov, const char *str)
 static bool	parse_camera_fields(t_cam *cam, char **tokens)
 {
 	const t_field	fields[] = {
-		{"ap", &cam->aperture, FIELD_FLT, (t_v2f){.x = 0.0f, .y = FLT_MAX}, FILLED, {0}},
-		{"fc", &cam->focus_dist, FIELD_FLT, (t_v2f){.x = 0.1f, .y = FLT_MAX}, FILLED, {0}},
-		{NULL, NULL, 0, g_v2f_zero, 0, {0}}
+	{"ap", &cam->aperture, FIELD_FLT,
+		(t_v2f){.x = 0.0f, .y = FLT_MAX}, FILLED, {0}},
+	{"fc", &cam->focus_dist, FIELD_FLT,
+		(t_v2f){.x = 0.1f, .y = FLT_MAX}, FILLED, {0}},
+	{NULL, NULL, 0, g_v2f_zero, 0, {0}}
 	};
-	
+
 	return (parse_fields((t_field *)fields, 2, tokens + CAMERA_MIN_TOKENS));
 }
 

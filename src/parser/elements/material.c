@@ -34,21 +34,6 @@ static bool	parse_path(int *ctx, const void *raw)
 	return (true);
 }
 
-static bool	try_load_bump_map(t_mat *mat)
-{
-	if (mat->bump_path != NULL && mat->bump_path[0] != '\0')
-	{
-		if (load_bump_map(mat, mat->bump_path))
-			return (true);
-	}
-	if (mat->texture.type == TEX_IMAGE && mat->tex_path != NULL)
-	{
-		mat->bump_map = mlx_load_png(mat->tex_path);
-		return (mat->bump_map != NULL);
-	}
-	return (false);
-}
-
 static bool	set_texture_pattern(t_mat *mat)
 {
 	if (mat->tex_path != NULL && mat->tex_path[0] != '\0')
@@ -63,20 +48,24 @@ static bool	set_texture_pattern(t_mat *mat)
 		mat->get_texcol = checker_pattern;
 	else
 		mat->get_texcol = solid_pattern;
-	if (mat->bump_scale > 0.0f)
-		try_load_bump_map(mat);
+	if (mat->bump_scale > 0.0f && mat->bump_path != NULL
+		&& mat->bump_path[0] != '\0')
+		load_bump_map(mat, mat->bump_path);
 	return (true);
 }
 
 static void	init_bump_fields(t_field *fields, int *field_count, t_mat *mat)
 {
 	const t_field	field_defs[] = {
-		{"tex", &mat->tex_path, FIELD_ENUM, g_v2f_zero, FILLED, {.to_enum = parse_path}},
-		{"pat", &mat->texture.type, FIELD_ENUM, g_v2f_zero, FILLED, {.to_enum = str_to_texture_type}},
-		{"bump", &mat->bump_path, FIELD_ENUM, g_v2f_zero, FILLED, {.to_enum = parse_path}},
-		{NULL, NULL, 0, g_v2f_zero, 0, {0}}
+	{"tex", &mat->tex_path, FIELD_ENUM,
+		g_v2f_zero, FILLED, {.to_enum = parse_path}},
+	{"pat", &mat->texture.type, FIELD_ENUM,
+		g_v2f_zero, FILLED, {.to_enum = str_to_texture_type}},
+	{"bump", &mat->bump_path, FIELD_ENUM,
+		g_v2f_zero, FILLED, {.to_enum = parse_path}},
+	{NULL, NULL, 0, g_v2f_zero, 0, {0}}
 	};
-	int	i;
+	int				i;
 
 	if (!fields || !field_count || !mat)
 		return ;
@@ -94,21 +83,21 @@ static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
 	const t_v2f	lim01 = init_v2f(0.0f, 1.0f);
 	const t_v2f	lim_shi = init_v2f(0.0f, 5000.0f);
 	const t_v2f	lim_ir = init_v2f(0.0f, 100.0f);
-	int			field_count;
+	int			count;
 	t_field		fields[20];
 
-	field_count = 0;
+	count = 0;
 	mat->type = type;
-	fields[field_count++] = init_field("spc", &mat->lamb.specular, FIELD_FLT, lim01);
-	fields[field_count++] = init_field("shi", &mat->lamb.shininess, FIELD_FLT, lim_shi);
-	fields[field_count++] = init_field("l_rough", &mat->lamb.roughness, FIELD_FLT, lim01);
-	fields[field_count++] = init_field("mt_rough", &mat->metal.roughness, FIELD_FLT, lim01);
-	fields[field_count++] = init_field("ir", &mat->diel.ir, FIELD_FLT, lim_ir);
-	fields[field_count++] = init_field("tr", &mat->diel.transmittance, FIELD_FLT, lim01);
-	fields[field_count++] = init_field("d_rough", &mat->diel.roughness, FIELD_FLT, lim01);
-	fields[field_count++] = init_field("alb", &mat->albedo, FIELD_COL, lim01);
-	init_bump_fields(fields, &field_count, mat);
-	fields[field_count++] = init_field("bump_scale", &mat->bump_scale, FIELD_FLT, init_v2f(0.0f, 100.0f));
+	fields[count++] = init_field("spc", &mat->lamb.specular, FIELD_FLT, lim01);
+	fields[count++] = init_field("shi", &mat->lamb.shininess, FIELD_FLT, lim_shi);
+	fields[count++] = init_field("l_rough", &mat->lamb.roughness, FIELD_FLT, lim01);
+	fields[count++] = init_field("mt_rough", &mat->metal.roughness, FIELD_FLT, lim01);
+	fields[count++] = init_field("ir", &mat->diel.ir, FIELD_FLT, lim_ir);
+	fields[count++] = init_field("tr", &mat->diel.transmittance, FIELD_FLT, lim01);
+	fields[count++] = init_field("d_rough", &mat->diel.roughness, FIELD_FLT, lim01);
+	fields[count++] = init_field("alb", &mat->albedo, FIELD_COL, lim01);
+	init_bump_fields(fields, &count, mat);
+	fields[count++] = init_field("bump_scale", &mat->bump_scale, FIELD_FLT, init_v2f(0.0f, 100.0f));
 	fields[0].state |= (HIDDEN * (type != MAT_LAMBERTIAN));
 	fields[1].state |= (HIDDEN * (type != MAT_LAMBERTIAN));
 	fields[2].state |= (HIDDEN * (type != MAT_LAMBERTIAN));
@@ -117,9 +106,9 @@ static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
 	fields[5].state |= (HIDDEN * (type != MAT_DIELECTRIC));
 	fields[6].state |= (HIDDEN * (type != MAT_DIELECTRIC));
 	fields[7].state = FILLED;
-	init_texture_fields(fields + field_count, &mat->texture);
-	field_count += 5;
-	if (!parse_fields(fields, field_count, tokens))
+	init_texture_fields(fields + count, &mat->texture);
+	count += 5;
+	if (!parse_fields(fields, count, tokens))
 		return (false);
 	if (mat->tex_path == NULL && mat->texture.type != TEX_CHECKER)
 		mat->texture.type = TEX_SOLID;

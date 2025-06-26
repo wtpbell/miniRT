@@ -23,7 +23,7 @@
 
 t_v3f	sample_texture(const t_v2f *texcoord, const t_tex *tex, t_v3f prim_col)
 {
-	t_v2f	uv = *texcoord;
+	t_v2f	uv;
 
 	(void)prim_col;
 	uv = *texcoord;
@@ -36,7 +36,7 @@ t_v3f	sample_texture(const t_v2f *texcoord, const t_tex *tex, t_v3f prim_col)
 	return (g_v3f_one);
 }
 
-mlx_texture_t *load_png_texture(const char *path)
+mlx_texture_t	*load_png_texture(const char *path)
 {
 	int				fd;
 	mlx_texture_t	*texture;

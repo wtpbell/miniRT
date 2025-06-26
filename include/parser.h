@@ -204,7 +204,8 @@ bool		parse_fields(t_field *fields, int count, char **tokens);
 // material_utils.c
 t_mat		*find_or_create_material(t_vector *materials, const char *m_name);
 int			is_valid_material_name(const char *m_name);
-bool		assign_material(t_obj *obj, t_vector *materials, const char *m_name);
+bool		assign_material(t_obj *obj,
+				t_vector *materials, const char *m_name);
 t_mat_type	get_mat_type(const char *value);
 
 #endif

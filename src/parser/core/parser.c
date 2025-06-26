@@ -65,7 +65,6 @@ bool	parse_map(t_scene *scene, const char *file)
 		cleanup_scene(scene);
 		return (false);
 	}
-
 	result = parse_file_lines(scene, fd);
 	close(fd);
 	if (!result)

@@ -56,7 +56,6 @@ typedef t_v3f					(*t_apply_light)(t_scene *scene,
 typedef t_v2f					(*t_texcoord)(t_obj *obj, t_v3f point);
 typedef t_v3f					(*t_texcol)(const t_v2f *texcoord,
 											const t_tex *tex, t_v3f prim_col);
-typedef t_v2f 					(*t_uv_map)(struct s_object *obj, t_v3f point);
-
+typedef t_v2f					(*t_uv_map)(struct s_object *obj, t_v3f point);
 
 #endif

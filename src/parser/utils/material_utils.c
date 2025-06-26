@@ -44,7 +44,7 @@ int	is_valid_material_name(const char *m_name)
 bool	load_bump_map(t_mat *mat, const char *bump_path)
 {
 	mlx_texture_t	*bump_map;
-	
+
 	if (!mat || !bump_path || !*bump_path)
 		return (print_error(ERR_INV_MAT_NAME, "material", bump_path), false);
 	bump_map = load_png_texture(bump_path);
@@ -70,9 +70,15 @@ bool	assign_material(t_obj *obj, t_vector *materials, const char *m_name)
 	if (!mat)
 		return (print_error(ERR_MEM, "material", NULL), false);
 	if (mat->tex_path && !load_texture(&mat->texture, mat->tex_path))
-		return (print_error(ERR_LOAD_TEXTURE, "material", mat->tex_path), false);
+	{
+		print_error(ERR_LOAD_TEXTURE, "material", mat->tex_path);
+		return (false);
+	}
 	if (mat->bump_path && !load_bump_map(mat, mat->bump_path))
-		return (print_error(ERR_LOAD_TEXTURE, "material", mat->bump_path), false);
+	{
+		print_error(ERR_LOAD_TEXTURE, "material", mat->bump_path);
+		return (false);
+	}
 	obj->r.mat = mat;
 	return (true);
 }

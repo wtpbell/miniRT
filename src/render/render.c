@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/26 14:53:10 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/26 17:08:29 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,10 @@ static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 	if (!hit_info->front_face)
 		hit_info->normal = v3f_scale(hit_info->normal, -1.0f);
 	if (obj->r.mat && obj->r.mat->bump_map)
-		hit_info->normal = perturb_normal(obj, hit_info->normal, hit_info->hit, obj->r.mat);
+		hit_info->normal = perturb_normal(
+				obj, hit_info->normal, hit_info->hit, obj->r.mat);
 	hit_info->texcoord = v2f_rotate(obj->r.get_texcoord(obj, hit_info->hit),
-		obj->r.mat->texture.scale_rot.theta * DEGTORAD);
+			obj->r.mat->texture.scale_rot.theta * DEGTORAD);
 	hit_info->hit_color = obj->r.mat->get_texcol(&hit_info->texcoord,
 			&obj->r.mat->texture, v3f_mul(obj->r.color, obj->r.mat->albedo));
 }
@@ -104,8 +105,8 @@ static t_v3f	sample_pixel(t_scene *scene, float x, float y)
 	i = 0;
 	while (i < SAMPLES_PER_PIXEL)
 	{
-		jitter_x = frandom_norm_distribution() - 0.5f;  // -0.5 to 0.5
-		jitter_y = frandom_norm_distribution() - 0.5f;  // -0.5 to 0.5
+		jitter_x = frandom_norm_distribution() - 0.5f;
+		jitter_y = frandom_norm_distribution() - 0.5f;
 		u = (x + 0.5f + jitter_x) / (float)(scene->camera.img_plane->width - 1);
 		v = 1.0f - (y + 0.5f + jitter_y) / (float)(scene->camera.img_plane->height - 1);
 		ray = get_ray_with_dof(&scene->camera, u, v);
@@ -124,7 +125,6 @@ void	render(t_scene *scene)
 
 	img = scene->camera.img_plane;
 	update_camera_view(&scene->camera);
-
 	y = 0;
 	while (y < img->height)
 	{

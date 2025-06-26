@@ -17,9 +17,7 @@
 # include "rt_types.h"
 # include "container.h"
 
-
-
-typedef struct s_material t_mat;
+typedef struct s_material	t_mat;
 
 enum e_material_type
 {
@@ -44,7 +42,7 @@ struct s_texture
 	mlx_texture_t	*tex;
 };
 
-typedef struct s_bump_context 
+typedef struct s_bump_context
 {
 	t_v3f		n;			// Surface normal
 	t_v3f		t;			// Tangent
@@ -53,7 +51,7 @@ typedef struct s_bump_context
 	t_v3f		p;		// Perturbed normal
 	float		delta;		// Delta for sampling
 	const t_mat	*mat;	// Material (contains bump_scale)
-} t_bump;
+}	t_bump;
 
 struct s_material
 {
@@ -85,25 +83,31 @@ struct s_material
 	}				diel;
 };
 
-t_mat	*init_material(t_mat_type type, const char *name);
-bool	create_default_materials(t_vector *shared_materials);
-bool	assign_material(t_obj *obj, t_vector *materials, const char *m_name);
-t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth);
-t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info);
-t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth);
-t_v2f	cone_texcoord(t_obj *obj, t_v3f point);
-t_v2f	plane_texcoord(t_obj *obj, t_v3f point);
-t_v2f	sphere_texcoord(t_obj *obj, t_v3f point);
-t_v2f	triangle_texcoord(t_obj *obj, t_v3f world_point);
-t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point);
-t_v3f	checker_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
-t_v3f	solid_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
-t_v3f	image_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
-t_v3f	perturb_normal(t_obj *obj, t_v3f normal, t_v3f point, const t_mat *mat);
-t_v3f	sample_texture(const t_v2f *texcoord, const t_tex *tex, t_v3f prim_col);
-void	toggle_bump_debug(t_mat *mat);
-void	cleanup_texture(t_tex *tex);
-bool	load_texture(t_tex *tex, const char *path);
-bool	load_bump_map(t_mat *mat, const char *bump_path);
+t_mat			*init_material(t_mat_type type, const char *name);
+bool			create_default_materials(t_vector *shared_materials);
+bool			assign_material(t_obj *obj,
+					t_vector *materials, const char *m_name);
+t_v3f			handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth);
+t_v3f			handle_lambertian(t_scene *scene, t_ray_hit *hit_info);
+t_v3f			handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth);
+t_v2f			cone_texcoord(t_obj *obj, t_v3f point);
+t_v2f			plane_texcoord(t_obj *obj, t_v3f point);
+t_v2f			sphere_texcoord(t_obj *obj, t_v3f point);
+t_v2f			triangle_texcoord(t_obj *obj, t_v3f world_point);
+t_v2f			cylinder_texcoord(t_obj *obj, t_v3f point);
+t_v3f			checker_pattern(const t_v2f *texcoord,
+					const t_tex *tex, t_v3f col_a);
+t_v3f			solid_pattern(const t_v2f *texcoord,
+					const t_tex *tex, t_v3f col_a);
+t_v3f			image_pattern(const t_v2f *texcoord,
+					const t_tex *tex, t_v3f col_a);
+t_v3f			perturb_normal(t_obj *obj,
+					t_v3f normal, t_v3f point, const t_mat *mat);
+t_v3f			sample_texture(const t_v2f *texcoord,
+					const t_tex *tex, t_v3f prim_col);
+void			toggle_bump_debug(t_mat *mat);
+void			cleanup_texture(t_tex *tex);
+bool			load_texture(t_tex *tex, const char *path);
+bool			load_bump_map(t_mat *mat, const char *bump_path);
 mlx_texture_t	*load_png_texture(const char *path);
 #endif
