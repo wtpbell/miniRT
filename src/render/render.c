@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/26 17:08:29 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/26 18:30:48 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ static t_v3f	sample_pixel(t_scene *scene, float x, float y)
 	i = 0;
 	while (i < SAMPLES_PER_PIXEL)
 	{
+		seed_rand(get_rngstate(x, y, i));
 		jitter_x = frandom_norm_distribution() - 0.5f;
 		jitter_y = frandom_norm_distribution() - 0.5f;
 		u = (x + 0.5f + jitter_x) / (float)(scene->camera.img_plane->width - 1);
