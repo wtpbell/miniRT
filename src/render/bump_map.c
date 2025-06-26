@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 09:15:29 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/26 14:31:05 by bewong           ###   ########.fr       */
+/*   Updated: 2025/06/26 15:13:37 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ static float	sample_bump_map(mlx_texture_t *bump_map, t_v2f uv)
 	rgb[2] = bump_map->pixels[idx + 2] / 255.0f;
 	return (0.2126f * rgb[0] + 0.7152f * rgb[1] + 0.0722f * rgb[2]);
 }
-
 
 static t_v3f	apply_bump(t_bump *ctx, t_v2f uv)
 {
