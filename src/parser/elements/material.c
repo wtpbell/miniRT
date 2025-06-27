@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/27 13:58:31 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/27 19:40:44 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,7 @@ static bool	parse_path(int *ctx, const void *raw)
 
 static void	set_texture_pattern(t_mat *mat)
 {
-	if (mat->texture.type == TEX_IMAGE)
-		mat->get_texcol = image_pattern;
-	else if (mat->texture.type == TEX_CHECKER)
+	if (mat->texture.type == TEX_CHECKER)
 		mat->get_texcol = checker_pattern;
 	else if (mat->texture.type == TEX_IMAGE)
 		mat->get_texcol = image_pattern;
@@ -96,12 +94,10 @@ static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
 	fields[5].state |= (HIDDEN * (type != MAT_DIELECTRIC));
 	fields[6].state |= (HIDDEN * (type != MAT_DIELECTRIC));
 	fields[7].state = FILLED;
-	init_texture_fields(fields + count, &mat->texture);
+	init_texture_fields(fields + count, &mat->texture); // do the same as above
 	count += 5;
 	if (!parse_fields(fields, count, tokens))
 		return (false);
-	if (mat->tex_path == NULL && mat->texture.type != TEX_CHECKER)
-		mat->texture.type = TEX_SOLID;
 	return (true);
 }
 

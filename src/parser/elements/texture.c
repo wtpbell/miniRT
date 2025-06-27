@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/16 10:29:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/27 13:58:55 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/27 19:38:14 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,8 @@ void	init_texture_fields(t_field *tex_fields, t_tex *tex)
 	const t_field	field_defs[] = {
 	{"su", &tex->scale_rot.u, FIELD_FLT, limsv, FILLED, {0}},
 	{"sv", &tex->scale_rot.v, FIELD_FLT, limsv, FILLED, {0}},
-	{"rot", &tex->scale_rot.z, FIELD_FLT, limtheta, HIDDEN, {0}},
-	{"alt_col", &tex->col, FIELD_COL, lim01, HIDDEN, {0}},
-	{"col", &tex->col, FIELD_COL, lim01, HIDDEN, {0}},
+	{"rot", &tex->scale_rot.z, FIELD_FLT, limtheta, FILLED, {0}},
+	{"col", &tex->col, FIELD_COL, lim01, FILLED, {0}},
 	{NULL, NULL, 0, g_v2f_zero, 0, {0}}
 	};
 	int				i;

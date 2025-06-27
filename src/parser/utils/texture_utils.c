@@ -15,10 +15,8 @@
 void	cleanup_texture(t_tex *tex)
 {
 	if (tex->tex)
-	{
 		mlx_delete_texture(tex->tex);
-		tex->tex = NULL;
-	}
+	tex->tex = NULL;
 	tex->type = TEX_SOLID;
 	tex->scale_rot = init_v3f(1.0f, 1.0f, 0.0f);
 	tex->col = g_v3f_one;

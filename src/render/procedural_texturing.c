@@ -6,14 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/10 23:49:31 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/27 15:46:01 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/27 16:39:42 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt_math.h"
 #include "scene.h"
-#include "color.h"
-#include <stdio.h>
 
 t_v3f	solid_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a)
 {

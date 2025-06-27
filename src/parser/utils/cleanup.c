@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cleanup.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:44:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/25 20:23:58 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   cleanup.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:44:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/27 17:06:33 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,26 +40,11 @@ void	free_material(void *ptr)
 	t_mat	*mat;
 
 	mat = (t_mat *)ptr;
-	if (mat->name)
-	{
-		free(mat->name);
-		mat->name = NULL;
-	}
-	if (mat->tex_path)
-	{
-		free(mat->tex_path);
-		mat->tex_path = NULL;
-	}
-	if (mat->bump_path)
-	{
-		free(mat->bump_path);
-		mat->bump_path = NULL;
-	}
+	free(mat->name);
+	free(mat->tex_path);
+	free(mat->bump_path);
 	if (mat->bump_map)
-	{
 		mlx_delete_texture(mat->bump_map);
-		mat->bump_map = NULL;
-	}
 	cleanup_texture(&mat->texture);
 	free(ptr);
 }
