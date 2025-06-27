@@ -16,7 +16,7 @@ L	0,5,5				1.0			255,255,255
 
 m_earth type:lambertian spc:1.0 shi:100.0 l_rough:0.2 pat:image tex:textures/earth.png bump:textures/earth_bump2.png bump_scale: 70.0 
 m_moon type:metal mt_rough:0.3 spc:1.0 shi:100.0 pat:image tex:textures/moon.png bump:textures/moon_normals.png bump_scale: 20.0 
-m_checker		type:lambertian	spc:1.0	shi:50.0			pat:image tex:textures/uvmap.png alt_col:0,0,0
+m_checker		type:lambertian	spc:1.0	shi:50.0			pat:image tex:textures/uvmap.png col:0,0,0
 
 
 sp	-3,4,1	4						255,255,255 m_earth
