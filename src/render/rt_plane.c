@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_plane.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/19 10:33:19 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/26 16:15:00 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_plane.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/19 10:33:19 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/27 21:00:46 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,9 @@ t_v3f	plane_normal(t_obj *obj, t_v3f point)
 t_v2f	plane_texcoord(t_obj *obj, t_v3f world_point)
 {
 	t_v3f	local_point;
-	t_v2f	uv;
 
 	local_point = mul_v3_m4x4(world_point, obj->t.to_obj);
-	uv.x = local_point.x - floorf(local_point.x);
-	uv.y = local_point.z - floorf(local_point.z);
-	uv.x = ft_clampf(uv.x, 0.0f, 1.0f - FLT_SML);
-    uv.y = ft_clampf(uv.y, 0.0f, 1.0f - FLT_SML);
-	return (uv);
+	return (init_v2f(local_point.x, local_point.z));
 }
 
 int	plane_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)

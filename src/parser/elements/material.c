@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/27 19:40:44 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/27 19:53:57 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,6 @@
 #include "material.h"
 #include "libft.h"
 
-static bool	parse_path(int *ctx, const void *raw)
-{
-	const char	*path = raw;
-	char		**dest;
-	char		*new_path;
-
-	dest = (char **)ctx;
-	if (str_is_empty(path))
-		return (false);
-	new_path = ft_strdup(path);
-	if (!new_path)
-		return (false);
-	if (*dest)
-		free(*dest);
-	*dest = new_path;
-	return (true);
-}
-
 static void	set_texture_pattern(t_mat *mat)
 {
 	if (mat->texture.type == TEX_CHECKER)
@@ -42,28 +24,6 @@ static void	set_texture_pattern(t_mat *mat)
 		mat->get_texcol = image_pattern;
 	else
 		mat->get_texcol = solid_pattern;
-}
-
-static void	init_bump_fields(t_field *fields, int *field_count, t_mat *mat)
-{
-	const t_field	field_defs[] = {
-	{"tex", &mat->tex_path, FIELD_ENUM,
-		g_v2f_zero, FILLED, {.to_enum = parse_path}},
-	{"pat", &mat->texture.type, FIELD_ENUM,
-		g_v2f_zero, FILLED, {.to_enum = str_to_texture_type}},
-	{"bump", &mat->bump_path, FIELD_ENUM,
-		g_v2f_zero, FILLED, {.to_enum = parse_path}},
-	{NULL, NULL, 0, g_v2f_zero, 0, {0}}
-	};
-	int				i;
-
-	i = 0;
-	while (field_defs[i].name != NULL)
-	{
-		fields[*field_count] = field_defs[i];
-		(*field_count)++;
-		i++;
-	}
 }
 
 static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
@@ -94,8 +54,7 @@ static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
 	fields[5].state |= (HIDDEN * (type != MAT_DIELECTRIC));
 	fields[6].state |= (HIDDEN * (type != MAT_DIELECTRIC));
 	fields[7].state = FILLED;
-	init_texture_fields(fields + count, &mat->texture); // do the same as above
-	count += 5;
+	init_texture_fields(fields, &count, mat);
 	if (!parse_fields(fields, count, tokens))
 		return (false);
 	return (true);

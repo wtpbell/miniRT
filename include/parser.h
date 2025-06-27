@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/27 15:47:16 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/27 19:53:47 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ t_parser	element_parser(char **tokens, t_scene *scene, const char *line);
 /* ---------------------Elements--------------------- */
 // camera.c
 bool		parse_camera(char **tokens, t_scene *scene);
+
 // light.c
 bool		parse_ambient_light(char **tokens, t_scene *scene);
 bool		parse_point_light(char **tokens, t_scene *scene);
@@ -135,19 +136,25 @@ bool		parse_spot_light(char **tokens, t_scene *scene);
 
 // material.c
 bool		parse_material(char **tokens, t_scene *scene);
+
 // texture.c
-void		init_texture_fields(t_field *tex_fields, t_tex *tex);
+void		init_texture_fields(t_field *fields, int *field_count, t_mat *mat);
+void		init_bump_fields(t_field *fields, int *field_count, t_mat *mat);
 
 /* ---------------------Objects--------------------- */
 // sphere.c
 bool		parse_diameter(float *out, const char *str);
 bool		parse_sphere(char **tokens, t_scene *scene);
+
 // plane.c
 bool		parse_plane(char **tokens, t_scene *scene);
+
 // cylinder.c
 bool		parse_cylinder(char **tokens, t_scene *scene);
+
 // cone.c
 bool		parse_cone(char **tokens, t_scene *scene);
+
 // triangle.c
 bool		parse_triangle(char **tokens, t_scene *scene);
 
@@ -187,9 +194,6 @@ bool		parse_int(int *out, const char *str,
 // error.c
 void		print_error(t_error type, const char *ctx, const char *value);
 void		exit_err(t_error type, const char *ctx, const char *value);
-
-// texture.c
-bool		str_to_texture_type(int *val, const void *enum_name);
 
 // cleanup.c
 void		free_tokens(char **tokens);
