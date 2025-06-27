@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   material_init.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/31 23:53:11 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/26 14:24:25 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   material_init.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/31 23:53:11 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/27 11:52:18 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	init_texture(t_mat *mat)
 	mat->texture.scale_rot = init_v3f(1.0f, 1.0f, 0.0f);
 	mat->texture.col = g_v3f_one;
 	mat->texture.tex = NULL;
-	mat->get_texcol = sample_texture;
+	mat->get_texcol = solid_pattern;
 }
 
 t_mat	*init_material(t_mat_type type, const char *name)

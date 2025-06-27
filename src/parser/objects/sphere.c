@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   sphere.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/26 19:04:43 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   sphere.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/27 15:39:33 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ static void	sphere_init(t_obj *obj, float diameter)
 	obj->sp = (t_sp){.radius = diameter * 0.5f};
 	obj->intersect = sphere_intersect;
 	obj->calc_norm = sphere_normal;
-	obj->uv_map = sphere_texcoord;
 }
 
 bool	parse_sphere(char **tokens, t_scene *scene)

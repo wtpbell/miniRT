@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_types.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/07 16:31:03 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/26 17:09:48 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_types.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/06/07 16:31:03 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/27 15:40:02 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,5 @@ typedef t_v3f					(*t_apply_light)(t_scene *scene,
 typedef t_v2f					(*t_texcoord)(t_obj *obj, t_v3f point);
 typedef t_v3f					(*t_texcol)(const t_v2f *texcoord,
 											const t_tex *tex, t_v3f prim_col);
-typedef t_v2f					(*t_uv_map)(struct s_object *obj, t_v3f point);
 
 #endif

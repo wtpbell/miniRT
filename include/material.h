@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   material.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/29 13:47:23 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/26 17:13:19 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   material.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/27 12:42:13 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,13 +101,8 @@ t_v3f			solid_pattern(const t_v2f *texcoord,
 					const t_tex *tex, t_v3f col_a);
 t_v3f			image_pattern(const t_v2f *texcoord,
 					const t_tex *tex, t_v3f col_a);
-t_v3f			perturb_normal(t_obj *obj,
-					t_v3f normal, t_v3f point, const t_mat *mat);
-t_v3f			sample_texture(const t_v2f *texcoord,
-					const t_tex *tex, t_v3f prim_col);
-void			toggle_bump_debug(t_mat *mat);
-void			cleanup_texture(t_tex *tex);
-bool			load_texture(t_tex *tex, const char *path);
-bool			load_bump_map(t_mat *mat, const char *bump_path);
-mlx_texture_t	*load_png_texture(const char *path);
+
+t_v3f			perturb_normal(const t_mat *mat, const t_v2f texcoord, const t_v3f normal);
+t_v3f			sample_texture(const mlx_texture_t *tex, const t_v2f uv, const t_v3f mod);
+
 #endif

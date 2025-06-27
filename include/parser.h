@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 22:20:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/26 17:10:43 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   parser.h                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
+/*   Updated: 2025/06/27 15:47:16 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include "MLX42/MLX42.h"
 # include "minirt.h"
 # include "scene.h"
 # include "container.h"
@@ -154,6 +155,7 @@ bool		parse_triangle(char **tokens, t_scene *scene);
 // string_utils.c
 void		clean_spaces(char *str);
 bool		validate_commas(const char *str);
+bool		str_is_empty(const char *s);
 
 // vector_utils.c
 bool		parse_v3f(t_v3f *v3f, const char *str);
@@ -207,5 +209,11 @@ int			is_valid_material_name(const char *m_name);
 bool		assign_material(t_obj *obj,
 				t_vector *materials, const char *m_name);
 t_mat_type	get_mat_type(const char *value);
+bool		load_bump_map(t_mat *mat, const char *bump_path);
+
+// texture_utils.c
+void		cleanup_texture(t_tex *tex);
+bool		load_texture(t_tex *tex, const char *path);
+void		assign_textures(t_mat *mat);
 
 #endif

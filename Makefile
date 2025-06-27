@@ -25,7 +25,7 @@ SRCS_MAIN	:= main.c vector_init.c vector_helper.c vector_operation.c\
 				color_utils.c random_utils.c rt_light.c rt_dof.c \
 				quit.c rt_triangle.c rt_material.c material_init.c light_utils.c\
 				material_utils.c obj_utils.c procedural_texturing.c rt_cone.c \
-				bump_map.c 
+				bump_map.c rt_texture.c
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE)
 OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)

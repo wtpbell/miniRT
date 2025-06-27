@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   texture.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/16 10:29:24 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/26 17:00:11 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   texture.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/06/16 10:29:24 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/27 13:58:55 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,6 @@ void	init_texture_fields(t_field *tex_fields, t_tex *tex)
 	};
 	int				i;
 
-	tex->scale_rot = init_v3f(1.0f, 1.0f, 0.0f);
-	tex->col = g_v3f_one;
-	tex->type = TEX_SOLID;
 	i = 0;
 	while (field_defs[i].name != NULL)
 	{

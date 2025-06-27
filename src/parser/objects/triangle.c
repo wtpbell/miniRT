@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   triangle.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/29 12:00:31 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/25 17:49:48 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   triangle.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/29 12:00:31 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/27 15:39:36 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ static void	triangle_init(t_obj *obj, t_tri *tri)
 	obj->tri = *tri;
 	obj->intersect = triangle_intersect;
 	obj->calc_norm = triangle_normal;
-	obj->uv_map = triangle_texcoord;
 	generate_uv_vertices(&obj->tri, obj->t.to_obj);
 }
 

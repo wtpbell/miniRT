@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   material.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/05 14:04:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/26 16:58:25 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   material.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/27 13:58:31 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static bool	parse_path(int *ctx, const void *raw)
 	char		*new_path;
 
 	dest = (char **)ctx;
-	if (!path || !*path || !dest)
+	if (str_is_empty(path))
 		return (false);
 	new_path = ft_strdup(path);
 	if (!new_path)
@@ -34,24 +34,16 @@ static bool	parse_path(int *ctx, const void *raw)
 	return (true);
 }
 
-static bool	set_texture_pattern(t_mat *mat)
+static void	set_texture_pattern(t_mat *mat)
 {
-	if (mat->tex_path != NULL && mat->tex_path[0] != '\0')
-	{
-		mat->texture.type = TEX_IMAGE;
-		if (!load_texture(&mat->texture, mat->tex_path))
-			mat->texture.type = TEX_SOLID;
-	}
 	if (mat->texture.type == TEX_IMAGE)
 		mat->get_texcol = image_pattern;
 	else if (mat->texture.type == TEX_CHECKER)
 		mat->get_texcol = checker_pattern;
+	else if (mat->texture.type == TEX_IMAGE)
+		mat->get_texcol = image_pattern;
 	else
 		mat->get_texcol = solid_pattern;
-	if (mat->bump_scale > 0.0f && mat->bump_path != NULL
-		&& mat->bump_path[0] != '\0')
-		load_bump_map(mat, mat->bump_path);
-	return (true);
 }
 
 static void	init_bump_fields(t_field *fields, int *field_count, t_mat *mat)
@@ -67,8 +59,6 @@ static void	init_bump_fields(t_field *fields, int *field_count, t_mat *mat)
 	};
 	int				i;
 
-	if (!fields || !field_count || !mat)
-		return ;
 	i = 0;
 	while (field_defs[i].name != NULL)
 	{
@@ -134,7 +124,7 @@ bool	parse_material(char **tokens, t_scene *scene)
 		return (print_error(ERR_MEM, "material", NULL), false);
 	if (!parse_type_material(mat, mat_type, tokens + 2))
 		return (false);
-	if (!set_texture_pattern(mat))
-		return (false);
+	assign_textures(mat);
+	set_texture_pattern(mat);
 	return (true);
 }

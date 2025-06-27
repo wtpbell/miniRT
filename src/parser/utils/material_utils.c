@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   material_utils.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/06 19:17:23 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/26 16:55:55 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   material_utils.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/06/06 19:17:23 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/27 15:53:48 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,14 @@ bool	load_bump_map(t_mat *mat, const char *bump_path)
 {
 	mlx_texture_t	*bump_map;
 
-	if (!mat || !bump_path || !*bump_path)
+	if (str_is_empty(bump_path))
 		return (print_error(ERR_INV_MAT_NAME, "material", bump_path), false);
-	bump_map = load_png_texture(bump_path);
+	bump_map = mlx_load_png(bump_path);
 	if (!bump_map)
-		return (print_error(ERR_LOAD_TEXTURE, "material", bump_path), false);
+		return (false);
 	if (mat->bump_map)
 		mlx_delete_texture(mat->bump_map);
 	mat->bump_map = bump_map;
-	if (mat->bump_scale <= 0.0f)
-		mat->bump_scale = 5.0f;
 	return (true);
 }
 
@@ -62,7 +60,7 @@ bool	assign_material(t_obj *obj, t_vector *materials, const char *m_name)
 {
 	t_mat	*mat;
 
-	if (!m_name || !*m_name)
+	if (str_is_empty(m_name))
 		m_name = "m_default";
 	if (!is_valid_material_name(m_name))
 		return (print_error(ERR_INV_MAT_NAME, "material", m_name), false);
