@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   material.h                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/27 12:42:13 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/28 22:04:15 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ enum e_material_type
 	MAT_UNKNOWN,
 	MAT_LAMBERTIAN,
 	MAT_METAL,
-	MAT_DIELECTRIC
+	MAT_DIELECTRIC,
+	MAT_NORMAL
 };
 
 typedef enum e_texture_type
@@ -104,5 +105,7 @@ t_v3f			image_pattern(const t_v2f *texcoord,
 
 t_v3f			perturb_normal(const t_mat *mat, const t_v2f texcoord, const t_v3f normal);
 t_v3f			sample_texture(const mlx_texture_t *tex, const t_v2f uv, const t_v3f mod);
+
+t_v3f			display_normal(t_ray_hit *hit_info);
 
 #endif

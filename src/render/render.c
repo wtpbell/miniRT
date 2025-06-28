@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   render.c                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/27 12:21:16 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/28 22:16:22 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t)
 
 static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 {
+	hit_info->ray = ray;
 	hit_info->hit = v3f_add(ray->origin, v3f_scale(ray->direction, t));
 	hit_info->normal = obj->calc_norm(obj, hit_info->hit);
 	hit_info->distance = t;
@@ -56,8 +57,8 @@ static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 	if (!hit_info->front_face)
 		hit_info->normal = v3f_scale(hit_info->normal, -1.0f);
 
-	// TODO: What about scaling the texcoords here?
-	hit_info->texcoord = v2f_rotate(obj->r.get_texcoord(obj, hit_info->hit),
+	hit_info->texcoord = v2f_rotate(
+		v2f_mul_v3f(obj->r.get_texcoord(obj, hit_info->hit), obj->r.mat->texture.scale_rot),
 			obj->r.mat->texture.scale_rot.theta * DEGTORAD);
 
 	if (obj->r.mat && obj->r.mat->bump_map)
@@ -80,13 +81,14 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	if (hit == NULL)
 		return (g_v3f_zero);
 	init_hit_info(&hit_info, hit, ray, t);
-	hit_info.ray = ray;
 	if (hit->r.mat->type == MAT_LAMBERTIAN)
 		color = handle_lambertian(scene, &hit_info);
 	else if (hit->r.mat->type == MAT_DIELECTRIC)
 		color = handle_dielectric(scene, &hit_info, depth);
 	else if (hit->r.mat->type == MAT_METAL)
 		color = handle_metal(scene, &hit_info, depth);
+	else if (hit->r.mat->type == MAT_NORMAL)
+		color = display_normal(&hit_info);
 	else
 		color = (g_v3f_one);
 	return (color);

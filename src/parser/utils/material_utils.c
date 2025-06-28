@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   material_utils.c                                   :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/06 19:17:23 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/27 15:53:48 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/28 22:08:18 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,7 @@ t_mat_type	get_mat_type(const char *value)
 		return (MAT_METAL);
 	else if (ft_strcmp("dielectric", value) == 0)
 		return (MAT_DIELECTRIC);
+	else if (ft_strcmp("normal", value) == 0)
+		return (MAT_NORMAL);
 	return (MAT_UNKNOWN);
 }
