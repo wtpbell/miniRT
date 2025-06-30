@@ -21,11 +21,11 @@ PARSER_CORE	:= parser.c element_parser.c camera.c light.c sphere.c plane.c\
 				field.c material.c texture.c texture_utils.c
 SRCS_MAIN	:= main.c vector_init.c vector_helper.c vector_operation.c\
 				vec_container.c vec_container_utils.c color.c render.c\
-				rt_math.c matrix.c game.c rt_sphere.c rt_plane.c rt_cylinder.c \
+				rt_math.c range.c matrix.c game.c rt_sphere.c rt_plane.c rt_cylinder.c \
 				color_utils.c random_utils.c rt_light.c rt_dof.c \
 				quit.c rt_triangle.c rt_material.c material_init.c light_utils.c\
-				material_utils.c obj_utils.c procedural_texturing.c rt_cone.c \
-				bump_map.c rt_texture.c
+				material_utils.c obj_utils.c procedural_texturing.c rt_cone.c\
+				random_vector.c matrix_utils.c bump_map.c rt_texture.c
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE)
 OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)
@@ -38,7 +38,7 @@ debug: all
 
 val: C_FLAGS += -g3
 val: clean all
-	@valgrind --leak-check=full --track-origins=yes --suppressions=mlx42.supp ./$(NAME) $(ARG) 
+	@valgrind --leak-check=full --track-origins=yes --suppressions=mlx42.supp ./$(NAME) $(ARG)
 
 bonus: all
 

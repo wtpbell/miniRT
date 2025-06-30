@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   game.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/26 19:04:43 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   game.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
+/*   Updated: 2025/06/30 20:05:08 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 #define WIDTH	1600
 #define HEIGHT	900
 
-// TODO: Implementation needed ()
 void	obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up)
 {
 	t_v3f		x_axis;
@@ -65,7 +64,8 @@ void	view_matrix(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up)
 static bool	cam_init(t_cam *cam, mlx_t *mlx)
 {
 	cam->img_plane = mlx_new_image(mlx, mlx->width, mlx->height);
-	if (cam->img_plane == NULL || mlx_image_to_window(mlx, cam->img_plane, 0, 0) == -1)
+	if (cam->img_plane == NULL
+		|| mlx_image_to_window(mlx, cam->img_plane, 0, 0) == -1)
 		return (false);
 	cam->aspect_ratio = cam->img_plane->width / (float)cam->img_plane->height;
 	cam->bg_color = init_v3f(0.5f, 0.0f, 0.5f);
