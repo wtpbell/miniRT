@@ -67,10 +67,9 @@ t_v2f	sphere_texcoord(t_obj *obj, t_v3f world_point)
 	local_point = v3f_sub(world_point, obj->t.pos);
 	r = v3f_mag(local_point);
 	theta = atan2f(local_point.z, local_point.x);
+	theta = 1.0f - (theta / (2.0f * PI) + 0.5f);
 	phi = acosf(ft_clampf(local_point.y / r, -1.0f, 1.0f));
-	theta = theta / TAU;
-	theta = 1.0f - (theta + 0.5f);
-	phi = 1.0f - phi / PI;
+	phi = phi / PI;
 	return (init_v2f(theta, phi));
 }
 

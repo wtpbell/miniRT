@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   triangle.c                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 12:00:31 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 17:04:01 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/27 15:39:36 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

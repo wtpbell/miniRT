@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   rt_material.c                                      :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/02 11:16:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 17:46:01 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/27 19:56:52 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,14 @@ static t_v3f	blend_color(t_scene *sc, t_ray_hit *h,
 	fresnel = powf(fresnel, 0.5f);
 	reflect_dir = v3f_refl(ray.direction, h->normal);
 	if (h->obj->r.mat->diel.roughness > 0.0f)
-		reflect_dir = v3f_norm(v3f_add(reflect_dir, v3f_scale(random_in_hemisphere(h->normal),
-			h->obj->r.mat->diel.roughness)));
+		reflect_dir = v3f_norm(v3f_add(reflect_dir,
+			v3f_scale(random_in_hemisphere(h->normal), h->obj->r.mat->diel.roughness)));
 	reflect_color = v3f_mul(trace(&(t_ray){ray.origin, reflect_dir}, sc, depth - 1),
-		h->obj->r.mat->albedo);
+		h->hit_color);
 	refract_color = g_v3f_zero;
 	if (ior * sqrtf(1.0f - powf(v3f_dot(v3f_scale(ray.direction, -1.0f), h->normal), 2)) <= 1.0f)
-		refract_color = v3f_mul(trace(&(t_ray){ray.origin, v3f_refr(ray.direction, h->normal, 
-			get_refraction_ratio(h))}, sc, depth - 1), h->obj->r.mat->albedo);
+		refract_color = v3f_mul(trace(&(t_ray){ray.origin, v3f_refr(ray.direction, h->normal,
+			get_refraction_ratio(h))}, sc, depth - 1), h->hit_color);
 	return (v3f_lerp(refract_color, reflect_color, fresnel));
 }
 
@@ -99,7 +99,7 @@ t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 	reflected_dir = v3f_refl(v3f_norm(hit->ray->direction), hit->normal);
 	if (hit->obj->r.mat->metal.roughness > 0.0f)
 		reflected_dir = v3f_norm(v3f_add(reflected_dir,
-						v3f_scale(random_in_hemisphere(hit->normal), 
+						v3f_scale(random_in_hemisphere(hit->normal),
 						hit->obj->r.mat->metal.roughness)));
 	reflected_ray.origin = v3f_add(hit->hit, v3f_scale(hit->normal, 0.001f));
 	reflected_ray.direction = reflected_dir;

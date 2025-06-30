@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   rt_types.h                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/07 16:31:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/23 17:31:58 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/27 15:40:02 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_lighting		t_lighting;
 typedef enum e_material_type	t_mat_type;
 typedef struct s_material		t_mat;
 typedef struct s_texture		t_tex;
+typedef struct s_bump_context	t_bump;
 
 /* scene */
 typedef enum e_object_type		t_obj_type;

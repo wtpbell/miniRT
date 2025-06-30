@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   cylinder.c                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 17:03:42 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/27 15:39:22 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   rt_plane.c                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/19 10:33:19 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/17 21:41:47 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/27 21:00:46 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

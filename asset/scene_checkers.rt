@@ -1,6 +1,6 @@
-m_checker		type:lambertian	spc:1.0	shi:50.0			pat:checker	su:2	sv:2	rot:0	alt_col:0,0,0
-m_rot_checker	type:lambertian	spc:1.0	shi:50.0			pat:checker	su:2	sv:2	rot:45	alt_col:255,255,255
-m_sp_checker	type:lambertian	spc:1.0	shi:50.0			pat:checker	su:8	sv:12	rot:45	alt_col:214,232,19
+m_checker		type:lambertian	spc:1.0	shi:50.0	pat:checker	su:2	sv:2	rot:0	col:0,0,0
+m_rot_checker	type:lambertian	spc:1.0	shi:50.0	pat:checker	su:2	sv:2	rot:45	col:255,255,255
+m_sp_checker	type:lambertian	spc:1.0	shi:50.0	pat:checker	su:8	sv:12	rot:45	col:0,0,0
 m_metal			type:metal		mt_rough:0.0
 m_dielectric	type:dielectric	ir:1.55	tr:.8
 

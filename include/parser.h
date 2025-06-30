@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   parser.h                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/23 23:31:49 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/27 19:53:47 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include "MLX42/MLX42.h"
 # include "minirt.h"
 # include "scene.h"
 # include "container.h"
@@ -75,6 +76,7 @@ typedef enum e_error
 	ERR_UNKNOWN_MAT_TYPE,
 	ERR_UNKNOWN_FIELD,
 	ERR_REQ_FIELD,
+	ERR_LOAD_TEXTURE,
 	ERR_COUNT
 }	t_error;
 
@@ -126,6 +128,7 @@ t_parser	element_parser(char **tokens, t_scene *scene, const char *line);
 /* ---------------------Elements--------------------- */
 // camera.c
 bool		parse_camera(char **tokens, t_scene *scene);
+
 // light.c
 bool		parse_ambient_light(char **tokens, t_scene *scene);
 bool		parse_point_light(char **tokens, t_scene *scene);
@@ -133,19 +136,25 @@ bool		parse_spot_light(char **tokens, t_scene *scene);
 
 // material.c
 bool		parse_material(char **tokens, t_scene *scene);
+
 // texture.c
-void		init_texture_fields(t_field *tex_fields, t_tex *tex);
+void		init_texture_fields(t_field *fields, int *field_count, t_mat *mat);
+void		init_bump_fields(t_field *fields, int *field_count, t_mat *mat);
 
 /* ---------------------Objects--------------------- */
 // sphere.c
 bool		parse_diameter(float *out, const char *str);
 bool		parse_sphere(char **tokens, t_scene *scene);
+
 // plane.c
 bool		parse_plane(char **tokens, t_scene *scene);
+
 // cylinder.c
 bool		parse_cylinder(char **tokens, t_scene *scene);
+
 // cone.c
 bool		parse_cone(char **tokens, t_scene *scene);
+
 // triangle.c
 bool		parse_triangle(char **tokens, t_scene *scene);
 
@@ -153,6 +162,7 @@ bool		parse_triangle(char **tokens, t_scene *scene);
 // string_utils.c
 void		clean_spaces(char *str);
 bool		validate_commas(const char *str);
+bool		str_is_empty(const char *s);
 
 // vector_utils.c
 bool		parse_v3f(t_v3f *v3f, const char *str);
@@ -200,8 +210,14 @@ bool		parse_fields(t_field *fields, int count, char **tokens);
 // material_utils.c
 t_mat		*find_or_create_material(t_vector *materials, const char *m_name);
 int			is_valid_material_name(const char *m_name);
-bool		assign_material(t_obj *obj, t_vector *materials,
-				const char *m_name);
+bool		assign_material(t_obj *obj,
+				t_vector *materials, const char *m_name);
 t_mat_type	get_mat_type(const char *value);
+bool		load_bump_map(t_mat *mat, const char *bump_path);
+
+// texture_utils.c
+void		cleanup_texture(t_tex *tex);
+bool		load_texture(t_tex *tex, const char *path);
+void		assign_textures(t_mat *mat);
 
 #endif

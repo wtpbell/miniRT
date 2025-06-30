@@ -11,7 +11,15 @@
 /* ************************************************************************** */
 
 #include "debug/rt_debug.h"
+#include "material.h"
+#include <stdio.h>
+#include "parser.h"
+
+#ifndef RT_DEBUG
+# define RT_DEBUG 0  // Default to debug off if not defined
+#endif
 #include "minirt.h"
+#include "MLX42/MLX42.h"
 
 void	mat4x4_rot_print(t_mat4x4 m)
 {
@@ -167,7 +175,7 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 {
 	int			i;
 	t_mat		*mat;
-	t_tex	*tex;
+	t_tex		*tex;
 
 	i = 0;
 	printf("%*s%s <%i/%i>\n", spaces, "", prefix, materials.size, materials.capacity);
@@ -190,6 +198,21 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 		}
 		else
 			str_print("Unknown", spaces + 4, "type:");
+		
+		// Print bump map information
+		if (mat->bump_map)
+		{
+			str_print("Bump Map", spaces + 4, "");
+			if (mat->bump_path)
+				str_print(mat->bump_path, spaces + 6, "path:");
+			printf("%*sdimensions: %dx%d\n", spaces + 6, "", 
+				mat->bump_map->width, mat->bump_map->height);
+			printf("%*sscale: %.2f\n", spaces + 6, "", mat->bump_scale);
+		}
+		else if (mat->bump_path)
+		{
+			printf("%*sBump Map (failed to load): %s\n", spaces + 4, "", mat->bump_path);
+		}
 		col32_print(mat->albedo, spaces + 4, "albedo");
 
 		tex = &mat->texture;
@@ -197,6 +220,8 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 			str_print("SOLID", spaces + 4, "texture type:");
 		else if (tex->type == TEX_CHECKER)
 			str_print("CHECKER", spaces + 4, "texture type:");
+		else if (tex->type == TEX_IMAGE)
+			str_print("IMAGE", spaces + 4, "texture type:");
 		else
 			str_print("UNKNOWN", spaces + 4, "texture type:");
 		col32_print(tex->col, spaces + 4, "alt col");
@@ -226,18 +251,110 @@ void	print_camera_setup(t_cam *cam)
 
 void	scene_print(t_scene *scene)
 {
-	int	spaces = 0;
-
-	printf("===SCENE===\n");
-	print_camera_setup(&scene->camera);
-	camera_print(&scene->camera, spaces + 2);
-	objects_print(scene->objects, spaces + 2, "OBJECTS");
-	materials_print(scene->shared_materials, spaces + 2, "MATERIALS");
-	printf("===END SCENE===\n");
+	if (!scene)
+		return ;
+	objects_print(scene->objects, 0, "OBJECTS");
+	if (scene->shared_materials.size > 0)
+		materials_print(scene->shared_materials, 0, "MATERIALS");
+	camera_print(&scene->camera, 0);
+	printf("=========================\n");
 }
 
-void debug_scene_setup(t_scene *scene) {
-	printf("\n=== SCENE SETUP DEBUG ===\n");
+void	debug_bump_uv(const char *stage, t_v2f uv, float u_scale, float v_scale, float theta)
+{
+	if (!RT_DEBUG)
+		return;
+	printf("Bump %s: UV=(%.6f,%.6f)", stage, uv.u, uv.v);
+	if (u_scale != 1.0f || v_scale != 1.0f || theta != 0.0f) {
+		printf(", Scale=(%.2f,%.2f)", u_scale, v_scale);
+		if (theta != 0.0f)
+			printf(", Rot=%.1f°", theta);
+	}
+	printf("\n");
+}
+
+void	debug_bump_sample(mlx_texture_t *bump_map, t_v2f uv, int sample_idx)
+{
+	if (!RT_DEBUG || sample_idx >= 5)
+		return;
+	
+	t_col32 tx = (t_col32)(uv.u * (bump_map->width - 1));
+	t_col32 ty = (t_col32)(uv.v * (bump_map->height - 1));
+	t_col32 idx = (ty * bump_map->width + tx) * bump_map->bytes_per_pixel;
+	
+	printf("Bump Sample #%d: UV(%.3f,%.3f) -> Texel(%d,%d) -> ", 
+		sample_idx + 1, uv.u, uv.v, tx, ty);
+	
+	if (bump_map->bytes_per_pixel >= 3) {
+		printf("RGB(%d,%d,%d)", 
+			bump_map->pixels[idx],
+			bump_map->pixels[idx + 1],
+			bump_map->pixels[idx + 2]);
+	} else {
+		printf("Gray(%d)", bump_map->pixels[idx]);
+	}
+	printf("\n");
+}
+
+void	debug_bump_normal(t_v3f old_normal, t_v3f new_normal)
+{
+	if (!RT_DEBUG)
+		return;
+	printf("Bump normal: (%.3f,%.3f,%.3f) -> (%.3f,%.3f,%.3f)\n",
+		old_normal.x, old_normal.y, old_normal.z,
+		new_normal.x, new_normal.y, new_normal.z);
+}
+
+void	debug_bump_texture_info(mlx_texture_t *bump_map, float delta)
+{
+	if (!RT_DEBUG)
+		return;
+	printf("Bump map: Texture size: %dx%d, BPP: %d, Delta: %f\n",
+		bump_map->width, bump_map->height, bump_map->bytes_per_pixel, delta);
+}
+
+void	debug_cleanup_start(void)
+{
+	printf("[DEBUG] Cleaning up scene resources\n");
+}
+
+void	debug_cleanup_directory(const char *dir_path)
+{
+	printf("[DEBUG] Freeing scene directory: %s\n", dir_path);
+}
+
+void	debug_cleanup_objects(int count)
+{
+	printf("[DEBUG] Freeing %d objects\n", count);
+}
+
+void	debug_cleanup_lights(int count)
+{
+	printf("[DEBUG] Freeing %d lights\n", count);
+}
+
+void	debug_cleanup_materials(int count)
+{
+	printf("[DEBUG] Freeing %d materials\n", count);
+}
+
+void	debug_cleanup_material(const char *name)
+{
+	printf("[DEBUG] Freeing material: %s\n", name ? name : "unnamed");
+}
+
+void	debug_cleanup_texture(void *addr)
+{
+	printf("[DEBUG] Freeing texture at %p\n", addr);
+}
+
+void	debug_cleanup_complete(void)
+{
+	printf("[DEBUG] Scene cleanup complete\n");
+}
+
+void	debug_scene_setup(t_scene *scene) {
+	// Scene setup debug information
 	printf("Camera position: (%.2f, %.2f, %.2f)\n",
 			scene->camera.t.pos.x, scene->camera.t.pos.y, scene->camera.t.pos.z);
 	printf("Camera direction: (%.2f, %.2f, %.2f)\n",

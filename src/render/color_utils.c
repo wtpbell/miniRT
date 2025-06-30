@@ -13,6 +13,7 @@
 #include "color.h"
 #include "vector.h"
 #include "rt_math.h"
+#include "ray.h"
 
 t_v3f	col32_to_v3f(t_col32 color)
 {
@@ -57,8 +58,28 @@ t_v3f	v3f_apply_gamma(t_v3f color, float gamma)
 
 	inv_gamma = 1.0f / gamma;
 	return ((t_v3f){{
-			.x = fminf(powf(color.x, inv_gamma), 1.0f),
-			.y = fminf(powf(color.y, inv_gamma), 1.0f),
-			.z = fminf(powf(color.z, inv_gamma), 1.0f)
+			.x = ft_clampf(powf(color.x, inv_gamma), 0.0f, 1.0f),
+			.y = ft_clampf(powf(color.y, inv_gamma), 0.0f, 1.0f),
+			.z = ft_clampf(powf(color.z, inv_gamma), 0.0f, 1.0f)
 		}});
+}
+
+/**
+ * Ignore all lighting/shading and purely display the resulting surface normal
+ * as a grayscaled color
+ */
+t_v3f	display_normal(t_ray_hit *hit_info)
+{
+	const float	contrast = 2.0f;
+	const t_v3f	lumi = init_v3f(.21f, .72f, .07f);
+	t_v3f		n;
+	float		grey;
+
+	n = v3f_scale(v3f_add(hit_info->normal, g_v3f_one), 0.5f);
+	n.x = (n.x - 0.5f) * contrast + 0.5f;
+	n.y = (n.y - 0.5f) * contrast + 0.5f;
+	n.z = (n.z - 0.5f) * contrast + 0.5f;
+	n = v3f_clampf01(n);
+	grey = v3f_dot(n, lumi);
+	return (init_v3f(grey, grey, grey));
 }

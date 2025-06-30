@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   camera.c                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/23 23:34:27 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   camera.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/14 12:05:02 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/26 16:59:28 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,15 @@ static bool	parse_fov(float *fov, const char *str)
 
 static bool	parse_camera_fields(t_cam *cam, char **tokens)
 {
-	t_field		fields[2];
+	const t_field	fields[] = {
+	{"ap", &cam->aperture, FIELD_FLT,
+		(t_v2f){.x = 0.0f, .y = FLT_MAX}, FILLED, {0}},
+	{"fc", &cam->focus_dist, FIELD_FLT,
+		(t_v2f){.x = 0.1f, .y = FLT_MAX}, FILLED, {0}},
+	{NULL, NULL, 0, g_v2f_zero, 0, {0}}
+	};
 
-	fields[0] = init_field("ap", &cam->aperture, FIELD_FLT,
-			(t_v2f){.x = 0.0f, .y = FLT_MAX});
-	fields[1] = init_field("fc", &cam->focus_dist, FIELD_FLT,
-			(t_v2f){.x = 0.1f, .y = FLT_MAX});
-	return (parse_fields(fields, 2, tokens + CAMERA_MIN_TOKENS));
+	return (parse_fields((t_field *)fields, 2, tokens + CAMERA_MIN_TOKENS));
 }
 
 static void	camera_init(t_cam *cam, t_v3f pos, t_v3f dir, float fov)

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/26 14:20:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/28 22:16:22 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t)
 
 static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 {
+	hit_info->ray = ray;
 	hit_info->hit = v3f_add(ray->origin, v3f_scale(ray->direction, t));
 	hit_info->normal = obj->calc_norm(obj, hit_info->hit);
 	hit_info->distance = t;
@@ -55,8 +56,14 @@ static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 	hit_info->obj = obj;
 	if (!hit_info->front_face)
 		hit_info->normal = v3f_scale(hit_info->normal, -1.0f);
-	hit_info->texcoord = v2f_rotate(obj->r.get_texcoord(obj, hit_info->hit),
-		obj->r.mat->texture.scale_rot.theta * DEGTORAD);
+
+	hit_info->texcoord = v2f_rotate(
+		v2f_mul_v3f(obj->r.get_texcoord(obj, hit_info->hit), obj->r.mat->texture.scale_rot),
+			obj->r.mat->texture.scale_rot.theta * DEGTORAD);
+
+	if (obj->r.mat && obj->r.mat->bump_map)
+		hit_info->normal = perturb_normal(obj->r.mat, hit_info->texcoord, hit_info->normal);
+
 	hit_info->hit_color = obj->r.mat->get_texcol(&hit_info->texcoord,
 			&obj->r.mat->texture, v3f_mul(obj->r.color, obj->r.mat->albedo));
 }
@@ -74,13 +81,14 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	if (hit == NULL)
 		return (g_v3f_zero);
 	init_hit_info(&hit_info, hit, ray, t);
-	hit_info.ray = ray;
 	if (hit->r.mat->type == MAT_LAMBERTIAN)
 		color = handle_lambertian(scene, &hit_info);
 	else if (hit->r.mat->type == MAT_DIELECTRIC)
 		color = handle_dielectric(scene, &hit_info, depth);
 	else if (hit->r.mat->type == MAT_METAL)
 		color = handle_metal(scene, &hit_info, depth);
+	else if (hit->r.mat->type == MAT_NORMAL)
+		color = display_normal(&hit_info);
 	else
 		color = (g_v3f_one);
 	return (color);
@@ -103,8 +111,8 @@ static t_v3f	sample_pixel(t_scene *scene, float x, float y)
 	while (i < SAMPLES_PER_PIXEL)
 	{
 		seed_rand(get_rngstate(x, y, i));
-		jitter_x = frandom_norm_distribution() - 0.5f;  // -0.5 to 0.5
-		jitter_y = frandom_norm_distribution() - 0.5f;  // -0.5 to 0.5
+		jitter_x = frandom_norm_distribution() - 0.5f;
+		jitter_y = frandom_norm_distribution() - 0.5f;
 		u = (x + 0.5f + jitter_x) / (float)(scene->camera.img_plane->width - 1);
 		v = 1.0f - (y + 0.5f + jitter_y) / (float)(scene->camera.img_plane->height - 1);
 		ray = get_ray_with_dof(&scene->camera, u, v);
@@ -123,7 +131,6 @@ void	render(t_scene *scene)
 
 	img = scene->camera.img_plane;
 	update_camera_view(&scene->camera);
-
 	y = 0;
 	while (y < img->height)
 	{

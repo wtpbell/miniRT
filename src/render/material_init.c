@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   material_init.c                                    :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/31 23:53:11 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 17:06:38 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/27 11:52:18 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 #define DFLT_MAT_COUNT 3
 
-t_mat	*init_material(t_mat_type type, const char *name)
+static t_mat	*create_base_material(const char *name)
 {
 	t_mat	*mat;
 
@@ -24,10 +24,35 @@ t_mat	*init_material(t_mat_type type, const char *name)
 	if (!mat)
 		return (NULL);
 	mat->name = ft_strdup(name);
-	if (mat->name == NULL)
+	if (!mat->name)
 		return (free(mat), NULL);
-	mat->type = type;
 	mat->albedo = g_v3f_one;
+	mat->tex_path = NULL;
+	mat->bump_path = NULL;
+	mat->bump_map = NULL;
+	mat->bump_scale = 1.0f;
+	mat->debug_bump = false;
+	return (mat);
+}
+
+static void	init_texture(t_mat *mat)
+{
+	mat->texture.type = TEX_SOLID;
+	mat->texture.scale_rot = init_v3f(1.0f, 1.0f, 0.0f);
+	mat->texture.col = g_v3f_one;
+	mat->texture.tex = NULL;
+	mat->get_texcol = solid_pattern;
+}
+
+t_mat	*init_material(t_mat_type type, const char *name)
+{
+	t_mat	*mat;
+
+	mat = create_base_material(name);
+	if (!mat)
+		return (NULL);
+	mat->type = type;
+	init_texture(mat);
 	if (type == MAT_LAMBERTIAN)
 	{
 		mat->lamb.specular = 0.1f;
@@ -42,8 +67,6 @@ t_mat	*init_material(t_mat_type type, const char *name)
 		mat->diel.transmittance = 1.0f;
 		mat->diel.roughness = 0.0f;
 	}
-	mat->texture = (t_tex){TEX_SOLID, init_v3f(1.0f, 1.0f, 0.0f), g_v3f_one};
-	mat->get_texcol = solid_pattern;
 	return (mat);
 }
 

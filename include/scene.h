@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   scene.h                                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/23 14:45:02 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/27 15:38:56 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,6 @@ struct s_scene
 	t_vector	shared_materials;
 	t_cam		camera;
 	int			scene_flags;
-	uint32_t	frame_num;
 };
 
 #endif

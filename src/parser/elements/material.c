@@ -3,19 +3,25 @@
 /*                                                        ::::::::            */
 /*   material.c                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 18:00:12 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/27 19:53:57 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "rt_math.h"
+#include "scene.h"
+#include "material.h"
+#include "libft.h"
 
 static void	set_texture_pattern(t_mat *mat)
 {
 	if (mat->texture.type == TEX_CHECKER)
 		mat->get_texcol = checker_pattern;
+	else if (mat->texture.type == TEX_IMAGE)
+		mat->get_texcol = image_pattern;
 	else
 		mat->get_texcol = solid_pattern;
 }
@@ -25,17 +31,21 @@ static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
 	const t_v2f	lim01 = init_v2f(0.0f, 1.0f);
 	const t_v2f	lim_shi = init_v2f(0.0f, 5000.0f);
 	const t_v2f	lim_ir = init_v2f(0.0f, 100.0f);
-	t_field		fields[13];
+	int			count;
+	t_field		fields[20];
 
+	count = 0;
 	mat->type = type;
-	fields[0] = init_field("spc", &mat->lamb.specular, FIELD_FLT, lim01);
-	fields[1] = init_field("shi", &mat->lamb.shininess, FIELD_FLT, lim_shi);
-	fields[2] = init_field("l_rough", &mat->lamb.roughness, FIELD_FLT, lim01);
-	fields[3] = init_field("mt_rough", &mat->metal.roughness, FIELD_FLT, lim01);
-	fields[4] = init_field("ir", &mat->diel.ir, FIELD_FLT, lim_ir);
-	fields[5] = init_field("tr", &mat->diel.transmittance, FIELD_FLT, lim01);
-	fields[6] = init_field("d_rough", &mat->diel.roughness, FIELD_FLT, lim01);
-	fields[7] = init_field("alb", &mat->albedo, FIELD_COL, lim01);
+	fields[count++] = init_field("spc", &mat->lamb.specular, FIELD_FLT, lim01);
+	fields[count++] = init_field("shi", &mat->lamb.shininess, FIELD_FLT, lim_shi);
+	fields[count++] = init_field("l_rough", &mat->lamb.roughness, FIELD_FLT, lim01);
+	fields[count++] = init_field("mt_rough", &mat->metal.roughness, FIELD_FLT, lim01);
+	fields[count++] = init_field("ir", &mat->diel.ir, FIELD_FLT, lim_ir);
+	fields[count++] = init_field("tr", &mat->diel.transmittance, FIELD_FLT, lim01);
+	fields[count++] = init_field("d_rough", &mat->diel.roughness, FIELD_FLT, lim01);
+	fields[count++] = init_field("alb", &mat->albedo, FIELD_COL, lim01);
+	init_bump_fields(fields, &count, mat);
+	fields[count++] = init_field("bump_scale", &mat->bump_scale, FIELD_FLT, init_v2f(0.0f, 100.0f));
 	fields[0].state |= (HIDDEN * (type != MAT_LAMBERTIAN));
 	fields[1].state |= (HIDDEN * (type != MAT_LAMBERTIAN));
 	fields[2].state |= (HIDDEN * (type != MAT_LAMBERTIAN));
@@ -44,8 +54,10 @@ static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
 	fields[5].state |= (HIDDEN * (type != MAT_DIELECTRIC));
 	fields[6].state |= (HIDDEN * (type != MAT_DIELECTRIC));
 	fields[7].state = FILLED;
-	init_texture_fields(fields + 8, &mat->texture);
-	return (parse_fields(fields, 13, tokens));
+	init_texture_fields(fields, &count, mat);
+	if (!parse_fields(fields, count, tokens))
+		return (false);
+	return (true);
 }
 
 bool	parse_material(char **tokens, t_scene *scene)
@@ -61,15 +73,13 @@ bool	parse_material(char **tokens, t_scene *scene)
 		return (print_error(ERR_REQ_FIELD, "material", "type:<value>"), false);
 	mat_type = get_mat_type(str_type);
 	if (mat_type == MAT_UNKNOWN)
-	{
-		print_error(ERR_UNKNOWN_MAT_TYPE, "material", tokens[1]);
-		return (false);
-	}
+		return (print_error(ERR_UNKNOWN_MAT_TYPE, "material", tokens[1]), false);
 	mat = find_or_create_material(&scene->shared_materials, tokens[0]);
 	if (mat == NULL)
 		return (print_error(ERR_MEM, "material", NULL), false);
 	if (!parse_type_material(mat, mat_type, tokens + 2))
 		return (false);
+	assign_textures(mat);
 	set_texture_pattern(mat);
 	return (true);
 }

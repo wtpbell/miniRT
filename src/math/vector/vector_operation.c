@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:38:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 17:01:16 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/30 09:40:56 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_v3f	v3f_refr(t_v3f uv, t_v3f n, float etai_over_etat)
 	t_v3f	r_out_perp;
 	t_v3f	r_out_parallel;
 
-	cos_theta = fminf(v3f_dot(v3f_scale(uv, -1.0f), n), 1.0f);
+	cos_theta = ft_clampf(v3f_dot(v3f_scale(uv, -1.0f), n), -1.0f, 1.0f);
 	r_out_perp = v3f_scale(v3f_add(uv, v3f_scale(n, cos_theta)),
 			etai_over_etat);
 	r_out_parallel = v3f_scale(n, -sqrtf(fabsf(
@@ -114,4 +114,9 @@ t_v3f	v3f_sub_v2f(t_v3f a, t_v2f b)
 t_v3f	v3f_mul_v2f(t_v3f a, t_v2f b)
 {
 	return (init_v3f(a.x * b.x, a.y * b.y, a.z));
+}
+
+t_v2f	v2f_mul_v3f(t_v2f a, t_v3f b)
+{
+	return (init_v2f(a.x * b.x, a.y * b.y));
 }

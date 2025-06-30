@@ -4,11 +4,11 @@
 # su = amount of tiles on the horizontal axis
 # sv = amount of tiles on the vertical axis
 
-m_checker		type:lambertian	spc:1.0	shi:50.0	pat:checker	su:2	sv:0	rot:-45	alt_col:0,0,0
-m_sp_checker	type:lambertian	spc:.4 shi:200.0	pat:checker	su:20	sv:10			alt_col:185,0,0
-m_cy_checker	type:lambertian	spc:1.0	shi:50.0	pat:checker	su:32	sv:16			alt_col:0,0,0
-m_tri_checker	type:lambertian spc:1.0 shi:500.0	pat:checker	su:4	sv:4	rot:65	alt_col:255,255,255
-m_tri_checker2	type:lambertian spc:1.0	shi:200.0	pat:checker	su:10	sv:10			alt_col:0,0,255
+m_checker		type:lambertian	spc:1.0	shi:50.0	pat:checker	su:2	sv:0	rot:45	col:0,0,0
+m_sp_checker	type:lambertian	spc:.4 shi:200.0	pat:checker	su:20	sv:10			col:185,0,0
+m_cy_checker	type:lambertian	spc:1.0	shi:50.0	pat:checker	su:32	sv:16			col:0,0,0
+m_tri_checker	type:lambertian spc:1.0 shi:500.0	pat:checker	su:4	sv:4	rot:65	col:255,255,255
+m_tri_checker2	type:lambertian spc:1.0	shi:200.0	pat:checker	su:10	sv:10			col:0,0,255
 
 
 # Camera position and settings
