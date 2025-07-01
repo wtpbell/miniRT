@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/30 19:28:01 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/30 19:50:20 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/01 18:52:57 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ float	ft_clampf(float value, float min, float max)
 	return (value);
 }
 
-extern inline float	ft_clampf01(float val)
+float	ft_clampf01(float val)
 {
 	return (ft_clampf(val, 0.0f, 1.0f));
 }

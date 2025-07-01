@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/27 12:24:16 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/01 18:53:15 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ bool	validate_commas(const char *str)
 	return (true);
 }
 
-inline bool	str_is_empty(const char *s)
+bool	str_is_empty(const char *s)
 {
 	return (s == NULL || *s == '\0');
 }

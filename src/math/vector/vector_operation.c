@@ -6,14 +6,14 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:38:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/30 20:13:41 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/01 18:52:04 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt_math.h"
 #include "vector.h"
 
-inline t_v3f	v3f_add(t_v3f a, t_v3f b)
+t_v3f	v3f_add(t_v3f a, t_v3f b)
 {
 	return ((t_v3f){
 		.x = a.x + b.x,
@@ -22,7 +22,7 @@ inline t_v3f	v3f_add(t_v3f a, t_v3f b)
 	});
 }
 
-inline t_v3f	v3f_sub(t_v3f a, t_v3f b)
+t_v3f	v3f_sub(t_v3f a, t_v3f b)
 {
 	return ((t_v3f){
 		.x = a.x - b.x,
@@ -31,7 +31,7 @@ inline t_v3f	v3f_sub(t_v3f a, t_v3f b)
 	});
 }
 
-inline t_v3f	v3f_scale(t_v3f v, float f)
+t_v3f	v3f_scale(t_v3f v, float f)
 {
 	return ((t_v3f){
 		.x = v.x * f,
@@ -93,7 +93,7 @@ t_v3f	v3f_lerp(t_v3f a, t_v3f b, float t)
 	});
 }
 
-inline t_v3f	v3f_clamp(t_v3f v, float min, float max)
+t_v3f	v3f_clamp(t_v3f v, float min, float max)
 {
 	return ((t_v3f){{
 			.x = ft_clampf(v.x, min, max),
@@ -102,7 +102,7 @@ inline t_v3f	v3f_clamp(t_v3f v, float min, float max)
 		}});
 }
 
-inline t_v3f	v3f_clampf01(t_v3f v)
+t_v3f	v3f_clampf01(t_v3f v)
 {
 	return (v3f_clamp(v, 0.0f, 1.0f));
 }

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:41:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/09 09:21:53 by bewong        ########   odam.nl         */
+/*   Updated: 2025/07/01 18:52:52 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
  * -1 means the vectors are going in opposing directions.
  *  1 means that both vectors are aligned in the same direction.
  */
-inline float	v3f_dot(t_v3f a, t_v3f b)
+float	v3f_dot(t_v3f a, t_v3f b)
 {
 	return (a.x * b.x + a.y * b.y + a.z * b.z);
 }
@@ -30,7 +30,7 @@ inline float	v3f_dot(t_v3f a, t_v3f b)
  *  Az   Bz    Ax     Bx    a.x * b.y - a.y * b.x
  *             Ay     By
  */
-inline t_v3f	v3f_cross(t_v3f a, t_v3f b)
+t_v3f	v3f_cross(t_v3f a, t_v3f b)
 {
 	return ((t_v3f){
 		.x = a.y * b.z - a.z * b.y,
@@ -39,12 +39,12 @@ inline t_v3f	v3f_cross(t_v3f a, t_v3f b)
 	});
 }
 
-inline float	v3f_sqr_mag(t_v3f v)
+float	v3f_sqr_mag(t_v3f v)
 {
 	return (v3f_dot(v, v));
 }
 
-inline float	v3f_mag(t_v3f v)
+float	v3f_mag(t_v3f v)
 {
 	return (sqrtf(v3f_sqr_mag(v)));
 }
