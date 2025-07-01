@@ -1,64 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   vector_operation.c                                 :+:    :+:            */
+/*   vector_operations.c                                :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/05/08 19:38:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/01 18:52:04 by jboon         ########   odam.nl         */
+/*   Created: 2025/07/01 18:58:07 by jboon         #+#    #+#                 */
+/*   Updated: 2025/07/01 19:06:00 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt_math.h"
 #include "vector.h"
-
-t_v3f	v3f_add(t_v3f a, t_v3f b)
-{
-	return ((t_v3f){
-		.x = a.x + b.x,
-		.y = a.y + b.y,
-		.z = a.z + b.z
-	});
-}
-
-t_v3f	v3f_sub(t_v3f a, t_v3f b)
-{
-	return ((t_v3f){
-		.x = a.x - b.x,
-		.y = a.y - b.y,
-		.z = a.z - b.z
-	});
-}
-
-t_v3f	v3f_scale(t_v3f v, float f)
-{
-	return ((t_v3f){
-		.x = v.x * f,
-		.y = v.y * f,
-		.z = v.z * f
-	});
-}
-
-t_v3f	v3f_mul(t_v3f a, t_v3f b)
-{
-	return ((t_v3f){
-		.x = a.x * b.x,
-		.y = a.y * b.y,
-		.z = a.z * b.z
-	});
-}
-
-bool	v3f_equals(t_v3f a, t_v3f b, float epsilon)
-{
-	return (fabsf(a.x - b.x) < epsilon
-		&& fabsf(a.y - b.y) < epsilon
-		&& fabsf(a.z - b.z) < epsilon);
-}
-
-
-
-
 
 // Reflection formula: r = d - 2*(d·n)*n
 t_v3f	v3f_refl(t_v3f d, t_v3f n)
@@ -80,10 +33,6 @@ t_v3f	v3f_refr(t_v3f uv, t_v3f n, float etai_over_etat)
 	return (v3f_add(r_out_perp, r_out_parallel));
 }
 
-
-
-
-
 t_v3f	v3f_lerp(t_v3f a, t_v3f b, float t)
 {
 	return ((t_v3f){
@@ -92,22 +41,6 @@ t_v3f	v3f_lerp(t_v3f a, t_v3f b, float t)
 		.z = a.z + (b.z - a.z) * t
 	});
 }
-
-t_v3f	v3f_clamp(t_v3f v, float min, float max)
-{
-	return ((t_v3f){{
-			.x = ft_clampf(v.x, min, max),
-			.y = ft_clampf(v.y, min, max),
-			.z = ft_clampf(v.z, min, max)
-		}});
-}
-
-t_v3f	v3f_clampf01(t_v3f v)
-{
-	return (v3f_clamp(v, 0.0f, 1.0f));
-}
-
-
 
 t_v3f	v3f_sub_v2f(t_v3f a, t_v2f b)
 {
