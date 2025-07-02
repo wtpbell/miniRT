@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/01 19:48:24 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/02 18:25:29 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 	hit_info->texcoord = v2f_rotate(hit_info->texcoord,
 			obj->r.mat->texture.scale_rot.theta * DEGTORAD);
 	if (obj->r.mat && obj->r.mat->bump_map)
-		hit_info->normal = perturb_normal(obj->r.mat, hit_info->texcoord, hit_info->normal);
+		hit_info->normal = perturb_normal(obj->r.mat, hit_info->texcoord,
+				hit_info->normal);
 	hit_info->hit_color = obj->r.mat->get_texcol(&hit_info->texcoord,
 			&obj->r.mat->texture, v3f_mul(obj->r.color, obj->r.mat->albedo));
 }
@@ -91,28 +92,26 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	return (color);
 }
 
-//u = x / (width - 1)
-// v = 1 - y / (height - 1)
 static t_v3f	sample_pixel(t_scene *scene, float x, float y)
 {
 	t_v3f	color;
 	t_ray	ray;
-	float	u;
-	float	v;
+	t_v2f	uv;
+	t_v2f	jitter;
 	int		i;
-	float	jitter_x;
-	float	jitter_y;
 
 	color = g_v3f_zero;
 	i = 0;
 	while (i < SAMPLES_PER_PIXEL)
 	{
 		seed_rand(get_rngstate(x, y, i));
-		jitter_x = frandom_norm_distribution() - 0.5f;
-		jitter_y = frandom_norm_distribution() - 0.5f;
-		u = (x + 0.5f + jitter_x) / (float)(scene->camera.img_plane->width - 1);
-		v = 1.0f - (y + 0.5f + jitter_y) / (float)(scene->camera.img_plane->height - 1);
-		ray = get_ray_with_dof(&scene->camera, u, v);
+		jitter.x = frandom_norm_distribution() - 0.5f;
+		jitter.y = frandom_norm_distribution() - 0.5f;
+		uv.u = (x + 0.5f + jitter.x)
+			/ (float)(scene->camera.img_plane->width - 1);
+		uv.v = 1.0f - (y + 0.5f + jitter.y)
+			/ (float)(scene->camera.img_plane->height - 1);
+		ray = get_ray_with_dof(&scene->camera, uv.u, uv.v);
 		color = v3f_add(color, trace(&ray, scene, MAX_DEPTH));
 		++i;
 	}
