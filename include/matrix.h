@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 08:51:07 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/30 19:21:52 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/02 18:15:46 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,7 @@ void	mul_mat4x4(t_mat4x4 dst, t_mat4x4 a, t_mat4x4 b);
 void	transpose_mat4x4(t_mat4x4 mat);
 void	invert_m4x4(t_mat4x4 dst, const t_mat4x4 src);
 void	rotate_m4x4(t_mat4x4 mat, t_v3f x, t_v3f y, t_v3f z);
+void	view_matrix(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up);
+void	obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up);
 
 #endif
