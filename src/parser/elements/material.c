@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   material.c                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/02 18:10:25 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/02 22:35:13 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	init_material_fields(t_field *fields, int *field_count, t_mat *mat)
 		init_field("tr", &mat->diel.transmittance, FIELD_FLT, lim01),
 		init_field("d_rough", &mat->diel.roughness, FIELD_FLT, lim01),
 		init_field("alb", &mat->albedo, FIELD_COL, lim01),
-		init_field(NULL, NULL, 0, (t_v2f){0})
+		init_field(NULL, NULL, 0, (t_v2f){{0}})
 	};
 	int				i;
 
