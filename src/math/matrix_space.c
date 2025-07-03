@@ -6,12 +6,39 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/02 18:15:06 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/02 18:15:28 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/03 10:35:34 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vector.h"
 #include "matrix.h"
+
+static void	mul_col_mat4x4(t_mat4x4 dst, t_mat4x4 a, t_mat4x4 b)
+{
+	int		r;
+	int		c;
+	int		k;
+	float	sum;
+
+	c = 0;
+	while (c < 4)
+	{
+		r = 0;
+		while (r < 4)
+		{
+			sum = 0.0f;
+			k = 0;
+			while (k < 4)
+			{
+				sum += a[(k << 2) + r] * b[(c << 2) + k];
+				++k;
+			}
+			dst[(c << 2) + r] = sum;
+			++r;
+		}
+		++c;
+	}
+}
 
 void	obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up)
 {
@@ -29,7 +56,7 @@ void	obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up)
 	id_m4x4(trans);
 	rotate_m4x4(rot, x_axis, y_axis, z_axis);
 	trans_m4x4(trans, pos);
-	mul_mat4x4(dst, trans, rot);
+	mul_col_mat4x4(dst, trans, rot);
 }
 
 void	view_matrix(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up)
