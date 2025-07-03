@@ -6,17 +6,29 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/13 13:40:09 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 16:06:18 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/01 18:52:41 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt_math.h"
 
-float	ft_maxf(float a, float b)
+int	fapprox(float n)
 {
-	if (a > b)
-		return (a);
-	return (b);
+	return (fabsf(n) > FLT_SML);
+}
+
+float	schlick(float cosin, float ref_idx)
+{
+	float	r0;
+
+	r0 = (1 - ref_idx) / (1 + ref_idx);
+	r0 = r0 * r0;
+	return (r0 + (1 - r0) * powf(1 - cosin, 5));
+}
+
+float	modulo(float x)
+{
+	return (x - floorf(x));
 }
 
 float	ft_signf(float a)
@@ -33,37 +45,4 @@ void	ft_swapf(float *a, float *b)
 	tmp = *a;
 	*a = *b;
 	*b = tmp;
-}
-
-inline int	fapprox(float n)
-{
-	return (fabsf(n) > FLT_SML);
-}
-
-float	ft_clampf(float value, float min, float max)
-{
-	if (value < min)
-		return (min);
-	if (value > max)
-		return (max);
-	return (value);
-}
-
-inline float	ft_clampf01(float val)
-{
-	return (ft_clampf(val, 0.0f, 1.0f));
-}
-
-float	schlick(float cosin, float ref_idx)
-{
-	float	r0;
-
-	r0 = (1 - ref_idx) / (1 + ref_idx);
-	r0 = r0 * r0;
-	return (r0 + (1 - r0) * powf(1 - cosin, 5));
-}
-
-inline float	modulo(float x)
-{
-	return (x - floorf(x));
 }

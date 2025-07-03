@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/10 15:24:11 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   error.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/07/02 18:08:00 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static const char *const	g_err_msg[ERR_COUNT] = {
 [ERR_MISSING_COMPONENT] = "Component is missing",
 [ERR_FORMAT] = "Repeated comma between numbers",
 [ERR_INV_MAT_NAME] = "Invalid material name (must be ^m_[a-zA-Z0-9]+$)",
-[ERR_UNKNOWN_MAT_TYPE] = "Unknown material type",
+[ERR_UNKNOWN_MAT] = "Unknown material type",
 [ERR_UNKNOWN_FIELD] = "Unknown field (<field>:<value>)",
 [ERR_REQ_FIELD] = "Required field is missing",
 [ERR_LOAD_TEXTURE] = "Failed to load texture"

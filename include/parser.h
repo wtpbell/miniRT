@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/27 19:53:47 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/02 18:08:00 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ typedef enum e_error
 	ERR_MISSING_COMPONENT,
 	ERR_FORMAT,
 	ERR_INV_MAT_NAME,
-	ERR_UNKNOWN_MAT_TYPE,
+	ERR_UNKNOWN_MAT,
 	ERR_UNKNOWN_FIELD,
 	ERR_REQ_FIELD,
 	ERR_LOAD_TEXTURE,

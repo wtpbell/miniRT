@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/28 22:04:15 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/02 19:05:35 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ typedef struct s_bump_context
 	t_v3f		t;			// Tangent
 	t_v3f		b;			// Bitangent
 	t_v3f		heights[3];	// Height samples (center, u+delta, v+delta)
-	t_v3f		p;		// Perturbed normal
+	t_v3f		p;			// Perturbed normal
 	float		delta;		// Delta for sampling
-	const t_mat	*mat;	// Material (contains bump_scale)
+	const t_mat	*mat;		// Material (contains bump_scale)
 }	t_bump;
 
 struct s_material
@@ -84,28 +84,25 @@ struct s_material
 	}				diel;
 };
 
-t_mat			*init_material(t_mat_type type, const char *name);
-bool			create_default_materials(t_vector *shared_materials);
-bool			assign_material(t_obj *obj,
-					t_vector *materials, const char *m_name);
-t_v3f			handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth);
-t_v3f			handle_lambertian(t_scene *scene, t_ray_hit *hit_info);
-t_v3f			handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth);
-t_v2f			cone_texcoord(t_obj *obj, t_v3f point);
-t_v2f			plane_texcoord(t_obj *obj, t_v3f point);
-t_v2f			sphere_texcoord(t_obj *obj, t_v3f point);
-t_v2f			triangle_texcoord(t_obj *obj, t_v3f world_point);
-t_v2f			cylinder_texcoord(t_obj *obj, t_v3f point);
-t_v3f			checker_pattern(const t_v2f *texcoord,
-					const t_tex *tex, t_v3f col_a);
-t_v3f			solid_pattern(const t_v2f *texcoord,
-					const t_tex *tex, t_v3f col_a);
-t_v3f			image_pattern(const t_v2f *texcoord,
-					const t_tex *tex, t_v3f col_a);
-
-t_v3f			perturb_normal(const t_mat *mat, const t_v2f texcoord, const t_v3f normal);
-t_v3f			sample_texture(const mlx_texture_t *tex, const t_v2f uv, const t_v3f mod);
-
-t_v3f			display_normal(t_ray_hit *hit_info);
+t_mat	*init_material(t_mat_type type, const char *name);
+bool	create_default_materials(t_vector *shared_materials);
+bool	assign_material(t_obj *obj, t_vector *materials, const char *m_name);
+t_v3f	blend_color(t_scene *sc, t_ray_hit *h, uint32_t depth, float ior);
+t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth);
+t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info);
+t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth);
+t_v2f	cone_texcoord(t_obj *obj, t_v3f point);
+t_v2f	plane_texcoord(t_obj *obj, t_v3f point);
+t_v2f	sphere_texcoord(t_obj *obj, t_v3f point);
+t_v2f	triangle_texcoord(t_obj *obj, t_v3f world_point);
+t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point);
+t_v3f	checker_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
+t_v3f	solid_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
+t_v3f	image_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
+t_v3f	perturb_normal(const t_mat *mat, const t_v2f texcoord,
+			const t_v3f normal);
+t_v3f	sample_texture(const mlx_texture_t *tex, const t_v2f uv,
+			const t_v3f mod);
+t_v3f	display_normal(t_ray_hit *hit_info);
 
 #endif

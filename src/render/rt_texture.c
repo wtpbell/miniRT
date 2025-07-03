@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/27 11:54:25 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/27 15:52:12 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/02 18:27:29 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 // 1. scale the UVs to repeat the texture multiple times on the object
 // 2. use fractional part to sample within the single texture
 // e.g.UV: 0.9, 0.95, 1.0, 1.05, 1.1 Fractional: 0.9, 0.95, 0.0, 0.05, 0.1
-t_v3f	sample_texture(const mlx_texture_t *tex, const t_v2f uv, const t_v3f mod)
+t_v3f	sample_texture(const mlx_texture_t *tex, const t_v2f uv,
+	const t_v3f mod)
 {
 	t_col32	x;
 	t_col32	y;

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 17:00:52 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/02 19:12:03 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	camera_print(t_cam *cam, int spaces)
 	mat4x4_print(cam->view_matrix, spaces + 2, "view_matrix");
 	float_print(cam->fov, spaces + 2, "FOV");
 	col32_print(cam->bg_color, spaces + 2, "bg_color");
-	
+
 	// Print DoF parameters
 	float_print(cam->aperture, spaces + 2, "APERTURE");
 	float_print(cam->focus_dist, spaces + 2, "FOCUS_DIST");
@@ -198,14 +198,14 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 		}
 		else
 			str_print("Unknown", spaces + 4, "type:");
-		
+
 		// Print bump map information
 		if (mat->bump_map)
 		{
 			str_print("Bump Map", spaces + 4, "");
 			if (mat->bump_path)
 				str_print(mat->bump_path, spaces + 6, "path:");
-			printf("%*sdimensions: %dx%d\n", spaces + 6, "", 
+			printf("%*sdimensions: %dx%d\n", spaces + 6, "",
 				mat->bump_map->width, mat->bump_map->height);
 			printf("%*sscale: %.2f\n", spaces + 6, "", mat->bump_scale);
 		}
@@ -233,17 +233,17 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 void	print_camera_setup(t_cam *cam)
 {
 	printf("\n--- Camera Setup ---\n");
-	printf("Position: (%.2f, %.2f, %.2f)\n", 
+	printf("Position: (%.2f, %.2f, %.2f)\n",
 		cam->t.pos.x, cam->t.pos.y, cam->t.pos.z);
-	printf("Direction: (%.2f, %.2f, %.2f)\n", 
+	printf("Direction: (%.2f, %.2f, %.2f)\n",
 		cam->t.dir.x, cam->t.dir.y, cam->t.dir.z);
-	printf("Up: (%.2f, %.2f, %.2f)\n", 
+	printf("Up: (%.2f, %.2f, %.2f)\n",
 		cam->t.up.x, cam->t.up.y, cam->t.up.z);
-	printf("U (right): (%.2f, %.2f, %.2f)\n", 
+	printf("U (right): (%.2f, %.2f, %.2f)\n",
 		cam->u.x, cam->u.y, cam->u.z);
-	printf("V (up): (%.2f, %.2f, %.2f)\n", 
+	printf("V (up): (%.2f, %.2f, %.2f)\n",
 		cam->v.x, cam->v.y, cam->v.z);
-	printf("W (forward): (%.2f, %.2f, %.2f)\n", 
+	printf("W (forward): (%.2f, %.2f, %.2f)\n",
 		cam->w.x, cam->w.y, cam->w.z);
 	printf("Aperture: %.2f (from scene file)\n", cam->aperture);
 	printf("Focus distance: %.2f (from scene file)\n", cam->focus_dist);
@@ -277,16 +277,16 @@ void	debug_bump_sample(mlx_texture_t *bump_map, t_v2f uv, int sample_idx)
 {
 	if (!RT_DEBUG || sample_idx >= 5)
 		return;
-	
+
 	t_col32 tx = (t_col32)(uv.u * (bump_map->width - 1));
 	t_col32 ty = (t_col32)(uv.v * (bump_map->height - 1));
 	t_col32 idx = (ty * bump_map->width + tx) * bump_map->bytes_per_pixel;
-	
-	printf("Bump Sample #%d: UV(%.3f,%.3f) -> Texel(%d,%d) -> ", 
+
+	printf("Bump Sample #%d: UV(%.3f,%.3f) -> Texel(%d,%d) -> ",
 		sample_idx + 1, uv.u, uv.v, tx, ty);
-	
+
 	if (bump_map->bytes_per_pixel >= 3) {
-		printf("RGB(%d,%d,%d)", 
+		printf("RGB(%d,%d,%d)",
 			bump_map->pixels[idx],
 			bump_map->pixels[idx + 1],
 			bump_map->pixels[idx + 2]);
@@ -298,8 +298,6 @@ void	debug_bump_sample(mlx_texture_t *bump_map, t_v2f uv, int sample_idx)
 
 void	debug_bump_normal(t_v3f old_normal, t_v3f new_normal)
 {
-	if (!RT_DEBUG)
-		return;
 	printf("Bump normal: (%.3f,%.3f,%.3f) -> (%.3f,%.3f,%.3f)\n",
 		old_normal.x, old_normal.y, old_normal.z,
 		new_normal.x, new_normal.y, new_normal.z);
@@ -307,50 +305,8 @@ void	debug_bump_normal(t_v3f old_normal, t_v3f new_normal)
 
 void	debug_bump_texture_info(mlx_texture_t *bump_map, float delta)
 {
-	if (!RT_DEBUG)
-		return;
 	printf("Bump map: Texture size: %dx%d, BPP: %d, Delta: %f\n",
 		bump_map->width, bump_map->height, bump_map->bytes_per_pixel, delta);
-}
-
-void	debug_cleanup_start(void)
-{
-	printf("[DEBUG] Cleaning up scene resources\n");
-}
-
-void	debug_cleanup_directory(const char *dir_path)
-{
-	printf("[DEBUG] Freeing scene directory: %s\n", dir_path);
-}
-
-void	debug_cleanup_objects(int count)
-{
-	printf("[DEBUG] Freeing %d objects\n", count);
-}
-
-void	debug_cleanup_lights(int count)
-{
-	printf("[DEBUG] Freeing %d lights\n", count);
-}
-
-void	debug_cleanup_materials(int count)
-{
-	printf("[DEBUG] Freeing %d materials\n", count);
-}
-
-void	debug_cleanup_material(const char *name)
-{
-	printf("[DEBUG] Freeing material: %s\n", name ? name : "unnamed");
-}
-
-void	debug_cleanup_texture(void *addr)
-{
-	printf("[DEBUG] Freeing texture at %p\n", addr);
-}
-
-void	debug_cleanup_complete(void)
-{
-	printf("[DEBUG] Scene cleanup complete\n");
 }
 
 void	debug_scene_setup(t_scene *scene) {
