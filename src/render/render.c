@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/02 18:25:29 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/04 17:14:23 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@
 #include "ray.h"
 #include "rt_math.h"
 #include "scene.h"
+#include "rt_thread.h"
 
 #define MAX_DEPTH			8
-#define SAMPLES_PER_PIXEL	8
+#define SAMPLES_PER_PIXEL	24
 
 t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t)
 {
@@ -118,27 +119,26 @@ static t_v3f	sample_pixel(t_scene *scene, float x, float y)
 	return (v3f_scale(color, 1.0f / (float)SAMPLES_PER_PIXEL));
 }
 
-void	render(t_scene *scene)
+void	*render(void *ctx)
 {
-	uint32_t	x;
-	uint32_t	y;
-	t_v3f		color;
-	mlx_image_t	*img;
+	t_pthread_instr	*instr;
+	t_v3f			color;
+	uint32_t		y;
+	uint32_t		x;
 
-	img = scene->camera.img_plane;
-	update_camera_view(&scene->camera);
-	y = 0;
-	while (y < img->height)
+	instr = (t_pthread_instr *)ctx;
+	y = instr->start_y;
+	while (y < instr->end_y)
 	{
 		x = 0;
-		while (x < img->width)
+		while (x < instr->img->width)
 		{
-			color = sample_pixel(scene, (float)x, (float)y);
+			color = sample_pixel(instr->scene, (float)x, (float)y);
 			color = v3f_apply_gamma(color, GAMMA);
-			mlx_put_pixel(img, x, y, v3f_to_col32(color));
+			mlx_put_pixel(instr->img, x, y, v3f_to_col32(color));
 			++x;
 		}
 		++y;
 	}
-	debug_scene_setup(scene);
+	return (NULL);
 }

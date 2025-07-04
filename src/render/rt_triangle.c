@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 14:00:37 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/02 18:33:18 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/03 17:28:37 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static int	is_within_triangle(t_tri *tri, t_ray *ray, t_tri_var *vars,
 	v = v3f_dot(ray->direction, qvec) * vars->det;
 	if (v < 0.0f || (u + v) > 1.0f)
 		return (0);
+	// TODO: This needs to be stored elsewere for thread safety (not thread safe atm)
 	tri->weight = init_v2f(u, v);
 	*dst = v3f_dot(vars->v0v2, qvec) * vars->det;
 	return (1);

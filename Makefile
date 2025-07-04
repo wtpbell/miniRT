@@ -2,8 +2,8 @@ vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/
 
 NAME		:= miniRT
 CC			:= cc
-C_FLAGS		:= -Werror -Wall -Wextra -Ofast
-C_LINK		:= -ldl -lglfw -pthread -lm
+C_FLAGS		:= -Werror -Wall -Wextra -O3
+C_LINK		:= -ldl -lglfw -pthread -lm -flto
 
 BIN_DIR		:= bin/
 LIB_DIR		:= lib/

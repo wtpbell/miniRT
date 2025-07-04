@@ -6,15 +6,19 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/02 18:17:10 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/03 19:18:08 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <time.h>
+#include <stdio.h>
 #include "MLX42/MLX42.h"
 #include "minirt.h"
+#include "rt_thread.h"
 
-#define WIDTH	1600
-#define HEIGHT	900
+#define WIDTH		1600
+#define HEIGHT		900
+#define THRD_CNT	4
 
 static bool	cam_init(t_cam *cam, mlx_t *mlx)
 {
@@ -40,6 +44,40 @@ static void	cleanup_mlx(t_game *game)
 	}
 }
 
+static void init_thread(t_pthread_instr *instr, t_scene *scene, uint32_t start, uint32_t end)
+{
+	instr->scene = scene;
+	instr->start_y = start;
+	instr->end_y = end;
+	instr->img = scene->camera.img_plane;
+	pthread_create(&instr->thread, NULL, render, instr);
+}
+
+static void	render_scene(t_scene *scene)
+{
+	t_pthread_instr	threads[THRD_CNT];
+	uint32_t		delta;
+	uint32_t		y;
+	int				i;
+
+	i = 0;
+	y = 0;
+	// TODO: Not all height is evenly divisible by THRD_CNT
+	delta = scene->camera.img_plane->height / THRD_CNT;
+	while (i < THRD_CNT)
+	{
+		// TODO: Needs -1 check and cancel threads
+		init_thread(&threads[i], scene, y + delta * i, y + delta * (i + 1));
+		++i;
+	}
+	i = 0;
+	while (i < THRD_CNT)
+	{
+		pthread_join(threads[i].thread, NULL);
+		++i;
+	}
+}
+
 int	game(t_scene *scene)
 {
 	t_game	game;
@@ -51,7 +89,12 @@ int	game(t_scene *scene)
 	if (!cam_init(&scene->camera, game.mlx))
 		return (cleanup_mlx(&game), 1);
 	mlx_key_hook(game.mlx, quit_on_escape, &game);
-	render(scene);
+
+	float starttime = (float)clock() / CLOCKS_PER_SEC;
+	render_scene(scene);
+	float endtime = (float)clock() / CLOCKS_PER_SEC;
+	printf("TIME: %f\n", endtime - starttime);
+
 	mlx_loop(game.mlx);
 	cleanup_mlx(&game);
 	return (0);

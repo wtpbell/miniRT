@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/02 18:15:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/03 17:59:34 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	quit_on_escape(mlx_key_data_t keydata, void *param);
 void	init_object_matrices(t_obj *obj);
 void	init_obj_transform(t_obj *obj, t_v3f pos, t_v3f dir, t_v3f up);
 void	init_obj_renderer(t_obj *obj, t_v3f col, t_texcoord coord);
-void	render(t_scene *scene);
+void	*render(void *ctx);
 bool	solve_quadratic(t_v3f *abc, float *x0, float *x1);
 int		sphere_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
 int		plane_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
