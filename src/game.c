@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   game.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/03 19:18:08 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   game.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
+/*   Updated: 2025/07/06 20:28:13 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,17 +57,20 @@ static void	render_scene(t_scene *scene)
 {
 	t_pthread_instr	threads[THRD_CNT];
 	uint32_t		delta;
-	uint32_t		y;
+	uint32_t		start_y;
+	uint32_t		end_y;
 	int				i;
 
 	i = 0;
-	y = 0;
-	// TODO: Not all height is evenly divisible by THRD_CNT
+	start_y = 0;
 	delta = scene->camera.img_plane->height / THRD_CNT;
 	while (i < THRD_CNT)
 	{
-		// TODO: Needs -1 check and cancel threads
-		init_thread(&threads[i], scene, y + delta * i, y + delta * (i + 1));
+		end_y = start_y + delta;
+		if (i == THRD_CNT - 1 || end_y > scene->camera.img_plane->height) // if last thread or end_y is past the image height
+			end_y = scene->camera.img_plane->height; // clamp to the actual image height
+		init_thread(&threads[i], scene, start_y, end_y);
+		start_y = end_y; //  next thread starts where this thread ends
 		++i;
 	}
 	i = 0;
