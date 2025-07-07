@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/02 18:33:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/02 18:33:33 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/07 17:16:53 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,17 @@ void	generate_uv_vertices(t_tri *tri, t_mat4x4 local)
 	tri->vt2.y = (1.0f - tri->vt2.y) * aspect;
 }
 
-t_v2f	triangle_texcoord(t_obj *obj, t_v3f world_point)
+t_v2f	triangle_texcoord(t_obj *obj, t_v3f point, t_v2f *weight)
 {
 	float	w;
 	float	u;
 	float	v;
 	t_tri	*tri;
 
-	(void)world_point;
+	(void)point;
 	tri = &obj->tri;
-	u = tri->weight.u;
-	v = tri->weight.v;
+	u = weight->u;
+	v = weight->v;
 	w = 1.0f - u - v;
 	return (init_v2f(
 			w * tri->vt0.x + u * tri->vt1.x + v * tri->vt2.x,

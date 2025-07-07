@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/02 11:37:29 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/18 16:58:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/07 16:59:55 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ struct s_ray_hit
 	bool	front_face;
 	t_obj	*obj;
 	t_ray	*ray;
+	t_v2f	weight;
 };
 
 #endif
