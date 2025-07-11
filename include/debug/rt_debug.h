@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_debug.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/15 10:18:24 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/26 17:13:37 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_debug.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/15 10:18:24 by jboon         #+#    #+#                 */
+/*   Updated: 2025/07/11 18:02:58 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,10 @@ void	debug_bump_uv(const char *stage, t_v2f uv,
 void	debug_bump_sample(mlx_texture_t *bump_map, t_v2f uv, int sample_idx);
 void	debug_bump_normal(t_v3f old_normal, t_v3f new_normal);
 void	debug_bump_texture_info(mlx_texture_t *bump_map, float delta);
+
+/* benchmark.c */
+
+void	start_time(void);
+void	end_time(void);
 
 #endif

@@ -1,33 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   rt_thread.h                                        :+:    :+:            */
+/*   benchmark.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/07/03 17:35:16 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/11 18:12:07 by jboon         ########   odam.nl         */
+/*   Created: 2025/07/11 18:00:10 by jboon         #+#    #+#                 */
+/*   Updated: 2025/07/11 18:07:37 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RT_THREAD_H
-# define RT_THREAD_H
+#include <time.h>
+#include <stdio.h>
 
-# include <pthread.h>
-# include "MLX42/MLX42.h"
-# include "scene.h"
+static float g_starttime;
 
-# define THRD_CNT	4
-
-typedef struct s_pthread_instr
+void start_time(void)
 {
-	uint32_t	start_y;
-	uint32_t	end_y;
-	t_scene		*scene;
-	mlx_image_t	*img;
-	pthread_t	thread;
-} t_pthread_instr;
+	g_starttime = (float)clock() / CLOCKS_PER_SEC;
+}
 
-bool	thread_rendering(t_scene *scene);
+void end_time(void)
+{
+	float	endtime;
 
-#endif
+	endtime = (float)clock() / CLOCKS_PER_SEC;
+	printf("TIME: %f\n", endtime - g_starttime);
+}
