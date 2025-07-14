@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/02 18:08:00 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/14 15:50:11 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,6 @@ bool		parse_int(int *out, const char *str,
 
 // error.c
 void		print_error(t_error type, const char *ctx, const char *value);
-void		exit_err(t_error type, const char *ctx, const char *value);
 
 // cleanup.c
 void		free_tokens(char **tokens);

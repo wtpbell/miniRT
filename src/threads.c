@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/11 17:52:35 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/11 18:12:41 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/14 15:53:32 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ bool	thread_rendering(t_scene *scene)
 		if (i == THRD_CNT - 1 || end_y > scene->camera.img_plane->height)
 			end_y = scene->camera.img_plane->height;
 		if (!init_thread(&instr[i], scene, start_y, end_y))
-			return (end_time(), cancel_threads(instr, i), false); // TODO: print out an error
+			return (perror("minirt:"), end_time(), cancel_threads(instr, i), false);
 		start_y = end_y;
 		++i;
 	}
