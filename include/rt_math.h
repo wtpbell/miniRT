@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:51:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 18:52:32 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/30 19:48:37 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,25 @@
 # define RT_MATH_H
 
 # include <math.h>
-
 # include "vector.h"
 # include "matrix.h"
 
 # define PI			3.14159265358979323846f
+# define TAU		6.28318530717958647692f
 # define RADTODEG	57.2957795131f
-# define DEGTORAD	0.01745329251
-# define FLT_MAX	3.40282347e+38F
-# define FLT_EPI	1.19209290e-7F
+# define DEGTORAD	0.01745329251f
+# define FLT_MAX	3.40282347e+38f
+# define FLT_EPI	1.19209290e-7f
+# define FLT_SML	1e-5f
+# define BIAS		1e-2f
+# define GAMMA		2.2f
 
 float	ft_maxf(float a, float b);
 float	ft_signf(float a);
 void	ft_swapf(float *a, float *b);
-float	ft_absf(float a);
-
+int		fapprox(float n);
+float	ft_clampf(float value, float min, float max);
+float	ft_clampf01(float val);
+float	schlick(float cosin, float ref_idx);
+float	modulo(float x);
 #endif

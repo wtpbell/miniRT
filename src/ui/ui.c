@@ -1,61 +1,442 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui.c                                               :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/19 15:00:42 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/19 18:13:55 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/21 15:00:00 by bewong            #+#    #+#             */
+/*   Updated: 2025/07/22 01:14:56 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minirt.h"
+#include <string.h>
+#include <stdio.h>
+#include <stdint.h>
 
-#include "../../lib/mlx42/src/font/font.h"
-#include "MLX42/MLX42_Int.h"
-#include "libft.h"
+// UI Constants
+#define UI_PANEL_WIDTH 250
+#define UI_BUTTON_WIDTH 200
+#define UI_BUTTON_HEIGHT 30
+#define UI_BUTTON_SPACING 10
+#define UI_SECTION_HEADER_HEIGHT 30
+#define UI_CHAR_WIDTH 8
+#define UI_CHAR_HEIGHT 15
+
+// UI Colors
+#define UI_BG_COLOR 0x11111180
+#define UI_PANEL_BG_COLOR 0x111111FF
+#define UI_SECTION_HEADER_COLOR 0x222222FF
+#define UI_BUTTON_COLOR 0x333333FF
+#define UI_BUTTON_HOVER_COLOR 0x444444FF
+#define UI_BUTTON_BORDER_COLOR 0x666666FF
+#define UI_BUTTON_BORDER_HOVER_COLOR 0x888888FF
+#define UI_TEXT_COLOR 0xFFFFFFFF
 
 /**
- * Does the actual copying of pixels form the atlas buffer to the
- * image buffer.
- *
- * Skips any non-printable characters.
- *
- * @param image The image to draw on.
- * @param texture The font_atlas.
- * @param texoffset The character texture X offset.
- * @param imgoffset The image X offset.
+ * Draws a character on the image using a simple bitmap font.
+ * This is a basic implementation that draws ASCII characters.
+ * For a more complete solution, consider using a proper font rendering library.
  */
-static void rt_draw_char(mlx_image_t* image, int32_t texoffset, int32_t imgoffset, int32_t offset)
+static void draw_char(mlx_image_t *img, char c, int x, int y, uint32_t color)
 {
-	char*		pixelx;
-	uint8_t*	pixeli;
+	static const uint8_t font[128][8] = {
+		[0 ... 31] = {0},
+		[' '] = {0},
+		['0'] = {0x3C, 0x42, 0x46, 0x4A, 0x52, 0x62, 0x42, 0x3C},
+		['1'] = {0x10, 0x30, 0x50, 0x10, 0x10, 0x10, 0x10, 0x7C},
+		['2'] = {0x3C, 0x42, 0x02, 0x0C, 0x30, 0x40, 0x40, 0x7E},
+		['3'] = {0x3C, 0x42, 0x02, 0x1C, 0x02, 0x02, 0x42, 0x3C},
+		['4'] = {0x04, 0x0C, 0x14, 0x24, 0x44, 0x7E, 0x04, 0x04},
+		['5'] = {0x7E, 0x40, 0x40, 0x7C, 0x02, 0x02, 0x42, 0x3C},
+		['6'] = {0x1C, 0x20, 0x40, 0x7C, 0x42, 0x42, 0x42, 0x3C},
+		['7'] = {0x7E, 0x02, 0x04, 0x08, 0x10, 0x20, 0x20, 0x20},
+		['8'] = {0x3C, 0x42, 0x42, 0x3C, 0x42, 0x42, 0x42, 0x3C},
+		['9'] = {0x3C, 0x42, 0x42, 0x42, 0x3E, 0x02, 0x04, 0x38},
+		['A'] = {0x18, 0x24, 0x42, 0x42, 0x7E, 0x42, 0x42, 0x42},
+		['B'] = {0x7C, 0x42, 0x42, 0x7C, 0x42, 0x42, 0x42, 0x7C},
+		['C'] = {0x3C, 0x42, 0x40, 0x40, 0x40, 0x40, 0x42, 0x3C},
+		['D'] = {0x78, 0x44, 0x42, 0x42, 0x42, 0x42, 0x44, 0x78},
+		['E'] = {0x7E, 0x40, 0x40, 0x7C, 0x40, 0x40, 0x40, 0x7E},
+		['F'] = {0x7E, 0x40, 0x40, 0x7C, 0x40, 0x40, 0x40, 0x40},
+		['G'] = {0x3C, 0x42, 0x40, 0x4E, 0x42, 0x42, 0x42, 0x3C},
+		['H'] = {0x42, 0x42, 0x42, 0x7E, 0x42, 0x42, 0x42, 0x42},
+		['I'] = {0x7C, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x7C},
+		['J'] = {0x3E, 0x08, 0x08, 0x08, 0x08, 0x08, 0x48, 0x30},
+		['K'] = {0x42, 0x44, 0x48, 0x70, 0x48, 0x44, 0x42, 0x42},
+		['L'] = {0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x7E},
+		['M'] = {0x42, 0x66, 0x5A, 0x5A, 0x42, 0x42, 0x42, 0x42},
+		['N'] = {0x42, 0x62, 0x52, 0x4A, 0x46, 0x42, 0x42, 0x42},
+		['O'] = {0x3C, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x3C},
+		['P'] = {0x7C, 0x42, 0x42, 0x7C, 0x40, 0x40, 0x40, 0x40},
+		['Q'] = {0x3C, 0x42, 0x42, 0x42, 0x4A, 0x44, 0x3A, 0x00},
+		['R'] = {0x7C, 0x42, 0x42, 0x7C, 0x48, 0x44, 0x42, 0x42},
+		['S'] = {0x3C, 0x42, 0x40, 0x3C, 0x02, 0x02, 0x42, 0x3C},
+		['T'] = {0xFE, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10},
+		['U'] = {0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x3C},
+		['V'] = {0x42, 0x42, 0x42, 0x24, 0x24, 0x24, 0x18, 0x18},
+		['W'] = {0x42, 0x42, 0x42, 0x42, 0x5A, 0x5A, 0x66, 0x42},
+		['X'] = {0x42, 0x42, 0x24, 0x18, 0x18, 0x24, 0x42, 0x42},
+		['Y'] = {0x82, 0x44, 0x28, 0x10, 0x10, 0x10, 0x10, 0x10},
+		['Z'] = {0x7E, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x7E},
+	};
+	unsigned char uc = (unsigned char)c;
+	int dy;
+	int dx;
 
-	if (texoffset < 0)
+	if (uc >= 128 || font[uc][0] == 0)
 		return;
-	for (uint32_t y = 0; y < FONT_HEIGHT; y++)
+	dy = 0;
+	while (dy < 8)
 	{
-		pixelx = &font_atlas.pixels[(y * font_atlas.width + texoffset) * BPP];
-		pixeli = image->pixels + ((offset + y * image->width + imgoffset) * BPP);
-		ft_memcpy(pixeli, pixelx, FONT_WIDTH * BPP);
+		dx = 0;
+		while (dx < 8)
+		{
+			if (font[uc][dy] & (1 << (7 - dx)))
+			{
+				int px = x + dx;
+				int py = y + dy;
+				if (px >= 0 && px < (int)img->width && 
+					py >= 0 && py < (int)img->height)
+				{
+					mlx_put_pixel(img, px, py, color);
+				}
+			}
+			dx++;
+		}
+		dy++;
 	}
 }
 
-/* Modified code from MLX42 library */
-mlx_image_t* rt_put_string(mlx_image_t *strimage, const char* str, int32_t x, int32_t y)
+/**
+ * Draws a string on the image at the specified position.
+ * Uses a simple bitmap font for text rendering.
+ */
+void	rt_put_string(mlx_image_t *img, const char *str, int x, int y)
 {
-	const size_t	len = strlen(str);
-	int32_t			imgoffset;
+	int			start_x;
+	int			char_width;
+	int			line_height;
+	uint32_t	color;
 
-	(void)x;
-	(void)y;
-	if (len > MLX_MAX_STRING)
-		return ((void*)mlx_error(MLX_STRTOOBIG));
-	imgoffset = 0;
-	for (size_t i = 0; i < len; i++, imgoffset += FONT_WIDTH)
+	start_x = x;
+	char_width = UI_CHAR_WIDTH;
+	line_height = UI_CHAR_HEIGHT;
+	color = UI_TEXT_COLOR;
+	while (*str)
 	{
-		rt_draw_char(strimage, mlx_get_texoffset(str[i]), imgoffset, y * strimage->width + x);
+		if (*str == '\n')
+		{
+			y += line_height;
+			x = start_x;
+		}
+		else if (*str == '\t')
+			x += char_width * 4;
+		else if (*str == '\r')
+			x = start_x;
+		else
+		{
+			draw_char(img, *str, x, y, color);
+			x += char_width;
+		}
+		str++;
+	}
+}
+
+static	void draw_rect(mlx_image_t *img, int x, int y, int width, int height, uint32_t color)
+{
+	int	dy;
+	int	dx;
+
+	dy = 0;
+	while (dy < height)
+	{
+		dx = 0;
+		while (dx < width)
+		{
+			if (y + dy >= 0 && y + dy < (int)img->height &&
+				x + dx >= 0 && x + dx < (int)img->width)
+				mlx_put_pixel(img, x + dx, y + dy, color);
+			dx++;
+		}
+		dy++;
+	}
+}
+
+/**
+ * Draws a button on the image at the specified position.
+ */
+void	draw_button(mlx_image_t *img, t_button *button, int y_offset)
+{
+	char		value_str[32];
+	uint32_t	color;
+	int			x;
+	int			y;
+
+	rt_put_string(img, button->label, button->x, button->y + y_offset - 15);
+	snprintf(value_str, sizeof(value_str), "%.2f", *button->value);
+	if (button->is_hovered)
+		color = UI_BUTTON_HOVER_COLOR;
+	else
+		color = UI_BUTTON_COLOR;
+	draw_rect(img, button->x, button->y + y_offset,
+		button->width, button->height, color);
+	if (button->is_hovered)
+		color = UI_BUTTON_BORDER_HOVER_COLOR;
+	else
+		color = UI_BUTTON_BORDER_COLOR;
+	x = 0;
+	while (x < button->width)
+	{
+		mlx_put_pixel(img, button->x + x, button->y + y_offset, color);
+		mlx_put_pixel(img, button->x + x, 
+			button->y + y_offset + button->height - 1, color);
+		x++;
+	}
+	y = 0;
+	while (y < button->height)
+	{
+		mlx_put_pixel(img, button->x, button->y + y_offset + y, color);
+		mlx_put_pixel(img, button->x + button->width - 1, 
+			button->y + y_offset + y, color);
+		y++;
+	}
+	rt_put_string(img, value_str, 
+		button->x + (button->width - (int)strlen(value_str) * UI_CHAR_WIDTH) / 2, 
+		button->y + y_offset + (button->height / 2) - 4);
+	x = -5;
+	while (x <= 5)
+	{
+		mlx_put_pixel(img, button->x + 15 + x, 
+			button->y + y_offset + (button->height / 2), UI_TEXT_COLOR);
+		x++;
+	}
+	x = -5;
+	while (x <= 5)
+	{
+		mlx_put_pixel(img, button->x + button->width - 15 + x, 
+			button->y + y_offset + (button->height / 2), UI_TEXT_COLOR);
+		if (x >= -1 && x <= 1)
+		{
+			y = -5;
+			while (y <= 5)
+			{
+				mlx_put_pixel(img, button->x + button->width - 15, 
+					button->y + y_offset + (button->height / 2) + y, UI_TEXT_COLOR);
+				y++;
+			}
+		}
+		x++;
+	}
+}
+
+void	draw_section_header(mlx_image_t *img, const char *title, int x, int y)
+{
+	int	title_len;
+	int	title_x;
+
+	draw_rect(img, x, y, 220, UI_SECTION_HEADER_HEIGHT, UI_SECTION_HEADER_COLOR);
+	title_len = ft_strlen(title);
+	title_x = x + (200 - (title_len * UI_CHAR_WIDTH)) / 2;
+	if (title_x < x + 10)
+		title_x = x + 10;
+	rt_put_string(img, title, title_x, y + 8);
+}
+
+// Check if a point is inside a button
+bool	is_point_in_button(t_button *button, int x, int y, int y_offset)
+{
+	return (x >= button->x && x <= button->x + button->width &&
+			y >= button->y + y_offset && y <= button->y + y_offset + button->height);
+}
+
+// Update button value based on click position
+void update_button_value(t_button *button, int mouse_x, int y_offset)
+{
+	(void)y_offset; // Mark as unused to avoid compiler warning
+
+	int	button_center_x;
+	button_center_x = button->x + (button->width / 2);
+	if (mouse_x < button_center_x)
+		*button->value = fmax(button->min, *button->value - button->step);
+	else
+		*button->value = fmin(button->max, *button->value + button->step);
+}
+
+// Helper function to initialize a button with common settings
+static t_button init_button(float *value, const char *label, float min, float max, float step)
+{
+    t_button button = {
+        .x = UI_BUTTON_SPACING,
+        .y = 0,
+        .width = UI_BUTTON_WIDTH,
+        .height = UI_BUTTON_HEIGHT,
+        .min = min,
+        .max = max,
+        .step = step,
+        .is_hovered = false
+    };
+    
+    // Safely copy the label string
+    if (label)
+        strncpy(button.label, label, sizeof(button.label) - 1);
+    button.label[sizeof(button.label) - 1] = '\0'; // Ensure null-termination
+    
+    button.value = value;
+    return button;
+}
+
+// Initialize environment buttons with hardcoded values
+void init_environment_buttons(t_ui *ui, t_scene *scene)
+{
+    ui->bg_r_button = init_button(
+        &scene->camera.bg_color.x, "BG R", 0.0f, 1.0f, 0.1f);
+    ui->bg_g_button = init_button(
+        &scene->camera.bg_color.y, "BG G", 0.0f, 1.0f, 0.1f);
+    ui->bg_b_button = init_button(
+        &scene->camera.bg_color.z, "BG B", 0.0f, 1.0f, 0.1f);
+}
+
+// Initialize camera buttons with values from the parsed scene
+void init_camera_buttons(t_ui *ui, t_cam *camera)
+{
+    ui->cam_x_button = init_button(
+        &camera->t.pos.x, "CAM X", -10.0f, 10.0f, 0.5f);
+    ui->cam_y_button = init_button(
+        &camera->t.pos.y, "CAM Y", -10.0f, 10.0f, 0.5f);
+    ui->cam_z_button = init_button(
+        &camera->t.pos.z, "CAM Z", -10.0f, 10.0f, 0.5f);
+    ui->cam_fov_button = init_button(
+        &camera->fov, "FOV", 30.0f, 120.0f, 5.0f);
+}
+
+// Initialize point light controls
+void	init_point_light_buttons(t_ui *ui, t_scene *scene)
+{
+	t_light	*point_light;
+	t_light	*light;
+	int		i;
+
+	point_light = NULL;
+	i = 0;
+	while (i < (int)scene->lights.size) 
+	{
+		light = vector_get(&scene->lights, i);
+		if (light && light->type == LIGHT_POINT)
+		{
+			point_light = light;
+			break ;
+		}
+		i++;
+	}
+	if (point_light)
+	{
+		ui->light_x_button = init_button(
+			&point_light->pos.x, "LIGHT X", -10.0f, 10.0f, 0.5f);
+		ui->light_y_button = init_button(
+			&point_light->pos.y, "LIGHT Y", -10.0f, 10.0f, 0.5f);
+		ui->light_z_button = init_button(
+			&point_light->pos.z, "LIGHT Z", -10.0f, 10.0f, 0.5f);
+		ui->light_intensity_button = init_button(
+			&point_light->intensity, "INTENSITY", 0.0f, 1.0f, 0.1f);
+	}
+}
+
+// Initialize all UI elements with values from the parsed scene
+void ui_init(t_ui *ui, t_scene *scene)
+{
+	init_environment_buttons(ui, scene);
+	init_camera_buttons(ui, &scene->camera);
+	init_point_light_buttons(ui, scene);
+	ui->show_ui = true;
+}
+
+/**
+ * Draws the main UI overlay
+ */
+void draw_ui(t_game *game)
+{
+	uint32_t	y;
+	uint32_t	x;
+	int		y_offset;
+
+	if (!game || !game->ui.ui_layer || !game->ui.ui_layer->pixels)
+		return ;
+
+	if (!game->ui.show_ui)
+	{
+		ft_bzero(game->ui.ui_layer->pixels, 
+			game->ui.ui_layer->width * game->ui.ui_layer->height * 4);
+		return ;
+	}
+	y = 0;
+	while (y < game->ui.ui_layer->height)
+	{
+		x = 0;
+		while (x < game->ui.ui_layer->width)
+		{
+			uint8_t *pixel = &game->ui.ui_layer->pixels[(y * game->ui.ui_layer->width + x) * 4];
+			if (x < UI_PANEL_WIDTH)
+			{
+				pixel[0] = (UI_PANEL_BG_COLOR >> 24) & 0xFF;
+				pixel[1] = (UI_PANEL_BG_COLOR >> 16) & 0xFF;
+				pixel[2] = (UI_PANEL_BG_COLOR >> 8) & 0xFF;
+				pixel[3] = UI_PANEL_BG_COLOR & 0xFF;
+			}
+			else
+				*(uint32_t *)pixel = 0x00000000;
+			x++;
+		}
+		y++;
 	}
 
-	return (strimage);
+	y_offset = UI_BUTTON_SPACING;
+
+	// Draw Environment Section
+	draw_section_header(game->ui.ui_layer, "ENVIRONMENT", UI_BUTTON_SPACING, y_offset);
+	y_offset += UI_SECTION_HEADER_HEIGHT + UI_BUTTON_SPACING;
+
+	game->ui.bg_r_button.y = y_offset;
+	draw_button(game->ui.ui_layer, &game->ui.bg_r_button, 0);
+	y_offset += UI_BUTTON_HEIGHT + UI_BUTTON_SPACING;
+	game->ui.bg_g_button.y = y_offset;
+	draw_button(game->ui.ui_layer, &game->ui.bg_g_button, 0);
+	y_offset += UI_BUTTON_HEIGHT + UI_BUTTON_SPACING;
+	game->ui.bg_b_button.y = y_offset;
+	draw_button(game->ui.ui_layer, &game->ui.bg_b_button, 0);
+	y_offset += UI_BUTTON_HEIGHT + (UI_BUTTON_SPACING * 2);
+
+	// Draw Camera Section
+	draw_section_header(game->ui.ui_layer, "CAMERA", UI_BUTTON_SPACING, y_offset);
+	y_offset += UI_SECTION_HEADER_HEIGHT + UI_BUTTON_SPACING;
+
+	game->ui.cam_x_button.y = y_offset;
+	draw_button(game->ui.ui_layer, &game->ui.cam_x_button, 0);
+	y_offset += UI_BUTTON_HEIGHT + UI_BUTTON_SPACING;
+	game->ui.cam_y_button.y = y_offset;
+	draw_button(game->ui.ui_layer, &game->ui.cam_y_button, 0);
+	y_offset += UI_BUTTON_HEIGHT + UI_BUTTON_SPACING;
+	game->ui.cam_z_button.y = y_offset;
+	draw_button(game->ui.ui_layer, &game->ui.cam_z_button, 0);
+	y_offset += UI_BUTTON_HEIGHT + UI_BUTTON_SPACING;
+	game->ui.cam_fov_button.y = y_offset;
+	draw_button(game->ui.ui_layer, &game->ui.cam_fov_button, 0);
+	y_offset += UI_BUTTON_HEIGHT + (UI_BUTTON_SPACING * 2);
+
+	// Draw Light Section
+	draw_section_header(game->ui.ui_layer, "POINT LIGHT", UI_BUTTON_SPACING, y_offset);
+	y_offset += UI_SECTION_HEADER_HEIGHT + UI_BUTTON_SPACING;
+
+	game->ui.light_x_button.y = y_offset;
+	draw_button(game->ui.ui_layer, &game->ui.light_x_button, 0);
+	y_offset += UI_BUTTON_HEIGHT + UI_BUTTON_SPACING;
+	game->ui.light_y_button.y = y_offset;
+	draw_button(game->ui.ui_layer, &game->ui.light_y_button, 0);
+	y_offset += UI_BUTTON_HEIGHT + UI_BUTTON_SPACING;
+	game->ui.light_z_button.y = y_offset;
+	draw_button(game->ui.ui_layer, &game->ui.light_z_button, 0);
+	y_offset += UI_BUTTON_HEIGHT + UI_BUTTON_SPACING;
+	game->ui.light_intensity_button.y = y_offset;
+	draw_button(game->ui.ui_layer, &game->ui.light_intensity_button, 0);
 }

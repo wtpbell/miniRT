@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   vector_utils.c                                     :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 16:56:40 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   vector_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
+/*   Updated: 2025/06/01 17:03:24 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ bool	parse_v3f(t_v3f *v3f, const char *str)
 	return (true);
 }
 
-bool	parse_col(t_col32 *col, const char *str)
+bool	parse_col(t_v3f *color, const char *str)
 {
 	char	**tokens;
 	int		rgb[3];
@@ -82,7 +82,11 @@ bool	parse_col(t_col32 *col, const char *str)
 		}
 		i++;
 	}
-	*col = init_col32(rgb[0], rgb[1], rgb[2], 0xFF);
+	*color = (t_v3f){{
+		.x = (float)rgb[0] / 255.0f,
+		.y = (float)rgb[1] / 255.0f,
+		.z = (float)rgb[2] / 255.0f
+	}};
 	free_tokens(tokens);
 	return (true);
 }
@@ -91,11 +95,22 @@ bool	parse_dir(t_v3f *dir, const char *str)
 {
 	char	**tokens;
 	float	values[3];
+	int		i;
 
+	i = 0;
 	if (!split_and_validate(str, &tokens, 3, "parse dir"))
 		return (false);
 	if (!parse_floats((const char **)tokens, values, 3, "parse dir"))
 		return (free_tokens(tokens), false);
+	while (i < 3)
+	{
+		if (values[i] < MIN_DIR || values[i] > MAX_DIR)
+		{
+			print_error(ERR_RANGE, "orientation -1,1", tokens[i]);
+			return (free_tokens(tokens), false);
+		}
+		i++;
+	}
 	*dir = v3f_norm((t_v3f){{values[0], values[1], values[2]}});
 	free_tokens(tokens);
 	return (true);

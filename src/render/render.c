@@ -1,107 +1,144 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   render.c                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 18:56:15 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   render.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
+/*   Updated: 2025/07/22 00:45:32 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <stdint.h>
-#include <stdlib.h>
 
 #include "MLX42/MLX42.h"
-#include "libft.h"
-#include "minirt.h"
-#include "scene.h"
-#include "color.h"
+#include "light.h"
+#include "material.h"
+#include "random.h"
+#include "ray.h"
 #include "rt_math.h"
-#include "container.h"
+#include "scene.h"
 
-#include "debug/rt_debug.h"
+#define MAX_DEPTH			8
+#define SAMPLES_PER_PIXEL	8
 
-static t_col32	trace(t_ray *ray, t_scene *scene, uint32_t depth)
+t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t)
 {
-	int			i;
-	float		min_dist;
-	float		curr_dst;
-	t_obj		*obj;
-	t_obj		*hit;
-	t_ray_hit	curr_hit;
-	t_vector	objects;
+	int		i;
+	float	dst;
+	t_obj	*obj;
+	t_obj	*hit;
 
-	(void)depth;
 	i = 0;
 	hit = NULL;
-	min_dist = FLT_MAX;
-	objects = scene->objects;
-	while (i < objects.size)
+	*t = FLT_MAX;
+	while (i < scene->objects.size)
 	{
-		obj = (t_obj *)objects.items[i];
-		if (obj->intersect(obj, ray, &curr_dst)
-			&& curr_dst < min_dist)
-			{
-				min_dist = curr_dst;
-				hit = obj;
-			}
+		obj = (t_obj *)scene->objects.items[i];
+		if (obj->intersect(obj, ray, init_v2f(BIAS, *t), &dst))
+		{
+			*t = dst;
+			hit = obj;
+		}
 		++i;
 	}
-	if (hit == NULL)
-	{
-		t_v3f	hitcolor = v3f_scale(v3f_add(ray->direction, (t_v3f){.x = 1, .y = 1, .z = 1}), 255 >> 1);
-		return (init_col32(hitcolor.x, hitcolor.y, hitcolor.z, 255));
-	}
-	else
-	{
-		curr_hit.hit = v3f_add(ray->origin, v3f_scale(ray->direction, min_dist));
-		curr_hit.normal = v3f_norm(v3f_sub(curr_hit.hit, hit->t.pos));
-		curr_hit.normal = v3f_scale(v3f_add(curr_hit.normal, init_v3f(1, 1, 1)), 255>>1);
-		return (init_col32(curr_hit.normal.x, curr_hit.normal.y, curr_hit.normal.z, 255));
-	}
-	return (scene->camera.bg_col);
+	return (hit);
 }
 
-static void	compute_ray(uint32_t x, uint32_t y, t_cam *cam, t_ray *ray)
+static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 {
-	t_v3f	camera_space;
-	float	view;
+	hit_info->ray = ray;
+	hit_info->hit = v3f_add(ray->origin, v3f_scale(ray->direction, t));
+	hit_info->normal = obj->calc_norm(obj, hit_info->hit);
+	hit_info->distance = t;
+	hit_info->front_face = v3f_dot(ray->direction, hit_info->normal) < 0;
+	hit_info->obj = obj;
+	if (!hit_info->front_face)
+		hit_info->normal = v3f_scale(hit_info->normal, -1.0f);
+	hit_info->texcoord = obj->r.get_texcoord(obj, hit_info->hit);
+	hit_info->texcoord = v2f_rotate(hit_info->texcoord,
+			obj->r.mat->texture.scale_rot.theta * DEGTORAD);
+	if (obj->r.mat && obj->r.mat->bump_map)
+		hit_info->normal = perturb_normal(obj->r.mat, hit_info->texcoord,
+				hit_info->normal);
+	hit_info->hit_color = obj->r.mat->get_texcol(&hit_info->texcoord,
+			&obj->r.mat->texture, v3f_mul(obj->r.color, obj->r.mat->albedo));
+}
 
-	view = tanf(cam->fov / 2.0f * DEGTORAD);
-	camera_space.x = (x + .5f) / cam->img_plane->width;
-	camera_space.y = (y + .5f) / cam->img_plane->height;
+t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
+{
+	float		t;
+	t_obj		*hit;
+	t_ray_hit	hit_info;
+	t_v3f		color;
 
-	camera_space.x = (2 * camera_space.x - 1) * cam->aspect_ratio * view;
-	camera_space.y = (1 - (2 * camera_space.y)) * view;
-	camera_space.z = -1;
+	if (depth <= 0)
+		return (g_v3f_zero);
+	hit = find_intersection(ray, scene, &t);
+	if (hit == NULL)
+		return (g_v3f_zero);
+	init_hit_info(&hit_info, hit, ray, t);
+	if (hit->r.mat->type == MAT_LAMBERTIAN)
+		color = handle_lambertian(scene, &hit_info);
+	else if (hit->r.mat->type == MAT_DIELECTRIC)
+		color = handle_dielectric(scene, &hit_info, depth);
+	else if (hit->r.mat->type == MAT_METAL)
+		color = handle_metal(scene, &hit_info, depth);
+	else if (hit->r.mat->type == MAT_NORMAL)
+		color = display_normal(&hit_info);
+	else
+		color = (g_v3f_one);
+	return (color);
+}
 
-	ray->direction = v3f_norm(camera_space);
+static t_v3f	sample_pixel(t_scene *scene, float x, float y)
+{
+	t_v3f	color;
+	t_ray	ray;
+	t_v2f	uv;
+	t_v2f	jitter;
+	int		i;
+
+	color = g_v3f_zero;
+	i = 0;
+	while (i < SAMPLES_PER_PIXEL)
+	{
+		seed_rand(get_rngstate(x, y, i));
+		jitter.x = frandom_norm_distribution() - 0.5f;
+		jitter.y = frandom_norm_distribution() - 0.5f;
+		uv.u = (x + 0.5f + jitter.x)
+			/ (float)(scene->camera.img_plane->width - 1);
+		uv.v = 1.0f - (y + 0.5f + jitter.y)
+			/ (float)(scene->camera.img_plane->height - 1);
+		ray = get_ray_with_dof(&scene->camera, uv.u, uv.v);
+		color = v3f_add(color, trace(&ray, scene, MAX_DEPTH));
+		++i;
+	}
+	return (v3f_scale(color, 1.0f / (float)SAMPLES_PER_PIXEL));
 }
 
 void	render(t_scene *scene)
 {
 	uint32_t	x;
 	uint32_t	y;
-	t_ray		ray;
+	t_v3f		color;
 	mlx_image_t	*img;
 
-	y = 0;
 	img = scene->camera.img_plane;
-	ray.origin = mul_v3_m4x4(init_v3f(0, 0, 0), scene->camera.cam_to_world);
+	update_camera_view(&scene->camera);
+	y = 0;
 	while (y < img->height)
 	{
 		x = 0;
 		while (x < img->width)
 		{
-			compute_ray(x, y, &scene->camera, &ray);
-			ray.direction = v3f_norm(
-				mul_dir_m4x4(ray.direction, scene->camera.cam_to_world));
-			mlx_put_pixel(img, x, y, trace(&ray, scene, 0));
+			color = sample_pixel(scene, (float)x, (float)y);
+			color = v3f_apply_gamma(color, GAMMA);
+			mlx_put_pixel(img, x, y, v3f_to_col32(color));
 			++x;
 		}
 		++y;
 	}
+	debug_scene_setup(scene);
 }

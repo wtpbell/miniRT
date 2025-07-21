@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 18:47:27 by jboon         ########   odam.nl         */
+/*   Updated: 2025/06/27 15:38:56 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,85 +14,118 @@
 # define SCENE_H
 
 # include "MLX42/MLX42.h"
-# include "ray.h"
+# include "libft.h"
+# include "rt_types.h"
+# include "container.h"
 # include "matrix.h"
 # include "vector.h"
+# include "material.h"
 # include "color.h"
-# include "libft.h"
-# include "container.h"
+# include "material.h"
 
-typedef struct s_object	t_obj;
-
-typedef enum e_object_type
+enum e_object_type
 {
 	OBJ_SPHERE,
 	OBJ_CYLINDER,
 	OBJ_CONE,
 	OBJ_PLANE,
-}	t_obj_type;
+	OBJ_TRIANGLE
+};
 
-typedef enum e_light_type
+enum e_light_type
 {
 	LIGHT_AMBIENT,
 	LIGHT_POINT,
-}	t_light_type;
+	LIGHT_SPOT,
+};
 
 typedef enum e_scene_flags
 {
 	SCENE_NONE = 0,
 	SCENE_AMBIENT = 1 << 0,
 	SCENE_POINT_LIGHT = 1 << 1,
-	SCENE_CAMERA = 2 << 2
+	SCENE_CAMERA = 1 << 3,
 }	t_scene_flags;
 
-typedef struct s_transform
+struct s_transform
 {
-	t_v3f	pos;
-	t_v3f	dir;
-}	t_trans;
+	t_v3f		pos;
+	t_v3f		dir;
+	t_v3f		up;
+	t_mat4x4	to_world;
+	t_mat4x4	to_obj;
+};
 
-typedef struct s_camera
+struct s_camera
 {
 	t_trans		t;
 	float		fov;
 	float		aspect_ratio;
-	t_col32		bg_col;
+	t_v3f		bg_color;
 	mlx_image_t	*img_plane;
-	t_mat4x4	cam_to_world;
-}	t_cam;
+	t_mat4x4	view_matrix;
+	float		aperture;
+	float		focus_dist;
+	t_v3f		u;
+	t_v3f		v;
+	t_v3f		w;
+	t_v3f		horizontal;
+	t_v3f		vertical;
+	t_v3f		lower_left;
+};
 
-typedef struct s_material
+struct s_render
 {
-}	t_mat;
+	t_mat		*mat;
+	t_v3f		color;
+	t_texcoord	get_texcoord;
+};
 
-typedef struct s_render
+struct s_plane
 {
-	t_mat	mat;
-	t_col32	col;
-}	t_ren;
+};
 
-typedef struct s_plane
-{
-}	t_pl;
-
-typedef struct s_sphere
+struct s_sphere
 {
 	float		radius;
-}	t_sp;
+};
 
-typedef struct s_cylinder
+struct s_cylinder
 {
 	float		radius;
 	float		height;
-}	t_cy;
+};
 
-typedef struct s_light
+struct s_cone
+{
+	float		radius;
+	float		height;
+};
+
+struct s_triangle
+{
+	t_v3f	v0;
+	t_v3f	v1;
+	t_v3f	v2;
+	t_v3f	vt0;
+	t_v3f	vt1;
+	t_v3f	vt2;
+	t_v2f	weight;
+};
+
+struct s_light
 {
 	t_v3f			pos;
-	t_col32			col;
+	t_v3f			color;
 	t_light_type	type;
 	float			intensity;
-}	t_light;
+	struct s_spotlight
+	{
+		t_v3f		dir;
+		float		inner;
+		float		outer;
+	}				spot;
+};
 
 struct s_object
 {
@@ -103,17 +136,29 @@ struct s_object
 		t_sp	sp;
 		t_pl	pl;
 		t_cy	cy;
-	}			u_shape;
+		t_tri	tri;
+		t_cone	cone;
+	};
 	t_obj_type	type;
-	int			(*intersect)(t_obj *obj, t_ray *ray, float *dst);
+	t_intsct	intersect;
+	t_cnorm		calc_norm;
 };
 
-typedef struct s_scene
+struct s_tri_var
+{
+	t_v3f	v0v1;
+	t_v3f	v0v2;
+	t_v3f	pvec;
+	float	det;
+};
+
+struct s_scene
 {
 	t_vector	objects;
 	t_vector	lights;
+	t_vector	shared_materials;
 	t_cam		camera;
 	int			scene_flags;
-}	t_scene;
+};
 
 #endif

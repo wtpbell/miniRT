@@ -3,41 +3,66 @@
 /*                                                        ::::::::            */
 /*   element_parser.c                                   :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/05/15 12:08:07 by bewong        ########   odam.nl         */
+/*   Updated: 2025/06/24 12:56:30 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static t_parser	get_parser(const char *type)
+#define EP_SIZE	11
+
+static const t_ele	g_parsers[EP_SIZE] = {
+{"C", SCENE_CAMERA, 4, -1, parse_camera},
+{"A", SCENE_AMBIENT, 3, 3, parse_ambient_light},
+{"L", SCENE_POINT_LIGHT, 4, 4, parse_point_light},
+{"l", SCENE_NONE, 4, 4, parse_point_light},
+{"spl", SCENE_NONE, 7, 7, parse_spot_light},
+{"sp", SCENE_NONE, 4, 5, parse_sphere},
+{"pl", SCENE_NONE, 4, 5, parse_plane},
+{"tri", SCENE_NONE, 5, 6, parse_triangle},
+{"cy", SCENE_NONE, 6, 7, parse_cylinder},
+{"co", SCENE_NONE, 6, 7, parse_cone},
+[EP_SIZE - 1] = {"m_", SCENE_NONE, 2, -1, parse_material}
+};
+
+static inline bool	is_duplicate(t_scene_flags sc_flag, t_scene_flags flag)
 {
-	if (!type)
-		return (NULL);
-	if (ft_strcmp(type, "sp") == 0)
-		return (parse_sphere);
-	else if (ft_strcmp(type, "pl") == 0)
-		return (parse_plane);
-	else if (ft_strcmp(type, "cy") == 0)
-		return (parse_cylinder);
-	else if (ft_strcmp(type, "L") == 0 || ft_strcmp(type, "A") == 0)
-		return (parse_light);
-	else if (ft_strcmp(type, "C") == 0)
-		return (parse_camera);
-	return (NULL);
+	return (flag != SCENE_NONE && (sc_flag & flag) == flag);
 }
 
-bool	parse_scene_element(const char *type, char **tokens, t_scene *scene)
+static inline bool	is_invalid_count(int min, int max, int count)
 {
-	t_parser	parser;
+	return (count < min || (max != -1 && count > max));
+}
 
-	parser = get_parser(type);
-	if (!parser)
+static inline bool	is_specifier(int i, const t_ele *ele, const char *token)
+{
+	return ((i == (EP_SIZE - 1) && ft_strncmp(ele->spec, token, 2) == 0)
+		|| ft_strcmp(ele->spec, token) == 0);
+}
+
+t_parser	element_parser(char **tokens, t_scene *scene, const char *line)
+{
+	int			i;
+	const t_ele	*ele;
+
+	i = 0;
+	while (i < EP_SIZE)
 	{
-		print_error(ERR_UNKNOWN_TOKEN, "token", *tokens);
-		return (false);
+		ele = (g_parsers + i);
+		if (is_specifier(i, ele, *tokens))
+		{
+			if (is_duplicate(scene->scene_flags, ele->sc_flag))
+				return (print_error(ERR_DUPLICATE, ele->spec, line), NULL);
+			if (is_invalid_count(ele->min_cnt, ele->max_cnt,
+					(int)token_count(tokens)))
+				return (print_error(ERR_TOKEN_COUNT, "token", line), NULL);
+			return (ele->parse_fn);
+		}
+		++i;
 	}
-	return (parser(tokens, scene));
+	return (print_error(ERR_UNKNOWN_TOKEN, "token", *tokens), NULL);
 }

@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   matrix.h                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 08:51:07 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/15 11:20:24 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/02 18:15:46 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,10 @@ void	scale_m4x4(t_mat4x4 mat, t_v3f scale);
 t_v3f	mul_v3_m4x4(t_v3f v, t_mat4x4 mat);
 t_v3f	mul_dir_m4x4(t_v3f dir, t_mat4x4 mat);
 void	mul_mat4x4(t_mat4x4 dst, t_mat4x4 a, t_mat4x4 b);
+void	transpose_mat4x4(t_mat4x4 mat);
+void	invert_m4x4(t_mat4x4 dst, const t_mat4x4 src);
+void	rotate_m4x4(t_mat4x4 mat, t_v3f x, t_v3f y, t_v3f z);
+void	view_matrix(t_mat4x4 mat, t_v3f pos, t_v3f dir, t_v3f up);
+void	obj_to_world(t_mat4x4 dst, t_v3f pos, t_v3f dir, t_v3f up);
 
 #endif

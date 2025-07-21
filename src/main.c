@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 18:21:05 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/19 14:28:55 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 18:21:05 by jboon             #+#    #+#             */
+/*   Updated: 2025/07/21 17:18:29 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,9 @@ static bool	valid_input(int argc, char **argv)
 static void	init_scene_and_vector(t_scene *scene)
 {
 	ft_bzero(scene, sizeof(t_scene));
-	if (!vector_init(&scene->objects, 8) || !vector_init(&scene->lights, 8))
+	if (!vector_init(&scene->objects, 8) || !vector_init(&scene->lights, 8)
+		|| !vector_init(&scene->shared_materials, 8)
+		|| !create_default_materials(&scene->shared_materials))
 	{
 		perror("init_scene_and_vector");
 		cleanup_scene(scene);
@@ -53,15 +55,21 @@ int	main(int argc, char **argv)
 {
 	t_scene	scene;
 
-	ft_bzero(&scene, sizeof(t_scene));
 	if (!valid_input(argc, argv))
-		return (EXIT_FAILURE);
+		return (1);
 	init_scene_and_vector(&scene);
 	if (!parse_map(&scene, argv[1]))
-		print_error(ERR_PARSE_FAIL, "map", argv[1]);
-	else if (!validate_scene(&scene))
-		return (cleanup_scene(&scene), false);
-	game(&scene);
+	{
+		cleanup_scene(&scene);
+		return (1);
+	}
+	if (!validate_scene(&scene))
+	{
+		cleanup_scene(&scene);
+		return (1);
+	}
+	if (game(&scene) != 0)
+		return (1);
 	cleanup_scene(&scene);
-	return (EXIT_SUCCESS);
+	return (0);
 }
