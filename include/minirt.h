@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minirt.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 11:37:50 by jboon             #+#    #+#             */
-/*   Updated: 2025/07/22 01:08:17 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   minirt.h                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
+/*   Updated: 2025/07/22 16:44:23 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,22 @@ typedef struct s_button
 typedef struct s_ui
 {
 	bool		show_ui;
-	bool		show_environment;
-	bool		show_camera;
-	bool		show_objects;
-	bool		show_lights;
-	int			scroll_offset;
+	// bool		show_ambient;
+	// bool		show_camera;
+	// bool		show_lights;
 	int			mouse_x;
 	int			mouse_y;
 	bool		refresh;
-	t_button	ambient_button;
-	t_button	bg_r_button;
-	t_button	bg_g_button;
-	t_button	bg_b_button;
-	t_button	cam_x_button;
-	t_button	cam_y_button;
-	t_button	cam_z_button;
+	t_button	am_inten_button;
+	t_button	am_r_button;
+	t_button	am_g_button;
+	t_button	am_b_button;
+	t_button	pos_x_button;
+	t_button	pos_y_button;
+	t_button	pos_z_button;
+	t_button	dir_x_button;
+	t_button	dir_y_button;
+	t_button	dir_z_button;
 	t_button	cam_fov_button;
 	t_button	light_x_button;
 	t_button	light_y_button;
@@ -89,15 +90,14 @@ typedef struct s_game {
 void			rt_put_string(mlx_image_t *img, const char *str, int x, int y);
 void			ui_init(t_ui *ui, t_scene *scene);
 void			draw_ui(t_game *game);
-void			init_environment_buttons(t_ui *ui, t_scene *scene);
+void			init_ambient_buttons(t_ui *ui, t_scene *scene);
 void			init_camera_buttons(t_ui *ui, t_cam *camera);
 void			init_point_light_buttons(t_ui *ui, t_scene *scene);
 bool			is_point_in_button(t_button *button, int x, int y, int y_offset);
 void			update_button_value(t_button *button, int mouse_x, int y_offset);
 void			draw_button(mlx_image_t *img, t_button *button, int y_offset);
 void			draw_section_header(mlx_image_t *img, const char *title, int x, int y);
-void			display_scene_info(t_game *game, const char *filename);
-
+void			draw_submit_button(mlx_image_t *img, const char *title, int x, int y);
 // Game functions
 bool			game_init(t_game *game, t_scene *scene);
 int				game(t_scene *scene);
