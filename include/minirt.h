@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/22 16:44:23 by bewong        ########   odam.nl         */
+/*   Updated: 2025/07/22 17:59:21 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,26 @@
 
 // Then MLX42
 # include "MLX42/MLX42.h"
+
+// UI Constants
+#define UI_PANEL_WIDTH 250
+#define UI_BUTTON_WIDTH 200
+#define UI_BUTTON_HEIGHT 30
+#define UI_BUTTON_SPACING 20
+#define UI_SECTION_HEADER_HEIGHT 30
+#define UI_CHAR_WIDTH 8
+#define UI_CHAR_HEIGHT 15
+
+// UI Colors
+#define UI_BG_COLOR 0x11111180
+#define UI_PANEL_BG_COLOR 0x111111FF
+#define UI_SECTION_HEADER_COLOR 0x222222FF
+#define UI_SUBMIT_BUTTON_COLOR 0x666666FF
+#define UI_BUTTON_COLOR 0x333333FF
+#define UI_BUTTON_HOVER_COLOR 0x444444FF
+#define UI_BUTTON_BORDER_COLOR 0x666666FF
+#define UI_BUTTON_BORDER_HOVER_COLOR 0x888888FF
+#define UI_TEXT_COLOR 0xFFFFFFFF
 
 // Then project headers
 # include "color.h"
@@ -52,9 +72,9 @@ typedef struct s_button
 typedef struct s_ui
 {
 	bool		show_ui;
-	// bool		show_ambient;
-	// bool		show_camera;
-	// bool		show_lights;
+	bool		show_ambient;
+	bool		show_camera;
+	bool		show_lights;
 	int			mouse_x;
 	int			mouse_y;
 	bool		refresh;
@@ -74,7 +94,7 @@ typedef struct s_ui
 	t_button	light_z_button;
 	t_button	light_intensity_button;
 	mlx_image_t	*ui_layer;
-	float		ambient_light_intensity;
+	// float		ambient_light_intensity;
 } t_ui;
 
 typedef struct s_game {

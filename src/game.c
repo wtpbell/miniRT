@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/22 15:59:35 by bewong        ########   odam.nl         */
+/*   Updated: 2025/07/22 18:54:08 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@
 #define WIDTH    1600
 #define HEIGHT   900
 
+#define SECTION_HEADER_X UI_BUTTON_SPACING
+#define SECTION_WIDTH    220
+
+#define AMBIENT_HEADER_Y  UI_BUTTON_SPACING
+#define CAMERA_HEADER_Y   (AMBIENT_HEADER_Y + UI_SECTION_HEADER_HEIGHT + (UI_BUTTON_SPACING * 1.5) + 4 * (UI_BUTTON_HEIGHT + (UI_BUTTON_SPACING * 1.2)))
+#define LIGHT_HEADER_Y    (CAMERA_HEADER_Y + UI_SECTION_HEADER_HEIGHT + (UI_BUTTON_SPACING * 1.5) + 7 * (UI_BUTTON_HEIGHT + (UI_BUTTON_SPACING * 1.2)))
+
 void	key_hook(mlx_key_data_t keydata, void *param)
 {
 	t_game	*game;
@@ -26,24 +33,87 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 		mlx_close_window(game->mlx);
 	else if (keydata.key == MLX_KEY_H && keydata.action == MLX_PRESS)
 	{
-		game->ui.show_ui = false;
-		render(game->scene);
-		if (game->ui.show_ui)
-			draw_ui(game);
+		game->ui.show_ui = !game->ui.show_ui;
+		game->ui.ui_layer->instances[0].enabled = game->ui.show_ui;
 	}
+}
+
+static int	get_all_buttons(t_ui *ui, t_button **out)
+{
+	int	count = 0;
+	if (ui->show_ambient)
+	{
+		out[count++] = &ui->am_inten_button;
+		out[count++] = &ui->am_r_button;
+		out[count++] = &ui->am_g_button;
+		out[count++] = &ui->am_b_button;
+	}
+	if (ui->show_camera)
+	{
+		out[count++] = &ui->pos_x_button;
+		out[count++] = &ui->pos_y_button;
+		out[count++] = &ui->pos_z_button;
+		out[count++] = &ui->dir_x_button;
+		out[count++] = &ui->dir_y_button;
+		out[count++] = &ui->dir_z_button;
+		out[count++] = &ui->cam_fov_button;
+	}
+	if (ui->show_lights)
+	{
+		out[count++] = &ui->light_x_button;
+		out[count++] = &ui->light_y_button;
+		out[count++] = &ui->light_z_button;
+		out[count++] = &ui->light_intensity_button;
+	}
+	return (count);
 }
 
 void	mouse_hook(mouse_key_t button, action_t action, 
 	__attribute__((unused)) modifier_key_t mods, void *param)
 {
-	t_game	*game;
-	int32_t	x;
-	int32_t	y;
-	
+	t_game		*game;
+	t_ui		*ui;
+	int32_t		x;
+	int32_t		y;
+	t_button	*buttons[32];
+	int			count;
+	int			i;
+
 	game = param;
-	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS && game->ui.show_ui)
+	ui = &game->ui;
+	i = 0;
+	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS && ui->show_ui)
+	{
 		mlx_get_mouse_pos(game->mlx, &x, &y);
+
+		// Handle section header toggle clicks
+		if (x >= SECTION_HEADER_X && x <= SECTION_HEADER_X + SECTION_WIDTH)
+		{
+			if (y >= AMBIENT_HEADER_Y && y <= AMBIENT_HEADER_Y + UI_SECTION_HEADER_HEIGHT)
+				ui->show_ambient = !ui->show_ambient;
+			else if (y >= CAMERA_HEADER_Y && y <= CAMERA_HEADER_Y + UI_SECTION_HEADER_HEIGHT)
+				ui->show_camera = !ui->show_camera;
+			else if (y >= LIGHT_HEADER_Y && y <= LIGHT_HEADER_Y + UI_SECTION_HEADER_HEIGHT)
+				ui->show_lights = !ui->show_lights;
+
+			draw_ui(game);
+			// return ;
+		}		
+
+		count = get_all_buttons(ui, buttons);
+		while (i < count)
+		{
+			if (is_point_in_button(buttons[i], x, y, 0))
+			{
+				update_button_value(buttons[i], x, 0);
+				draw_ui(game);
+				break ;
+			}
+			++i;
+		}
+	}
 }
+
 
 bool	init_ui(t_game *game, t_scene *scene)
 {
