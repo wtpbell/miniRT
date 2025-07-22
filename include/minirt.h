@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/22 17:59:21 by bewong        ########   odam.nl         */
+/*   Updated: 2025/07/22 19:24:04 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,20 @@ typedef struct s_button
 	bool	is_hovered;
 }	t_button;
 
+void increment(void *ctx)
+{
+	(void *)ctx;
+	
+}
+
+struct s_data
+{
+	float *real_value;
+	float min;
+	float max;
+	float step;
+};
+
 typedef struct s_ui
 {
 	bool		show_ui;
@@ -94,8 +108,50 @@ typedef struct s_ui
 	t_button	light_z_button;
 	t_button	light_intensity_button;
 	mlx_image_t	*ui_layer;
-	// float		ambient_light_intensity;
 } t_ui;
+
+typedef	struct	s_real_button
+{
+	t_label 	*label;
+	void	 	*ctx;
+	void 		(*action)(void *inst, void * ctx);
+};
+
+typedef struct s_ui_element
+{
+	t_v2f	pos;
+	t_v2f	size;
+	// t_v2f	anchor;
+	
+	struct s_ui_element	*children;
+	struct s_ui_element	*parent;
+
+	
+	bool	is_clickable;
+	bool	is_visible;
+	int		ui_type;
+	union
+	{
+		struct s_real_button	*button;
+		struct s_label			*label;
+	};	
+} t_uie;
+
+typedef struct s_label
+{
+	char *name;
+} t_label;
+
+void	bla()
+{
+	t_uie main;
+	t_uie sub_group;
+	t_uie button;
+
+	main.children = &sub_group;
+	sub_group.button = &button;
+	
+}
 
 typedef struct s_game {
 	mlx_t		*mlx;
