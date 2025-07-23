@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 12:05:02 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/21 21:56:43 by bewong           ###   ########.fr       */
+/*   Updated: 2025/07/23 20:00:48 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static bool	parse_camera_fields(t_cam *cam, char **tokens)
 	return (parse_fields((t_field *)fields, 2, tokens + CAMERA_MIN_TOKENS));
 }
 
-static void	camera_init(t_cam *cam, t_v3f pos, t_v3f dir, float fov)
+void	camera_init(t_cam *cam, t_v3f pos, t_v3f dir, float fov)
 {
 	cam->t.pos = pos;
 	dir.z = -dir.z;
@@ -58,6 +58,7 @@ static void	camera_init(t_cam *cam, t_v3f pos, t_v3f dir, float fov)
 	cam->fov = fov;
 	cam->aperture = 0.0f;
 	cam->focus_dist = 10.0f;
+	cam->initialized = true;
 }
 
 bool	parse_camera(char **tokens, t_scene *scene)

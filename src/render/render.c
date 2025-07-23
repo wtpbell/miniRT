@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/07/22 00:45:32 by bewong           ###   ########.fr       */
+/*   Updated: 2025/07/23 21:29:31 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "ray.h"
 #include "rt_math.h"
 #include "scene.h"
+#include <stdio.h>
 
 #define MAX_DEPTH			8
 #define SAMPLES_PER_PIXEL	8
@@ -141,4 +142,49 @@ void	render(t_scene *scene)
 		++y;
 	}
 	debug_scene_setup(scene);
+}
+
+void	render_scene(t_game *game)
+{
+    printf("render_scene: Starting...\n");
+    if (!game) {
+        printf("render_scene: Error - game is NULL\n");
+        return;
+    }
+    if (!game->scene) {
+        printf("render_scene: Error - game->scene is NULL\n");
+        return;
+    }
+
+    printf("render_scene: Calling render()\n");
+    render(game->scene);
+    
+    printf("render_scene: Checking camera image plane\n");
+    if (game->scene->camera.img_plane) {
+        printf("render_scene: Displaying scene\n");
+        mlx_image_to_window(game->mlx, game->scene->camera.img_plane, 0, 0);
+    } else {
+        printf("render_scene: Warning - camera.img_plane is NULL\n");
+    }
+    
+    printf("render_scene: Checking UI\n");
+    if (game->ui && game->ui->root && game->ui->root->style.visible) {
+        printf("render_scene: Rendering UI\n");
+        if (game->ui->ui_layer) {
+            printf("render_scene: UI layer dimensions: %dx%d\n", 
+                  game->ui->ui_layer->width, game->ui->ui_layer->height);
+            
+            ft_bzero(game->ui->ui_layer->pixels, 
+                    game->ui->ui_layer->width * game->ui->ui_layer->height * sizeof(int32_t));
+            
+            printf("render_scene: Rendering UI elements\n");
+            render_ui_element(game->ui->root, game->ui->ui_layer);
+            
+            printf("render_scene: Displaying UI\n");
+            mlx_image_to_window(game->mlx, game->ui->ui_layer, 0, 0);
+        } else {
+            printf("render_scene: Warning - ui_layer is NULL\n");
+        }
+    }
+    printf("render_scene: Done\n");
 }

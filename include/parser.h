@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   parser.h                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/02 18:08:00 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   parser.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 22:20:50 by bewong            #+#    #+#             */
+/*   Updated: 2025/07/23 19:59:36 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ t_parser	element_parser(char **tokens, t_scene *scene, const char *line);
 
 /* ---------------------Elements--------------------- */
 // camera.c
+void		camera_init(t_cam *cam, t_v3f pos, t_v3f dir, float fov);
 bool		parse_camera(char **tokens, t_scene *scene);
 
 // light.c

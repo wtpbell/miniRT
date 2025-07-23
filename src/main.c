@@ -6,12 +6,14 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:21:05 by jboon             #+#    #+#             */
-/*   Updated: 2025/07/21 17:18:29 by bewong           ###   ########.fr       */
+/*   Updated: 2025/07/23 21:20:00 by bewong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "minirt.h"
+#include "ui.h"
+#include <unistd.h> 
 
 static bool	valid_file_format(const char *file)
 {
@@ -55,21 +57,15 @@ int	main(int argc, char **argv)
 {
 	t_scene	scene;
 
+	ft_bzero(&scene, sizeof(t_scene));
 	if (!valid_input(argc, argv))
-		return (1);
+		return (EXIT_FAILURE);
 	init_scene_and_vector(&scene);
 	if (!parse_map(&scene, argv[1]))
-	{
-		cleanup_scene(&scene);
-		return (1);
-	}
-	if (!validate_scene(&scene))
-	{
-		cleanup_scene(&scene);
-		return (1);
-	}
-	if (game(&scene) != 0)
-		return (1);
+		return (print_error(ERR_PARSE_FAIL, "map", argv[1]), EXIT_FAILURE);
+	else if (!validate_scene(&scene))
+		return (cleanup_scene(&scene), EXIT_FAILURE);
+	game(&scene);
 	cleanup_scene(&scene);
-	return (0);
+	return (EXIT_SUCCESS);
 }

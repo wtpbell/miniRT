@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   rt_types.h                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/06/07 16:31:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/27 15:40:02 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   rt_types.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/07 16:31:03 by jboon             #+#    #+#             */
+/*   Updated: 2025/07/23 22:00:46 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_ray_hit		t_ray_hit;
 typedef struct s_object			t_obj;
 typedef struct s_tri_var		t_tri_var;
 typedef struct s_scene			t_scene;
+typedef struct s_game			t_game;
 
 typedef int						(*t_intsct)(t_obj *obj, t_ray *ray,
 									t_v2f t, float *dst);
