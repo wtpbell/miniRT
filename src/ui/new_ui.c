@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   new_ui.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/23 14:48:38 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/24 00:38:43 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   new_ui.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/23 14:48:38 by bewong        #+#    #+#                 */
+/*   Updated: 2025/07/24 14:46:41 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_ui_element *ui_element_create(t_ui_type type, t_v2f pos, t_v2f size)
 	}
 	else if (type == UI_SECTION)
 	{
-		element->style.bg_color = 0x222222FF;s
+		element->style.bg_color = 0x222222FF;
 	}
 	else if (type == UI_HEADER)
 	{
@@ -247,9 +247,11 @@ t_ui_element	*create_value_button(const char *label, float *value,
 	btn->label_text = ft_strdup(label);
 	if (!btn->label_text)
 		return (free(btn), free(button), NULL);
+	
 	btn->value = value;
 	btn->range = range;
 	btn->step = step;
+	btn->instance_id = btn->image->count - 1;
 	*value = fmax(range.x, fmin(range.y, *value));
 	button->data = btn;
 	return (button);
@@ -293,8 +295,8 @@ t_ui_element	*create_ambient_section(t_scene *scene, t_v2f pos)
 	section = create_section("AMBIENT", pos, init_v2f(UI_PANEL_WIDTH, 200));
 	if (!section)
 	{
-		if (am_light->type == LIGHT_AMBIENT)
-			free(am_light);
+		// if (am_light->type == LIGHT_AMBIENT)
+		// 	free(am_light);
 		return (NULL);
 	}
 	col_r = create_value_button("COL R", &am_light->color.x, init_v2f(0, 255), 5.0f);
@@ -308,7 +310,7 @@ t_ui_element	*create_ambient_section(t_scene *scene, t_v2f pos)
 		if (col_g) free(col_g);
 		if (col_b) free(col_b);
 		if (am_inten) free(am_inten);
-		if (am_light->type == LIGHT_AMBIENT) free(am_light);
+		// if (am_light->type == LIGHT_AMBIENT) free(am_light);
 		free(section);
 		return (NULL);
 	}
@@ -325,7 +327,7 @@ t_ui_element	*create_ambient_section(t_scene *scene, t_v2f pos)
 	ui_add_child(section, col_g);
 	ui_add_child(section, col_b);
 	ui_add_child(section, am_inten);
-	if (am_light->type == LIGHT_AMBIENT)
+	// if (am_light->type == LIGHT_AMBIENT)
 		section->data = am_light;
 
 	return (section);
@@ -344,7 +346,6 @@ int game_loop(void *param)
 	t_game *game = (t_game *)param;
 	t_ui *ui;
 	bool needs_scene_redraw = false;
-
 
 	ui = game->ui;
 	needs_scene_redraw = first_frame || ui->needs_redraw;
@@ -521,6 +522,7 @@ bool	is_point_in_element(t_ui_element *element, int32_t x, int32_t y)
 		y >= element->pos.y && 
 		y <= (element->pos.y + element->size.y));
 }
+
 
 void	update_button_value(t_ui_element *button, int32_t click_x)
 {
@@ -724,3 +726,4 @@ void	*mlx_get_mlx(void)
 		mlx = mlx_init(800, 600, "MiniRT", true);
 	return (mlx);
 }
+

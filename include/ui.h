@@ -93,7 +93,7 @@ typedef struct s_ui
 	mlx_image_t		*ui_layer;
 	t_ui_element	*root;
 	mlx_t			*mlx;
-	bool			needs_redraw;  // Flag to indicate if UI needs to be redrawn
+	bool			needs_redraw;
 }	t_ui;
 
 typedef struct s_game
@@ -106,10 +106,12 @@ typedef struct s_game
 
 typedef struct s_ui_button
 {
+	mlx_image_t	*img;
 	char		*label_text;
 	float		*value;
-	t_v2f		range;
 	float		step;
+	int			instance_id;
+	t_v2f		range;
 }	t_ui_button;
 
 typedef struct s_ui_label
