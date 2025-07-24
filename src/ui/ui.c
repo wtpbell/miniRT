@@ -231,10 +231,11 @@ void	draw_section_header(mlx_image_t *img, const char *title, int x, int y)
 {
 	int	title_len;
 	int	title_x;
+	int	section_width = UI_PANEL_WIDTH - (2 * UI_BUTTON_SPACING);
 
-	draw_rect(img, x, y, 220, UI_SECTION_HEADER_HEIGHT, UI_SECTION_HEADER_COLOR);
+	draw_rect(img, x, y, section_width, UI_SECTION_HEADER_HEIGHT, UI_SECTION_HEADER_COLOR);
 	title_len = ft_strlen(title);
-	title_x = x + (200 - (title_len * UI_CHAR_WIDTH)) / 2;
+	title_x = x + (section_width - (title_len * UI_CHAR_WIDTH)) / 2;
 	if (title_x < x + 10)
 		title_x = x + 10;
 	rt_put_string(img, title, title_x, y + 8);
@@ -244,10 +245,11 @@ void	draw_submit_button(mlx_image_t *img, const char *title, int x, int y)
 {
 	int	title_len;
 	int	title_x;
+	int	button_width = UI_PANEL_WIDTH - (2 * UI_BUTTON_SPACING);
 
-	draw_rect(img, x, y, 220, UI_SECTION_HEADER_HEIGHT, UI_SUBMIT_BUTTON_COLOR);
+	draw_rect(img, x, y, button_width, UI_SECTION_HEADER_HEIGHT, UI_SUBMIT_BUTTON_COLOR);
 	title_len = ft_strlen(title);
-	title_x = x + (200 - (title_len * UI_CHAR_WIDTH)) / 2;
+	title_x = x + (button_width - (title_len * UI_CHAR_WIDTH)) / 2;
 	if (title_x < x + 10)
 		title_x = x + 10;
 	rt_put_string(img, title, title_x, y + 8);
@@ -278,9 +280,9 @@ void update_button_value(t_button *button, int mouse_x, int y_offset)
 static t_button init_button(float *value, const char *label, float min, float max, float step)
 {
 	t_button button = {
-		.x = UI_BUTTON_SPACING,
+		.x = UI_BUTTON_SPACING, // This will be adjusted based on the panel position
 		.y = 0,
-		.width = UI_BUTTON_WIDTH,
+		.width = UI_PANEL_WIDTH - (2 * UI_BUTTON_SPACING), // Make buttons span panel width with padding
 		.height = UI_BUTTON_HEIGHT,
 		.min = min,
 		.max = max,
@@ -397,25 +399,23 @@ void draw_ui(t_game *game)
 	if (!game->ui.show_ui)
 	{
 		ft_bzero(game->ui.ui_layer->pixels, 
-			game->ui.ui_layer->width * game->ui.ui_layer->height * 4);
+			game->ui.ui_layer->width * game->ui.ui_layer->height * sizeof(uint32_t));
 		return ;
 	}
+
+	// Clear the entire UI layer with transparent black
+	ft_bzero(game->ui.ui_layer->pixels, 
+		game->ui.ui_layer->width * game->ui.ui_layer->height * sizeof(uint32_t));
+
+	// Draw the panel background on the right side
 	y = 0;
 	while (y < game->ui.ui_layer->height)
 	{
-		x = 0;
+		x = game->ui.ui_layer->width - UI_PANEL_WIDTH;
 		while (x < game->ui.ui_layer->width)
 		{
-			uint8_t *pixel = &game->ui.ui_layer->pixels[(y * game->ui.ui_layer->width + x) * 4];
-			if (x < UI_PANEL_WIDTH)
-			{
-				pixel[0] = (UI_PANEL_BG_COLOR >> 24) & 0xFF;
-				pixel[1] = (UI_PANEL_BG_COLOR >> 16) & 0xFF;
-				pixel[2] = (UI_PANEL_BG_COLOR >> 8) & 0xFF;
-				pixel[3] = UI_PANEL_BG_COLOR & 0xFF;
-			}
-			else
-				*(uint32_t *)pixel = 0x00000000;
+			uint32_t *pixel = (uint32_t *)&game->ui.ui_layer->pixels[(y * game->ui.ui_layer->width + x) * 4];
+			*pixel = UI_PANEL_BG_COLOR;
 			x++;
 		}
 		y++;
@@ -424,7 +424,8 @@ void draw_ui(t_game *game)
 	y_offset = UI_BUTTON_SPACING;
 
 	// Draw Environment Section
-	draw_section_header(game->ui.ui_layer, "AMBIENT LIGHT", UI_BUTTON_SPACING, y_offset);
+	draw_section_header(game->ui.ui_layer, "AMBIENT LIGHT", 
+		game->ui.ui_layer->width - UI_PANEL_WIDTH + UI_BUTTON_SPACING, y_offset);
 	y_offset += UI_SECTION_HEADER_HEIGHT + (UI_BUTTON_SPACING * 1.5);
 
 	if (game->ui.show_ambient)
@@ -443,7 +444,8 @@ void draw_ui(t_game *game)
 		y_offset += UI_BUTTON_HEIGHT + (UI_BUTTON_SPACING * 1.3);
 	}
 	// Draw Camera Section
-	draw_section_header(game->ui.ui_layer, "CAMERA", UI_BUTTON_SPACING, y_offset);
+	draw_section_header(game->ui.ui_layer, "CAMERA", 
+		game->ui.ui_layer->width - UI_PANEL_WIDTH + UI_BUTTON_SPACING, y_offset);
 	y_offset += UI_SECTION_HEADER_HEIGHT + (UI_BUTTON_SPACING * 1.5);
 
 	if (game->ui.show_camera)
@@ -471,7 +473,8 @@ void draw_ui(t_game *game)
 		y_offset += UI_BUTTON_HEIGHT + (UI_BUTTON_SPACING * 1.3);
 	}
 	// Draw Light Section
-	draw_section_header(game->ui.ui_layer, "POINT LIGHT", UI_BUTTON_SPACING, y_offset);
+	draw_section_header(game->ui.ui_layer, "POINT LIGHT", 
+		game->ui.ui_layer->width - UI_PANEL_WIDTH + UI_BUTTON_SPACING, y_offset);
 	y_offset += UI_SECTION_HEADER_HEIGHT + (UI_BUTTON_SPACING * 1.5);
 
 	if (game->ui.show_lights)
@@ -490,6 +493,7 @@ void draw_ui(t_game *game)
 		y_offset += UI_BUTTON_HEIGHT + (UI_BUTTON_SPACING * 1.3);
 	}
 
-	draw_submit_button(game->ui.ui_layer, "SUBMIT", UI_BUTTON_SPACING, y_offset);
+	draw_submit_button(game->ui.ui_layer, "SUBMIT", 
+		game->ui.ui_layer->width - UI_PANEL_WIDTH + UI_BUTTON_SPACING, y_offset);
 	y_offset += UI_SECTION_HEADER_HEIGHT + (UI_BUTTON_SPACING * 1.5);
 }

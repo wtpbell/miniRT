@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/07/23 21:29:31 by bewong           ###   ########.fr       */
+/*   Updated: 2025/07/25 00:25:42 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,45 +146,25 @@ void	render(t_scene *scene)
 
 void	render_scene(t_game *game)
 {
-    printf("render_scene: Starting...\n");
-    if (!game) {
-        printf("render_scene: Error - game is NULL\n");
-        return;
-    }
-    if (!game->scene) {
-        printf("render_scene: Error - game->scene is NULL\n");
-        return;
-    }
-
-    printf("render_scene: Calling render()\n");
-    render(game->scene);
-    
-    printf("render_scene: Checking camera image plane\n");
-    if (game->scene->camera.img_plane) {
-        printf("render_scene: Displaying scene\n");
-        mlx_image_to_window(game->mlx, game->scene->camera.img_plane, 0, 0);
-    } else {
-        printf("render_scene: Warning - camera.img_plane is NULL\n");
-    }
-    
-    printf("render_scene: Checking UI\n");
-    if (game->ui && game->ui->root && game->ui->root->style.visible) {
-        printf("render_scene: Rendering UI\n");
-        if (game->ui->ui_layer) {
-            printf("render_scene: UI layer dimensions: %dx%d\n", 
-                  game->ui->ui_layer->width, game->ui->ui_layer->height);
-            
-            ft_bzero(game->ui->ui_layer->pixels, 
-                    game->ui->ui_layer->width * game->ui->ui_layer->height * sizeof(int32_t));
-            
-            printf("render_scene: Rendering UI elements\n");
-            render_ui_element(game->ui->root, game->ui->ui_layer);
-            
-            printf("render_scene: Displaying UI\n");
-            mlx_image_to_window(game->mlx, game->ui->ui_layer, 0, 0);
-        } else {
-            printf("render_scene: Warning - ui_layer is NULL\n");
-        }
-    }
-    printf("render_scene: Done\n");
+	static bool scene_initialized = false;
+	if (!scene_initialized) {
+		printf("render_scene: Initial scene render...\n");
+		scene_initialized = true;
+	}
+	update_camera_view(&game->scene->camera);
+	render(game->scene);
+	if (game->scene->camera.img_plane) {
+		static bool image_added = false;
+		if (!image_added && game->scene->camera.img_plane->instances)
+		{
+			mlx_set_instance_depth(game->scene->camera.img_plane->instances, 0);
+			image_added = true;
+		}
+	}
+	if (game->ui)
+	{
+		if (game->ui->needs_redraw)
+			game->ui->needs_redraw = false;
+	}
+	printf("render_scene: Done\n");
 }
