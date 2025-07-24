@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:51:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/24 11:57:23 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/24 12:18:55 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	ft_swapi(int *a, int *b);
 int		fapprox(float n);
 float	ft_clampf(float value, float min, float max);
 float	ft_clampf01(float val);
-float	schlick(float cosin, float ref_idx);
 float	modulo(float x);
 float	lerpf(float min, float max, float t);
 float	cos_smooth(float t);

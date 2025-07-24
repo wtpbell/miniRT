@@ -30,6 +30,7 @@ struct s_lighting
 	float	specular;
 };
 
+float	schlick(float cosin, float ref_idx);
 float	calculate_diffuse(t_lighting *lighting);
 float	get_specular(t_lighting *lt, t_ray_hit *hit);
 t_v3f	compute_lighting(t_ray_hit *hit_info, t_scene *scene);
