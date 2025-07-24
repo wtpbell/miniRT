@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/24 09:15:29 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/02 18:31:49 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/24 14:52:37 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@
 // height difference.
 // standard luminance formula (29.9% Red + 58.7% Green + 11.4% Blue)
 // full wrapping: handle x > width, y > height, x < 0, y < 0
-static float	sample_bump_map(mlx_texture_t *bump, t_v2f uv, const t_v3f mod)
-{
-	return (v3f_dot(sample_texture(bump, uv, mod),
-			init_v3f(0.2126f, 0.7152f, 0.0722f)));
-}
+// static float	sample_bump_map(mlx_texture_t *bump, t_v2f uv, const t_v3f mod)
+// {
+// 	return (v3f_dot(sample_texture(bump, uv, mod),
+// 			init_v3f(0.2126f, 0.7152f, 0.0722f)));
+// }
 
 static t_v3f	apply_bump(t_bump *ctx, t_v2f uv, t_v3f mod)
 {
@@ -37,9 +37,18 @@ static t_v3f	apply_bump(t_bump *ctx, t_v2f uv, t_v3f mod)
 
 	uv_u = init_v2f(uv.u + ctx->delta, uv.v);
 	uv_v = init_v2f(uv.u, uv.v + ctx->delta);
-	heights.x = sample_bump_map(ctx->mat->bump_map, uv, mod);
-	heights.y = sample_bump_map(ctx->mat->bump_map, uv_u, mod);
-	heights.z = sample_bump_map(ctx->mat->bump_map, uv_v, mod);
+
+	uv = v2f_mul_v3f(uv, mod);
+	uv_u = v2f_mul_v3f(uv_u, mod);
+	uv_v = v2f_mul_v3f(uv_v, mod);
+
+	heights.x = v3f_dot(sample_noise(&uv, &ctx->mat->texture, g_v3f_zero), init_v3f(0.2126f, 0.7152f, 0.0722f));
+	heights.y = v3f_dot(sample_noise(&uv_u, &ctx->mat->texture, g_v3f_zero), init_v3f(0.2126f, 0.7152f, 0.0722f));
+	heights.z = v3f_dot(sample_noise(&uv_v, &ctx->mat->texture, g_v3f_zero), init_v3f(0.2126f, 0.7152f, 0.0722f));
+
+	// heights.x = sample_bump_map(ctx->mat->bump_map, uv, mod);
+	// heights.y = sample_bump_map(ctx->mat->bump_map, uv_u, mod);
+	// heights.z = sample_bump_map(ctx->mat->bump_map, uv_v, mod);
 	if (ctx->mat->bump_scale > 0.0f)
 		bump_scale = ctx->mat->bump_scale;
 	else
@@ -73,6 +82,7 @@ t_v3f	perturb_normal(const t_mat *mat, const t_v2f texcoord,
 	ctx.n = normal;
 	ctx.mat = mat;
 	ctx.delta = 1.0f / mat->bump_map->width;
+
 	calc_tangent_basis(normal, &ctx.t, &ctx.b);
 	return (apply_bump(&ctx, texcoord, mat->texture.scale_rot));
 }

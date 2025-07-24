@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/24 12:14:04 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/24 12:38:17 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ struct s_material
 	t_v3f			albedo;
 	t_tex			texture;
 	t_texcol		get_texcol;
+	void			(*get_bump)(void *, void *);
 	char			*bump_path;
 	char			*tex_path;
 	mlx_texture_t	*bump_map;
@@ -105,6 +106,6 @@ t_v3f	perturb_normal(const t_mat *mat, const t_v2f texcoord,
 t_v3f	sample_texture(const mlx_texture_t *tex, const t_v2f uv,
 			const t_v3f mod);
 t_v3f	display_normal(t_ray_hit *hit_info);
-t_v3f	noise_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
+t_v3f	sample_noise(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
 
 #endif
