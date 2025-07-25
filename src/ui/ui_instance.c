@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_instance.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/24 20:30:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/25 00:38:18 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_instance.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/24 20:30:00 by bewong        #+#    #+#                 */
+/*   Updated: 2025/07/25 17:51:56 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,8 @@ void ui_images_destroy(mlx_t *mlx, t_ui_images *images)
 // Initialize a UI element with an image
 t_ui_element *ui_element_create_with_image(mlx_t *mlx, t_ui_type type, t_v2f pos, t_v2f size)
 {
+	printf("ui_element_create_with_image: start\n");
 	t_ui_element *element;
-	
-
-	if (!mlx || size.x <= 0 || size.y <= 0)
-	{
-		printf("Error: Invalid parameters for UI element creation\n");
-		return NULL;
-	}
 
 	element = ft_calloc(1, sizeof(t_ui_element));
 	if (!element)
@@ -124,7 +118,7 @@ t_ui_element *ui_element_create_with_image(mlx_t *mlx, t_ui_type type, t_v2f pos
 	}
 	element->style = (t_ui_style){
 		.bg_color = UI_BG_COLOR,
-		.fg_color = 0x00000000,
+		.fg_color = UI_TRANSPARENT,
 		.text_color = UI_TEXT_COLOR,
 		.border_color = UI_BORDER_COLOR,
 		.padding = 4,
@@ -146,11 +140,12 @@ t_ui_element *ui_element_create_with_image(mlx_t *mlx, t_ui_type type, t_v2f pos
 
 void ui_element_render(t_ui_element *element)
 {
+	printf("ui_element_render: start UI element render\n");
 	if (!element || !element->image || !element->image->pixels)
 	{
 		printf("Warning: Cannot render element - invalid parameters\n");
 		return;
-	}e
+	}
 	if (!element->style.visible)
 		return;
 	uint8_t *pixels = element->image->pixels;
@@ -193,6 +188,7 @@ void ui_element_render(t_ui_element *element)
 			}
 		}
 	}
+	printf("ui_element_render: added label\n");
 	if ((element->type == UI_HEADER || element->type == UI_SECTION) && element->data)
 	{
 		t_ui_label *label = (t_ui_label *)element->data;
@@ -238,6 +234,7 @@ void ui_element_render(t_ui_element *element)
 		element->image->instances[element->instance_id].enabled = 
 			element->style.visible && element->visible;
 	}
+	printf("ui_element_render: done label\n");
 }
 
 int32_t ui_element_add_instance(mlx_t *mlx, t_ui_element *element)

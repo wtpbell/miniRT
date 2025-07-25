@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui.h                                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/25 00:51:07 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui.h                                               :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
+/*   Updated: 2025/07/25 18:01:28 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@
 # define UI_HEADER_WIDTH 230
 # define UI_SECTION_HEADER_HEIGHT 30
 # define UI_SECTION_PADDING 10
+# define UI_PANEL_PADDING 4
 # define UI_SECTION_SPACING 10
 # define UI_CHAR_WIDTH 8
 # define UI_CHAR_HEIGHT 15
@@ -73,11 +74,11 @@
 # define UI_SECTION_HEADER_COLOR 0x222222FF
 # define UI_HEADER_COLOR 0x333333FF
 # define UI_BORDER_COLOR 0xFFFFFFFF
-
+# define UI_TRANSPARENT 0x00000000
 
 typedef enum e_ui_type
 {
-	UI_PANEL,
+	UI_PANEL,`
 	UI_BUTTON, 
 	UI_LABEL,
 	UI_HEADER,
@@ -118,8 +119,6 @@ typedef struct s_ui_element
 	t_v2f				pos;
 	t_v2f				size;
 	bool				visible;
-	bool				hovered;
-	bool				pressed;
 	struct s_ui_element	*parent;
 	struct s_ui_element	*first_child;
 	struct s_ui_element	*next_sibling;
@@ -129,19 +128,21 @@ typedef struct s_ui_element
 	void				(*action)(struct s_ui_element *, void *);
 } t_ui_element;
 
-
 typedef struct s_ui_button
 {
-	char		*label_text;
-	float		*value;
-	float		step;
-	t_v2f		range;
-	void		*param;
-	bool		is_hovered;
-	int			instance_id;
-	mlx_image_t	*img;
 	void		(*on_click)(t_ui_element *, void *);
+	void		*param;
 } t_ui_button;
+
+typedef struct s_ui_value_button
+{
+	float			*value;
+	float			step;
+	t_v2f			range;
+	t_ui_element	*value_label;
+	void			(*on_click)(t_ui_element *, void *);
+	void			*param;
+} t_ui_value_button;
 
 typedef struct s_ui
 {
@@ -171,15 +172,10 @@ void			ui_element_set_position(t_ui_element *element, int32_t x, int32_t y);
 void			ui_element_set_visible(t_ui_element *element, bool visible);
 
 bool			init_ui(t_game *game, t_scene *scene);
-t_ui			*ui_create(mlx_t *mlx, t_scene *scene);
 void			ui_add_child(t_ui_element *parent, t_ui_element *child);
 
 
 t_ui_element	*create_panel(mlx_t *mlx, t_v2f pos, t_v2f size);
-t_ui_element	*create_slider(mlx_t *mlx, const char *label, t_v2f pos, t_v2f size,
-							float *value, float min, float max, float step);
-t_ui_element	*create_color_control(mlx_t *mlx, const char *label, t_v2f pos, t_v2f size,
-							t_v3f *color);
 t_ui_element	*create_label(mlx_t *mlx, const char *text, t_v2f pos, uint32_t color);
 t_ui_element	*create_button(mlx_t *mlx, const char *label, t_v2f pos, t_v2f size, 
 							 void (*on_click)(t_ui_element *, void *), void *param);
@@ -187,18 +183,8 @@ t_ui_element	*create_value_button(mlx_t *mlx, const char *label, float *value,
 								   t_v2f range, float step, t_v2f pos, t_v2f size);
 t_ui_element	*create_section(mlx_t *mlx, const char *title, t_v2f pos, t_v2f size);
 t_ui_element	*create_ambient_section(mlx_t *mlx, t_scene *scene, t_v2f pos, t_v2f size);
-
-
-void	ui_set_button_action(t_ui_element *button, void (*action)(t_ui_element *, void *), void *param);
-void	ui_set_label_text(t_ui_element *label, const char *text);
-void	ui_set_style(t_ui_element *element, t_ui_style style);
-void	ui_set_visible(t_ui_element *element, bool visible);
-void	ui_set_position(t_ui_element *element, t_v2f pos);
-void	ui_element_destroy(t_ui_element *element);
+t_ui_element	*create_header(mlx_t *mlx, const char *title, t_v2f pos, t_v2f size);
 void	render_ui(t_ui *ui);
-void	ui_mouse_move(t_ui *ui, int32_t x, int32_t y);
-void	ui_mouse_click(t_ui *ui, int32_t x, int32_t y, int32_t button);
-void	ui_mouse_release(t_ui *ui, int32_t x, int32_t y, int32_t button);
 t_ui	*create_ui(mlx_t *mlx, t_scene *scene);
 void	destroy_ui(t_ui *ui);
 void	render_ui(t_ui *ui);

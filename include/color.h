@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   color.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 19:16:29 by jboon             #+#    #+#             */
-/*   Updated: 2025/07/21 10:28:20 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   color.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 19:16:29 by jboon         #+#    #+#                 */
+/*   Updated: 2025/07/25 17:51:56 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # define C_BLUE		0x0000FFFF
 # define C_WHITE	0xFFFFFFFF
 # define C_BLACK	0x000000FF
-# define C_TRANS	0x00000000
+# define C_TRANS	UI_TRANSPARENT
 
 typedef uint32_t	t_col32;
 

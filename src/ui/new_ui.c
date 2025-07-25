@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   new_ui.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/23 14:48:38 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/25 00:45:55 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   new_ui.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/23 14:48:38 by bewong        #+#    #+#                 */
+/*   Updated: 2025/07/25 17:51:56 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,113 +46,25 @@
 // │
 // └── BUTTON "Submit" (action)
 
-/* Helper function to initialize button data */
-static t_ui_button *init_button(const char *label, float *value, 
-							   float min, float max, float step)
-{
-	t_ui_button *btn = (t_ui_button *)malloc(sizeof(t_ui_button));
-	if (!btn) return NULL;
+// /* Helper function to initialize button data */
+// static t_ui_button *init_button(const char *label, float *value, 
+// 							   float min, float max, float step)
+// {
+// 	t_ui_button *btn = (t_ui_button *)malloc(sizeof(t_ui_button));
+// 	if (!btn) return NULL;
 	
-	btn->label_text = ft_strdup(label);
-	btn->value = value;
-	btn->step = step;
-	btn->range.x = min;
-	btn->range.y = max;
-	btn->is_hovered = false;
-	btn->instance_id = -1;
-	btn->img = NULL;
-	btn->on_click = NULL;
-	return btn;
-}
+// 	btn->label_text = ft_strdup(label);
+// 	btn->value = value;
+// 	btn->step = step;
+// 	btn->range.x = min;
+// 	btn->range.y = max;
+// 	btn->is_hovered = false;
+// 	btn->instance_id = -1;
+// 	btn->img = NULL;
+// 	btn->on_click = NULL;
+// 	return btn;
+// }
 
-/* Create a slider UI element */
-t_ui_element *create_slider(mlx_t *mlx, const char *label, t_v2f pos, t_v2f size,
-						  float *value, float min, float max, float step)
-{
-	// Create the slider element
-	t_ui_element *slider = (t_ui_element *)malloc(sizeof(t_ui_element));
-	if (!slider) return NULL;
-	
-	// Initialize basic element properties
-	slider->type = UI_BUTTON; // Using BUTTON as base type for slider
-	slider->pos = pos;
-	slider->size = size;
-	slider->visible = true;
-	slider->hovered = false;
-	slider->pressed = false;
-	slider->parent = NULL;
-	slider->first_child = NULL;
-	slider->next_sibling = NULL;
-	slider->instance_id = -1;
-	slider->image = NULL;
-	slider->data = NULL;
-	slider->action = NULL;
-	if (!slider) return NULL;
-	
-	// Allocate and initialize slider data
-	t_slider_data *data = malloc(sizeof(t_slider_data));
-	if (!data) {
-		free(slider);
-		return NULL;
-	}
-	
-	data->label = ft_strdup(label);
-	data->value = value;
-	data->min = min;
-	data->max = max;
-	data->step = step;
-	data->is_dragging = false;
-	data->grab_offset.x = 0;
-	data->grab_offset.y = 0;
-	
-	// Ensure the initial value is within bounds
-	if (data->value) {
-		*data->value = fmaxf(min, fminf(max, *data->value));
-	}
-	
-	slider->data = data;
-	
-	// Create the slider image
-	slider->image = mlx_new_image(mlx, (uint32_t)size.x, (uint32_t)size.y);
-	if (slider->image) {
-		// Fill with background color
-		uint32_t *pixels = (uint32_t *)slider->image->pixels;
-		for (size_t i = 0; i < (size_t)(size.x * size.y); i++) {
-			pixels[i] = slider->style.bg_color;
-		}
-		
-		// Draw the slider track
-		t_v2f track_pos = {0, (size.y - 4) / 2};
-		t_v2f track_size = {size.x, 4};
-		draw_rect(slider->image, track_pos, track_size, 0xFF666666);
-		
-		// Draw the slider handle
-		float handle_pos = 0.0f;
-		if (data->value) {
-			float range = max - min;
-			if (range > 0.0f) {
-				handle_pos = ((*data->value - min) / range) * (size.x - 10);
-			}
-		}
-		
-		t_v2f handle_pos_v = {handle_pos, 0};
-		t_v2f handle_size = {10, size.y};
-		draw_rect(slider->image, handle_pos_v, handle_size, 0xFF1E88E5);
-		
-		// Draw the label and value
-		char value_str[32];
-		if (data->value) {
-			snprintf(value_str, sizeof(value_str), "%s: %.2f", label, *data->value);
-		} else {
-			snprintf(value_str, sizeof(value_str), "%s: N/A", label);
-		}
-		
-		t_v2f text_pos = {5, (size.y - UI_CHAR_HEIGHT) / 2};
-		draw_text(slider->image, value_str, text_pos, 0xFFFFFFFF);
-	}
-	
-	return slider;
-}
 
 /* Create a new UI element */
 t_ui_element *ui_element_create(t_ui_type type, t_v2f pos, t_v2f size)
@@ -184,32 +96,44 @@ t_ui_element *ui_element_create(t_ui_type type, t_v2f pos, t_v2f size)
 	};
 
 	if (type == UI_PANEL)
+	{
 		element->style.bg_color = 0xFF2D2D2D;
 		element->style.border_color = 0xFF3F3F46;
 		element->style.padding = 10;
-	if (type == UI_SECTION)
+	}
+	else if (type == UI_SECTION)
+	{
 		element->style.bg_color = 0xFF32353B;
 		element->style.border_color = 0xFF4A4D54;
 		element->style.padding = 8;
-	if (type == UI_HEADER)
+	}
+	else if (type == UI_HEADER)
+	{
 		element->style.bg_color = 0xFF1E88E5;
 		element->style.text_color = 0xFFFFFFFF;
 		element->style.border_color = 0xFF64B5F6;
 		element->style.padding = 12;
-	if (type == UI_BUTTON)
+	}
+	else if (type == UI_BUTTON)
+	{
 		element->style.bg_color = 0xFF3E4146;
 		element->style.text_color = 0xFFFFFFFF;
 		element->style.border_color = 0xFF646C7A;
 		element->style.padding = 6;
-	if (type == UI_VALUE_BUTTON)
+	}
+	else if (type == UI_VALUE_BUTTON)
+	{
 		element->style.bg_color = 0xFF3A3E44;
 		element->style.text_color = 0xFFFFFFFF;
 		element->style.border_color = 0xFF5D646F;
 		element->style.padding = 6;
-	if (type == UI_LABEL)
-		element->style.bg_color = 0x00000000;  // Transparent
+	}
+	else if (type == UI_LABEL)
+	{
+		element->style.bg_color = UI_TRANSPARENT;  // Transparent
 		element->style.text_color = 0xFFFFFFFF; // White text
 		element->style.padding = 2;
+	}
 	return (element);
 }
 
@@ -266,54 +190,6 @@ t_ui_element *create_button(mlx_t *mlx, const char *label, t_v2f pos, t_v2f size
 	return button;
 }
 
-t_ui_element *create_button(mlx_t *mlx, const char *label, t_v2f pos, t_v2f size,
-						 void (*on_click)(t_ui_element *, void *), void *param)
-{
-	t_ui_element *button;
-	
-	button = ui_element_create_with_image(mlx, UI_BUTTON, pos, size);
-	if (!button)
-		return (NULL);
-	
-	// Set up button data
-	t_ui_button *button_data = (t_ui_button *)malloc(sizeof(t_ui_button));
-	if (!button_data) {
-		free(button);
-		return NULL;
-	}
-	
-	button_data->label_text = label ? ft_strdup(label) : NULL;
-	button_data->value = NULL;
-	button_data->step = 0.0f;
-	button_data->range = init_v2f(0, 0);
-	button_data->instance_id = -1;
-	button_data->img = NULL;
-	button_data->on_click = on_click;
-	button_data->param = param;
-	
-	button->data = button_data;
-	button->action = on_click;
-	
-	ui_element_render(button);
-	
-	if (label) {
-		t_v2f text_pos = init_v2f(button->style.padding, 
-								(button->size.y - UI_CHAR_HEIGHT) / 2);
-		draw_text(button->image, label, text_pos, button->style.text_color);
-	}
-	
-	button->instance_id = ui_element_add_instance(mlx, button);
-	if (button->instance_id < 0)
-	{
-		free(button_data->label_text);
-		free(button_data);
-		free(button);
-		return (NULL);
-	}
-	
-	return (button);
-}
-
 t_ui_element *create_panel(mlx_t *mlx, t_v2f pos, t_v2f size)
 {
 	t_ui_element *panel;
@@ -339,8 +215,6 @@ t_ui_element *create_panel(mlx_t *mlx, t_v2f pos, t_v2f size)
 	panel->pos = pos;
 	panel->size = size;
 	panel->visible = true;
-	panel->hovered = false;
-	panel->pressed = false;
 	panel->parent = NULL;
 	panel->first_child = NULL;
 	panel->next_sibling = NULL;
@@ -385,7 +259,7 @@ t_ui_element *create_section(mlx_t *mlx, const char *title, t_v2f pos, t_v2f siz
 	printf("create_section: Section created at %p\n", (void *)section);
 	section->style = (t_ui_style){
 		.bg_color = 0x2A2D32FF,       // Dark gray background
-		.fg_color = 0x00000000,       // Not used
+		.fg_color = UI_TRANSPARENT,       // Not used
 		.text_color = 0xFFFFFFFF,     // White text
 		.border_color = 0x3F3F46FF,   // Slightly lighter border
 		.padding = 8,
@@ -397,9 +271,10 @@ t_ui_element *create_section(mlx_t *mlx, const char *title, t_v2f pos, t_v2f siz
 		printf("create_section: Creating header for section\n");
 		t_v2f header_size = init_v2f(size.x, 30); // Fixed header height
 		t_ui_element *header = create_header(mlx, title, init_v2f(0, 0), header_size);
+		printf("create section: done header\n");
 		if (header)
 		{
-			printf("create_section: Header created at %p\n", (void *)header);
+			// printf("create_section: Header created at %p\n", (void *)header);
 			// Style the header
 			header->style.bg_color = 0x1E88E5FF;  // Blue header
 			header->style.text_color = 0xFFFFFFFF; // White text
@@ -442,13 +317,14 @@ t_ui_element *create_header(mlx_t *mlx, const char *title, t_v2f pos, t_v2f size
 		return (NULL);
 	header->style = (t_ui_style){
 		.bg_color = 0x1E88E5FF,       // Blue background
-		.fg_color = 0x00000000,       // Not used
+		.fg_color = UI_TRANSPARENT,       // Not used
 		.text_color = 0xFFFFFFFF,     // White text
 		.border_color = 0x64B5F6FF,   // Lighter blue border
 		.padding = 10,
 		.visible = true
 	};
 	
+	printf("create_header:  in title\n");
 	if (title)
 	{
 		t_v2f label_pos = init_v2f(
@@ -459,7 +335,7 @@ t_ui_element *create_header(mlx_t *mlx, const char *title, t_v2f pos, t_v2f size
 		t_ui_element *label_elem = create_label(mlx, title, label_pos, 0xFFFFFFFF);
 		if (label_elem)
 		{
-			label_elem->style.bg_color = 0x00000000;  // Transparent background
+			label_elem->style.bg_color = UI_TRANSPARENT;  // Transparent background
 			label_elem->style.text_color = 0xFFFFFFFF; // White text
 			label_elem->style.padding = 0;
 			ui_add_child(header, label_elem);
@@ -472,6 +348,7 @@ t_ui_element *create_header(mlx_t *mlx, const char *title, t_v2f pos, t_v2f size
 			}
 		}
 	}
+	printf("create_header: finished title\n");
 	ui_element_render(header);
 	if (mlx)
 	{
@@ -486,12 +363,14 @@ t_ui_element *create_header(mlx_t *mlx, const char *title, t_v2f pos, t_v2f size
 			free(header);
 			return (NULL);
 		}
-		if (header->image && header->instance_id >= 0)
+		if (header->image && header->instance_id >= 0 &&
+			header->instance_id < (int32_t)header->image->count)
 		{
 			mlx_set_instance_depth(&header->image->instances[header->instance_id], 200);
 		}
+		printf("create_header: done mlx\n");
 	}
-
+	printf("create_header: finished header\n");
 	return (header);
 }
 
@@ -517,10 +396,10 @@ t_ui_element *create_label(mlx_t *mlx, const char *title, t_v2f pos, uint32_t co
 
 	// Set label style
 	label->style = (t_ui_style){
-		.bg_color = 0x00000000,  // Transparent background
-		.fg_color = 0x00000000,  // No foreground color
+		.bg_color = UI_TRANSPARENT,  // Transparent background
+		.fg_color = UI_TRANSPARENT,  // No foreground color
 		.text_color = color,     // Text color from parameter
-		.border_color = 0x00000000, // No border
+		.border_color = UI_TRANSPARENT, // No border
 		.padding = 2,
 		.visible = true
 	};
@@ -626,47 +505,58 @@ t_ui_element *create_value_button(mlx_t *mlx, const char *label, float *value,
 	return (button);
 }
 
-static void	position_vertically(t_ui_element *element, t_v2f pos, float spacing)
-{
-	if (!element)
-		return;
-	element->pos = pos;
-	if (element->next_sibling)
-	{
-		t_v2f next_pos = init_v2f(pos.x, pos.y + element->size.y + spacing);
-		position_vertically(element->next_sibling, next_pos, spacing);
-	}
-}
+// static void	position_vertically(t_ui_element *element, t_v2f pos, float spacing)
+// {
+// 	if (!element)
+// 		return;
+// 	element->pos = pos;
+// 	if (element->next_sibling)
+// 	{
+// 		t_v2f next_pos = init_v2f(pos.x, pos.y + element->size.y + spacing);
+// 		position_vertically(element->next_sibling, next_pos, spacing);
+// 	}
+// }
 
 t_ui_element *create_ambient_section(mlx_t *mlx, t_scene *scene, t_v2f pos, t_v2f size)
 {
 	printf("create_ambient_section: Starting with scene at %p\n", (void *)scene);
-	t_ui_element *section = create_section(mlx, "AMBIENT", pos, size);
-	if (!section) {
+	(void)size;
+	// === Step 1: Create section with calculated size ===
+	const float header_height = 30.0f;
+	const float button_height = 30.0f;
+	const float button_spacing = 10.0f;
+	const float padding = 10.0f;
+	const int num_controls = 4;
+
+	float section_height = header_height + (num_controls * (button_height + button_spacing)) + padding;
+	t_v2f section_size = init_v2f(UI_PANEL_WIDTH - 20, section_height);
+
+	t_ui_element *section = create_section(mlx, "AMBIENT", pos, section_size);
+	if (!section)
+	{
 		printf("create_ambient_section: Failed to create section\n");
 		return NULL;
 	}
+	printf("create_ambient_section: Section created at %p\n", (void *)section);
+
+	// === Step 2: Try to find content panel inside section ===
 	t_ui_element *content = section->first_child ? section->first_child->next_sibling : NULL;
-	if (!content) {
-		printf("create_ambient_section: Failed to get content panel\n");
-		return section; // Return section even without content
-	}
-	t_light *am_light = NULL;
-	long unsigned int i;
-	printf("create_ambient_section: Searching for ambient light in %u lights...\n", scene->lights.size);
-	for (i = 0; i < scene->lights.size; i++)
+	if (!content)
 	{
-		if (!scene->lights.items[i]) {
-			printf("  Light %zu is NULL\n", i);
-			continue;
-		}
+		printf("create_ambient_section: Warning: content panel not found, using section directly\n");
+		content = section; // fallback
+	}
+
+	// === Step 3: Find or create ambient light ===
+	t_light *am_light = NULL;
+	for (int i = 0; i < scene->lights.size; i++)
+	{
 		t_light *light = (t_light *)scene->lights.items[i];
-		printf("  Light %zu at %p, type: %d\n", i, (void *)light, light->type);
-		
+		if (!light)
+			continue;
 		if (light->type == LIGHT_AMBIENT)
 		{
 			am_light = light;
-			printf("  Found ambient light at index %zu\n", i);
 			break;
 		}
 	}
@@ -674,58 +564,31 @@ t_ui_element *create_ambient_section(mlx_t *mlx, t_scene *scene, t_v2f pos, t_v2
 	{
 		printf("create_ambient_section: No ambient light found, creating default\n");
 		am_light = (t_light *)malloc(sizeof(t_light));
-		if (!am_light) {
+		if (!am_light)
+		{
 			printf("create_ambient_section: Failed to allocate ambient light\n");
 			return section;
 		}
 		am_light->type = LIGHT_AMBIENT;
-		am_light->color.x = 1.0f;
-		am_light->color.y = 1.0f;
-		am_light->color.z = 1.0f;
+		am_light->color = init_v3f(1.0f, 1.0f, 1.0f);
 		am_light->intensity = 0.2f;
 	}
-	
-	printf("create_ambient_section: Section created successfully at %p\n", (void *)section);
-	return section;
-	const float header_height = 30.0f;
-	const float button_height = 30.0f;
-	const float button_spacing = 10.0f;
-	const float padding = 10.0f;
-	const int num_controls = 4; // R, G, B, Intensity
-	
-	printf("create_ambient_section: Creating section with header_height=%.1f, button_height=%.1f, button_spacing=%.1f, padding=%.1f\n",
-		   header_height, button_height, button_spacing, padding);
-	
-	float section_height = header_height + (num_controls * (button_height + button_spacing)) + padding;
-	t_v2f section_size = init_v2f(UI_PANEL_WIDTH - 20, section_height);
-	
-	printf("create_ambient_section: Creating section with size (%.1f, %.1f) at (%.1f, %.1f)\n",
-		   section_size.x, section_size.y, pos.x, pos.y);
-	
-	section = create_section(mlx, "AMBIENT", pos, section_size);
-	if (!section) {
-		printf("create_ambient_section: Failed to create section\n");
-		return NULL;
-	}
-	printf("create_ambient_section: Section created at %p\n", (void *)section);
-	if (!section)
-	{
-		printf("Error: Failed to create ambient section\n");
-		return (NULL);
-	}
 
+	// === Step 4: Create buttons ===
 	t_v2f color_range = init_v2f(0, 255);
 	t_v2f intensity_range = init_v2f(0, 1);
-	t_v2f button_size = init_v2f(section_size.x - 20, button_height);
-	
-	printf("create_ambient_section: Creating buttons...\n");
-	// Create buttons with proper positioning
+	t_v2f button_size = init_v2f(section_size.x - 2 * padding, button_height);
 	t_v2f button_pos = init_v2f(padding, header_height + padding);
-	printf("create_ambient_section: Button position: (%.1f, %.1f)\n", button_pos.x, button_pos.y);
-	
+
 	t_ui_element *col_r = create_value_button(mlx, "COL R", &am_light->color.x, color_range, 5.0f, button_pos, button_size);
+	button_pos.y += button_height + button_spacing;
+
 	t_ui_element *col_g = create_value_button(mlx, "COL G", &am_light->color.y, color_range, 5.0f, button_pos, button_size);
+	button_pos.y += button_height + button_spacing;
+
 	t_ui_element *col_b = create_value_button(mlx, "COL B", &am_light->color.z, color_range, 5.0f, button_pos, button_size);
+	button_pos.y += button_height + button_spacing;
+
 	t_ui_element *am_inten = create_value_button(mlx, "INTENSITY", &am_light->intensity, intensity_range, 0.1f, button_pos, button_size);
 
 	if (!col_r || !col_g || !col_b || !am_inten)
@@ -736,26 +599,20 @@ t_ui_element *create_ambient_section(mlx_t *mlx, t_scene *scene, t_v2f pos, t_v2
 		if (col_b) destroy_ui_element_recursive(col_b, NULL);
 		if (am_inten) destroy_ui_element_recursive(am_inten, NULL);
 		destroy_ui_element_recursive(section, NULL);
-		return (NULL);
+		return NULL;
 	}
 
-	t_v2f current_pos = init_v2f(10, 40);
-	position_vertically(col_r, current_pos, 5);
-	current_pos.y += col_r->size.y + 5;
-	position_vertically(col_g, current_pos, 5);
-	current_pos.y += col_g->size.y + 5;
-	position_vertically(col_b, current_pos, 5);
-	current_pos.y += col_b->size.y + 5;
-	position_vertically(am_inten, current_pos, 5);
-	ui_add_child(section, col_r);
-	ui_add_child(section, col_g);
-	ui_add_child(section, col_b);
-	ui_add_child(section, am_inten);
-	// if (am_light->type == LIGHT_AMBIENT)
-		section->data = am_light;
+	// === Step 5: Add buttons to content panel ===
+	ui_add_child(content, col_r);
+	ui_add_child(content, col_g);
+	ui_add_child(content, col_b);
+	ui_add_child(content, am_inten);
 
-	return (section);
+	section->data = am_light;
+
+	return section;
 }
+
 
 int game_loop(void *param)
 {
