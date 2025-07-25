@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/24 10:37:14 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/24 12:38:17 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/25 17:03:40 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,5 +108,5 @@ t_v3f	sample_noise(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a)
 
 	point = v2f_mul_v3f(*texcoord, tex->scale_rot);
 	fract(point);
-	return (v3f_lerp(col_a, tex->col, (pink_noise(point) + 1.0f) * 0.5f));
+	return (v3f_lerp(col_a, tex->col, (marble_noise(point) + 1.0f) * 0.5f));
 }

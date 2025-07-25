@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/24 12:28:32 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/25 17:55:13 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,14 @@ static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, float t)
 	hit_info->texcoord = obj->r.get_texcoord(obj, hit_info->hit);
 	hit_info->texcoord = v2f_rotate(hit_info->texcoord,
 			obj->r.mat->texture.scale_rot.w * DEGTORAD);
+
 	if (obj->r.mat && obj->r.mat->bump_map)
+	{
 		hit_info->normal = perturb_normal(obj->r.mat, hit_info->texcoord,
-				hit_info->normal);
+			hit_info->normal);
+		hit_info->normal = mul_dir_m4x4(hit_info->normal, obj->t.to_world);
+	}
+
 	hit_info->hit_color = obj->r.mat->get_texcol(&hit_info->texcoord,
 			&obj->r.mat->texture, v3f_mul(obj->r.color, obj->r.mat->albedo));
 }

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/16 10:29:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/24 12:03:21 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/25 14:33:02 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	init_bump_fields(t_field *fields, int *field_count, t_mat *mat)
 	{"bump", &mat->bump_path, FIELD_ENUM,
 		g_v2f_zero, FILLED, {.to_enum = parse_path}},
 	{"bump_scale", &mat->bump_scale, FIELD_FLT,
-		init_v2f(0.0f, 100.0f), EMPTY, {NULL}},
+		init_v2f(0.0f, 1024.0f), EMPTY, {NULL}},
 	{NULL, NULL, 0, g_v2f_zero, 0, {0}}
 	};
 	int				i;

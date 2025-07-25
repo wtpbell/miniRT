@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/24 09:15:29 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/24 14:52:37 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/25 18:42:32 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 // 	return (v3f_dot(sample_texture(bump, uv, mod),
 // 			init_v3f(0.2126f, 0.7152f, 0.0722f)));
 // }
-
+// https://github.com/dorukb/Advanced-CPU-Raytracing/blob/master/src/hw6submission/sphere.cpp#L109
 static t_v3f	apply_bump(t_bump *ctx, t_v2f uv, t_v3f mod)
 {
 	t_v2f	uv_u;
@@ -38,9 +38,10 @@ static t_v3f	apply_bump(t_bump *ctx, t_v2f uv, t_v3f mod)
 	uv_u = init_v2f(uv.u + ctx->delta, uv.v);
 	uv_v = init_v2f(uv.u, uv.v + ctx->delta);
 
-	uv = v2f_mul_v3f(uv, mod);
-	uv_u = v2f_mul_v3f(uv_u, mod);
-	uv_v = v2f_mul_v3f(uv_v, mod);
+	(void)mod;
+	// uv = v2f_mul_v3f(uv, mod);
+	// uv_u = v2f_mul_v3f(uv_u, mod);
+	// uv_v = v2f_mul_v3f(uv_v, mod);
 
 	heights.x = v3f_dot(sample_noise(&uv, &ctx->mat->texture, g_v3f_zero), init_v3f(0.2126f, 0.7152f, 0.0722f));
 	heights.y = v3f_dot(sample_noise(&uv_u, &ctx->mat->texture, g_v3f_zero), init_v3f(0.2126f, 0.7152f, 0.0722f));
@@ -54,11 +55,23 @@ static t_v3f	apply_bump(t_bump *ctx, t_v2f uv, t_v3f mod)
 	else
 		bump_scale = DFLT_BUMP_SCALE;
 	height_deltas = init_v3f(
-			(heights.y - heights.x) * bump_scale,
-			(heights.z - heights.x) * bump_scale,
+			(heights.y - heights.x) * bump_scale / ctx->delta,
+			(heights.z - heights.x) * bump_scale / ctx->delta,
 			0.0f);
-	ctx->p = v3f_add(ctx->n, v3f_scale(ctx->t, height_deltas.x));
-	ctx->p = v3f_add(ctx->p, v3f_scale(ctx->b, height_deltas.y));
+
+	t_v3f N = v3f_norm(v3f_cross(ctx->b, ctx->t));
+	t_v3f par = v3f_scale(N, v3f_dot(height_deltas, N));
+	t_v3f surf = v3f_sub(height_deltas, par);
+	return (v3f_norm(v3f_sub(N, surf)));
+
+	// ctx->p = v3f_add(ctx->n, v3f_scale(ctx->t, height_deltas.x));
+	// ctx->p = v3f_add(ctx->p, v3f_scale(ctx->b, height_deltas.y));
+
+	// ctx->p = v3f_cross(
+	// 	v3f_add(ctx->t, v3f_scale(ctx->n, height_deltas.x)),
+	// 	v3f_add(ctx->b, v3f_scale(ctx->n, height_deltas.y))
+	// );
+
 	return (v3f_norm(ctx->p));
 }
 
