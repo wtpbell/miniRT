@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/24 10:37:14 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/25 17:03:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/27 21:26:26 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,7 @@ float	turbulence_noise(t_v2f point)
 	return (sum);
 }
 
-inline void	fract(t_v2f v)
-{
-	v.x = modulo(v.x);
-	v.y = modulo(v.y);
-}
-
+// https://dl.acm.org/doi/pdf/10.1145/325334.325247
 // spectral densities - to describe the various frequencies (layers) of the resulting noise is made of
 // power spectra - each layer has a specific amplitude
 // octave - can be misleading as an octave can describe the doubling or halving of a frequency of each layer
@@ -107,6 +102,6 @@ t_v3f	sample_noise(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a)
 	t_v2f	point;
 
 	point = v2f_mul_v3f(*texcoord, tex->scale_rot);
-	fract(point);
-	return (v3f_lerp(col_a, tex->col, (marble_noise(point) + 1.0f) * 0.5f));
+	v2f_fract(&point);
+	return (v3f_lerp(col_a, tex->col, (tex->fp_perlin(point) + 1.0f) * 0.5f));
 }

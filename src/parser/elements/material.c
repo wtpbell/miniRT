@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/24 12:38:17 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/27 23:36:25 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,38 @@
 #include "material.h"
 #include "libft.h"
 
+static void	set_perlin_pattern(t_tex_type *type, float (**fp)(t_v2f uv))
+{
+	if (*type == TEX_PINK)
+		*fp = pink_noise;
+	else if (*type == TEX_WOOD)
+		*fp = wood_noise;
+	else if (*type == TEX_MARB)
+		*fp = marble_noise;
+	else if (*type == TEX_TURB)
+		*fp = turbulence_noise;
+	else
+		*fp = perlin;
+	*type = TEX_PERLIN;
+}
+
 static void	set_texture_pattern(t_mat *mat)
 {
 	if (mat->texture.type == TEX_CHECKER)
 		mat->get_texcol = checker_pattern;
 	else if (mat->texture.type == TEX_IMAGE)
 		mat->get_texcol = image_pattern;
-	else if (mat->texture.type == TEX_PERLIN)
+	else if ((mat->texture.type & TEX_IS_PERLIN) != 0)
+	{
+		set_perlin_pattern(&mat->texture.type, &mat->texture.fp_perlin);
 		mat->get_texcol = sample_noise;
+	}
 	else
 		mat->get_texcol = solid_pattern;
+	if ((mat->bump_map.type & TEX_IS_PERLIN) != 0)
+		set_perlin_pattern(&mat->bump_map.type, &mat->bump_map.fp_perlin);
+	else if (mat->bump_map.type != TEX_IMAGE)
+		mat->bump_map.type = TEX_SOLID;
 }
 
 static void	init_material_fields(t_field *fields, int *field_count, t_mat *mat)

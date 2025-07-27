@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   texture.c                                          :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/16 10:29:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/25 14:33:02 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/27 23:43:04 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,19 @@
 
 static bool	str_to_texture_type(int *val, const void *enum_name)
 {
-	if (ft_strcmp("solid", enum_name) == 0)
-		return (*val = TEX_SOLID, true);
-	if (ft_strcmp("checker", enum_name) == 0)
-		return (*val = TEX_CHECKER, true);
-	if (ft_strcmp("image", enum_name) == 0)
-		return (*val = TEX_IMAGE, true);
-	else if (ft_strcmp("perlin", enum_name) == 0)
-		return (*val = TEX_PERLIN);
+	static const char		*str_types[] = {"solid", "checker", "image",
+		"perlin", "pink", "wood", "turb", "marble", NULL};
+	static const t_tex_type	types[] = {TEX_SOLID, TEX_CHECKER, TEX_IMAGE,
+		TEX_PERLIN, TEX_PINK, TEX_WOOD, TEX_TURB, TEX_MARB};
+	int						i;
+
+	i = 0;
+	while (str_types[i] != NULL)
+	{
+		if (ft_strcmp(str_types[i], enum_name) == 0)
+			return (*val = types[i], true);
+		++i;
+	}
 	return (*val = -1, false);
 }
 
@@ -46,13 +51,15 @@ static bool	parse_path(int *ctx, const void *raw)
 void	init_bump_fields(t_field *fields, int *field_count, t_mat *mat)
 {
 	const t_field	field_defs[] = {
-	{"tex", &mat->tex_path, FIELD_ENUM,
+	{"tex", &mat->texture.tex_path, FIELD_ENUM,
 		g_v2f_zero, FILLED, {.to_enum = parse_path}},
 	{"pat", &mat->texture.type, FIELD_ENUM,
 		g_v2f_zero, FILLED, {.to_enum = str_to_texture_type}},
-	{"bump", &mat->bump_path, FIELD_ENUM,
+	{"bump_pat", &mat->bump_map.type, FIELD_ENUM,
+		g_v2f_zero, FILLED, {.to_enum = str_to_texture_type}},
+	{"bump", &mat->bump_map.tex_path, FIELD_ENUM,
 		g_v2f_zero, FILLED, {.to_enum = parse_path}},
-	{"bump_scale", &mat->bump_scale, FIELD_FLT,
+	{"bump_scale", &mat->bump_map.scale, FIELD_FLT,
 		init_v2f(0.0f, 1024.0f), EMPTY, {NULL}},
 	{NULL, NULL, 0, g_v2f_zero, 0, {0}}
 	};

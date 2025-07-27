@@ -6,11 +6,12 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/30 20:06:59 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/24 12:08:13 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/27 23:26:22 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vector.h"
+#include "rt_math.h"
 
 t_v2f	v2f_scale(t_v2f v, float f)
 {
@@ -26,6 +27,17 @@ t_v2f	v2f_mul(t_v2f a, t_v2f b)
 		a.x * b.x,
 		a.y * b.y
 	));
+}
+
+void	v2f_fract(t_v2f *v)
+{
+	v->x = modulo(v->x);
+	v->y = modulo(v->y);
+}
+
+float	v2f_mag(t_v2f v)
+{
+	return (sqrt(v.x * v.x + v.y * v.y));
 }
 
 t_v2f	v2f_rotate(t_v2f v, float angle)

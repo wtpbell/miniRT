@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/24 12:38:17 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/27 23:17:30 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,15 @@ enum e_material_type
 
 typedef enum e_texture_type
 {
-	TEX_SOLID,
-	TEX_CHECKER,
-	TEX_IMAGE,
-	TEX_PERLIN
+	TEX_SOLID	= 0x0,
+	TEX_CHECKER	= 0x1,
+	TEX_IMAGE	= 0x2,
+	TEX_PERLIN	= 0x4,
+	TEX_PINK	= 0x8,
+	TEX_WOOD	= 0x10,
+	TEX_TURB	= 0x20,
+	TEX_MARB	= 0x40,
+	TEX_IS_PERLIN = TEX_PERLIN | TEX_PINK | TEX_WOOD | TEX_TURB | TEX_MARB
 }	t_tex_type;
 
 struct s_texture
@@ -41,19 +46,32 @@ struct s_texture
 	t_tex_type		type;
 	t_v3f			scale_rot;
 	t_v3f			col;
+	char			*tex_path;
 	mlx_texture_t	*tex;
+	float			(*fp_perlin)(t_v2f uv);
 };
 
-typedef struct s_bump_context
+struct s_bump
+{
+	t_tex_type		type;
+	char			*tex_path;
+	mlx_texture_t	*tex;
+	float			(*fp_perlin)(t_v2f uv);
+	float			scale;
+};
+
+struct s_bump_context
 {
 	t_v3f		n;			// Surface normal
 	t_v3f		t;			// Tangent
 	t_v3f		b;			// Bitangent
 	t_v3f		heights[3];	// Height samples (center, u+delta, v+delta)
 	t_v3f		p;			// Perturbed normal
-	float		delta;		// Delta for sampling
-	const t_mat	*mat;		// Material (contains bump_scale)
-}	t_bump;
+	t_v2f		delta;		// Delta for sampling
+	float		scale;		// Bump scale
+	float		(*fp_perlin)(t_v2f uv);
+	const t_mat	*mat;		// Material
+};
 
 struct s_material
 {
@@ -61,13 +79,8 @@ struct s_material
 	t_mat_type		type;
 	t_v3f			albedo;
 	t_tex			texture;
+	t_bump			bump_map;
 	t_texcol		get_texcol;
-	void			(*get_bump)(void *, void *);
-	char			*bump_path;
-	char			*tex_path;
-	mlx_texture_t	*bump_map;
-	float			bump_scale;
-	bool			debug_bump; // Toggle bump map visualization
 	struct s_lambertian
 	{
 		float		specular;
@@ -107,5 +120,10 @@ t_v3f	sample_texture(const mlx_texture_t *tex, const t_v2f uv,
 			const t_v3f mod);
 t_v3f	display_normal(t_ray_hit *hit_info);
 t_v3f	sample_noise(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
+
+float	pink_noise(t_v2f point);
+float	marble_noise(t_v2f point);
+float	wood_noise(t_v2f point);
+float	turbulence_noise(t_v2f point);
 
 #endif

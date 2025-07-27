@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/02 19:12:03 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/27 23:29:12 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,18 +200,18 @@ void	materials_print(t_vector materials, int spaces, const char *prefix)
 			str_print("Unknown", spaces + 4, "type:");
 
 		// Print bump map information
-		if (mat->bump_map)
+		if (mat->bump_map.tex)
 		{
 			str_print("Bump Map", spaces + 4, "");
-			if (mat->bump_path)
-				str_print(mat->bump_path, spaces + 6, "path:");
+			if (mat->bump_map.tex_path)
+				str_print(mat->bump_map.tex_path, spaces + 6, "path:");
 			printf("%*sdimensions: %dx%d\n", spaces + 6, "",
-				mat->bump_map->width, mat->bump_map->height);
-			printf("%*sscale: %.2f\n", spaces + 6, "", mat->bump_scale);
+				mat->bump_map.tex->width, mat->bump_map.tex->height);
+			printf("%*sscale: %.2f\n", spaces + 6, "", mat->bump_map.scale);
 		}
-		else if (mat->bump_path)
+		else if (mat->bump_map.tex_path)
 		{
-			printf("%*sBump Map (failed to load): %s\n", spaces + 4, "", mat->bump_path);
+			printf("%*sBump Map (failed to load): %s\n", spaces + 4, "", mat->bump_map.tex_path);
 		}
 		col32_print(mat->albedo, spaces + 4, "albedo");
 

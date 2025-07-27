@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   rt_light.c                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/31 19:11:17 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/24 16:30:09 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/27 23:48:27 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static t_v3f	apply_ambient(t_scene *scene, t_ray_hit *hit_info,
 	t_lighting	lt;
 	init_lighting(&lt, hit_info, light, scene->camera.t.pos);
 	return (v3f_scale(
-			v3f_mul(hit_info->hit_color, light->color), light->intensity * v3f_dot(lt.normal, lt.view_dir)));
+			v3f_mul(hit_info->hit_color, light->color), light->intensity));
 }
 
 /**quadratic falloff: inten / (1 + a*d + b*d²)
