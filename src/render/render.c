@@ -6,20 +6,24 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
-/*   Updated: 2025/07/25 00:25:42 by bewong           ###   ########.fr       */
+/*   Updated: 2025/07/27 21:09:35 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdint.h>
+#include <stdio.h>
+#include <float.h>
+#include <stdbool.h>
 
 #include "MLX42/MLX42.h"
 #include "light.h"
 #include "material.h"
+#include "minirt.h"
 #include "random.h"
 #include "ray.h"
 #include "rt_math.h"
 #include "scene.h"
-#include <stdio.h>
+#include "ui.h"
 
 #define MAX_DEPTH			8
 #define SAMPLES_PER_PIXEL	8
@@ -144,27 +148,3 @@ void	render(t_scene *scene)
 	debug_scene_setup(scene);
 }
 
-void	render_scene(t_game *game)
-{
-	static bool scene_initialized = false;
-	if (!scene_initialized) {
-		printf("render_scene: Initial scene render...\n");
-		scene_initialized = true;
-	}
-	update_camera_view(&game->scene->camera);
-	render(game->scene);
-	if (game->scene->camera.img_plane) {
-		static bool image_added = false;
-		if (!image_added && game->scene->camera.img_plane->instances)
-		{
-			mlx_set_instance_depth(game->scene->camera.img_plane->instances, 0);
-			image_added = true;
-		}
-	}
-	if (game->ui)
-	{
-		if (game->ui->needs_redraw)
-			game->ui->needs_redraw = false;
-	}
-	printf("render_scene: Done\n");
-}

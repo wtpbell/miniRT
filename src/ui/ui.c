@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 15:00:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/24 00:01:08 by bewong           ###   ########.fr       */
+/*   Updated: 2025/07/27 12:51:57 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,12 +255,7 @@ void	draw_submit_button(mlx_image_t *img, const char *title, int x, int y)
 	rt_put_string(img, title, title_x, y + 8);
 }
 
-// Check if a point is inside a button
-bool	is_point_in_button(t_button *button, int x, int y, int y_offset)
-{
-	return (x >= button->x && x <= button->x + button->width &&
-			y >= button->y + y_offset && y <= button->y + y_offset + button->height);
-}
+
 
 // Update button value based on click position
 void update_button_value(t_button *button, int mouse_x, int y_offset)

@@ -6,11 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 12:05:02 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/23 20:00:48 by bewong           ###   ########.fr       */
+/*   Updated: 2025/07/27 18:37:39 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <math.h>
+#include <float.h>
 #include "rt_math.h"
 #include "parser.h"
 #include "minirt.h"
