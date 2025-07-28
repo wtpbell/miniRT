@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/06 19:14:48 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 17:59:29 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/28 10:02:39 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ static t_field	*get_field(t_field *fields, int count, char *token,
 	*value = ft_strchrnul(token, ':');
 	while (i < count)
 	{
-		if (ft_strncmp(fields[i].name, token, (*value - token)) == 0)
+		if (ft_strncmp(fields[i].name, token, (*value - token)) == 0
+			&& *(fields[i].name + (*value - token)) == '\0')
 		{
 			*value += (**value == ':');
 			return (fields + i);

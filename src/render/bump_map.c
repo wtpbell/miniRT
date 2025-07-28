@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/24 09:15:29 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/27 23:25:51 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/28 10:52:40 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ static t_v3f	apply_bump(t_bump_ctx *ctx, t_v2f uv, t_v3f mod)
 	t_v3f	heights;
 	t_v3f	height_deltas;
 
-	// v2f_fract(&uv);
 	uv_u = init_v2f(uv.u + ctx->delta.u, uv.v);
 	uv_v = init_v2f(uv.u, uv.v + ctx->delta.v);
 	if (ctx->mat->bump_map.type == TEX_IMAGE)

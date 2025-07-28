@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/24 10:37:14 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/27 21:26:26 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/28 10:53:43 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ float	marble_noise(t_v2f point)
 		ampt *= gain;
 		++layer;
 	}
-	return ((sin((x + sum * 100.0f) * TAU / 200.0f) + 1.0f) * 0.5f);
+	return (sin((x + sum * 100.0f) * TAU / 200.0f));
 }
 
 float	wood_noise(t_v2f point)
@@ -102,6 +102,5 @@ t_v3f	sample_noise(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a)
 	t_v2f	point;
 
 	point = v2f_mul_v3f(*texcoord, tex->scale_rot);
-	v2f_fract(&point);
 	return (v3f_lerp(col_a, tex->col, (tex->fp_perlin(point) + 1.0f) * 0.5f));
 }
