@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui.h                                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/28 00:01:17 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui.h                                               :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
+/*   Updated: 2025/07/29 16:12:00 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ typedef void (*t_ui_render_func)(t_ui_element *, mlx_image_t *);
 typedef void (*t_ui_click_func)(t_ui_element *element, int x, int y, void *param);
 typedef void (*t_ui_update_func)(t_ui_element *, void *);
 
-
 # define WIDTH 1600
 # define HEIGHT 900
 // UI Dimensions
@@ -47,6 +46,7 @@ typedef void (*t_ui_update_func)(t_ui_element *, void *);
 # define UI_SECTION_SPACING 10
 # define UI_CHAR_WIDTH 8
 # define UI_CHAR_HEIGHT 15
+# define UI_FONT_HEIGHT 8
 
 // UI Layer Depths
 # define UI_LAYER_PANEL 10
@@ -122,6 +122,7 @@ typedef struct s_ui_element
 	t_ui_destroy_func	destroy;
 	t_ui_update_func	update;
 	void				(*action)(struct s_ui_element *, void *);
+	t_v2f				layout_offset;
 } t_ui_element;
 
 typedef struct s_ui_button
@@ -151,7 +152,7 @@ typedef struct s_ui
 	mlx_t			*mlx;
 } t_ui;
 
-t_ui_images		*ui_images_create(mlx_t *mlx);
+
 void			ui_images_destroy(mlx_t *mlx, t_ui_images *images);
 t_ui_element	*ui_element_create(t_ui_type type, t_v2f pos, t_v2f size);
 void			safe_call_destroy_handler(t_ui_element *element, mlx_t *mlx);
@@ -170,8 +171,7 @@ t_ui_element	*create_label(mlx_t *mlx, const char *text, t_v2f pos, uint32_t col
 t_ui_element	*create_button(mlx_t *mlx, const char *label, t_v2f pos, t_v2f size,
 				void (*on_click)(t_ui_element *, void *), void *param);
 t_ui_element	*create_value_button(mlx_t *mlx, const char *label, float *value,
-				t_v2f range, float step, t_v2f pos, t_v2f size);
-t_ui_element	*create_section(mlx_t *mlx, const char *title, t_v2f pos, t_v2f size);
+							t_v2f range, float step, t_v2f pos, t_v2f size);
 t_ui_element	*create_ambient_section(mlx_t *mlx, t_scene *scene, t_v2f pos, t_v2f size);
 t_ui_element	*create_header(mlx_t *mlx, const char *title, t_v2f pos, t_v2f size);
 
@@ -181,11 +181,9 @@ void		destroy_ui_element_recursive(t_ui_element *element, t_ui *ui);
 bool		ui_element_remove_child(t_ui_element *parent, t_ui_element *child, 
 				bool destroy, mlx_t *mlx);
 void		attach_child(t_ui_element *parent, t_ui_element *child);
-int32_t		ui_element_add_instance(mlx_t *mlx, t_ui_element *element);
-void		ui_element_set_position(t_ui_element *element, int32_t x, int32_t y);
-void		ui_element_set_visible(t_ui_element *element, bool visible);
-bool		is_point_in_element(t_ui_element *element, int32_t x, int32_t y);
 void		update_button_value(t_ui_element *button, int32_t click_x);
+void		decrement_value_button(t_ui_element *btn, void *param);
+void		increment_value_button(t_ui_element *btn, void *param);
 
 /* UI Default Styles */
 void		default_button(t_ui_element *button, t_v2f pos, t_v2f size);
@@ -202,4 +200,6 @@ void		draw_char(mlx_image_t *img, char c, int x, int y, uint32_t color);
 void		draw_text(mlx_image_t *img, const char *str, t_v2f pos, uint32_t color);
 void		draw_rect(mlx_image_t *img, t_v2f pos, t_v2f size, uint32_t color);
 
+void		layout_vertical(t_ui_element *parent, float spacing);
+void		layout_horizontal(t_ui_element *parent, float spacing);
 #endif

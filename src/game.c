@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   game.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/07/27 23:13:59 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   game.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
+/*   Updated: 2025/07/29 16:48:20 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,55 +22,43 @@
 typedef struct s_game t_game;
 
 
-/**
- * @brief Main render loop for the game
- * 
- * @param param Pointer to the game structure
- */
 void render_loop(void *param)
 {
 	t_game *game = (t_game *)param;
 
 	if (!game->needs_redraw)
 		return;
-
-	// Clear the screen
 	ft_memset(game->img->pixels, 0, game->img->width * game->img->height * sizeof(int));
-
-	// Render 3D scene
 	render(game->scene);
 
-	// Render UI if it exists and needs redraw
-	if (game->ui && game->ui->needs_redraw) {
+	if (game->ui && game->ui->needs_redraw)
+	{
 		render_ui(game->ui);
 		game->ui->needs_redraw = false;
 	}
-
 	game->needs_redraw = false;
 }
 
-/**
- * @brief Create the main UI structure
- * 
- * @param mlx MLX context
- * @param scene Scene data
- * @return t_ui* Pointer to the created UI structure
- */
+
 t_ui *create_ui(mlx_t *mlx, t_scene *scene)
 {
-	t_ui *ui = ft_calloc(1, sizeof(t_ui));
+	t_ui			*ui;
+	t_v2f			root_pos;
+	t_v2f			root_size;
+	t_v2f			ambient_pos;
+	t_v2f			ambient_size;
+	t_ui_element	*ambient_section;
+
+	ui = ft_calloc(1, sizeof(t_ui));
 	if (!ui)
 	{
 		fprintf(stderr, "Error: Failed to allocate UI structure\n");
 		return (NULL);
 	}
-
 	ui->mlx = mlx;
 	ui->needs_redraw = true;
-
-	// Create root panel
-	t_v2f root_pos = g_v2f_zero;
-	t_v2f root_size = init_v2f(UI_PANEL_WIDTH, HEIGHT);
+	root_pos = g_v2f_zero;
+	root_size = init_v2f(UI_PANEL_WIDTH, HEIGHT);
 	ui->root = create_panel(mlx, root_pos, root_size);
 	if (!ui->root)
 	{
@@ -78,11 +66,9 @@ t_ui *create_ui(mlx_t *mlx, t_scene *scene)
 		free(ui);
 		return (NULL);
 	}
-
-	// Create and add ambient section
-	t_v2f ambient_pos = init_v2f(10, 10);
-	t_v2f ambient_size = init_v2f(UI_PANEL_WIDTH - 20, 200);
-	t_ui_element *ambient_section = create_ambient_section(mlx, scene, ambient_pos, ambient_size);
+	ambient_pos = init_v2f(10, 80);
+	ambient_size = init_v2f(UI_PANEL_WIDTH - 20, 200);
+	ambient_section = create_ambient_section(mlx, scene, ambient_pos, ambient_size);
 	if (!ambient_section)
 	{
 		fprintf(stderr, "Error: Failed to create ambient section\n");
@@ -90,38 +76,25 @@ t_ui *create_ui(mlx_t *mlx, t_scene *scene)
 		free(ui);
 		return (NULL);
 	}
-
-	// Add the ambient section to the root panel
 	attach_child(ui->root, ambient_section);
 	ui->needs_redraw = true;
-
-	// Initial render - We'll render the UI in the render_loop
-	// No need to render here as it will be handled by the render_loop
-	
 	return (ui);
 }
-
-// UI destruction functions have been moved to ui_utils.c to avoid duplication
 
 void destroy_ui(t_ui *ui)
 {
 	if (!ui)
 		return;
-
-	// Destroy the UI element tree using the implementation in ui_utils.c
 	if (ui->root)
 	{
 		destroy_ui_element_recursive(ui->root, ui);
 		ui->root = NULL;
 	}
-
-	// Clean up any remaining resources
 	if (ui->mlx && ui->images)
 	{
 		ui_images_destroy(ui->mlx, ui->images);
 		ui->images = NULL;
 	}
-
 	free(ui);
 }
 
@@ -195,22 +168,22 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 	}
 }
 
-void	mouse_hook(mouse_key_t button, action_t action, 
-	__attribute__((unused)) modifier_key_t mods, void *param)
-{
-	t_game	*game;
-	int32_t	x;
-	int32_t	y;
+// void	mouse_hook(mouse_key_t button, action_t action, 
+// 	__attribute__((unused)) modifier_key_t mods, void *param)
+// {
+// 	t_game	*game;
+// 	int32_t	x;
+// 	int32_t	y;
 
-	game = (t_game *)param;
-	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS && game->ui
-		&& game->ui->root->style.visible)
-	{
-		mlx_get_mouse_pos(game->mlx, &x, &y);
-		handle_ui_click(game->ui->root, x, y);
-		render_ui(game->ui);
-	}
-}
+// 	game = (t_game *)param;
+// 	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS && game->ui
+// 		&& game->ui->root->style.visible)
+// 	{
+// 		mlx_get_mouse_pos(game->mlx, &x, &y);
+// 		handle_ui_click(game->ui->root, x, y);
+// 		render_ui(game->ui);
+// 	}
+// }
 
 void cleanup_mlx(t_game *game)
 {
@@ -286,7 +259,7 @@ int	game(t_scene *scene)
 	}
 	mlx_loop_hook(game.mlx, render_loop, &game);
 	mlx_key_hook(game.mlx, key_hook, &game);
-	mlx_mouse_hook(game.mlx, mouse_hook, &game);
+	// mlx_mouse_hook(game.mlx, mouse_hook, &game);
 	if (!init_ui(&game, scene))
 		fprintf(stderr, "Warning: UI initialization had issues, continuing without UI\n");
 	render(scene);

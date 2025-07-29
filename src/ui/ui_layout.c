@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_layout.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/25 11:39:13 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/27 23:50:50 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_layout.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/25 11:39:13 by bewong        #+#    #+#                 */
+/*   Updated: 2025/07/29 17:16:38 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,13 @@
 bool	apply_instance(t_ui_element *element, mlx_image_t *img,
 					mlx_t *mlx, int32_t x, int32_t y)
 {
+	mlx_instance_t	*inst;
+
 	element->image = img;
 	element->pos = init_v2f(x, y);
 	if (element->instance_id >= 0 && element->instance_id < (int32_t)img->count)
 	{
-		mlx_instance_t *inst = &img->instances[element->instance_id];
+		inst = &img->instances[element->instance_id];
 		inst->x = x;
 		inst->y = y;
 		return (true);
@@ -39,14 +41,7 @@ t_ui_element	*create_panel(mlx_t *mlx, t_v2f pos, t_v2f size)
 	panel = (t_ui_element *)ft_calloc(1, sizeof(t_ui_element));
 	if (!panel)
 		return (NULL);
-	panel->type = UI_PANEL;
-	panel->pos = pos;
-	panel->size = size;
-	panel->visible = true;
-	panel->style.bg_color = UI_PANEL_BG_COLOR;
-	panel->style.border_color = UI_BORDER_COLOR;
-	panel->style.text_color = UI_TEXT_COLOR;
-	panel->style.padding = UI_PANEL_PADDING;
+	default_panel(panel, pos, size);
 	panel_img = mlx_new_image(mlx, (uint32_t)size.x, (uint32_t)size.y);
 	if (!panel_img)
 		return (free(panel), NULL);
@@ -57,7 +52,7 @@ t_ui_element	*create_panel(mlx_t *mlx, t_v2f pos, t_v2f size)
 		while (x < (uint32_t)size.x)
 		{
 			if (x < 2 || y < 2 || x >= (uint32_t)size.x - 2 || y >= (uint32_t)size.y - 2)
-				color = 0x666666FF;
+				color = UI_BORDER_COLOR;
 			else
 				color = panel->style.bg_color;
 			mlx_put_pixel(panel_img, x, y, color);
@@ -74,21 +69,14 @@ t_ui_element	*create_panel(mlx_t *mlx, t_v2f pos, t_v2f size)
 	return (panel);
 }
 
-t_ui_element	*create_label(mlx_t *mlx, const char *text, t_v2f pos, uint32_t color)
+t_ui_element *create_label(mlx_t *mlx, const char *text, t_v2f pos, uint32_t color)
 {
-	t_v2f			size;
-	t_ui_element	*label;
+	t_v2f			size = init_v2f((float)(ft_strlen(text) * 8 + 10), 24.0f);
+	t_ui_element	*label = ui_element_create(UI_LABEL, pos, size);
 	mlx_image_t		*label_img;
 
-	size.x = (float)(ft_strlen(text) * 8 + 10);
-	size.y = 24.0f;
-
-	label = (t_ui_element *)ft_calloc(1, sizeof(t_ui_element));
 	if (!label)
 		return (NULL);
-	label->type = UI_LABEL;
-	label->pos = pos;
-	label->size = size;
 	label->style.text_color = color;
 	label_img = mlx_new_image(mlx, (uint32_t)size.x, (uint32_t)size.y);
 	if (!label_img)
@@ -96,7 +84,8 @@ t_ui_element	*create_label(mlx_t *mlx, const char *text, t_v2f pos, uint32_t col
 	draw_text(label_img, text, init_v2f(5, 5), color);
 	if (!apply_instance(label, label_img, mlx, (int)pos.x, (int)pos.y))
 		return (mlx_delete_image(mlx, label_img), free(label), NULL);
-	return (label);
+	label->layout_offset = pos;
+	return label;
 }
 
 
@@ -109,14 +98,7 @@ t_ui_element	*create_header(mlx_t *mlx, const char *title, t_v2f pos, t_v2f size
 	header = (t_ui_element *)ft_calloc(1, sizeof(t_ui_element));
 	if (!header)
 		return (NULL);
-	header->type = UI_HEADER;
-	header->pos = pos;
-	header->size = size;
-	header->visible = true;
-	header->style.bg_color = UI_HEADER_COLOR;
-	header->style.text_color = UI_TEXT_COLOR;
-	header->style.padding = 10;
-	header->style.border_color = UI_BORDER_COLOR;
+	default_header(header, pos, size);
 	label = (t_ui_label *)ft_calloc(1, sizeof(t_ui_label));
 	if (!label)
 		return (free(header), NULL);
@@ -127,218 +109,235 @@ t_ui_element	*create_header(mlx_t *mlx, const char *title, t_v2f pos, t_v2f size
 	if (!img)
 		return (free(header), free(label), NULL);
 	header->image = img;
+	for (uint32_t y = 0; y < (uint32_t)size.y; ++y)
+		for (uint32_t x = 0; x < (uint32_t)size.x; ++x)
+			mlx_put_pixel(img, x, y, UI_HEADER_COLOR);
+	draw_text(img, title, init_v2f(5, 5), UI_TEXT_COLOR);
 	if (mlx_image_to_window(mlx, img, (int)pos.x, (int)pos.y) < 0)
 		return (free(header), free(label), free(img), NULL);
 	return (header);
 }
 
-t_ui_element	*create_value_button(mlx_t *mlx, const char *label, float *value,
-							t_v2f range, float step, t_v2f pos, t_v2f size)
+static t_ui_element *create_icon_button(mlx_t *mlx, const char *text, t_v2f size, uint32_t color)
 {
-	t_ui_element		*button;
-	t_ui_value_button	*val_btn;
-	char				value_str[32];
-	t_ui_element		*label_elem;
-	t_ui_element		*value_elem;
-	t_v2f				label_pos;
-
-	button = create_button(mlx, "", pos, size, NULL, NULL);
+	t_ui_element *button = create_button(mlx, NULL, init_v2f(0, 0), size, NULL, NULL);
 	if (!button)
-		return NULL;
-	val_btn = (t_ui_value_button *)ft_calloc(1, sizeof(t_ui_value_button));
+		return (NULL);
+	t_ui_element *label = create_label(mlx, text,
+		init_v2f((size.x - ft_strlen(text) * 8) / 2, (size.y - UI_FONT_HEIGHT) / 2),
+		color);
+	if (label)
+		attach_child(button, label);
+	return button;
+}
+
+
+t_ui_element *create_value_button(mlx_t *mlx, const char *label, float *value,
+	t_v2f range, float step, t_v2f pos, t_v2f size)
+{
+	t_ui_element		*container;
+	t_ui_value_button	*val_btn;
+	t_ui_element		*label_elem;
+	t_ui_element		*row, *minus_btn, *plus_btn, *value_display;
+	char				value_str[32];
+	t_v2f				button_size = init_v2f(24, size.y);
+
+	// Outer container to hold label and row
+	container = ui_element_create(UI_VALUE_BUTTON, pos, init_v2f(size.x, size.y * 2));
+	if (!container)
+		return (NULL);
+
+	val_btn = ft_calloc(1, sizeof(t_ui_value_button));
 	if (!val_btn)
-		return (ui_element_destroy(button, mlx, true), NULL);
+		return (ui_element_destroy(container, mlx, true), NULL);
+
+	*value = fmaxf(range.x, fminf(range.y, *value));
 	val_btn->value = value;
 	val_btn->range = range;
 	val_btn->step = step;
-	*val_btn->value = fmaxf(range.x, fminf(range.y, *val_btn->value));
-	button->data = val_btn;
-	label_pos = init_v2f(5, (size.y - 12) / 2.0f);
-	label_elem = create_label(mlx, label, label_pos, 0xFFFFFFFF);
-	if (label_elem)
-		attach_child(button, label_elem);
-	snprintf(value_str, sizeof(value_str), "%.2f", *val_btn->value);
-	snprintf(value_str, sizeof(value_str), "%.2f", *value);
-	t_v2f value_pos = init_v2f(size.x - 60, (size.y - 12) / 2.0f);
-	value_elem = create_label(mlx, value_str, value_pos, 0xFFFFFFAA);
-	if (value_elem)
+	container->data = val_btn;
+
+	// Optional label above
+	if (label && *label)
 	{
-		attach_child(button, value_elem);
-		val_btn->value_label = value_elem;
+		label_elem = create_label(mlx, label, init_v2f(0, 0), 0xFFFFFFFF);
+		if (label_elem)
+			attach_child(container, label_elem);
 	}
-	return (button);
+
+	// Row: [-] [value] [+]
+	row = ui_element_create(UI_PANEL, init_v2f(0, size.y), init_v2f(size.x, size.y));
+	if (!row)
+		return (ui_element_destroy(container, mlx, true), NULL);
+
+	// - Button
+	minus_btn = create_icon_button(mlx, "-", button_size, 0xFFAAAAAA);
+	if (minus_btn)
+	{
+		minus_btn->data = val_btn;
+		minus_btn->action = decrement_value_button;
+		attach_child(row, minus_btn);
+	}
+
+	// Value label
+	snprintf(value_str, sizeof(value_str), "%.2f", *value);
+	value_display = create_label(mlx, value_str, init_v2f(0, 0), 0xFFFFFFAA);
+	if (value_display)
+	{
+		val_btn->value_label = value_display;
+		attach_child(row, value_display);
+	}
+
+	// + Button
+	plus_btn = create_icon_button(mlx, "+", button_size, 0xFFAAAAAA);
+	if (plus_btn)
+	{
+		plus_btn->data = val_btn;
+		plus_btn->action = increment_value_button;
+		attach_child(row, plus_btn);
+	}
+
+	attach_child(container, row);
+	layout_horizontal(row, 5); // Optional spacing between -, value, +
+
+	return container;
 }
+
+
 
 t_ui_element	*create_button(mlx_t *mlx, const char *label, t_v2f pos, t_v2f size,
 						void (*on_click)(t_ui_element *, void *), void *param)
 {
-	t_ui_element	*button;
-	t_ui_element	*label_elem;
+	t_ui_element	*button = ui_element_create(UI_BUTTON, pos, size);
 	t_ui_button		*btn_data;
-	mlx_image_t		*button_img;
-	uint32_t		color;
-	uint32_t		x;
-	uint32_t		y;
-	t_v2f			label_pos;
+	mlx_image_t		*img;
 
-	button = (t_ui_element *)ft_calloc(1, sizeof(t_ui_element));
 	if (!button)
 		return (NULL);
-	button->type = UI_BUTTON;
-	button->pos = pos;
-	button->size = size;
-	button_img = mlx_new_image(mlx, (uint32_t)size.x, (uint32_t)size.y);
-	if (!button_img)
+
+	img = mlx_new_image(mlx, (uint32_t)size.x, (uint32_t)size.y);
+	if (!img)
 		return (free(button), NULL);
-	y = 0;
-	while (y < (uint32_t)size.y)
+
+	// Draw border and background
+	for (uint32_t y = 0; y < (uint32_t)size.y; ++y)
 	{
-		x = 0;
-		while (x < (uint32_t)size.x)
+		for (uint32_t x = 0; x < (uint32_t)size.x; ++x)
 		{
-			color = 0xFF555555;
-			if (x < 2 || y < 2 || x >= (uint32_t)size.x - 2 || y >= (uint32_t)size.y - 2)
-				color = 0xFFFFFFFF;
-			mlx_put_pixel(button_img, x, y, color);
-			x++;
+			uint32_t color = (x < 2 || y < 2 || x >= (uint32_t)size.x - 2 || y >= (uint32_t)size.y - 2)
+							 ? 0xFFFFFFFF : 0xFF555555;
+			mlx_put_pixel(img, x, y, color);
 		}
-		y++;
 	}
-	if (!apply_instance(button, button_img, mlx, (int)pos.x, (int)pos.y))
+
+	if (!apply_instance(button, img, mlx, (int)pos.x, (int)pos.y))
 	{
-		mlx_delete_image(mlx, button_img);
-		free(button);
-		return NULL;
+		mlx_delete_image(mlx, img);
+		return (free(button), NULL);
 	}
+
 	btn_data = (t_ui_button *)ft_calloc(1, sizeof(t_ui_button));
 	if (!btn_data)
-	{
-		mlx_delete_image(mlx, button_img);
-		free(button);
-		return NULL;
-	}
+		return (ui_element_destroy(button, mlx, true), NULL);
 	btn_data->on_click = on_click;
 	btn_data->param = param;
 	button->data = btn_data;
-	if (label)
-	{
-		label_pos = init_v2f(
-			(size.x - (ft_strlen(label) * 8)) / 2.0f,
-			(size.y - 12) / 2.0f
-		);
-		label_elem = create_label(mlx, label, label_pos, 0xFFFFFFFF);
-		if (label_elem)
-			attach_child(button, label_elem);
-	}
 
+	// Add label centered in the button
+	if (label && *label)
+	{
+		t_ui_element *label_elem = create_label(mlx, label, init_v2f(0, 0), 0xFFFFFFFF);
+		if (label_elem)
+		{
+			label_elem->layout_offset = init_v2f(
+				(size.x - ft_strlen(label) * 8) / 2.0f,
+				(size.y - UI_FONT_HEIGHT) / 2.0f
+			);
+			attach_child(button, label_elem);
+		}
+	}
 	return (button);
 }
 
-t_ui_element	*create_ambient_section(mlx_t *mlx, t_scene *scene, t_v2f pos, t_v2f size)
+t_ui_element *create_ambient_section(mlx_t *mlx, t_scene *scene, t_v2f pos, t_v2f size)
 {
-	t_ui_element	*section;
-	float			button_width;
-	float			button_height;
-	float			y_offset;
-	float			spacing;
-	t_light			*ambient_light;
-	int				i;
-	t_light			*light;
-	t_ui_element	*intensity_btn;
+	const float		spacing = 5;
+	const t_v2f		button_size = init_v2f(size.x - 20, 25);
+	const char		*labels[] = {"COL R", "COL G", "COL B"};
+	t_ui_element	*section = create_panel(mlx, pos, size);
+	t_light			*ambient = NULL;
+	t_ui_element	*header, *child;
+	int				i = 0;
 
-	section = ui_element_create(UI_SECTION, pos, size);
 	if (!section)
-	{
-		fprintf(stderr, "Error: Failed to create ambient section\n");
-		return NULL;
-	}
-	default_section(section, pos, size);
+		return (NULL);
 
-	button_width = size.x - 20;
-	button_height = 25;
-	y_offset = 40;
-	spacing = 5;
-	ambient_light = NULL;
-	i = 0;
+	// Find ambient light
 	while (i < (int)scene->lights.size)
 	{
-		light = (t_light *)vector_get(&scene->lights, i);
-		if (light && light->type == LIGHT_AMBIENT)
+		t_light *l = (t_light *)vector_get(&scene->lights, i);
+		if (l && l->type == LIGHT_AMBIENT)
 		{
-			ambient_light = light;
-			break ;
+			ambient = l;
+			break;
 		}
-		i++;
+		++i;
 	}
-	if (!ambient_light)
-	{
-		fprintf(stderr, "Warning: No ambient light found in scene\n");
-		return section;
-	}
-	intensity_btn = create_value_button(
-		mlx, 
-		"Intensity", 
-		&ambient_light->intensity, 
-		init_v2f(0.0f, 1.0f), 
-		0.05f, 
-		init_v2f(10, y_offset), 
-		init_v2f(button_width, button_height)
-	);
-	if (intensity_btn)
-	{
-		attach_child(section, intensity_btn);
-		y_offset += button_height + spacing;
-	}
+	if (!ambient)
+		return (fprintf(stderr, "No ambient light found\n"), section);
 
-	// Add color controls for R, G, B components
-	t_ui_element *r_btn = create_value_button(
-		mlx,
-		"R",
-		&ambient_light->color.x,
-		init_v2f(0.0f, 1.0f),
-		0.05f,
-		init_v2f(10, y_offset),
-		init_v2f((button_width - 10) / 3, button_height)
-	);
-	
-	t_ui_element *g_btn = create_value_button(
-		mlx,
-		"G",
-		&ambient_light->color.y,
-		init_v2f(0.0f, 1.0f),
-		0.05f,
-		init_v2f(15 + (button_width - 10) / 3, y_offset),
-		init_v2f((button_width - 10) / 3, button_height)
-	);
-	
-	t_ui_element *b_btn = create_value_button(
-		mlx,
-		"B",
-		&ambient_light->color.z,
-		init_v2f(0.0f, 1.0f),
-		0.05f,
-		init_v2f(20 + 2 * (button_width - 10) / 3, y_offset),
-		init_v2f((button_width - 10) / 3, button_height)
-	);
-
-	if (r_btn) attach_child(section, r_btn);
-	if (g_btn) attach_child(section, g_btn);
-	if (b_btn) attach_child(section, b_btn);
-	
-	y_offset += button_height + spacing;
-	t_ui_element *preview = create_panel(mlx, init_v2f(10, y_offset), init_v2f(button_width, button_height));
-	if (preview)
-	{
-		preview->style.bg_color = (uint32_t)(ambient_light->color.x * 255) << 16 |
-								 (uint32_t)(ambient_light->color.y * 255) << 8 |
-								 (uint32_t)(ambient_light->color.z * 255) |
-								 0xFF000000;
-		attach_child(section, preview);
-		y_offset += button_height + spacing;
-	}
-	t_ui_element *header = create_header(mlx, "Ambient Light", init_v2f(0, 5), init_v2f(size.x, UI_HEADER_HEIGHT));
+	// Header
+	header = create_header(mlx, "AMBIENT LIGHT", init_v2f(0, 0), init_v2f(size.x, UI_HEADER_HEIGHT));
 	if (header)
+	{
+		header->layout_offset = init_v2f(0, 5);
 		attach_child(section, header);
+	}
 
+	child = create_label(mlx, "INTENSITY", init_v2f(0, 0), UI_TEXT_COLOR);
+
+	if (child)
+	{
+		child->layout_offset = init_v2f(10, 0);
+		attach_child(section, child);
+	}
+
+	// Intensity Value Button
+	child = create_value_button(mlx, NULL, &ambient->intensity, init_v2f(0, 1), 0.05f,
+								init_v2f(0, 0), button_size);
+	if (child)
+	{
+		child->layout_offset = init_v2f(10, 0);
+		attach_child(section, child);
+	}
+
+	// RGB Controls (Label + Value Button for each)
+	float *components[] = {&ambient->color.x, &ambient->color.y, &ambient->color.z};
+	i = 0;
+	while (i < 3)
+	{
+		// RGB Label
+		child = create_label(mlx, labels[i],  init_v2f(0, 0), 0xFFFFFFFF);
+		if (child)
+		{
+			child->layout_offset = init_v2f(10, 0);
+			attach_child(section, child);
+		}
+
+		// RGB Value Button
+		child = create_value_button(mlx, NULL, components[i], init_v2f(0, 255), 1.0f,
+									init_v2f(0, 0), button_size);
+		if (child)
+		{
+			child->layout_offset = init_v2f(100, 0);
+			attach_child(section, child);
+		}
+		++i;
+	}
+	
+	layout_vertical(section, spacing);
 	return section;
 }
+
+
+

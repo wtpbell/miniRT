@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_utils.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/27 23:26:26 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_utils.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 22:38:00 by bewong        #+#    #+#                 */
+/*   Updated: 2025/07/29 16:34:39 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,9 @@ t_ui_element	*create_ui_element(t_ui_type type, t_v2f pos, t_v2f size)
 	element->pos = pos;
 	element->size = size;
 	element->visible = true;
-	element->style.bg_color = 0x00000000;
-	element->style.text_color = 0xFFFFFFFF;
-	element->style.border_color = 0x00000000;
+	element->style.bg_color = UI_TRANSPARENT;
+	element->style.text_color = UI_TEXT_COLOR;
+	element->style.border_color = UI_TRANSPARENT;
 	element->style.padding = 2;
 	element->parent = NULL;
 	element->first_child = NULL;
@@ -104,3 +104,50 @@ t_ui_element	*create_ui_element(t_ui_type type, t_v2f pos, t_v2f size)
 	ui_element_setup_handlers(element);
 	return (element);
 }
+
+
+void	layout_vertical(t_ui_element *parent, float spacing)
+{
+	t_ui_element	*child;
+	float			y;
+
+	child = parent->first_child;
+	y = parent->style.padding;
+	while (child)
+	{
+		if (child->visible)
+		{
+			child->pos = v2f_add(parent->pos, init_v2f(child->layout_offset.x, y + child->layout_offset.y));
+			if (child->image)
+			{
+				child->image->instances[child->instance_id].x = (int)child->pos.x;
+				child->image->instances[child->instance_id].y = (int)child->pos.y;
+			}
+			y += child->size.y + spacing;
+		}
+		child = child->next_sibling;
+	}
+}
+
+
+
+void	layout_horizontal(t_ui_element *parent, float spacing)
+{
+	t_ui_element	*child;
+	float			x;
+
+	child = parent->first_child;
+	x = 0;
+	while (child)
+	{
+		child->pos = v2f_add(parent->pos, init_v2f(x + child->layout_offset.x, child->layout_offset.y));
+		if (child->image)
+		{
+			child->image->instances[child->instance_id].x = (int)child->pos.x;
+			child->image->instances[child->instance_id].y = (int)child->pos.y;
+		}
+		x += child->size.x + spacing;
+		child = child->next_sibling;
+	}
+}
+

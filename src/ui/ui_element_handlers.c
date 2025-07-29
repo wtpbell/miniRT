@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_element_handlers.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 21:25:00 by cascade           #+#    #+#             */
-/*   Updated: 2025/07/28 00:00:51 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_element_handlers.c                              :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 21:25:00 by cascade       #+#    #+#                 */
+/*   Updated: 2025/07/29 16:39:33 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,20 +79,9 @@ void	safe_call_destroy_handler(t_ui_element *element, mlx_t *mlx)
 
 static void	render_panel(t_ui_element *element, mlx_image_t *target)
 {
-	t_v2f		abs_pos;
-	t_v2f		abs_size;
-	t_ui_style	parent_style;
+	t_v2f abs_pos = element->pos;
+	t_v2f abs_size = element->size;
 
-	abs_pos = element->pos;
-	abs_size = element->size;
-	if (element->parent)
-	{
-		parent_style = element->parent->style;
-		abs_pos.x += element->parent->pos.x + parent_style.padding;
-		abs_pos.y += element->parent->pos.y + parent_style.padding;
-		abs_size.x = fmin(element->size.x, 
-			element->parent->size.x - (2 * parent_style.padding));
-	}
 	draw_rect(target, abs_pos, abs_size, element->style.bg_color);
 	draw_rect(target, abs_pos, init_v2f(abs_size.x, 1), UI_BORDER_COLOR);
 	draw_rect(target, abs_pos, init_v2f(1, abs_size.y), UI_BORDER_COLOR);
@@ -102,63 +91,34 @@ static void	render_panel(t_ui_element *element, mlx_image_t *target)
 		init_v2f(1, abs_size.y), UI_BORDER_COLOR);
 }
 
+
 static void	render_section(t_ui_element *element, mlx_image_t *target)
 {
-	t_v2f		abs_pos;
-	t_v2f		abs_size;
-	t_ui_style	parent_style;
-	t_ui_label	*label;
+	t_v2f abs_pos = element->pos;
+	t_v2f abs_size = element->size;
+	t_ui_label *label = (t_ui_label *)element->data;
 
-	abs_pos = element->pos;
-	abs_size = element->size;
-	if (element->parent)
-	{
-		parent_style = element->parent->style;
-		abs_pos.x += element->parent->pos.x + parent_style.padding;
-		abs_pos.y += element->parent->pos.y + parent_style.padding;
-		abs_size.x = fmin(element->size.x, 
-			element->parent->size.x - (2 * parent_style.padding));
-	}
 	draw_rect(target, abs_pos, abs_size, element->style.bg_color);
 	draw_rect(target, abs_pos, 
 		init_v2f(abs_size.x, UI_SECTION_HEADER_HEIGHT),
 		UI_SECTION_HEADER_COLOR);
-	if (element->data)
+	if (label && label->text)
 	{
-		label = (t_ui_label *)element->data;
-		if (label && label->text)
-		{
-			draw_text(target, label->text,
-				init_v2f(abs_pos.x + element->style.padding,
-				abs_pos.y + (UI_SECTION_HEADER_HEIGHT - UI_CHAR_HEIGHT) / 2),
-				UI_TEXT_COLOR);
-		}
+		draw_text(target, label->text,
+			init_v2f(abs_pos.x + element->style.padding,
+			         abs_pos.y + (UI_SECTION_HEADER_HEIGHT - UI_CHAR_HEIGHT) / 2),
+			UI_TEXT_COLOR);
 	}
 }
-
 static void	render_button(t_ui_element *element, mlx_image_t *target)
 {
-	t_ui_button	*button;
-	t_v2f		abs_pos;
-	t_v2f		abs_size;
-	t_ui_style	parent_style;
-	int			text_width;
-	int			text_x;
-	int			text_y;
+	t_ui_button	*button = (t_ui_button *)element->data;
+	t_v2f		abs_pos = element->pos;
+	t_v2f		abs_size = element->size;
 
-	button = (t_ui_button *)element->data;
 	if (!button)
 		return ;
-	abs_pos = element->pos;
-	abs_size = element->size;
-	if (element->parent)
-	{
-		parent_style = element->parent->style;
-		abs_pos.x += element->parent->pos.x + parent_style.padding;
-		abs_pos.y += element->parent->pos.y + parent_style.padding;
-		abs_size.x = fmin(element->size.x, 
-			element->parent->size.x - (2 * parent_style.padding));
-	}
+
 	draw_rect(target, abs_pos, abs_size, UI_BUTTON_COLOR);
 	draw_rect(target, abs_pos, init_v2f(abs_size.x, 1), UI_BUTTON_BORDER_COLOR);
 	draw_rect(target, abs_pos, init_v2f(1, abs_size.y), UI_BUTTON_BORDER_COLOR);
@@ -169,13 +129,14 @@ static void	render_button(t_ui_element *element, mlx_image_t *target)
 
 	if (button->label)
 	{
-		text_width = ft_strlen(button->label) * UI_CHAR_WIDTH;
-		text_x = abs_pos.x + (abs_size.x - text_width) / 2;
-		text_y = abs_pos.y + (abs_size.y - UI_CHAR_HEIGHT) / 2;
+		int text_width = ft_strlen(button->label) * UI_CHAR_WIDTH;
+		int text_x = abs_pos.x + (abs_size.x - text_width) / 2;
+		int text_y = abs_pos.y + (abs_size.y - UI_CHAR_HEIGHT) / 2;
 		draw_text(target, button->label, 
 			init_v2f(text_x, text_y), UI_TEXT_COLOR);
 	}
 }
+
 
 void ui_element_setup_handlers(t_ui_element *element)
 {

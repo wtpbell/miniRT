@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_render.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 15:03:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/27 23:37:15 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_render.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 15:03:00 by bewong        #+#    #+#                 */
+/*   Updated: 2025/07/29 16:36:16 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,45 +173,24 @@ void	draw_button(t_ui_element *button, mlx_image_t *target)
 		}
 	}
 }
-
-void render_ui_element(t_ui_element *element, mlx_image_t *target)
+void	render_ui_element(t_ui_element *element, mlx_image_t *target)
 {
-	t_v2f			abs_pos;
-	t_v2f			abs_size;
-	t_ui_style		parent_style;
-	t_ui_element	*child;
-	t_ui_label		*label;
+	t_ui_element *child;
 
-	abs_pos = element->pos;
-	abs_size = element->size;
-	if (element->parent)
+	if (!element || !element->visible)
+		return;
+	if (element->image && element->instance_id >= 0)
 	{
-		parent_style = element->parent->style;
-		abs_pos.x += element->parent->pos.x + parent_style.padding;
-		abs_pos.y += element->parent->pos.y + parent_style.padding;
-		abs_size.x = fmin(element->size.x, 
-			element->parent->size.x - (2 * parent_style.padding));
+		element->image->instances[element->instance_id].x = (int)element->pos.x;
+		element->image->instances[element->instance_id].y = (int)element->pos.y;
 	}
-	t_v2f orig_pos = element->pos;
-	t_v2f orig_size = element->size;
-	element->pos = abs_pos;
-	element->size = abs_size;
-	if (element->render)
-		element->render(element, target);
-	else
-		draw_rect(target, abs_pos, abs_size, 0xFFFF00FF);
-	if (element->data && (element->type == UI_LABEL || element->type == UI_HEADER))
-	{
-		label = (t_ui_label *)element->data;
-		if (label && label->text)
-			draw_text(target, label->text, abs_pos, label->color);
-	}
-	element->pos = orig_pos;
-	element->size = orig_size;
 	child = element->first_child;
 	while (child)
 	{
 		render_ui_element(child, target);
 		child = child->next_sibling;
 	}
+	layout_vertical(element, 5);
 }
+
+
