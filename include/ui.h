@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui.h                                               :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/29 16:12:00 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui.h                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
+/*   Updated: 2025/07/29 23:08:12 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ typedef struct s_ui_element
 	t_ui_update_func	update;
 	void				(*action)(struct s_ui_element *, void *);
 	t_v2f				layout_offset;
+	bool				needs_redraw;
 } t_ui_element;
 
 typedef struct s_ui_button
@@ -170,7 +171,7 @@ t_ui_element	*create_panel(mlx_t *mlx, t_v2f pos, t_v2f size);
 t_ui_element	*create_label(mlx_t *mlx, const char *text, t_v2f pos, uint32_t color);
 t_ui_element	*create_button(mlx_t *mlx, const char *label, t_v2f pos, t_v2f size,
 				void (*on_click)(t_ui_element *, void *), void *param);
-t_ui_element	*create_value_button(mlx_t *mlx, const char *label, float *value,
+t_ui_element	*create_value_button(mlx_t *mlx, float *value,
 							t_v2f range, float step, t_v2f pos, t_v2f size);
 t_ui_element	*create_ambient_section(mlx_t *mlx, t_scene *scene, t_v2f pos, t_v2f size);
 t_ui_element	*create_header(mlx_t *mlx, const char *title, t_v2f pos, t_v2f size);

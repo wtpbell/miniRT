@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_styles.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/25 16:25:35 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/29 09:11:37 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_styles.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/25 16:25:35 by bewong            #+#    #+#             */
+/*   Updated: 2025/07/29 22:56:14 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,9 +108,8 @@ void	default_value_button(t_ui_element *button, t_v2f pos, t_v2f size, const cha
 		.padding = 4,
 		.visible = true,
 	};
-	if (label && *label) 
+	if (label && *label)
 	{
-		// [-] | [+]
 		btn_data = (t_ui_button *)button->data;
 		if (!btn_data) {
 			btn_data = (t_ui_button *)ft_calloc(1, sizeof(t_ui_button));

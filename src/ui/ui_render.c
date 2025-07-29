@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_render.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/27 15:03:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/29 16:36:16 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_render.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/27 15:03:00 by bewong            #+#    #+#             */
+/*   Updated: 2025/07/29 22:44:02 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	draw_char(mlx_image_t *img, char c, int x, int y, uint32_t color)
 	static const uint8_t font[128][8] = {
 		[0 ... 31] = {0},
 		[' '] = {0},
+		['.'] = {0x00, 0x00, 0x00, 0x18, 0x18, 0x18, 0x18, 0x18},
 		['-'] = {0x00, 0x00, 0x00, 0x7E, 0x7E, 0x00, 0x00, 0x00},
 		['+'] = {0x00, 0x10, 0x10, 0x7C, 0x10, 0x10, 0x00, 0x00},
-		['.'] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0x18},
 		['0'] = {0x3C, 0x42, 0x46, 0x4A, 0x52, 0x62, 0x42, 0x3C},
 		['1'] = {0x10, 0x30, 0x50, 0x10, 0x10, 0x10, 0x10, 0x7C},
 		['2'] = {0x3C, 0x42, 0x02, 0x0C, 0x30, 0x40, 0x40, 0x7E},
@@ -175,14 +175,16 @@ void	draw_button(t_ui_element *button, mlx_image_t *target)
 }
 void	render_ui_element(t_ui_element *element, mlx_image_t *target)
 {
-	t_ui_element *child;
+	t_ui_element	*child;
 
-	if (!element || !element->visible)
+	if (!element || !element->visible || !target)
 		return;
-	if (element->image && element->instance_id >= 0)
+	if (element->needs_redraw)
 	{
-		element->image->instances[element->instance_id].x = (int)element->pos.x;
-		element->image->instances[element->instance_id].y = (int)element->pos.y;
+		draw_rect(target, element->pos, element->size, element->style.bg_color);
+		if (element->type == UI_BUTTON)
+			draw_button(element, target);
+		element->needs_redraw = false;
 	}
 	child = element->first_child;
 	while (child)
@@ -190,7 +192,6 @@ void	render_ui_element(t_ui_element *element, mlx_image_t *target)
 		render_ui_element(child, target);
 		child = child->next_sibling;
 	}
-	layout_vertical(element, 5);
 }
 
 

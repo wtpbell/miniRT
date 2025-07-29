@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_core.c                                          :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/27 12:53:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/29 14:52:49 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_core.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/27 12:53:50 by bewong            #+#    #+#             */
+/*   Updated: 2025/07/29 22:46:53 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ t_ui_element	*ui_element_create(t_ui_type type, t_v2f pos, t_v2f size)
 	element->visible = true;
 	element->image = NULL;
 	element->instance_id = -1;
+	element->needs_redraw = true;
 	if (type < (sizeof(g_default_stylers) / sizeof(g_default_stylers[0])) && 
 		g_default_stylers[type] != NULL)
 		g_default_stylers[type](element, pos, size);

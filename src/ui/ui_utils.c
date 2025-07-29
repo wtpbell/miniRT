@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_utils.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/27 22:38:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/29 16:34:39 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_utils.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
+/*   Updated: 2025/07/29 23:15:31 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,13 +117,19 @@ void	layout_vertical(t_ui_element *parent, float spacing)
 	{
 		if (child->visible)
 		{
-			child->pos = v2f_add(parent->pos, init_v2f(child->layout_offset.x, y + child->layout_offset.y));
+			if (child->layout_offset.x == 0 && child->layout_offset.y == 0)
+			{
+				child->pos = v2f_add(parent->pos, init_v2f(0, y));
+				y += child->size.y + spacing;
+			}
+			else
+
+				child->pos = v2f_add(parent->pos, child->layout_offset);
 			if (child->image)
 			{
 				child->image->instances[child->instance_id].x = (int)child->pos.x;
 				child->image->instances[child->instance_id].y = (int)child->pos.y;
 			}
-			y += child->size.y + spacing;
 		}
 		child = child->next_sibling;
 	}

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_event.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/27 12:51:30 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/29 16:25:02 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_event.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/27 12:51:30 by bewong            #+#    #+#             */
+/*   Updated: 2025/07/29 22:57:47 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 bool is_point_in_element(t_ui_element *element, int x, int y)
 {
+	
 	return (x >= element->pos.x &&
 		x <= (element->pos.x + element->size.x) &&
 		y >= element->pos.y &&
@@ -38,27 +39,20 @@ void handle_ui_click(t_ui_element *root, int32_t x, int32_t y)
 	}
 }
 
-// You must pass mlx or ui pointer to this function
 void update_label_text(t_ui_element *label, const char *text)
 {
-	t_ui *ui;
-	mlx_image_t *img;
-	t_v2f size;
-
-	if (!label || label->type != UI_LABEL || !label->image)
-		return;
+	t_ui		*ui;
+	mlx_image_t	*img;
+	t_v2f		size;
 
 	ui = (t_ui *)label->parent;
 	if (!ui || !ui->mlx)
-		return;
-
+		return ;
 	size = init_v2f(ft_strlen(text) * 8 + 10, 24);
 	img = mlx_new_image(ui->mlx, (uint32_t)size.x, (uint32_t)size.y);
 	if (!img)
 		return;
 	draw_text(img, text, init_v2f(5, 5), label->style.text_color);
-
-	// Replace image in label
 	label->image = img;
 }
 
@@ -81,19 +75,15 @@ void update_button_value(t_ui_element *button, int32_t click_x)
 		button_mid = button->size.x / 2.0f;
 		old_value = *value_btn->value;
 		value_changed = false;
-
 		if (relative_x < button_mid)
 			*value_btn->value -= value_btn->step;
 		else
 			*value_btn->value += value_btn->step;
-
 		if (*value_btn->value < value_btn->range.x)
 			*value_btn->value = value_btn->range.x;
 		else if (*value_btn->value > value_btn->range.y)
 			*value_btn->value = value_btn->range.y;
-
 		value_changed = (*value_btn->value != old_value);
-
 		if (value_changed)
 		{
 			if (button->parent && button->parent->parent &&
@@ -106,8 +96,6 @@ void update_button_value(t_ui_element *button, int32_t click_x)
 				ui = (t_ui *)button->parent->parent->parent->parent->data;
 				ui->needs_redraw = true;
 			}
-
-			// Force color rounding for light
 			if (button->parent && button->parent->parent &&
 				button->parent->parent->data)
 			{
@@ -116,8 +104,6 @@ void update_button_value(t_ui_element *button, int32_t click_x)
 					value_btn->value <= &light->color.z + 1)
 					*value_btn->value = (int)(*value_btn->value);
 			}
-
-			// Update label display
 			if (value_btn->value_label)
 			{
 				snprintf(value_str, sizeof(value_str), "%.2f", *value_btn->value);
@@ -142,8 +128,8 @@ void update_button_value(t_ui_element *button, int32_t click_x)
 void decrement_value_button(t_ui_element *btn, void *param)
 {
 	(void)param;
-	t_ui_value_button *vb = (t_ui_value_button *)btn->data;
-	char str[32];
+	t_ui_value_button	*vb = (t_ui_value_button *)btn->data;
+	char				str[32];
 
 	*vb->value = fmaxf(vb->range.x, *vb->value - vb->step);
 	snprintf(str, sizeof(str), "%.2f", *vb->value);
@@ -153,8 +139,8 @@ void decrement_value_button(t_ui_element *btn, void *param)
 void increment_value_button(t_ui_element *btn, void *param)
 {
 	(void)param;
-	t_ui_value_button *vb = (t_ui_value_button *)btn->data;
-	char str[32];
+	t_ui_value_button	*vb = (t_ui_value_button *)btn->data;
+	char				str[32];
 
 	*vb->value = fminf(vb->range.y, *vb->value + vb->step);
 	snprintf(str, sizeof(str), "%.2f", *vb->value);
