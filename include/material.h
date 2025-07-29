@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/27 23:17:30 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/29 12:11:14 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,15 @@ typedef enum e_texture_type
 struct s_texture
 {
 	t_tex_type		type;
-	t_v3f			scale_rot;
 	t_v3f			col;
+	union
+	{
+		t_v3f	scale_rot;
+		float	scale;
+	};
 	char			*tex_path;
 	mlx_texture_t	*tex;
 	float			(*fp_perlin)(t_v2f uv);
-};
-
-struct s_bump
-{
-	t_tex_type		type;
-	char			*tex_path;
-	mlx_texture_t	*tex;
-	float			(*fp_perlin)(t_v2f uv);
-	float			scale;
 };
 
 struct s_bump_context
@@ -79,7 +74,7 @@ struct s_material
 	t_mat_type		type;
 	t_v3f			albedo;
 	t_tex			texture;
-	t_bump			bump_map;
+	t_tex			bump_map;
 	t_texcol		get_texcol;
 	struct s_lambertian
 	{
