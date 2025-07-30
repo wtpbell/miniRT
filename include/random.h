@@ -20,7 +20,9 @@ void		seed_rand(uint32_t seed);
 uint32_t	get_rngstate(uint32_t x, uint32_t y, uint32_t frame);
 float		frandom(void);
 float		frandom_norm_distribution(void);
+int			irand(int min, int max);
 t_v3f		random_direction(void);
 t_v3f		random_in_hemisphere(t_v3f normal);
+t_v3f		frand_sphere(void);
 
 #endif

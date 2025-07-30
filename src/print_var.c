@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/27 23:29:12 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/30 15:21:40 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,15 +260,15 @@ void	scene_print(t_scene *scene)
 	printf("=========================\n");
 }
 
-void	debug_bump_uv(const char *stage, t_v2f uv, float u_scale, float v_scale, float theta)
+void	debug_bump_uv(const char *stage, t_v2f uv, t_v3f uvt)
 {
 	if (!RT_DEBUG)
 		return;
 	printf("Bump %s: UV=(%.6f,%.6f)", stage, uv.u, uv.v);
-	if (u_scale != 1.0f || v_scale != 1.0f || theta != 0.0f) {
-		printf(", Scale=(%.2f,%.2f)", u_scale, v_scale);
-		if (theta != 0.0f)
-			printf(", Rot=%.1f°", theta);
+	if (uvt.u != 1.0f || uvt.v != 1.0f || uvt.w != 0.0f) {
+		printf(", Scale=(%.2f,%.2f)", uvt.u, uvt.v);
+		if (uvt.w != 0.0f)
+			printf(", Rot=%.1f°", uvt.w);
 	}
 	printf("\n");
 }

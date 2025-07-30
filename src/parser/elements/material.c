@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/29 11:54:35 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/30 21:56:50 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	set_texture_pattern(t_mat *mat)
 	else if ((mat->texture.type & TEX_IS_PERLIN) != 0)
 	{
 		set_perlin_pattern(&mat->texture.type, &mat->texture.fp_perlin);
-		mat->get_texcol = sample_noise;
+		mat->get_texcol = noise_pattern;
 	}
 	else
 		mat->get_texcol = solid_pattern;

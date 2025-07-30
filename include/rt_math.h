@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:51:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/24 12:18:55 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/30 14:14:41 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ float	lerpf(float min, float max, float t);
 float	cos_smooth(float t);
 float	perlin_smoothstep(float t);
 float	smoothstep(float t);
-void	init_value_noise(void);
-float	eval_noise2d(t_v2f point);
 void	init_perlin(void);
 float	perlin(t_v2f point);
 

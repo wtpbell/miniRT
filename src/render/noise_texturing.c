@@ -6,101 +6,64 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/24 10:37:14 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/28 10:53:43 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/30 22:00:18 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt_math.h"
-#include "scene.h"
+#include "material.h"
 
-float	pink_noise(t_v2f point)
+static float	generate_perlin(t_perlin *data, t_v2f point)
 {
-	const float	rate = 2.0;
-	const float	gain = 0.5f;
-	const int	max_layer = 5;
-	float		freq = 1.0f;
-	float		ampt = 1.0f;
-	float		sum;
-	int			layer;
+	int		curr_layer;
+	float	sum;
 
+	curr_layer = 0;
 	sum = 0.0f;
-	layer = 0;
-	point = v2f_scale(point, freq);
-	while (layer < max_layer)
+	while (curr_layer < data->layers)
 	{
-		sum += perlin(point) * ampt;
-		point = v2f_scale(point, rate);
-		ampt *= gain;
-		++layer;
+		sum += perlin(v2f_scale(point, data->freq)) * data->ampt;
+		data->ampt *= data->gain;
+		data->freq *= data->rate;
+		++curr_layer;
 	}
 	return (sum);
 }
 
-float	marble_noise(t_v2f point)
+float	pink_noise(t_v2f point)
 {
-	const float	rate = 1.8f;
-	const float	gain = .35f;
-	const int	max_layer = 5;
-	float		freq = 0.02f;
-	float		ampt = 1.0f;
-	float		sum;
-	float		x;
-	int			layer;
+	t_perlin	pink;
 
-	sum = 0.0f;
-	layer = 0;
-	x = point.x;
-	point = v2f_scale(point, freq);
-	while (layer < max_layer)
-	{
-		sum += perlin(point) * ampt;
-		point = v2f_scale(point, rate);
-		ampt *= gain;
-		++layer;
-	}
-	return (sin((x + sum * 100.0f) * TAU / 200.0f));
-}
-
-float	wood_noise(t_v2f point)
-{
-	const float	freq = 0.35f;
-	float		val;
-
-	val = perlin(v2f_scale(point, freq)) * 10.0f;
-	return (modulo(val));
+	pink.rate = 2.0f;
+	pink.gain = 0.5f;
+	pink.freq = 1.0f;
+	pink.ampt = 1.0f;
+	pink.layers = 5;
+	return (generate_perlin(&pink, point));
 }
 
 float	turbulence_noise(t_v2f point)
 {
-	const float	rate = 1.8;
-	const float	gain = 0.35f;
-	const int	max_layer = 5;
-	float		freq = 0.02f;
-	float		ampt = 1.0f;
-	float		sum;
-	int			layer;
+	t_perlin	turb;
 
-	sum = 0.0f;
-	layer = 0;
-	point = v2f_scale(point, freq);
-	while (layer < max_layer)
-	{
-		sum += fabsf(2.0f * perlin(point) - 1.0f) * ampt;
-		point = v2f_scale(point, rate);
-		ampt *= gain;
-		++layer;
-	}
-	return (sum);
+	turb.rate = 1.8f;
+	turb.gain = 0.35f;
+	turb.freq = 0.02f;
+	turb.ampt = 1.0f;
+	turb.layers = 5;
+	return (fabsf(generate_perlin(&turb, point)));
 }
 
-// https://dl.acm.org/doi/pdf/10.1145/325334.325247
-// spectral densities - to describe the various frequencies (layers) of the resulting noise is made of
-// power spectra - each layer has a specific amplitude
-// octave - can be misleading as an octave can describe the doubling or halving of a frequency of each layer
-t_v3f	sample_noise(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a)
+float	marble_noise(t_v2f point)
 {
-	t_v2f	point;
+	return (sin((point.x + turbulence_noise(point) * 100.0f) * TAU / 200.0f));
+}
 
-	point = v2f_mul_v3f(*texcoord, tex->scale_rot);
-	return (v3f_lerp(col_a, tex->col, (tex->fp_perlin(point) + 1.0f) * 0.5f));
+float	wood_noise(t_v2f point)
+{
+	t_perlin	wood;
+
+	wood.freq = 0.35f;
+	wood.ampt = 10.0f;
+	return (modulo(perlin(v2f_scale(point, wood.freq)) * wood.ampt));
 }

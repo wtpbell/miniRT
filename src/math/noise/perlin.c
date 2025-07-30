@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/29 16:47:20 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/28 10:43:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/30 21:57:52 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,6 @@ static const int	g_verts = VERTS;
 static const int	g_mask = VERTS - 1;
 static t_v3f		g_gradients[VERTS];
 static int			g_hashtable[TABLE_SIZE];
-
-t_v3f	frand_sphere(void)
-{
-	float	theta;
-	float	phi;
-
-	theta = acosf(2.0f * frandom() - 1.0f);
-	phi = frandom() * TAU;
-	return (init_v3f(
-		cosf(phi) * sinf(theta),
-		sinf(phi) * sinf(theta),
-		cosf(theta)
-	));
-}
-
-inline int	irand(int min, int max)
-{
-	return (min + floorf(frandom() * (max - min)));
-}
 
 void	init_perlin(void)
 {
@@ -62,46 +43,40 @@ void	init_perlin(void)
 	}
 }
 
-inline static int hash(int x, int y)
+static inline int	hash(int x, int y)
 {
-	return(g_hashtable[g_hashtable[x] + y]);
+	return (g_hashtable[g_hashtable[x] + y]);
 }
 
 /**
- * source: https://www.scratchapixel.com/lessons/procedural-generation-virtual-worlds/perlin-noise-part-2/perlin-noise.html
+ * source: scratchapixel - perlin noise
+ * Ken Perlin: https://dl.acm.org/doi/pdf/10.1145/325334.325247
  */
 float	perlin(t_v2f point)
 {
-	t_v2i	p_i0;
-	t_v2i	p_i1;
 	t_v2f	p_t;
-	t_v2f	travel;
-	t_v3f	corners[4];
-	t_v3f	points[4];
-	t_v2f	vals;
+	t_v2f	t;
+	t_v2i	p_i[2];
+	t_v3f	cors[4];
+	t_v3f	pnts[4];
 
-	p_i0.x = ((int)floorf(point.x)) & g_mask;
-	p_i0.y = ((int)floorf(point.y)) & g_mask;
-	p_i1.x = (p_i0.x + 1) & g_mask;
-	p_i1.y = (p_i0.y + 1) & g_mask;
-	p_t.x = modulo(point.x);
-	p_t.y = modulo(point.y);
-
-	travel.u = smoothstep(p_t.x);
-	travel.v = smoothstep(p_t.y);
-
-	corners[0] = g_gradients[hash(p_i0.x, p_i0.y)];	// bottom left
-	corners[1] = g_gradients[hash(p_i1.x, p_i0.y)];	// bottom right
-	corners[2] = g_gradients[hash(p_i0.x, p_i1.y)];	// top left
-	corners[3] = g_gradients[hash(p_i1.x, p_i1.y)];	// top right
-
-	points[0] = init_v3f(p_t.x, p_t.y, 0.0f);
-	points[1] = init_v3f(p_t.x - 1.0f, p_t.y, 0.0f);
-	points[2] = init_v3f(p_t.x, p_t.y - 1.0f, 0.0f);
-	points[3] = init_v3f(p_t.x - 1.0f, p_t.y - 1.0f, 0.0f);
-
-	vals.x = lerpf(v3f_dot(corners[0], points[0]), v3f_dot(corners[1], points[1]), travel.u);
-	vals.y = lerpf(v3f_dot(corners[2], points[2]), v3f_dot(corners[3], points[3]), travel.u);
-
-	return (lerpf(vals.x, vals.y, travel.v));
+	p_i[0].x = ((int)floorf(point.x)) & g_mask;
+	p_i[0].y = ((int)floorf(point.y)) & g_mask;
+	p_i[1].x = (p_i[0].x + 1) & g_mask;
+	p_i[1].y = (p_i[0].y + 1) & g_mask;
+	p_t = v2f_fract(point);
+	t.u = perlin_smoothstep(p_t.x);
+	t.v = perlin_smoothstep(p_t.y);
+	cors[0] = g_gradients[hash(p_i[0].x, p_i[0].y)];
+	cors[1] = g_gradients[hash(p_i[1].x, p_i[0].y)];
+	cors[2] = g_gradients[hash(p_i[0].x, p_i[1].y)];
+	cors[3] = g_gradients[hash(p_i[1].x, p_i[1].y)];
+	pnts[0] = init_v3f(p_t.x, p_t.y, 0.0f);
+	pnts[1] = init_v3f(p_t.x - 1.0f, p_t.y, 0.0f);
+	pnts[2] = init_v3f(p_t.x, p_t.y - 1.0f, 0.0f);
+	pnts[3] = init_v3f(p_t.x - 1.0f, p_t.y - 1.0f, 0.0f);
+	return (lerpf(
+			lerpf(v3f_dot(cors[0], pnts[0]), v3f_dot(cors[1], pnts[1]), t.u),
+			lerpf(v3f_dot(cors[2], pnts[2]), v3f_dot(cors[3], pnts[3]), t.u),
+			t.v));
 }

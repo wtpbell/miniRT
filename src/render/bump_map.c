@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/24 09:15:29 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/28 10:52:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/30 22:31:14 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,46 +21,43 @@
 // height difference.
 // standard luminance formula (29.9% Red + 58.7% Green + 11.4% Blue)
 // full wrapping: handle x > width, y > height, x < 0, y < 0
-static float	sample_bump_map(mlx_texture_t *bump, t_v2f uv, const t_v3f mod)
+static t_v3f	sample_heights(t_bump_ctx *ctx, t_v2f uv, t_v3f mod)
 {
-	return (v3f_dot(sample_texture(bump, uv, mod),
-			init_v3f(0.2126f, 0.7152f, 0.0722f)));
-}
-
-static float	sample_noise_map(float (*fp_perlin)(t_v2f uv), t_v2f uv, const t_v3f mod)
-{
-	return ((fp_perlin(v2f_mul_v3f(uv, mod)) + 1.0f) * 0.5f);
-}
-
-// https://github.com/dorukb/Advanced-CPU-Raytracing/blob/master/src/hw6submission/sphere.cpp#L109
-static t_v3f	apply_bump(t_bump_ctx *ctx, t_v2f uv, t_v3f mod)
-{
-	t_v2f	uv_u;
-	t_v2f	uv_v;
-	t_v3f	heights;
-	t_v3f	height_deltas;
+	const t_v3f	gray = init_v3f(0.2126f, 0.7152f, 0.0722f);
+	const float	size = ctx->size;
+	t_v2f		uv_u;
+	t_v2f		uv_v;
 
 	uv_u = init_v2f(uv.u + ctx->delta.u, uv.v);
 	uv_v = init_v2f(uv.u, uv.v + ctx->delta.v);
-	if (ctx->mat->bump_map.type == TEX_IMAGE)
+	if (ctx->type == TEX_IMAGE)
 	{
-		heights.x = sample_bump_map(ctx->mat->bump_map.tex, uv, mod);
-		heights.y = sample_bump_map(ctx->mat->bump_map.tex, uv_u, mod);
-		heights.z = sample_bump_map(ctx->mat->bump_map.tex, uv_v, mod);
+		return (init_v3f(
+				v3f_dot(sample_texture(ctx->tex, uv, mod), gray),
+				v3f_dot(sample_texture(ctx->tex, uv_u, mod), gray),
+				v3f_dot(sample_texture(ctx->tex, uv_v, mod), gray)
+			));
 	}
-	else
-	{
-		heights.x = sample_noise_map(ctx->fp_perlin, uv, mod) / v2f_mag(ctx->delta);
-		heights.y = sample_noise_map(ctx->fp_perlin, uv_u, mod) / v2f_mag(ctx->delta);
-		heights.z = sample_noise_map(ctx->fp_perlin, uv_v, mod) / v2f_mag(ctx->delta);
-	}
-	height_deltas = init_v3f(
-			(heights.y - heights.x) * ctx->scale,
+	return (init_v3f(
+			((ctx->fp_perlin(v2f_mul_v3f(uv, mod)) + 1.0f) * 0.5f) / size,
+			((ctx->fp_perlin(v2f_mul_v3f(uv_u, mod)) + 1.0f) * 0.5f) / size,
+			((ctx->fp_perlin(v2f_mul_v3f(uv_v, mod)) + 1.0f) * 0.5f) / size
+		));
+}
+
+static t_v3f	apply_bump(t_bump_ctx *ctx, t_v2f uv, t_v3f mod)
+{
+	t_v3f	heights;
+	t_v3f	height_deltas;
+	t_v3f	perp_norm;
+
+	heights = sample_heights(ctx, uv, mod);
+	height_deltas = init_v3f((heights.y - heights.x) * ctx->scale,
 			(heights.z - heights.x) * ctx->scale,
 			0.0f);
-	ctx->p = v3f_add(ctx->n, v3f_scale(ctx->t, height_deltas.x));
-	ctx->p = v3f_add(ctx->p, v3f_scale(ctx->b, height_deltas.y));
-	return (v3f_norm(ctx->p));
+	perp_norm = v3f_add(ctx->n, v3f_scale(ctx->t, height_deltas.x));
+	perp_norm = v3f_add(perp_norm, v3f_scale(ctx->b, height_deltas.y));
+	return (v3f_norm(perp_norm));
 }
 
 static void	calc_tangent_basis(t_v3f n, t_v3f *t, t_v3f *b)
@@ -82,8 +79,8 @@ t_v3f	perturb_normal(const t_mat *mat, const t_v2f texcoord,
 	t_bump_ctx	ctx;
 
 	ctx.n = normal;
-	ctx.mat = mat;
-	if (mat->bump_map.type == TEX_PERLIN)
+	ctx.type = mat->bump_map.type;
+	if (ctx.type == TEX_PERLIN)
 	{
 		ctx.delta = init_v2f(perl_size, perl_size);
 		ctx.fp_perlin = mat->bump_map.fp_perlin;
@@ -91,9 +88,10 @@ t_v3f	perturb_normal(const t_mat *mat, const t_v2f texcoord,
 	else
 	{
 		ctx.delta = init_v2f(1.0f / mat->bump_map.tex->width,
-			1.0f / mat->bump_map.tex->height);
-		ctx.fp_perlin = NULL;
+				1.0f / mat->bump_map.tex->height);
+		ctx.tex = mat->bump_map.tex;
 	}
+	ctx.size = v2f_mag(ctx.delta);
 	if (mat->bump_map.scale > 0.0f)
 		ctx.scale = mat->bump_map.scale;
 	else

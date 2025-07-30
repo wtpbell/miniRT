@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/29 12:11:14 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/30 22:21:15 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 # include "MLX42/MLX42.h"
 # include "rt_types.h"
 # include "container.h"
-
-typedef struct s_material	t_mat;
 
 enum e_material_type
 {
@@ -41,6 +39,15 @@ typedef enum e_texture_type
 	TEX_IS_PERLIN = TEX_PERLIN | TEX_PINK | TEX_WOOD | TEX_TURB | TEX_MARB
 }	t_tex_type;
 
+typedef struct s_perlin
+{
+	float	rate;	// Change in frequency
+	float	gain;	// Change in amplitude
+	float	freq;	// Current frequency
+	float	ampt;	// Current amplitude
+	int		layers;	// Amount of layers
+}	t_perlin;
+
 struct s_texture
 {
 	t_tex_type		type;
@@ -52,20 +59,23 @@ struct s_texture
 	};
 	char			*tex_path;
 	mlx_texture_t	*tex;
-	float			(*fp_perlin)(t_v2f uv);
+	fp_perlin		fp_perlin;
 };
 
 struct s_bump_context
 {
-	t_v3f		n;			// Surface normal
-	t_v3f		t;			// Tangent
-	t_v3f		b;			// Bitangent
-	t_v3f		heights[3];	// Height samples (center, u+delta, v+delta)
-	t_v3f		p;			// Perturbed normal
-	t_v2f		delta;		// Delta for sampling
-	float		scale;		// Bump scale
-	float		(*fp_perlin)(t_v2f uv);
-	const t_mat	*mat;		// Material
+	t_v3f					n;			// Surface normal
+	t_v3f					t;			// Tangent
+	t_v3f					b;			// Bitangent
+	t_v2f					delta;		// Delta for sampling
+	float					size;		// delta magnitude
+	float					scale;		// Bump scale
+	union
+	{
+		fp_perlin			fp_perlin;	// Perlin noise pattern
+		const mlx_texture_t	*tex;		// Bump map texture
+	};
+	t_tex_type				type;		// Type of bump map (Texture or Perlin)
 };
 
 struct s_material
@@ -114,7 +124,7 @@ t_v3f	perturb_normal(const t_mat *mat, const t_v2f texcoord,
 t_v3f	sample_texture(const mlx_texture_t *tex, const t_v2f uv,
 			const t_v3f mod);
 t_v3f	display_normal(t_ray_hit *hit_info);
-t_v3f	sample_noise(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
+t_v3f	noise_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
 
 float	pink_noise(t_v2f point);
 float	marble_noise(t_v2f point);
