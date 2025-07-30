@@ -6,154 +6,158 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/29 23:15:31 by bewong           ###   ########.fr       */
+/*   Updated: 2025/07/30 20:35:51 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
+#include <stdlib.h>
+#include <stdio.h>
 
-void	ui_element_destroy(t_ui_element *element, mlx_t *mlx, bool free_data)
+// Forward declaration
+void ui_element_setup_handlers(t_ui_element *element);
+
+void	ui_element_destroy(t_ui_element *element, t_ui_context *ctx, bool free_data)
 {
-	if (!element)
+	if (!element || !ctx)
 		return ;
 	if (free_data && element->data)
 	{
-		safe_call_destroy_handler(element, mlx);
+		safe_call_destroy_handler(element, ctx);
 		element->data = NULL;
 	}
-	if (element->image && mlx)
-	{
-		if (mlx->window)
-			mlx_delete_image(mlx, element->image);
-		element->image = NULL;
-	}
+	// Note: Image cleanup is now handled by the canvas system
 	free(element);
 }
 
 bool	ui_element_remove_child(t_ui_element *parent, t_ui_element *child, 
-							bool destroy, mlx_t *mlx)
+							bool destroy, t_ui_context *ctx)
 {
 	t_ui_element	*current;
 	t_ui_element	*prev;
 
-	prev = NULL;
-	if (!parent || !child || child->parent != parent)
+	if (!parent || !child || child->parent != parent || !ctx)
 		return (false);
+	
+	prev = NULL;
 	current = parent->first_child;
 	while (current && current != child)
 	{
 		prev = current;
 		current = current->next_sibling;
 	}
+	
 	if (!current)
 		return (false);
+
 	if (prev)
 		prev->next_sibling = child->next_sibling;
 	else
 		parent->first_child = child->next_sibling;
+
 	child->parent = NULL;
 	child->next_sibling = NULL;
+
 	if (destroy)
-		ui_element_destroy(child, mlx, true);
+		destroy_ui_element_recursive(child, ctx, true);
+
 	return (true);
 }
 
-void	destroy_ui_element_recursive(t_ui_element *element, t_ui *ui)
+void	destroy_ui_element_recursive(t_ui_element *element, t_ui_context *ctx, bool free_data)
 {
 	t_ui_element	*child;
 	t_ui_element	*next;
 
-	if (!element || !ui)
+	if (!element || !ctx)
 		return ;
 	child = element->first_child;
 	while (child)
 	{
 		next = child->next_sibling;
-		ui_element_remove_child(element, child, true, ui->mlx);
+		ui_element_remove_child(element, child, true, ctx);
 		child = next;
 	}
 	if (element->parent)
-		ui_element_remove_child(element->parent, element, false, NULL);
-	ui_element_destroy(element, ui->mlx, true);
+		ui_element_remove_child(element->parent, element, false, ctx);
+	ui_element_destroy(element, ctx, free_data);
 }
 
 t_ui_element	*create_ui_element(t_ui_type type, t_v2f pos, t_v2f size)
 {
 	t_ui_element	*element;
 
-	element = (t_ui_element *)ft_calloc(1, sizeof(t_ui_element));
+	element = ft_calloc(1, sizeof(t_ui_element));
 	if (!element)
 		return (NULL);
 	element->type = type;
 	element->pos = pos;
 	element->size = size;
 	element->visible = true;
-	element->style.bg_color = UI_TRANSPARENT;
-	element->style.text_color = UI_TEXT_COLOR;
-	element->style.border_color = UI_TRANSPARENT;
-	element->style.padding = 2;
-	element->parent = NULL;
 	element->first_child = NULL;
 	element->next_sibling = NULL;
-	element->image = NULL;
+	element->parent = NULL;
 	element->data = NULL;
 	element->action = NULL;
-	element->destroy = NULL;
 	element->render = NULL;
-	element->update = NULL;
+	element->state = 0;
+	element->abs_pos = init_v2f(0, 0);
+	element->style = (t_ui_style){
+		.bg_color = 0x00000000,
+		.border_color = 0x00000000,
+		.text_color = 0xFFFFFFFF,
+		.padding = 0,
+		.visible = true
+	};
+	// Set up the element's handlers based on its type
 	ui_element_setup_handlers(element);
 	return (element);
 }
 
-
 void	layout_vertical(t_ui_element *parent, float spacing)
 {
 	t_ui_element	*child;
-	float			y;
+	t_v2f			pos;
+
+	if (!parent || !parent->first_child)
+		return ;
+
+	pos = parent->pos;
+	pos.x += parent->style.padding;
+	pos.y += parent->style.padding;
 
 	child = parent->first_child;
-	y = parent->style.padding;
 	while (child)
 	{
 		if (child->visible)
 		{
-			if (child->layout_offset.x == 0 && child->layout_offset.y == 0)
-			{
-				child->pos = v2f_add(parent->pos, init_v2f(0, y));
-				y += child->size.y + spacing;
-			}
-			else
-
-				child->pos = v2f_add(parent->pos, child->layout_offset);
-			if (child->image)
-			{
-				child->image->instances[child->instance_id].x = (int)child->pos.x;
-				child->image->instances[child->instance_id].y = (int)child->pos.y;
-			}
+			child->pos = pos;
+			pos.y += child->size.y + spacing;
 		}
 		child = child->next_sibling;
 	}
 }
-
-
 
 void	layout_horizontal(t_ui_element *parent, float spacing)
 {
 	t_ui_element	*child;
-	float			x;
+	t_v2f			pos;
+
+	if (!parent || !parent->first_child)
+		return ;
+
+	pos = parent->pos;
+	pos.x += parent->style.padding;
+	pos.y += parent->style.padding;
 
 	child = parent->first_child;
-	x = 0;
 	while (child)
 	{
-		child->pos = v2f_add(parent->pos, init_v2f(x + child->layout_offset.x, child->layout_offset.y));
-		if (child->image)
+		if (child->visible)
 		{
-			child->image->instances[child->instance_id].x = (int)child->pos.x;
-			child->image->instances[child->instance_id].y = (int)child->pos.y;
+			child->pos = pos;
+			pos.x += child->size.x + spacing;
 		}
-		x += child->size.x + spacing;
 		child = child->next_sibling;
 	}
 }
-

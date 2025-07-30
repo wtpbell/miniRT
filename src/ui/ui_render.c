@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 15:03:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/29 22:44:02 by bewong           ###   ########.fr       */
+/*   Updated: 2025/07/31 00:14:36 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <string.h>
 #include <stdint.h>
 
-void	draw_char(mlx_image_t *img, char c, int x, int y, uint32_t color)
+void	draw_char(mlx_image_t *canvas, char c, int x, int y, uint32_t color)
 {
 	static const uint8_t font[128][8] = {
 		[0 ... 31] = {0},
@@ -78,8 +78,11 @@ void	draw_char(mlx_image_t *img, char c, int x, int y, uint32_t color)
 			{
 				px = x + dx;
 				py = y + dy;
-				if (px >= 0 && px < (int)img->width && py >= 0 && py < (int)img->height)
-					mlx_put_pixel(img, px, py, color);
+				if (px >= 0 && py >= 0 && px < (int)canvas->width && py < (int)canvas->height)
+				{
+					uint32_t *pixel = (uint32_t *)canvas->pixels + py * canvas->width + px;
+					*pixel = color;
+				}
 			}
 			dx++;
 		}
@@ -87,7 +90,7 @@ void	draw_char(mlx_image_t *img, char c, int x, int y, uint32_t color)
 	}
 }
 
-void	draw_text(mlx_image_t *img, const char *str, t_v2f pos, uint32_t color)
+void	draw_text(mlx_image_t *canvas, const char *str, t_v2f pos, uint32_t color)
 {
 	int		x;
 	int		y;
@@ -96,102 +99,189 @@ void	draw_text(mlx_image_t *img, const char *str, t_v2f pos, uint32_t color)
 	x = (int)pos.x;
 	y = (int)pos.y;
 	i = 0;
-	if (y < 0 || y + 8 > (int)img->height)
+	if (y < 0 || y + 8 > (int)canvas->height)
 		return ;
 	while (str[i])
 	{
-		if (x + 8 > (int)img->width)
+		if (x + 8 > (int)canvas->width)
 		{
 			x = (int)pos.x;
 			y += 10;
-			if (y + 8 > (int)img->height)
+			if (y + 8 > (int)canvas->height)
 				break ;
 		}
-		draw_char(img, str[i], x, y, color);
+		draw_char(canvas, str[i], x, y, color);
 		x += UI_CHAR_WIDTH;
 		i++;
 	}
 }
 
-void	draw_rect(mlx_image_t *img, t_v2f pos, t_v2f size, uint32_t color)
-{	
-	const int	start_x = (int)fmax(0, pos.x);
-	const int	start_y = (int)fmax(0, pos.y);
-	const int	end_x = (int)fmin(img->width, pos.x + size.x);
-	const int	end_y = (int)fmin(img->height, pos.y + size.y);
-	int			x;
-	int			y;
-	
-	x = start_x;
-	y = start_y;
+void	draw_rect_border(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
+{
+	int x;
+	int y;
+	int end_x;
+	int end_y;
+
+	x = (int)pos.x;
+	y = (int)pos.y;
+	end_x = x + (int)size.x;
+	end_y = y + (int)size.y;
 	while (y < end_y)
 	{
+		x = (int)pos.x;
 		while (x < end_x)
 		{
-			mlx_put_pixel(img, x, y, color);
+			if ((x == (int)pos.x || x == end_x - 1 || y == (int)pos.y || y == end_y - 1) &&
+				x >= 0 && y >= 0 && x < (int)canvas->width && y < (int)canvas->height)
+			{
+				uint32_t *pixel = (uint32_t *)canvas->pixels + y * canvas->width + x;
+				*pixel = color;
+			}
 			x++;
 		}
 		y++;
 	}
 }
 
-
-void	draw_button(t_ui_element *button, mlx_image_t *target)
+// Helper function for alpha blending
+static uint32_t blend_colors(uint32_t bg, uint32_t fg)
 {
-	t_v2f				size;
-	t_ui_style			style;
-	t_ui_button			*btn_data;
-	char				value_str[32];
-	t_ui_value_button	*value_btn;
-	int					text_width;
-	int					plus_x;
+	float alpha = ((fg >> 24) & 0xFF) / 255.0f;
+	float inv_alpha = 1.0f - alpha;
 
-	size = button->size;
-	style = button->style;
-	btn_data = (t_ui_button *)button->data;
-	draw_rect(target, init_v2f(0, 0), size, style.bg_color);
-	draw_rect(target, init_v2f(0, 0), init_v2f(size.x, 1), style.border_color);
-	draw_rect(target, init_v2f(0, size.y - 1), init_v2f(size.x, 1), style.border_color);
-	if (btn_data && btn_data->label)
+	uint8_t r = (uint8_t)(((bg >> 16) & 0xFF) * inv_alpha + ((fg >> 16) & 0xFF) * alpha);
+	uint8_t g = (uint8_t)(((bg >> 8) & 0xFF) * inv_alpha + ((fg >> 8) & 0xFF) * alpha);
+	uint8_t b = (uint8_t)((bg & 0xFF) * inv_alpha + (fg & 0xFF) * alpha);
+	uint8_t a = (uint8_t)(0xFF);
+
+	return (a << 24) | (r << 16) | (g << 8) | b;
+}
+
+void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
+{
+	int x, y;
+	int start_x, start_y, end_x, end_y;
+
+	if (!canvas)
 	{
-		draw_text(target, btn_data->label, init_v2f(style.padding, style.padding), style.text_color);
-		if (button->type == UI_VALUE_BUTTON)
+		fprintf(stderr, "Error: draw_rect - canvas is NULL\n");
+		return;
+	}
+	start_x = (int)pos.x;
+	start_y = (int)pos.y;
+	end_x = start_x + (int)size.x;
+	end_y = start_y + (int)size.y;
+	if (start_x < 0) start_x = 0;
+	if (start_y < 0) start_y = 0;
+	if (end_x > (int)canvas->width) end_x = canvas->width;
+	if (end_y > (int)canvas->height) end_y = canvas->height;
+	if (start_x >= (int)canvas->width || start_y >= (int)canvas->height ||
+		end_x <= 0 || end_y <= 0)
+	{
+		fprintf(stderr, "Warning: draw_rect - rectangle outside canvas bounds\n");
+		return;
+	}
+	fprintf(stderr, "Drawing rectangle: pos=(%d,%d) size=(%d,%d) color=0x%08X\n",
+		start_x, start_y, end_x - start_x, end_y - start_y, color);
+	// If color is fully transparent, nothing to draw
+	if ((color >> 24) == 0x00)
+		return;
+	// If color is fully opaque, use direct pixel writing
+	if ((color >> 24) == 0xFF)
+	{
+		y = start_y;
+		while (y < end_y)
 		{
-			value_btn = (t_ui_value_button *)button->data;
-			snprintf(value_str, sizeof(value_str), "%.2f", *value_btn->value);
-			text_width = strlen(value_str) * UI_CHAR_WIDTH;
-			draw_text(target, value_str, 
-				init_v2f(size.x - text_width - style.padding, style.padding),
-				style.text_color);
-			draw_rect(target, init_v2f(style.padding, size.y/2 - 5),
-				init_v2f(10, 1), style.text_color);
-			plus_x = size.x - style.padding - 15;
-			draw_rect(target, init_v2f(plus_x, size.y/2 - 5),
-				init_v2f(10, 1), style.text_color);
-			draw_rect(target, init_v2f(plus_x + 4, size.y/2 - 9),
-				init_v2f(1, 10), style.text_color);
+			x = start_x;
+			while (x < end_x)
+			{
+				uint32_t *pixel = (uint32_t *)canvas->pixels + y * canvas->width + x;
+				*pixel = color;
+				x++;
+			}
+			y++;
+		}
+	}
+	else
+	{
+		y = start_y;
+		while (y < end_y)
+		{
+			x = start_x;
+			while (x < end_x)
+			{
+				uint32_t *pixel = (uint32_t *)canvas->pixels + y * canvas->width + x;
+				*pixel = blend_colors(*pixel, color);
+				x++;
+			}
+			y++;
 		}
 	}
 }
-void	render_ui_element(t_ui_element *element, mlx_image_t *target)
+
+void	draw_button(t_ui_element *button, t_ui_context *ctx)
+{
+	t_ui_button	*btn_data;
+	t_v2f		text_pos;
+	int		text_width;
+
+	if (!button || !ctx || !ctx->canvas)
+		return;
+	draw_rect(ctx->canvas, button->abs_pos, button->size, button->style.bg_color);
+	if (button->style.border_color != 0)
+		draw_rect_border(ctx->canvas, button->abs_pos, button->size, button->style.border_color);
+	btn_data = (t_ui_button *)button->data;
+	if (btn_data && btn_data->label)
+	{
+		text_width = ft_strlen(btn_data->label) * UI_CHAR_WIDTH;
+		text_pos.x = button->abs_pos.x + (button->size.x - text_width) / 2;
+		text_pos.y = button->abs_pos.y + (button->size.y - UI_CHAR_HEIGHT) / 2;
+		draw_text(ctx->canvas, btn_data->label, text_pos, button->style.text_color);
+	}
+}
+
+void	render_ui_element(t_ui_element *element, t_ui_context *ctx)
 {
 	t_ui_element	*child;
 
-	if (!element || !element->visible || !target)
-		return;
-	if (element->needs_redraw)
+	if (!element || !ctx || !ctx->canvas)
 	{
-		draw_rect(target, element->pos, element->size, element->style.bg_color);
-		if (element->type == UI_BUTTON)
-			draw_button(element, target);
-		element->needs_redraw = false;
+		fprintf(stderr, "Error: Invalid parameters in render_ui_element\n");
+		return;
+	}
+	if (!element->visible)
+		return;
+	element->abs_pos = element->pos;
+	if (element->parent)
+	{
+		element->abs_pos.x += element->parent->abs_pos.x + element->parent->style.padding;
+		element->abs_pos.y += element->parent->abs_pos.y + element->parent->style.padding;
+	}
+	if (element->type == UI_PANEL || element->type == UI_HEADER)
+	{
+		draw_rect(ctx->canvas, element->abs_pos, element->size, element->style.bg_color);
+		if (element->style.border_color != 0)
+			draw_rect_border(ctx->canvas, element->abs_pos, element->size, element->style.border_color);
+	}
+	else if (element->type == UI_BUTTON)
+			draw_button(element, ctx);
+	else if (element->type == UI_LABEL)
+	{
+		t_ui_label *label = (t_ui_label *)element->data;
+		if (label && label->text)
+			draw_text(ctx->canvas, label->text, element->abs_pos, element->style.text_color);
+	}
+	else if (element->type == UI_VALUE_BUTTON)
+	{
+		t_ui_value_button *vbutton = (t_ui_value_button *)element->data;
+		if (vbutton && vbutton->label)
+			draw_text(ctx->canvas, vbutton->label, element->abs_pos, element->style.text_color);
 	}
 	child = element->first_child;
 	while (child)
 	{
-		render_ui_element(child, target);
+		render_ui_element(child, ctx);
 		child = child->next_sibling;
 	}
 }
-
-

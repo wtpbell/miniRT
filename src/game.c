@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/07/29 22:53:59 by bewong           ###   ########.fr       */
+/*   Updated: 2025/07/31 00:10:09 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 typedef struct s_game t_game;
 
@@ -25,29 +24,87 @@ typedef struct s_game t_game;
 void render_loop(void *param)
 {
 	t_game *game = (t_game *)param;
-
-	if (!game->needs_redraw)
+	static int frame_count = 0;
+	fprintf(stderr, "=== RENDER LOOP START (Frame: %d) ===\n", frame_count++);
+	if (!game) {
+		fprintf(stderr, "ERROR: game is NULL!\n");
 		return;
-	ft_memset(game->img->pixels, 0, game->img->width * game->img->height * sizeof(int));
-	render(game->scene);
-
-	if (game->ui && game->ui->needs_redraw)
-	{
-		render_ui(game->ui);
-		game->ui->needs_redraw = false;
 	}
-	game->needs_redraw = false;
-}
+	fprintf(stderr, "Game pointer is valid. Checking image...\n");
+	if (!game->img) {
+		fprintf(stderr, "ERROR: game->img is NULL!\n");
+		return;
+	}
+	fprintf(stderr, "Image pointer is valid. Image dimensions: %dx%d\n", 
+		game->img->width, game->img->height);
+	fprintf(stderr, "Clearing main image...\n");
+	if (game->img->pixels)
+		ft_memset(game->img->pixels, 0, game->img->width * game->img->height * sizeof(int));
+	else
+	{
+		fprintf(stderr, "ERROR: game->img->pixels is NULL!\n");
+		return;
+	}
+	fprintf(stderr, "Rendering 3D scene...\n");
+	render(game->scene);
+	fprintf(stderr, "Checking UI...\n");
+	if (game->ui && game->ui->context)
+	{
+		fprintf(stderr, "UI context exists, is_visible=%d\n", game->ui->context->is_visible);
+		game->ui->context->needs_redraw = true;
+		if (game->ui->context->is_visible)
+		{
+			fprintf(stderr, "UI is visible, rendering...\n");
+			if (game->ui->context->canvas) {
+				fprintf(stderr, "Canvas before render: %p, instances: %zu\n", 
+					game->ui->context->canvas, 
+					game->ui->context->canvas->count);
+			}
+			render_ui(game->ui);
+			if (game->ui->context->canvas && game->ui->context->canvas->count > 0)
+			{
+				fprintf(stderr, "Setting UI canvas depth to 1000\n");
+				mlx_set_instance_depth(&game->ui->context->canvas->instances[0], 1000);
+				game->ui->context->canvas->instances[0].enabled = true;
 
+				fprintf(stderr, "UI canvas depth is now: %d\n", 
+					game->ui->context->canvas->instances[0].z);
+			}
+			fprintf(stderr, "Window update queued for next frame\n");
+			fprintf(stderr, "UI render called\n");
+		}
+		else
+		{
+			// Hide the UI by setting its depth to -1
+			if (game->ui->context->canvas && game->ui->context->canvas->count > 0)
+			{
+				fprintf(stderr, "Hiding UI canvas\n");
+				mlx_set_instance_depth(&game->ui->context->canvas->instances[0], -1);
+			}
+			fprintf(stderr, "UI is not visible, skipping render\n");
+		}
+	}
+	else
+	{
+		fprintf(stderr, "UI or UI context is NULL!\n");
+	}
+
+	// Force redraw on next frame
+	game->needs_redraw = true;
+	
+	fprintf(stderr, "=== RENDER LOOP END ===\n\n");
+}
 
 t_ui *create_ui(mlx_t *mlx, t_scene *scene)
 {
-	t_ui			*ui;
-	t_v2f			root_pos;
-	t_v2f			root_size;
-	t_v2f			ambient_pos;
-	t_v2f			ambient_size;
+	t_ui		*ui;
+	t_v2f		root_pos;
+	t_v2f		root_size;
+	t_v2f		ambient_pos;
+	t_v2f		ambient_size;
 	t_ui_element	*ambient_section;
+
+	fprintf(stderr, "Creating UI...\n");
 
 	ui = ft_calloc(1, sizeof(t_ui));
 	if (!ui)
@@ -55,112 +112,67 @@ t_ui *create_ui(mlx_t *mlx, t_scene *scene)
 		fprintf(stderr, "Error: Failed to allocate UI structure\n");
 		return (NULL);
 	}
-	ui->mlx = mlx;
-	ui->needs_redraw = true;
+	fprintf(stderr, "Creating UI context...\n");
+	ui->context = create_ui_context(mlx, scene);
+	if (!ui->context)
+	{
+		fprintf(stderr, "Error: Failed to create UI context\n");
+		free(ui);
+		return (NULL);
+	}
+	fprintf(stderr,"UI context created successfully\n");
+	fprintf(stderr, "Creating root panel...\n");
 	root_pos = g_v2f_zero;
 	root_size = init_v2f(UI_PANEL_WIDTH, HEIGHT);
-	ui->root = create_panel(mlx, root_pos, root_size);
+	ui->root = create_panel(ui->context, root_pos, root_size);
 	if (!ui->root)
 	{
 		fprintf(stderr, "Error: Failed to create root panel\n");
-		free(ui);
+		destroy_ui(ui);
 		return (NULL);
 	}
-	ambient_pos = init_v2f(10, 80);
-	ambient_size = init_v2f(UI_PANEL_WIDTH - 20, 200);
-	ambient_section = create_ambient_section(mlx, scene, ambient_pos, ambient_size);
+	fprintf(stderr, "Root panel created successfully\n");
+	fprintf(stderr, "Setting root panel style...\n");
+	ui->root->style.bg_color = UI_PANEL_BG_COLOR;
+	ui->root->style.border_color = UI_BORDER_COLOR;
+	ui->root->style.padding = UI_PANEL_PADDING;
+	fprintf(stderr, "Creating ambient section...\n");
+	ambient_pos = init_v2f(0, 0);
+	ambient_size = init_v2f(UI_PANEL_WIDTH, 200);
+	ambient_section = create_ambient_section(ui->context, scene, ambient_pos, ambient_size);
 	if (!ambient_section)
 	{
 		fprintf(stderr, "Error: Failed to create ambient section\n");
-		ui_element_destroy(ui->root, mlx, true);
-		free(ui);
+		destroy_ui(ui);
 		return (NULL);
 	}
+	fprintf(stderr, "Ambient section created successfully\n");
 	attach_child(ui->root, ambient_section);
-	ui->needs_redraw = true;
+	ui->context->needs_redraw = true;
+
 	return (ui);
 }
 
-void destroy_ui(t_ui *ui)
-{
-	if (!ui)
-		return;
-	if (ui->root)
-	{
-		destroy_ui_element_recursive(ui->root, ui);
-		ui->root = NULL;
-	}
-	if (ui->mlx && ui->images)
-	{
-		ui_images_destroy(ui->mlx, ui->images);
-		ui->images = NULL;
-	}
-	free(ui);
-}
-
-void	render_ui_element_recursive(t_ui_element *element, mlx_t *mlx, bool force_redraw)
-{
-	bool			needs_redraw;
-	int32_t			depth;
-	t_ui_element	*child;
-
-	needs_redraw = force_redraw || !element->image;
-	if (!element->image)
-	{
-		element->image = mlx_new_image(mlx, element->size.x, element->size.y);
-		if (!element->image)
-		{
-			printf("Failed to create image for UI element\n");
-			return ;
-		}
-		needs_redraw = true;
-		element->instance_id = mlx_image_to_window(mlx, element->image, 
-												(int)element->pos.x, (int)element->pos.y);
-		if (element->instance_id == -1)
-		{
-			printf("Failed to add UI element to window\n");
-			mlx_delete_image(mlx, element->image);
-			element->image = NULL;
-			return;
-		}
-		depth = 100;
-		if (element->type == UI_PANEL) depth = 10;
-		else if (element->type == UI_SECTION) depth = 20;
-		else if (element->type == UI_HEADER) depth = 30;
-		else if (element->type == UI_BUTTON || element->type == UI_VALUE_BUTTON) depth = 40;
-		mlx_set_instance_depth(&element->image->instances[element->instance_id], depth);
-	}
-	if (needs_redraw)
-		render_ui_element(element, NULL);
-	if (element->image && element->instance_id >= 0 && 
-		element->instance_id < (int32_t)element->image->count)
-	{
-		element->image->instances[element->instance_id].x = (int)element->pos.x;
-		element->image->instances[element->instance_id].y = (int)element->pos.y;
-		element->image->instances[element->instance_id].enabled = element->style.visible && element->visible;
-	}
-	child = element->first_child;
-	while (child)
-	{
-		render_ui_element_recursive(child, mlx, needs_redraw);
-		child = child->next_sibling;
-	}
-}
-
-void	render_ui(t_ui *ui)
-{
-	render_ui_element_recursive(ui->root, ui->mlx, ui->needs_redraw);
-	ui->needs_redraw = false;
-	printf("UI render complete - Root element at (%.0f,%.0f) size %.0fx%.0f\n", 
-		   ui->root->pos.x, ui->root->pos.y, 
-		   ui->root->size.x, ui->root->size.y);
-}
+// UI-related functions are now in ui_core.c
 
 void	key_hook(mlx_key_data_t keydata, void *param)
 {
 	t_game	*game;
 
 	game = (t_game *)param;
+
+	if (keydata.key == MLX_KEY_U && keydata.action == MLX_PRESS)
+	{
+		fprintf(stderr, "'U' key pressed - toggling UI visibility\n");
+		if (game->ui)
+		{
+			toggle_ui_visibility(game->ui);
+		}
+		else
+		{
+			fprintf(stderr, "Cannot toggle UI: game->ui is NULL\n");
+		}
+	}
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 	{
 		game->should_exit = true;
@@ -168,7 +180,7 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 	}
 }
 
-// void	mouse_hook(mouse_key_t button, action_t action, 
+// void mouse_hook(mouse_key_t button, action_t action, 
 // 	__attribute__((unused)) modifier_key_t mods, void *param)
 // {
 // 	t_game	*game;
@@ -180,37 +192,24 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 // 		&& game->ui->root->style.visible)
 // 	{
 // 		mlx_get_mouse_pos(game->mlx, &x, &y);
-// 		handle_ui_click(game->ui->root, x, y);
+// 		handle_ui_click(game->ui->root, x, y, game->ui->ctx);
 // 		render_ui(game->ui);
 // 	}
 // }
 
-void cleanup_mlx(t_game *game)
+void	cleanup_mlx(t_game *game)
 {
-	if (!game) return;
-
-	// First, clean up UI elements that might be using MLX resources
+	if (!game)
+		return;
 	if (game->ui)
 	{
-		if (game->ui->root)
-		{
-			destroy_ui_element_recursive(game->ui->root, game->ui);
-			game->ui->root = NULL;
-		}
-
-		// Clean up MLX images and UI images
-		if (game->ui->images && game->mlx)
-		{
-			ui_images_destroy(game->mlx, game->ui->images);
-			game->ui->images = NULL;
-		}
-
-		// Free the UI structure
-		free(game->ui);
+		destroy_ui(game->ui);
 		game->ui = NULL;
 	}
-
-	// Finally, terminate MLX
+	if (game->scene)
+	{
+		// Add any scene-specific cleanup here
+	}
 	if (game->mlx)
 	{
 		mlx_terminate(game->mlx);
@@ -232,12 +231,14 @@ static bool	cam_init(t_cam *cam, mlx_t *mlx)
 
 bool	init_ui(t_game *game, t_scene *scene)
 {
+	fprintf(stderr, "Initializing UI...\n");
 	game->ui = create_ui(game->mlx, scene);
 	if (!game->ui)
 	{
 		fprintf(stderr, "Error: Failed to initialize UI\n");
 		return (false);
 	}
+	fprintf(stderr, "UI initialized successfully\n");
 	return (true);
 }
 
@@ -251,18 +252,27 @@ int	game(t_scene *scene)
 	game.mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
 	if (!game.mlx)
 		return (EXIT_FAILURE);
+	if (!init_ui(&game, scene))
+		fprintf(stderr, "Warning: UI initialization had issues, continuing without UI\n");
 	if (!cam_init(&scene->camera, game.mlx))
 	{
 		fprintf(stderr, "Error: Failed to initialize camera\n");
 		cleanup_mlx(&game);
 		return (EXIT_FAILURE);
 	}
+	game.img = scene->camera.img_plane;
+	if (!game.img)
+	{
+		fprintf(stderr, "Error: Failed to initialize game image\n");
+		cleanup_mlx(&game);
+		return (EXIT_FAILURE);
+	}
+	mlx_set_instance_depth(&game.img->instances[0], 0);
 	mlx_loop_hook(game.mlx, render_loop, &game);
 	mlx_key_hook(game.mlx, key_hook, &game);
 	// mlx_mouse_hook(game.mlx, mouse_hook, &game);
-	if (!init_ui(&game, scene))
-		fprintf(stderr, "Warning: UI initialization had issues, continuing without UI\n");
 	render(scene);
+	fprintf(stderr, "Starting main game loop...\n");
 	mlx_loop(game.mlx);
 	cleanup_mlx(&game);
 	return (EXIT_SUCCESS);
