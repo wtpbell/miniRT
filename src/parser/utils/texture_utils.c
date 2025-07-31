@@ -53,3 +53,21 @@ void	assign_textures(t_mat *mat)
 			mat->bump_map.type = TEX_IMAGE;
 	}
 }
+
+void	override_unset_perlin_values(t_perlin *dst, const t_perlin *src)
+{
+	if (dst->rate == 0.0f)
+		dst->rate = src->rate;
+	if (dst->gain == 0.0f)
+		dst->gain = src->gain;
+	if (dst->freq == 0.0f)
+		dst->freq = src->freq;
+	if (dst->ampt == 0.0f)
+		dst->ampt = src->ampt;
+	if (dst->layers == 0)
+		dst->layers = src->layers;
+	if (dst->marble.distortion == 0.0f)
+		dst->marble.distortion = src->marble.distortion;
+	if (dst->marble.scale == 0.0f)
+		dst->marble.scale = src->marble.scale;
+}

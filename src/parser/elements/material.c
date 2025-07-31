@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/31 19:31:39 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/31 22:58:43 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,51 +16,33 @@
 #include "material.h"
 #include "libft.h"
 
-static void	override_unset_perlin_values(t_perlin *dst, const t_perlin *src)
-{
-	if (dst->rate == 0.0f)
-		dst->rate = src->rate;
-	if (dst->gain == 0.0f)
-		dst->gain = src->gain;
-	if (dst->freq == 0.0f)
-		dst->freq = src->freq;
-	if (dst->ampt == 0.0f)
-		dst->ampt = src->ampt;
-	if (dst->layers == 0)
-		dst->layers = src->layers;
-	if (dst->marble.distortion == 0.0f)
-		dst->marble.distortion = src->marble.distortion;
-	if (dst->marble.scale == 0.0f)
-		dst->marble.scale = src->marble.scale;
-}
+#define N 4
 
 static void	set_perlin_pattern(t_tex_type *type, t_perlin *dst, t_fp_perlin *fp)
 {
-	const t_tex_type	types[4] = {TEX_PINK, TEX_WOOD, TEX_MARB, TEX_TURB};
-	const t_fp_perlin	fp_perl[4] = {pink_noise, wood_noise, marble_noise, turbulence_noise};
-	const t_perlin	p_data[4] = {
+	const t_tex_type	types[N] = {TEX_PINK, TEX_WOOD, TEX_MARB, TEX_TURB};
+	const t_fp_perlin	fp_perl[N] = {
+		pink_noise, wood_noise, marble_noise, turbulence_noise
+	};
+	const t_perlin		p_data[N] = {
 		(t_perlin){2.0f, 0.5f, 1.0f, 1.0f, 5, {1.0f, 1.0f}},
 		(t_perlin){1.0f, 1.0f, 0.35f, 10.0f, 1, {1.0f, 1.0f}},
 		(t_perlin){1.8f, 0.35f, 0.02f, 1.0f, 5, {100.0f, TAU / 200.0f}},
-		(t_perlin){1.8f, 0.35f, 0.02f, 1.0f, 5, {1.0f, 1.0f}},
+		(t_perlin){1.8f, 0.35f, 0.02f, 1.0f, 5, {1.0f, 1.0f}}
 	};
-	int			i;
+	int					i;
 
 	i = 0;
-	while (i < 4)
+	while (i < N)
 	{
 		if (types[i] == *type)
-		{
-			*fp = fp_perl[i];
-			override_unset_perlin_values(dst, p_data + i);
-			*type = TEX_PERLIN;
-			return ;
-		}
+			break ;
 		++i;
 	}
-	*fp = pink_noise;
-	override_unset_perlin_values(dst, p_data);
+	i %= N;
 	*type = TEX_PERLIN;
+	*fp = fp_perl[i];
+	override_unset_perlin_values(dst, p_data + i);
 }
 
 static void	set_texture_pattern(t_mat *mat)
