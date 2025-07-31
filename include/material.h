@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/30 22:21:15 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/31 16:27:56 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,19 @@ typedef enum e_texture_type
 	TEX_IS_PERLIN = TEX_PERLIN | TEX_PINK | TEX_WOOD | TEX_TURB | TEX_MARB
 }	t_tex_type;
 
-typedef struct s_perlin
+struct s_perlin
 {
-	float	rate;	// Change in frequency
-	float	gain;	// Change in amplitude
-	float	freq;	// Current frequency
-	float	ampt;	// Current amplitude
-	int		layers;	// Amount of layers
-}	t_perlin;
+	float		rate;	// Change in frequency
+	float		gain;	// Change in amplitude
+	float		freq;	// Start frequency
+	float		ampt;	// Start amplitude
+	int			layers;	// Amount of layers
+	struct
+	{
+		float	distortion;
+		float	scale;
+	}			marble;
+};
 
 struct s_texture
 {
@@ -59,7 +64,8 @@ struct s_texture
 	};
 	char			*tex_path;
 	mlx_texture_t	*tex;
-	fp_perlin		fp_perlin;
+	t_fp_perlin		fp_perlin;
+	t_perlin		p_data;
 };
 
 struct s_bump_context
@@ -72,10 +78,11 @@ struct s_bump_context
 	float					scale;		// Bump scale
 	union
 	{
-		fp_perlin			fp_perlin;	// Perlin noise pattern
+		t_fp_perlin			fp_perlin;	// Perlin noise pattern
 		const mlx_texture_t	*tex;		// Bump map texture
 	};
 	t_tex_type				type;		// Type of bump map (Texture or Perlin)
+	const t_perlin			*p_data;
 };
 
 struct s_material
@@ -126,9 +133,9 @@ t_v3f	sample_texture(const mlx_texture_t *tex, const t_v2f uv,
 t_v3f	display_normal(t_ray_hit *hit_info);
 t_v3f	noise_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
 
-float	pink_noise(t_v2f point);
-float	marble_noise(t_v2f point);
-float	wood_noise(t_v2f point);
-float	turbulence_noise(t_v2f point);
+float	pink_noise(t_v2f point, const t_perlin *pink);
+float	turbulence_noise(t_v2f point, const t_perlin *turb);
+float	marble_noise(t_v2f point, const t_perlin *marb);
+float	wood_noise(t_v2f point, const t_perlin *wood);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/24 09:15:29 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/30 22:31:14 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/31 16:20:47 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,12 @@ static t_v3f	sample_heights(t_bump_ctx *ctx, t_v2f uv, t_v3f mod)
 			));
 	}
 	return (init_v3f(
-			((ctx->fp_perlin(v2f_mul_v3f(uv, mod)) + 1.0f) * 0.5f) / size,
-			((ctx->fp_perlin(v2f_mul_v3f(uv_u, mod)) + 1.0f) * 0.5f) / size,
-			((ctx->fp_perlin(v2f_mul_v3f(uv_v, mod)) + 1.0f) * 0.5f) / size
+			((ctx->fp_perlin(v2f_mul_v3f(uv, mod), ctx->p_data) + 1.0f)
+				* 0.5f) / size,
+			((ctx->fp_perlin(v2f_mul_v3f(uv_u, mod), ctx->p_data) + 1.0f)
+				* 0.5f) / size,
+			((ctx->fp_perlin(v2f_mul_v3f(uv_v, mod), ctx->p_data) + 1.0f)
+				* 0.5f) / size
 		));
 }
 
@@ -92,6 +95,7 @@ t_v3f	perturb_normal(const t_mat *mat, const t_v2f texcoord,
 		ctx.tex = mat->bump_map.tex;
 	}
 	ctx.size = v2f_mag(ctx.delta);
+	ctx.p_data = &mat->bump_map.p_data;
 	if (mat->bump_map.scale > 0.0f)
 		ctx.scale = mat->bump_map.scale;
 	else

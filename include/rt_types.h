@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/07 16:31:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/30 22:04:07 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/31 16:23:15 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_material		t_mat;
 typedef struct s_texture		t_tex;
 typedef struct s_bump			t_bump;
 typedef struct s_bump_context	t_bump_ctx;
+typedef struct s_perlin			t_perlin;
 
 /* scene */
 typedef enum e_object_type		t_obj_type;
@@ -57,6 +58,6 @@ typedef t_v3f					(*t_apply_light)(t_scene *scene,
 typedef t_v2f					(*t_texcoord)(t_obj *obj, t_v3f point);
 typedef t_v3f					(*t_texcol)(const t_v2f *texcoord,
 											const t_tex *tex, t_v3f prim_col);
-typedef float					(*fp_perlin)(t_v2f uv);
+typedef float					(*t_fp_perlin)(t_v2f uv, const t_perlin *data);
 
 #endif

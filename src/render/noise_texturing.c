@@ -6,64 +6,52 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/24 10:37:14 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/30 22:00:18 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/31 16:24:21 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt_math.h"
 #include "material.h"
 
-static float	generate_perlin(t_perlin *data, t_v2f point)
+static float	generate_perlin(t_v2f point, const t_perlin *data)
 {
 	int		curr_layer;
 	float	sum;
+	float	freq;
+	float	ampt;
 
 	curr_layer = 0;
 	sum = 0.0f;
+	freq = data->freq;
+	ampt = data->ampt;
 	while (curr_layer < data->layers)
 	{
-		sum += perlin(v2f_scale(point, data->freq)) * data->ampt;
-		data->ampt *= data->gain;
-		data->freq *= data->rate;
+		sum += perlin(v2f_scale(point, freq)) * ampt;
+		ampt *= data->gain;
+		freq *= data->rate;
 		++curr_layer;
 	}
 	return (sum);
 }
 
-float	pink_noise(t_v2f point)
+float	pink_noise(t_v2f point, const t_perlin *pink)
 {
-	t_perlin	pink;
-
-	pink.rate = 2.0f;
-	pink.gain = 0.5f;
-	pink.freq = 1.0f;
-	pink.ampt = 1.0f;
-	pink.layers = 5;
-	return (generate_perlin(&pink, point));
+	return (generate_perlin(point, pink));
 }
 
-float	turbulence_noise(t_v2f point)
+float	turbulence_noise(t_v2f point, const t_perlin *turb)
 {
-	t_perlin	turb;
-
-	turb.rate = 1.8f;
-	turb.gain = 0.35f;
-	turb.freq = 0.02f;
-	turb.ampt = 1.0f;
-	turb.layers = 5;
-	return (fabsf(generate_perlin(&turb, point)));
+	return (fabsf(generate_perlin(point, turb)));
 }
 
-float	marble_noise(t_v2f point)
+float	marble_noise(t_v2f point, const t_perlin *marb)
 {
-	return (sin((point.x + turbulence_noise(point) * 100.0f) * TAU / 200.0f));
+	return (sin(
+		(point.x + turbulence_noise(point, marb) * marb->marble.distortion)
+			* marb->marble.scale));
 }
 
-float	wood_noise(t_v2f point)
+float	wood_noise(t_v2f point, const t_perlin *wood)
 {
-	t_perlin	wood;
-
-	wood.freq = 0.35f;
-	wood.ampt = 10.0f;
-	return (modulo(perlin(v2f_scale(point, wood.freq)) * wood.ampt));
+	return (modulo(perlin(v2f_scale(point, wood->freq)) * wood->ampt));
 }
