@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/24 10:37:14 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/31 16:24:21 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/31 17:00:16 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ float	turbulence_noise(t_v2f point, const t_perlin *turb)
 float	marble_noise(t_v2f point, const t_perlin *marb)
 {
 	return (sin(
-		(point.x + turbulence_noise(point, marb) * marb->marble.distortion)
+			(point.x + turbulence_noise(point, marb) * marb->marble.distortion)
 			* marb->marble.scale));
 }
 

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/31 10:53:15 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/31 16:59:47 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,8 @@ bool		parse_material(char **tokens, t_scene *scene);
 // texture.c
 void		init_texture_fields(t_field *fields, int *field_count, t_mat *mat);
 void		init_bump_fields(t_field *fields, int *field_count, t_mat *mat);
-void		init_perlin_fields(t_field *fields, int *field_count, t_perlin *p_data);
+void		init_perlin_fields(t_field *fields, int *field_count,
+				t_perlin *p_data);
 
 /* ---------------------Objects--------------------- */
 // sphere.c

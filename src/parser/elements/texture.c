@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/16 10:29:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/31 16:32:20 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/31 19:30:54 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,19 +79,18 @@ void	init_perlin_fields(t_field *fields, int *field_count, t_perlin *p_data)
 	const t_v2f		lim = init_v2f(-1024, 1024);
 	const t_v2f		l_lim = init_v2f(1, 8);
 	const t_field	field_defs[] = {
-		{"p_rate", &p_data->rate, FIELD_FLT, lim, FILLED, {0}},
-		{"p_gain", &p_data->gain, FIELD_FLT, lim, FILLED, {0}},
-		{"p_freq", &p_data->freq, FIELD_FLT, lim, FILLED, {0}},
-		{"p_ampt", &p_data->ampt, FIELD_FLT, lim, FILLED, {0}},
-		{"p_layers", &p_data->layers, FIELD_INT, l_lim, FILLED, {0}},
-		{"p_dist", &p_data->marble.distortion, FIELD_FLT, lim, FILLED, {0}},
-		{"p_scale", &p_data->marble.scale, FIELD_FLT, lim, FILLED, {0}},
-		{NULL, NULL, 0, g_v2f_zero, 0, {0}}
-	};
+	{"p_rate", &p_data->rate, FIELD_FLT, lim, FILLED, {0}},
+	{"p_gain", &p_data->gain, FIELD_FLT, lim, FILLED, {0}},
+	{"p_freq", &p_data->freq, FIELD_FLT, lim, FILLED, {0}},
+	{"p_ampt", &p_data->ampt, FIELD_FLT, lim, FILLED, {0}},
+	{"p_layers", &p_data->layers, FIELD_INT, l_lim, FILLED, {0}},
+	{"p_dist", &p_data->marble.distortion, FIELD_FLT, lim, FILLED, {0}},
+	{"p_scale", &p_data->marble.scale, FIELD_FLT, lim, FILLED, {0}},
+	{NULL, NULL, 0, g_v2f_zero, 0, {0}}};
 	int				i;
 
 	i = 0;
-	while(field_defs[i].name != NULL)
+	while (field_defs[i].name != NULL)
 	{
 		fields[*field_count] = field_defs[i];
 		(*field_count)++;

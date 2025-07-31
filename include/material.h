@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/31 16:27:56 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/31 16:58:42 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ struct s_perlin
 	float		freq;	// Start frequency
 	float		ampt;	// Start amplitude
 	int			layers;	// Amount of layers
-	struct
+	struct s_marble
 	{
 		float	distortion;
 		float	scale;
