@@ -6,11 +6,12 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/27 11:36:15 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/01 18:46:29 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdint.h>
+#include <stdio.h>
 
 #include "MLX42/MLX42.h"
 #include "light.h"
@@ -132,7 +133,9 @@ void	*render(void *ctx)
 
 	instr = (t_pthread_instr *)ctx;
 	y = instr->start_y;
-	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+	if (set_thread_index(&instr->i) != 0
+		|| pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL) != 0)
+		return (perror("minirt"), NULL);
 	while (y < instr->end_y)
 	{
 		x = 0;
