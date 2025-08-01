@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 18:21:05 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/26 14:35:03 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 18:21:05 by jboon         #+#    #+#                 */
+/*   Updated: 2025/08/01 09:15:17 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,12 @@ static void	init_scene_and_vector(t_scene *scene)
 int	main(int argc, char **argv)
 {
 	t_scene	scene;
+
+	if (1)
+	{
+		perlin_display();
+		return (EXIT_SUCCESS);
+	}
 
 	ft_bzero(&scene, sizeof(t_scene));
 	if (!valid_input(argc, argv))
