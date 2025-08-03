@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   rt_types.h                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/07 16:31:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/27 15:40:02 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/02 16:55:08 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_ray_hit		t_ray_hit;
 typedef struct s_object			t_obj;
 typedef struct s_tri_var		t_tri_var;
 typedef struct s_scene			t_scene;
+typedef struct s_mesh			t_mesh;
 
 typedef int						(*t_intsct)(t_obj *obj, t_ray *ray,
 									t_v2f t, float *dst);

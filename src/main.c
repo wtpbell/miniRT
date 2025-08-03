@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 18:21:05 by jboon             #+#    #+#             */
-/*   Updated: 2025/06/26 14:35:03 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/08 18:21:05 by jboon         #+#    #+#                 */
+/*   Updated: 2025/08/02 17:10:45 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "minirt.h"
 
-static bool	valid_file_format(const char *file)
+bool	valid_file_format(const char *file, const char *ext)
 {
 	const size_t	len = ft_strlen(file);
+	const size_t	ext_len = ft_strlen(ext);
 
-	if (len < 3)
+	if (len < ext_len)
 		return (false);
-	file += len - 3;
-	return (ft_strncmp(file, ".rt", 3) == 0);
+	file += len - ext_len;
+	return (ft_strncmp(file, ext, 3) == 0);
 }
 
 static bool	valid_input(int argc, char **argv)
@@ -30,7 +31,7 @@ static bool	valid_input(int argc, char **argv)
 		print_error(ERR_NUM_ARGS, "input", NULL);
 		return (false);
 	}
-	if (!valid_file_format(argv[1]))
+	if (!valid_file_format(argv[1], ".rt"))
 	{
 		print_error(ERR_FILE_FORMAT, "format", argv[1]);
 		return (false);

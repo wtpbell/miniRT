@@ -1,0 +1,298 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   obj.c                                              :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/08/02 15:58:08 by jboon         #+#    #+#                 */
+/*   Updated: 2025/08/03 23:58:23 by jboon         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
+/*
+
+# still a comment. NOICE!
+
+# vertices are stored in a counter-clockwise order by default
+
+# List of geometric vertices, with (x, y, z, [w]) coordinates [w] optional and defaults to 1.0
+# These may contain colors after each coordinate (range 0..1)
+v x y z [w]
+v x y z [w]
+...
+
+# List of texture coordinates (u, [v, w]) coordinates, between 0 and 1, v and w are optional and default to 0
+vt 0.500 1 [0]
+vt u [v] [w]
+...
+
+# List of vertex normals in (x, y, z); normals might not be unit vectors
+vn 0.707 0.707 0.707
+vn x y z
+...
+
+# Polygonal face element (starts at 1, -1 refers the to the last element)
+# A face can contain three or more vertices
+f v1 v2 v3 ...
+f v3/vt1 4/2 5/3
+f 6/4/1 3/5/3 7/6/5
+f 7//1 8//2 9//3
+...
+
+# Line element
+1 5 8 1 2 4 9
+
+*/
+
+//
+// Need a struct to store the obj file into
+// Need temporary vector lists for storing the vertices, texture coordinates and normals;
+// The face element tells me which vertices are stored together...
+// Obj files are parsed after the main parser is complete (gnl bonus is also an option)
+// Optimization would be to construct an AABB around the model and have the ray caster intersect test it first
+
+#include "parser.h"
+#include "errno.h"
+
+#define WHITESPACE " \f\r\t\v\n"
+#define MAX_VAL		1.0e20f
+#define MIN_VAL		-MAX_VAL
+#define MAX_I		99999
+#define MIN_I		-MAX_I
+
+static bool	init_obj_file(t_obj_file *obj_file)
+{
+	ft_bzero(obj_file, sizeof(obj_file));
+	if (!vector_init(&obj_file->v, 10)
+		|| !vector_init(&obj_file->vt, 10)
+		|| !vector_init(&obj_file->vn, 10)
+		|| !vector_init(&obj_file->f, 10))
+	{
+		vector_free(&obj_file->v, free);
+		vector_free(&obj_file->vt, free);
+		vector_free(&obj_file->vn, free);
+		return (false);
+	}
+	return (true);
+}
+
+static void	free_obj_file(t_obj_file *obj_file)
+{
+	vector_free(&obj_file->v, free);
+	vector_free(&obj_file->vt, free);
+	vector_free(&obj_file->vn, free);
+	vector_free(&obj_file->f, free);
+}
+
+static inline void assign_v3f(t_v3f *v, t_vector *cont, int i)
+{
+	if (vector_get(cont, i) != NULL)
+		*v = *((t_v3f *)cont->items[i]);
+}
+
+// TODO: vn and vt are optional; If none are supplied within the obj file then it must be calcaluted.
+static bool	load_obj_into_mesh(t_obj_file *obj_file, t_mesh *mesh)
+{
+	int		i;
+	int		*indices;
+	t_tri	*tri;
+
+	i = 0;
+	while (i < obj_file->f.size)
+	{
+		tri = ft_calloc(1, sizeof(t_tri));
+		if (tri == NULL)
+			return (false);
+		indices = (int *)obj_file->f.items[i];
+		assign_v3f(&tri->v0, &obj_file->v, *(indices + 0) - 1);
+		assign_v3f(&tri->v1, &obj_file->v, *(indices + 3) - 1);
+		assign_v3f(&tri->v2, &obj_file->v, *(indices + 6) - 1);
+		assign_v3f(&tri->vt0, &obj_file->vt, *(indices + 1) - 1);
+		assign_v3f(&tri->vt1, &obj_file->vt, *(indices + 4) - 1);
+		assign_v3f(&tri->vt2, &obj_file->vt, *(indices + 7) - 1);
+		assign_v3f(&tri->vn0, &obj_file->vn, *(indices + 2) - 1);
+		assign_v3f(&tri->vn1, &obj_file->vn, *(indices + 5) - 1);
+		assign_v3f(&tri->vt2, &obj_file->vn, *(indices + 8) - 1);
+		++i;
+		if (!vector_add(&mesh->triangles, tri))
+			return (false);
+	}
+	return (true);
+}
+
+static bool	parse_vertex(char *str, t_vector *v)
+{
+	const	t_v2f	lim = init_v2f(MIN_VAL, MAX_VAL);
+	char			token;
+	int				count;
+	t_v3f			point;
+	t_v3f			*item;
+
+	count = 0;
+	while (count < 3)
+	{
+		token = rt_strtok(NULL, WHITESPACE, &str);
+		if (token == NULL)
+			break ;
+		if (!parse_float(point._axis + count, token, lim, token))
+			return (false);
+		++count;
+	}
+	if (count < 3)
+		return (false);
+	item = malloc(sizeof(t_v3f));
+	if (item == NULL)
+		return (false);
+	*item = point;
+	if (vector_add(v, item))
+		return (true);
+	return (free(item), false);
+}
+
+static bool	parse_vertex_texcoord(char *str, t_vector *vt)
+{
+	(void)str;
+	(void)vt;
+	return (true);
+}
+
+static bool	parse_vertex_normal(char *str, t_vector *vn)
+{
+	(void)str;
+	(void)vn;
+	return (true);
+}
+
+static bool	is_valid_face_syntax(const char *face)
+{
+	return (*face != '/' && rt_count_occ(face, '/') < 3);
+}
+
+static bool	is_valid_set(const int *first, const int *second)
+{
+	int	i;
+
+	i = 0;
+	while (i < 3)
+	{
+		if ((first[i] != 0) != (second[i] != 0))
+			return (false);
+	}
+	return (true);
+}
+
+static bool	parse_face(char *str, t_vector *f)
+{
+	const	t_v2f	lim = init_v2f(MIN_I, MAX_I);
+	const	int		max = 9;
+	char			*token;
+	char			*subtoken;
+	char			*saveptr;
+	int				*indices;
+	int				curr;
+	int				count;
+
+	indices = ft_calloc(max, sizeof(int)); // A face will have a maximum of 3 points, where each point can have up to 3 indicices seperated by /'s
+	if (indices == NULL)
+		return (false);
+	count = 0;
+	while (true)
+	{
+		token = rt_strtok(NULL, WHITESPACE, str);
+		if (token == NULL)
+			break ;
+
+		if (!is_valid_face_syntax(token))
+			return (free(indices), false);
+
+		curr = count * 3;
+		while (true) // We can assume there won't be more than 2 /'s
+		{
+			subtoken = rt_strtok(token, "/", &saveptr);
+			if (subtoken == NULL)
+				break ;
+			if (!parse_int(indices + curr, subtoken, lim, subtoken))
+				return (free(indices), false);
+			token = NULL;
+			curr += 1 + (*saveptr == '/'); // Skip one if vt is not supplied (v//vn)
+		}
+
+		// All point sets must match with the first set
+		if (!is_valid_set(indices, indices + (count * 3)))
+			return (free(indices), false);
+
+		++count;
+		if (count > 3) // Cannot have more than 3 points per face (unless we support triangulating of the faces ourselves)
+			return (free(indices), false);
+	}
+	if (!vector_add(f, indices))
+		return (free(indices), false);
+	return (count == 3);
+}
+
+static bool	parse_line(char *line, t_obj_file *obj_file)
+{
+	char	*token;
+	char	*saveptr;
+
+	token = rt_strtok(line, WHITESPACE, saveptr);
+	if (token == NULL || *token == '#')
+		return (true);
+	if (ft_strcmp(token, "f") == 0)
+		return (parse_face(saveptr, &obj_file->f));
+	else if (ft_strcmp(token, "v") == 0)
+		return (parse_vertex(saveptr, &obj_file->v));
+	else if (ft_strcmp(token, "vt") == 0)
+		return (parse_vertex_texcoord(saveptr, &obj_file->vt));
+	else if (ft_strcmp(token, "vn") == 0)
+		return (parse_vertex_normal(saveptr, &obj_file->vn));
+	return (true);
+}
+
+static bool	parse_obj_file(t_mesh *mesh)
+{
+	const char	*file_name = mesh->obj_path;
+	char		*line;
+	int			fd;
+	t_obj_file	obj_file;
+
+	fd = open(file_name, O_RDONLY);
+	if (fd < 0 || !init_obj_file(&obj_file))
+		return (perror("parse mesh"), close(fd), false);
+	errno = 0;
+	while (true)
+	{
+		line = get_next_line(fd);
+		if (line == NULL || !parse_line(line, &obj_file))
+			break ;
+		free(line);
+	}
+	close (fd);
+	get_next_line(-1);
+	if (errno != 0)
+		return (perror("parse mesh"), free_obj_file(&obj_file), false);
+	if (!load_obj_into_mesh(&obj_file, mesh))
+		return (free_obj_file(&obj_file), false);
+	return (free_obj_file(&obj_file), true);
+}
+
+bool	handle_mesh_obj(t_scene *scene)
+{
+	t_vector	*objects;
+	t_obj		*obj;
+	int			i;
+	int			size;
+
+	i = 0;
+	size = scene->objects.size;
+	while (i < size)
+	{
+		obj = (t_obj *)scene->objects.items[i];
+		// TODO: Cache the obj files for faster re-use
+		if (obj->type == OBJ_MESH && !parse_obj_file(&obj->mesh))
+			return (false);
+		++i;
+	}
+	return (true);
+}

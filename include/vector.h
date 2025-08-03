@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   vector.h                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/30 09:42:37 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/02 16:47:52 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,18 @@ typedef union s_vector3
 	};
 	float	_axis[3];
 }	t_v3f;
+
+typedef union u_v4f
+{
+	struct
+	{
+		float	x;
+		float	y;
+		float	z;
+		float	z;
+	};
+	float	_axis[4];
+}	t_v4f;
 
 extern const t_v3f	g_v3f_zero;
 extern const t_v3f	g_v3f_one;

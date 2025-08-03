@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   scene.h                                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/27 15:38:56 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/03 21:09:53 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ enum e_object_type
 	OBJ_CYLINDER,
 	OBJ_CONE,
 	OBJ_PLANE,
-	OBJ_TRIANGLE
+	OBJ_TRIANGLE,
+	OBJ_MESH
 };
 
 enum e_light_type
@@ -110,7 +111,17 @@ struct s_triangle
 	t_v3f	vt0;
 	t_v3f	vt1;
 	t_v3f	vt2;
+	t_v3f	vn0;
+	t_v3f	vn1;
+	t_v3f	vn2;
 	t_v2f	weight;
+};
+
+struct s_mesh
+{
+	char		*obj_path;
+	t_v4f		aabb;
+	t_vector	triangles;
 };
 
 struct s_light
@@ -138,6 +149,7 @@ struct s_object
 		t_cy	cy;
 		t_tri	tri;
 		t_cone	cone;
+		t_mesh	mesh;
 	};
 	t_obj_type	type;
 	t_intsct	intersect;

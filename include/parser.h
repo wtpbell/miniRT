@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   parser.h                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/02 18:08:00 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/03 23:55:38 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,12 +118,25 @@ typedef struct s_element
 	t_parser		parse_fn;
 }	t_ele;
 
+// Numbering of vertices start at 1 (right-hand coordinate system)
+typedef struct s_obj_file
+{
+	t_vector	v;	// Vertices (x, y, z, [w])
+	t_vector	vt;	// Vertex texture coordinates (u, [v, w])
+	t_vector	vn;	// Vertex normals (i, j, k)
+	t_vector	f;	// Faces (v1[/vt1/vn1] v2[/vt2/vn2] v3[/vt3/vn3] ...)
+}	t_obj_file;
+
 /* ---------------------Core--------------------- */
 // file_parser.c
 bool		parse_map(t_scene *scene, const char *file);
 
 // element_parser.c
 t_parser	element_parser(char **tokens, t_scene *scene, const char *line);
+
+// rt_strtok.c
+char		*rt_strtok(char *str, const char *delim, char **saveptr);
+size_t		rt_count_occ(const char *str, char c);
 
 /* ---------------------Elements--------------------- */
 // camera.c
@@ -199,6 +212,7 @@ void		exit_err(t_error type, const char *ctx, const char *value);
 void		free_tokens(char **tokens);
 void		cleanup_gnl(char *line, int fd);
 void		free_material(void *ptr);
+void		free_obj(void *ptr);
 void		cleanup_scene(t_scene *scene);
 
 // field.c

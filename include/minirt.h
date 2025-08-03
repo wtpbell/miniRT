@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   minirt.h                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/02 18:15:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/02 17:32:55 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int		sphere_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
 int		plane_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
 int		cylinder_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
 int		triangle_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
+bool	mesh_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
 int		cone_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst);
 int		intersect_disc(float r, float h, t_ray *ray, t_v2f *t_lim);
 t_obj	*find_intersection(t_ray *ray, t_scene *scene, float *t);
@@ -44,9 +45,11 @@ t_v3f	plane_normal(t_obj *obj, t_v3f point);
 t_v3f	cylinder_normal(t_obj *obj, t_v3f point);
 t_v3f	triangle_normal(t_obj *obj, t_v3f point);
 t_v3f	cone_normal(t_obj *obj, t_v3f point);
+t_v3f	mesh_normal(t_obj *obj, t_v3f point);
 void	debug_scene_setup(t_scene *scene);
 t_ray	get_ray_with_dof(t_cam *cam, float u, float v);
 void	update_camera_view(t_cam *cam);
 void	generate_uv_vertices(t_tri *tri, t_mat4x4 local);
+bool	valid_file_format(const char *file, const char *ext);
 
 #endif
