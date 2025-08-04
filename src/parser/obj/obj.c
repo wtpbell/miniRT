@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 15:58:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/04 22:47:38 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/04 23:27:37 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,13 @@ f 7//1 8//2 9//3
 
 // TODO: Better error messages
 
+float	ft_minf(float a, float b)
+{
+	if (a < b)
+		return (a);
+	return (b);
+}
+
 static bool	init_obj_file(t_obj_file *obj_file)
 {
 	ft_bzero(obj_file, sizeof(obj_file));
@@ -99,6 +106,33 @@ static inline t_v3f	get_normal(t_v3f v0, t_v3f v1, t_v3f v2)
 	return (v3f_norm(v3f_cross(v3f_sub(v1, v0), v3f_sub(v2, v0))));
 }
 
+static void	construct_mesh_aabb(t_mesh *mesh)
+{
+	int		i;
+	t_tri	*tri;
+	t_v3f	min;
+	t_v3f	max;
+
+	i = 0;
+	min = g_v3f_zero;
+	max = g_v3f_zero;
+	while (i < mesh->triangles.size)
+	{
+		tri = (t_tri *)mesh->triangles.items[i];
+
+		min.x = ft_minf(ft_minf(ft_minf(min.x, tri->v0.x), tri->v1.x), tri->v2.x);
+		min.y = ft_minf(ft_minf(ft_minf(min.y, tri->v0.y), tri->v1.y), tri->v2.y);
+		min.z = ft_minf(ft_minf(ft_minf(min.z, tri->v0.z), tri->v1.z), tri->v2.z);
+
+		max.x = ft_maxf(ft_maxf(ft_maxf(max.x, tri->v0.x), tri->v1.x), tri->v2.x);
+		max.y = ft_maxf(ft_maxf(ft_maxf(max.y, tri->v0.y), tri->v1.y), tri->v2.y);
+		max.z = ft_maxf(ft_maxf(ft_maxf(max.z, tri->v0.z), tri->v1.z), tri->v2.z);
+		++i;
+	}
+	mesh->box.min = min;
+	mesh->box.max = max;
+}
+
 // TODO: vn and vt are optional; If none are supplied within the obj file then it must be calcaluted.
 static bool	load_obj_into_mesh(t_obj_file *obj_file, t_mesh *mesh)
 {
@@ -132,6 +166,9 @@ static bool	load_obj_into_mesh(t_obj_file *obj_file, t_mesh *mesh)
 			return (false);
 		++i;
 	}
+	// TODO: This needs to be put in world space
+	construct_mesh_aabb(mesh);
+	printf("%f %f %f || %f %f %f\n", mesh->box.min.x, mesh->box.min.y, mesh->box.min.z, mesh->box.max.x, mesh->box.max.y, mesh->box.max.z);
 	return (true);
 }
 

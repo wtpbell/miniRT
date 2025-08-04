@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 17:28:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/04 18:30:07 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/04 23:35:55 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,39 +19,42 @@
 bool	aabb_intersect(t_ray *ray, t_aabb *box)
 {
 	// TODO: Make function static
-	const t_v3f	invdir = init_v3f(1.0f / ray->direction.x,
+	const t_v3f	invdir = init_v3f(
+		1.0f / ray->direction.x,
 		1.0f / ray->direction.y,
 		1.0f / ray->direction.z
 	);
-	t_v2f	is_x;
-	t_v2f	is_y;
-	t_v2f	is_z;
+	t_v2f	t;
+	t_v2f	ty;
+	t_v2f	tz;
 
 	// min
-	is_x.x = (box->min.x - ray->origin.x) * invdir.x;
-	is_y.x = (box->min.y - ray->origin.y) * invdir.y;
-	is_z.x = (box->min.z - ray->origin.z) * invdir.z;
+	t.x = (box->min.x - ray->origin.x) * invdir.x;
+	ty.x = (box->min.y - ray->origin.y) * invdir.y;
+	tz.x = (box->min.z - ray->origin.z) * invdir.z;
 
 	// max
-	is_x.y = (box->max.x - ray->origin.x) * invdir.x;
-	is_y.y = (box->max.y - ray->origin.y) * invdir.y;
-	is_z.y = (box->max.z - ray->origin.z) * invdir.z;
+	t.y = (box->max.x - ray->origin.x) * invdir.x;
+	ty.y = (box->max.y - ray->origin.y) * invdir.y;
+	tz.y = (box->max.z - ray->origin.z) * invdir.z;
 
-	if (invdir.x >= 0.0f)
-		ft_swapf(&is_x.x, &is_x.y);
-	if (invdir.y >= 0.0f)
-		ft_swapf(&is_y.x, &is_y.y);
-	if (invdir.z >= 0.0f)
-		ft_swapf(&is_z.x, &is_z.y);
+	if (invdir.x < 0.0f)
+		ft_swapf(&t.x, &t.y);
+	if (invdir.y < 0.0f)
+		ft_swapf(&ty.x, &ty.y);
 
-	if ((is_x.x > is_y.y) || (is_y.x > is_x.x))
+	if ((t.x > ty.y) || (ty.x > t.x))
 		return (false);
 
-	if (is_y.x > is_x.x)
-		is_x.x = is_y.x;
-	if (is_y.y < is_x.y)
-		is_x.y = is_y.y;
-	return (!((is_x.x > is_z.y) || (is_z.x > is_x.x)));
+	if (ty.x > t.x)
+		t.x = ty.x;
+	if (ty.y < t.y)
+		t.y = ty.y;
+
+	if (invdir.z < 0.0f)
+		ft_swapf(&tz.x, &tz.y);
+	
+	return (!((t.x > tz.y) || (tz.x > t.x)));
 }
 
 // TODO: Implementation needed
@@ -81,8 +84,8 @@ int	mesh_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_result *res)
 	int		i;
 	t_tri	*tri;
 
-	// if (!aabb_intersect(ray, &obj->mesh.box))
-	// 	return (false);
+	if (!aabb_intersect(ray, &obj->mesh.box))
+		return (false);
 	i = 0;
 	while (i < obj->mesh.triangles.size)
 	{
