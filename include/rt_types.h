@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/07 16:31:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/04 17:19:39 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/04 18:06:29 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,16 @@ typedef struct s_object			t_obj;
 typedef struct s_tri_var		t_tri_var;
 typedef struct s_scene			t_scene;
 typedef struct s_mesh			t_mesh;
+typedef struct s_result			t_result;
 
 typedef int						(*t_intsct)(t_obj *obj, t_ray *ray,
-									t_v2f t, t_v3f *s);
-typedef t_v3f					(*t_cnorm)(t_obj *obj, t_v3f point);
+									t_v2f t, t_result *res);
+typedef t_v3f					(*t_cnorm)(t_obj *obj, t_v3f point,
+									t_result *res);
 typedef t_v3f					(*t_apply_light)(t_scene *scene,
 										t_ray_hit *hit_info, t_light *light);
 typedef t_v2f					(*t_texcoord)(t_obj *obj, t_v3f point,
-									t_v2f *weight);
+									t_result *res);
 typedef t_v3f					(*t_texcol)(const t_v2f *texcoord,
 											const t_tex *tex, t_v3f prim_col);
 

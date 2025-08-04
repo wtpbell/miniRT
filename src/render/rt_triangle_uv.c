@@ -6,12 +6,13 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/02 18:33:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/07 17:16:53 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/04 17:52:09 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt_math.h"
 #include "scene.h"
+#include "ray.h"
 
 static void	set_minmax(t_tri *tri, t_v2f *min, t_v2f *max)
 {
@@ -46,7 +47,7 @@ void	generate_uv_vertices(t_tri *tri, t_mat4x4 local)
 	tri->vt2.y = (1.0f - tri->vt2.y) * aspect;
 }
 
-t_v2f	triangle_texcoord(t_obj *obj, t_v3f point, t_v2f *weight)
+t_v2f	triangle_texcoord(t_obj *obj, t_v3f point, t_result *res)
 {
 	float	w;
 	float	u;
@@ -55,8 +56,8 @@ t_v2f	triangle_texcoord(t_obj *obj, t_v3f point, t_v2f *weight)
 
 	(void)point;
 	tri = &obj->tri;
-	u = weight->u;
-	v = weight->v;
+	u = res->tri_weight.u;
+	v = res->tri_weight.v;
 	w = 1.0f - u - v;
 	return (init_v2f(
 			w * tri->vt0.x + u * tri->vt1.x + v * tri->vt2.x,

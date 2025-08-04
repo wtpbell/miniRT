@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 15:58:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/04 11:17:32 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/04 18:40:45 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,10 @@ f 7//1 8//2 9//3
 static bool	init_obj_file(t_obj_file *obj_file)
 {
 	ft_bzero(obj_file, sizeof(obj_file));
-	if (!vector_init(&obj_file->v, 10)
-		|| !vector_init(&obj_file->vt, 10)
-		|| !vector_init(&obj_file->vn, 10)
-		|| !vector_init(&obj_file->f, 10))
+	if (!vector_init(&obj_file->v, 3)
+		|| !vector_init(&obj_file->vt, 3)
+		|| !vector_init(&obj_file->vn, 3)
+		|| !vector_init(&obj_file->f, 3))
 	{
 		vector_free(&obj_file->v, free);
 		vector_free(&obj_file->vt, free);
@@ -89,6 +89,12 @@ static inline void assign_v3f(t_v3f *v, t_vector *cont, int i)
 {
 	if (vector_get(cont, i) != NULL)
 		*v = *((t_v3f *)cont->items[i]);
+}
+
+// temp function
+static inline t_v3f	get_normal(t_v3f v0, t_v3f v1, t_v3f v2)
+{
+	return (v3f_norm(v3f_cross(v3f_sub(v1, v0), v3f_sub(v2, v0))));
 }
 
 // TODO: vn and vt are optional; If none are supplied within the obj file then it must be calcaluted.
@@ -114,9 +120,15 @@ static bool	load_obj_into_mesh(t_obj_file *obj_file, t_mesh *mesh)
 		assign_v3f(&tri->vn0, &obj_file->vn, *(indices + 2) - 1);
 		assign_v3f(&tri->vn1, &obj_file->vn, *(indices + 5) - 1);
 		assign_v3f(&tri->vt2, &obj_file->vn, *(indices + 8) - 1);
-		++i;
+
+		t_v3f norm = get_normal(tri->v0, tri->v1, tri->v2);
+		tri->vn0 = norm;
+		tri->vn1 = norm;
+		tri->vn2 = norm;
+
 		if (!vector_add(&mesh->triangles, tri))
 			return (false);
+		++i;
 	}
 	return (true);
 }
@@ -178,6 +190,7 @@ static bool	is_valid_set(const int *first, const int *second)
 	{
 		if ((first[i] != 0) != (second[i] != 0))
 			return (false);
+		++i;
 	}
 	return (true);
 }
@@ -257,6 +270,7 @@ static bool	parse_obj_file(t_mesh *mesh)
 	int			fd;
 	t_obj_file	obj_file;
 
+	printf("PARSE OBJ: %s\n", file_name);
 	fd = open(file_name, O_RDONLY);
 	if (fd < 0 || !init_obj_file(&obj_file))
 		return (perror("parse mesh"), close(fd), false);

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/02 11:37:29 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/07 16:59:55 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/04 17:52:18 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,13 @@ struct s_ray_hit
 	t_obj	*obj;
 	t_ray	*ray;
 	t_v2f	weight;
+};
+
+struct s_result
+{
+	float	t;
+	int		face_index;
+	t_v2f	tri_weight;
 };
 
 #endif

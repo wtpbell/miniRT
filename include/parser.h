@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/04 17:19:27 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/04 18:33:48 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,5 +235,8 @@ bool		load_bump_map(t_mat *mat, const char *bump_path);
 void		cleanup_texture(t_tex *tex);
 bool		load_texture(t_tex *tex, const char *path);
 void		assign_textures(t_mat *mat);
+
+// obj.c
+bool		handle_mesh_obj(t_scene *scene);
 
 #endif

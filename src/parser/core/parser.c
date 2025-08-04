@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/27 16:42:09 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/04 18:35:04 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ bool	parse_map(t_scene *scene, const char *file)
 	}
 	result = parse_file_lines(scene, fd);
 	close(fd);
-	if (!result)
+	if (!result || !handle_mesh_obj(scene))
 		cleanup_scene(scene);
 	return (result);
 }

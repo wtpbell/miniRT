@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 17:28:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/04 14:47:41 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/04 18:30:07 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 #include "ray.h"
 #include "minirt.h"
 
-static bool	aabb_intersect(t_ray *ray, t_aabb *box)
+
+bool	aabb_intersect(t_ray *ray, t_aabb *box)
 {
-	const t_v3f	invdir = (t_v3f){
-		1.0f / ray->direction.x,
+	// TODO: Make function static
+	const t_v3f	invdir = init_v3f(1.0f / ray->direction.x,
 		1.0f / ray->direction.y,
 		1.0f / ray->direction.z
-	};
+	);
 	t_v2f	is_x;
 	t_v2f	is_y;
 	t_v2f	is_z;
@@ -54,37 +55,44 @@ static bool	aabb_intersect(t_ray *ray, t_aabb *box)
 }
 
 // TODO: Implementation needed
-t_v3f	mesh_normal(t_obj *obj, t_v3f point)
+t_v3f	mesh_normal(t_obj *obj, t_v3f point, t_result *res)
 {
-	(void)obj;
+	t_tri	*tri;
+
 	(void)point;
-	return (g_v3f_up);
+	tri = (t_tri *)vector_get(&obj->mesh.triangles, res->face_index);
+	if (tri == NULL)
+		return (g_v3f_up);
+	return (tri->vn0);
 }
 
 // TODO: Implementation needed
-t_v2f	mesh_texcoord(t_obj *obj, t_v3f world_point)
+t_v2f	mesh_texcoord(t_obj *obj, t_v3f world_point, t_result *res)
 {
 	(void)obj;
 	(void)world_point;
+	(void)res;
 	return (g_v2f_zero);
 }
 
 // TODO: Implementation needed
-int	mesh_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
+int	mesh_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_result *res)
 {
 	int		i;
 	t_tri	*tri;
 
-	(void)t;
-	(void)dst;
-	if (!aabb_intersect(ray, &obj->mesh.box))
-		return (false);
+	// if (!aabb_intersect(ray, &obj->mesh.box))
+	// 	return (false);
 	i = 0;
 	while (i < obj->mesh.triangles.size)
 	{
-
+		tri = (t_tri *)obj->mesh.triangles.items[i];
+		if (tri_intersect(tri, ray, t, res))
+		{
+			res->face_index = i;
+			return (true);
+		}
+		++i;
 	}
-	// triangle_intersect()
-
 	return (false);
 }
