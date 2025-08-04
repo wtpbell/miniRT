@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/03 23:55:38 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/04 11:22:40 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,9 @@ bool		parse_cone(char **tokens, t_scene *scene);
 
 // triangle.c
 bool		parse_triangle(char **tokens, t_scene *scene);
+
+// mesh.c
+bool		parse_mesh(char **tokens, t_scene *scene);
 
 /* ---------------------Utils--------------------- */
 // string_utils.c

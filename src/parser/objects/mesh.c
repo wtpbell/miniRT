@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 17:01:40 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/03 11:19:22 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/04 11:19:28 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ bool	parse_mesh(char **tokens, t_scene *scene)
 	char	*obj_path;
 	t_obj	*obj;
 
-	if (!parse_v3f(&pos, tokens[1] || !parse_col(&color, tokens[2]))
+	if (!parse_v3f(&pos, tokens[1]) || !parse_col(&color, tokens[2])
 		|| !parse_path(&obj_path, tokens[3]))
 		return (false);
 	obj = ft_calloc(1, sizeof(t_obj));

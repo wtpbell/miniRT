@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/02 16:47:52 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/04 12:19:59 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,16 @@ typedef union u_v4f
 		float	x;
 		float	y;
 		float	z;
-		float	z;
+		float	w;
 	};
 	float	_axis[4];
 }	t_v4f;
+
+typedef struct s_aabb
+{
+	t_v3f	min;
+	t_v3f	max;
+}	t_aabb;
 
 extern const t_v3f	g_v3f_zero;
 extern const t_v3f	g_v3f_one;

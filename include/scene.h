@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/03 21:09:53 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/04 14:30:22 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ struct s_triangle
 struct s_mesh
 {
 	char		*obj_path;
-	t_v4f		aabb;
+	t_aabb		box;
 	t_vector	triangles;
 };
 

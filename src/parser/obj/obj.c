@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 15:58:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/03 23:58:23 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/04 11:17:32 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ static bool	load_obj_into_mesh(t_obj_file *obj_file, t_mesh *mesh)
 static bool	parse_vertex(char *str, t_vector *v)
 {
 	const	t_v2f	lim = init_v2f(MIN_VAL, MAX_VAL);
-	char			token;
+	char			*token;
 	int				count;
 	t_v3f			point;
 	t_v3f			*item;
@@ -199,7 +199,7 @@ static bool	parse_face(char *str, t_vector *f)
 	count = 0;
 	while (true)
 	{
-		token = rt_strtok(NULL, WHITESPACE, str);
+		token = rt_strtok(NULL, WHITESPACE, &str);
 		if (token == NULL)
 			break ;
 
@@ -236,7 +236,7 @@ static bool	parse_line(char *line, t_obj_file *obj_file)
 	char	*token;
 	char	*saveptr;
 
-	token = rt_strtok(line, WHITESPACE, saveptr);
+	token = rt_strtok(line, WHITESPACE, &saveptr);
 	if (token == NULL || *token == '#')
 		return (true);
 	if (ft_strcmp(token, "f") == 0)
@@ -279,7 +279,6 @@ static bool	parse_obj_file(t_mesh *mesh)
 
 bool	handle_mesh_obj(t_scene *scene)
 {
-	t_vector	*objects;
 	t_obj		*obj;
 	int			i;
 	int			size;
