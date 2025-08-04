@@ -34,9 +34,10 @@ OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)
 
 all: $(LIBFT) $(MLX42) $(NAME)
 
-debug: C_FLAGS += -g3 -fsanitize=address,undefined
+debug: C_FLAGS += -g3 -fsanitize=thread #address,undefined
 debug: all
 	@echo 'use: LSAN_OPTIONS="suppressions=fsan_supp.supp" ./miniRT asset/<scene>.rt'
+	@echo 'use: TSAN_OPTIONS="suppressions=tsan_supp.supp" ./miniRT asset/<scene>.rt'
 
 val: C_FLAGS += -g3
 val: clean all

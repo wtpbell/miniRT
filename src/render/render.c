@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/01 18:46:29 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/04 10:41:17 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,8 +133,7 @@ void	*render(void *ctx)
 
 	instr = (t_pthread_instr *)ctx;
 	y = instr->start_y;
-	if (set_thread_index(&instr->i) != 0
-		|| pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL) != 0)
+	if (pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL) != 0)
 		return (perror("minirt"), NULL);
 	while (y < instr->end_y)
 	{
