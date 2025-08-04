@@ -1,38 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ray.h                                              :+:    :+:            */
+/*   rt_thread.h                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/06/02 11:37:29 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/07 16:59:55 by jboon         ########   odam.nl         */
+/*   Created: 2025/07/03 17:35:16 by jboon         #+#    #+#                 */
+/*   Updated: 2025/08/04 10:19:39 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RAY_H
-# define RAY_H
+#ifndef RT_THREAD_H
+# define RT_THREAD_H
 
-# include "vector.h"
-# include "rt_types.h"
+# include <pthread.h>
+# include "MLX42/MLX42.h"
+# include "scene.h"
 
-struct s_ray
+# define THRD_CNT	4
+
+typedef struct s_pthread_instr
 {
-	t_v3f	origin;
-	t_v3f	direction;
-};
+	int			i;
+	uint32_t	start_y;
+	uint32_t	end_y;
+	t_scene		*scene;
+	mlx_image_t	*img;
+	pthread_t	thread;
+}	t_pthread_instr;
 
-struct s_ray_hit
-{
-	t_v3f	hit;
-	t_v3f	normal;
-	t_v2f	texcoord;
-	t_v3f	hit_color;
-	float	distance;
-	bool	front_face;
-	t_obj	*obj;
-	t_ray	*ray;
-	t_v2f	weight;
-};
+/* threads.c */
+
+bool	thread_rendering(t_scene *scene);
+
+/* benchmark.c */
+
+void	start_time(void);
+void	end_time(void);
 
 #endif
