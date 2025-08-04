@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/04 21:46:03 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/04 23:01:01 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 	t_game	*game;
 
 	game = (t_game *)param;
-	if (keydata.key == MLX_KEY_U && keydata.action == MLX_PRESS)
+	if (keydata.key == MLX_KEY_H && keydata.action == MLX_PRESS)
 	{
 		if (game->ui)
 			toggle_ui_visibility(game->ui);

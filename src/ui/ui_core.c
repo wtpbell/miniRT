@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:53:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/04 22:35:15 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/04 23:00:23 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,30 +201,41 @@ void	destroy_ui(t_ui *ui)
 
 void	toggle_ui_visibility(t_ui *ui)
 {
-	if (!ui || !ui->context) {
-		fprintf(stderr, "Error: Cannot toggle UI visibility - invalid UI or context\n");
-		return;
-	}
-	t_ui_context *ctx = ui->context;
-	ctx->is_visible = !ctx->is_visible;
+	size_t			i;
+	t_ui_context	*ctx;
 
+	if (!ui || !ui->context || !ui->context->canvas)
+		return ;	
+	ctx = ui->context;
+	ctx->is_visible = !ctx->is_visible;
+	i = 0;
+	while (i < ctx->canvas->count)
+	{
+		ctx->canvas->instances[i].enabled = ctx->is_visible;
+		i++;
+	}
+	ctx->needs_redraw = true;
 	fprintf(stderr, "UI visibility toggled to: %s\n", 
 		ctx->is_visible ? "VISIBLE" : "HIDDEN");
 }
 
 void	render_ui(t_ui *ui)
 {
-	if (!ui || !ui->context || !ui->context->canvas || !ui->root) {
-		fprintf(stderr, "Warning: Cannot render UI - missing context, canvas, or root element\n");
-		return;
-	}
+	t_ui_context	*ctx;
+	mlx_image_t		*canvas;
+	int32_t			x_pos;
+	size_t			i;
+	int				instance_id;
+	uint32_t		y;
+	uint32_t		x;
+	uint32_t		*pixel;
 
-	t_ui_context *ctx = ui->context;
-	mlx_image_t *canvas = ctx->canvas;
-	int32_t x_pos = 0;
+	ctx = ui->context;
+	canvas = ctx->canvas;
+	x_pos = 0;
 	if (!ctx->is_visible)
 	{
-		size_t i = 0;
+		i = 0;
 		while (i < canvas->count)
 		{
 			canvas->instances[i].enabled = false;
@@ -235,7 +246,7 @@ void	render_ui(t_ui *ui)
 	}
 	if (canvas->count == 0)
 	{
-		int instance_id = mlx_image_to_window(ctx->mlx, canvas, x_pos, 0);
+		instance_id = mlx_image_to_window(ctx->mlx, canvas, x_pos, 0);
 		if (instance_id < 0)
 		{
 			fprintf(stderr, "ERROR: Failed to add canvas instance\n");
@@ -245,7 +256,7 @@ void	render_ui(t_ui *ui)
 		canvas->instances[0].z = 1000;
 		mlx_set_instance_depth(&canvas->instances[0], 1000);
 	}
-	size_t i = 0;
+	i = 0;
 	while (i < canvas->count)
 	{
 		canvas->instances[i].enabled = true;
@@ -253,14 +264,14 @@ void	render_ui(t_ui *ui)
 		canvas->instances[i].y = 0;
 		i++;
 	}
-	uint32_t y = 0;
+	y = 0;
 	while (y < canvas->height)
 	{
-		uint32_t x = 0;
+		x = 0;
 		while (x < canvas->width)
 		{
-			uint32_t *pixel = (uint32_t *)canvas->pixels + y * canvas->width + x;
-			*pixel = 0x00000000; // Transparent black
+			pixel = (uint32_t *)canvas->pixels + y * canvas->width + x;
+			*pixel = 0x00000000; 
 			x++;
 		}
 		y++;
