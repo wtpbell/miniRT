@@ -13,8 +13,9 @@
 #include <math.h>
 #include <stdint.h>
 #include "vector.h"
+#include "rt_thread.h"
 
-static uint32_t	g_state;
+static _Thread_local uint32_t g_state;
 
 void	seed_rand(uint32_t seed)
 {

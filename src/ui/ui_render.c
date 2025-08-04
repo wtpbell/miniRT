@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 15:03:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/31 00:14:36 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/04 15:52:09 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,11 +163,6 @@ void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
 	int x, y;
 	int start_x, start_y, end_x, end_y;
 
-	if (!canvas)
-	{
-		fprintf(stderr, "Error: draw_rect - canvas is NULL\n");
-		return;
-	}
 	start_x = (int)pos.x;
 	start_y = (int)pos.y;
 	end_x = start_x + (int)size.x;
@@ -178,16 +173,9 @@ void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
 	if (end_y > (int)canvas->height) end_y = canvas->height;
 	if (start_x >= (int)canvas->width || start_y >= (int)canvas->height ||
 		end_x <= 0 || end_y <= 0)
-	{
-		fprintf(stderr, "Warning: draw_rect - rectangle outside canvas bounds\n");
 		return;
-	}
-	fprintf(stderr, "Drawing rectangle: pos=(%d,%d) size=(%d,%d) color=0x%08X\n",
-		start_x, start_y, end_x - start_x, end_y - start_y, color);
-	// If color is fully transparent, nothing to draw
 	if ((color >> 24) == 0x00)
 		return;
-	// If color is fully opaque, use direct pixel writing
 	if ((color >> 24) == 0xFF)
 	{
 		y = start_y;

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 11:59:52 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/22 00:18:03 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/04 14:56:28 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ static int	intersect_cylinder_body(t_obj *obj, t_ray *ray, t_v2f *t)
 	return (check_body(coeff, ray, obj->cy.height, t));
 }
 
-int	cylinder_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
+int	cylinder_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_v3f *scalar)
 {
 	t_ray	l_ray;
 	float	r;
@@ -109,6 +109,6 @@ int	cylinder_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
 	if ((intersect_cylinder_body(obj, &l_ray, &t)
 			| intersect_disc(r, h, &l_ray, &t)
 			| intersect_disc(r, -h, &l_ray, &t)) == 1)
-		return (*dst = t.y, 1);
+		return (scalar->x = t.y, 1);
 	return (0);
 }

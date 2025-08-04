@@ -5,16 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 21:25:00 by cascade           #+#    #+#             */
-/*   Updated: 2025/07/31 00:16:33 by bewong           ###   ########.fr       */
+/*   Created: 2025/07/27 21:25:00 by bewong           #+#    #+#             */
+/*   Updated: 2025/08/04 16:13:11 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
 #include "libft.h"
-#include "vector.h"
 #include <stdlib.h>
-#include <math.h>
 
 static void	destroy_label(t_ui_element *element, t_ui_context *ctx)
 {
@@ -81,8 +79,7 @@ void	safe_call_destroy_handler(t_ui_element *element, t_ui_context *ctx)
 void	destroy_ui_element(t_ui_element *element, t_ui_context *ctx, bool free_data)
 {
 	if (!element || !ctx)
-		return;
-
+		return ;
 	safe_call_destroy_handler(element, ctx);
 	if (free_data && element->data)
 	{
@@ -98,8 +95,7 @@ static void	render_panel(t_ui_element *element, t_ui_context *ctx)
 	t_v2f abs_size = element->size;
 
 	if (!ctx || !ctx->canvas)
-		return;
-
+		return ;
 	draw_rect(ctx->canvas, abs_pos, abs_size, element->style.bg_color);
 	draw_rect_border(ctx->canvas, abs_pos, abs_size, element->style.border_color);
 }
@@ -109,10 +105,10 @@ t_ui_element	*create_panel(t_ui_context *ctx, t_v2f pos, t_v2f size)
 	t_ui_element	*panel;
 
 	(void)ctx;
-
 	panel = ui_element_create(UI_PANEL, pos, size);
 	if (!panel)
 		return (NULL);
+	// Apply default panel styling
 	default_panel(panel, pos, size);
 	return (panel);
 }
@@ -121,10 +117,9 @@ t_ui_element	*create_button(t_ui_context *ctx, const char *label_text, t_v2f pos
 	void (*on_click)(t_ui_element *, void *), void *param)
 {
 	t_ui_element	*button;
-	t_ui_button	*btn_data;
+	t_ui_button		*btn_data;
 
 	(void)ctx;
-
 	button = ui_element_create(UI_BUTTON, pos, size);
 	if (!button)
 		return (NULL);
@@ -132,10 +127,7 @@ t_ui_element	*create_button(t_ui_context *ctx, const char *label_text, t_v2f pos
 	button->action = on_click;
 	button->data = ft_calloc(1, sizeof(t_ui_button));
 	if (!button->data)
-	{
-		free(button);
-		return (NULL);
-	}
+		return (free(button), NULL);
 	btn_data = (t_ui_button *)button->data;
 	btn_data->on_click = on_click;
 	btn_data->param = param;
@@ -211,12 +203,7 @@ static void	render_button(t_ui_element *element, t_ui_context *ctx)
 		return ;
 
 	draw_rect(ctx->canvas, abs_pos, abs_size, UI_BUTTON_COLOR);
-	draw_rect(ctx->canvas, abs_pos, init_v2f(abs_size.x, 1), UI_BUTTON_BORDER_COLOR);
-	draw_rect(ctx->canvas, abs_pos, init_v2f(1, abs_size.y), UI_BUTTON_BORDER_COLOR);
-	draw_rect(ctx->canvas, init_v2f(abs_pos.x, abs_pos.y + abs_size.y - 1), 
-		init_v2f(abs_size.x, 1), UI_BUTTON_BORDER_COLOR);
-	draw_rect(ctx->canvas, init_v2f(abs_pos.x + abs_size.x - 1, abs_pos.y), 
-		init_v2f(1, abs_size.y), UI_BUTTON_BORDER_COLOR);
+	draw_rect_border(ctx->canvas, abs_pos, abs_size, UI_BUTTON_BORDER_COLOR);
 
 	if (button->label)
 	{
@@ -232,16 +219,11 @@ void ui_element_setup_handlers(t_ui_element *element)
 {
 	if (!element)
 		return ;
-	printf("DEBUG: Setting up handlers for element type %d at %p\n", 
-		element->type, (void *)element);
 	element->render = NULL;
 	if (element->type == UI_PANEL)
 		element->render = render_panel;
 	else if (element->type == UI_SECTION)
 		element->render = render_section;
-	else if (element->type == UI_BUTTON)
+	else if (element->type == UI_BUTTON || element->type == UI_VALUE_BUTTON)
 		element->render = render_button;
-	else if (element->type == UI_VALUE_BUTTON)
-		element->render = render_button;
-	printf("DEBUG: Handlers setup complete for type %d\n", element->type);
 }

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 11:37:29 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/23 22:00:07 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/04 14:51:46 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ struct s_ray_hit
 	bool	front_face;
 	t_obj	*obj;
 	t_ray	*ray;
+	t_v2f	weight;
 };
 
 #endif

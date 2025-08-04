@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/31 00:23:03 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/04 21:11:57 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,41 +49,26 @@ typedef void (*t_ui_update_func)(t_ui_element *, void *);
 # define UI_PANEL_WIDTH 300
 # define UI_BUTTON_WIDTH 200
 
-// Value Button Constants
-# define VALUE_BTN_BUTTON_WIDTH 30      // Width of + and - buttons
-# define VALUE_BTN_PADDING 5            // Padding around buttons
-# define VALUE_BTN_MIN_WIDTH 100        // Minimum width for the value button container
-# define VALUE_BTN_DEFAULT_HEIGHT 30    // Default height for the value button
-# define UI_BUTTON_HEIGHT 30
-# define UI_BUTTON_SPACING 10
+// Ambient Section Layout Ratios
+# define UI_LABEL_WIDTH_RATIO 0.3f    // 30% of panel width for labels
+# define UI_BTN_WIDTH_RATIO 0.6f   // 60% of panel width for buttons
+# define UI_BTN_HEIGHT_RATIO 0.15f // 15% of panel height for button height
+# define UI_VERT_PADDING_RATIO 0.04f  // 4% of panel height for vertical padding
+# define UI_HORZ_PADDING_RATIO 0.05f  // 5% of panel width for horizontal padding
+
 # define UI_HEADER_HEIGHT 30
-# define UI_HEADER_WIDTH 230
 # define UI_SECTION_HEADER_HEIGHT 30
 # define UI_SECTION_PADDING 10
-# define UI_PANEL_PADDING 4
-# define UI_SECTION_SPACING 10
+# define UI_PANEL_PADDING 0
 # define UI_CHAR_WIDTH 8
 # define UI_CHAR_HEIGHT 15
 # define UI_FONT_HEIGHT 8
 
-// UI Layer Depths
-# define UI_LAYER_PANEL 10
-# define UI_LAYER_SECTION 20
-# define UI_LAYER_HEADER 30
-# define UI_LAYER_BUTTON 40
-# define UI_LAYER_LABEL 50
-# define UI_SECTION_WIDTH 230
-# define UI_CHAR_WIDTH 8
-# define UI_CHAR_HEIGHT 15
-
 // UI Colors
-# define UI_BG_COLOR 0x11111180
 # define UI_PANEL_BG_COLOR 0x1E1E2EFF  // Dark blue-gray panel
 # define UI_SECTION_COLOR 0x2A2A3AFF   // Slightly lighter blue-gray for sections
 # define UI_BUTTON_COLOR 0x444444FF
-# define UI_BUTTON_HOVER_COLOR 0x555555FF
 # define UI_BUTTON_BORDER_COLOR 0x666666FF
-# define UI_BUTTON_BORDER_HOVER_COLOR 0x888888FF
 # define UI_TEXT_COLOR 0xFFFFFFFF
 # define UI_SECTION_HEADER_COLOR 0x252538FF  // Darker blue-gray for section headers
 # define UI_HEADER_COLOR 0x242437FF         // Darker blue-gray for main header
@@ -203,7 +188,6 @@ t_ui_element	*create_ambient_section(t_ui_context *ctx, t_scene *scene, t_v2f po
 t_ui_element	*create_header(t_ui_context *ctx, const char *title, t_v2f pos, t_v2f size);
 
 void			destroy_ui_element(t_ui_element *element, t_ui_context *ctx, bool free_data);
-void			attach_child(t_ui_element *parent, t_ui_element *child);
 void			safe_call_destroy_handler(t_ui_element *element, t_ui_context *ctx);
 
 void		ui_element_destroy(t_ui_element *element, t_ui_context *ctx, bool free_data);

@@ -2,8 +2,8 @@ vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/
 
 NAME		:= miniRT
 CC			:= cc
-C_FLAGS		:= -Werror -Wall -Wextra -Ofast
-C_LINK		:= -ldl -lglfw -pthread -lm
+C_FLAGS		:= -Werror -Wall -Wextra -O3
+C_LINK		:= -ldl -lglfw -pthread -lm -flto
 
 BIN_DIR		:= bin/
 LIB_DIR		:= lib/
@@ -19,7 +19,7 @@ PARSER_CORE	:= parser.c element_parser.c camera.c light.c sphere.c plane.c\
 				cylinder.c cone.c string_utils.c vector_utils.c error.c cleanup.c\
 				string_to_num.c general_utils.c validate_utils.c triangle.c\
 				field.c material.c texture.c texture_utils.c
-SRCS_MAIN	:= main.c vector_init.c vector_helper.c vector_operations.c\
+SRCS_MAIN  := main.c vector_init.c vector_helper.c vector_operations.c\
 				vec_container.c vec_container_utils.c color.c render.c\
 				rt_math.c range.c matrix.c game.c rt_sphere.c rt_plane.c rt_cylinder.c\
 				color_utils.c random_utils.c rt_light.c rt_dof.c \
@@ -28,16 +28,18 @@ SRCS_MAIN	:= main.c vector_init.c vector_helper.c vector_operations.c\
 				random_vector.c matrix_utils.c bump_map.c rt_texture.c v2f.c\
 				vector_core.c matrix_space.c rt_material_utils.c rt_triangle_uv.c\
 				rt_cylinder_uv.c ui_core.c ui_layout.c ui_render.c\
-				ui_event.c ui_styles.c ui_utils.c ui_element_handlers.c
+				ui_event.c ui_styles.c ui_utils.c ui_element_handlers.c \
+				threads.c benchmark.c
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE)
 OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)
 
 all: $(LIBFT) $(MLX42) $(NAME)
 
-debug: C_FLAGS += -g3 -fsanitize=address,undefined
+debug: C_FLAGS += -g3 -fsanitize=thread #address,undefined
 debug: all
-# LSAN_OPTIONS="suppressions=fsan_supp.supp" ./miniRT asset/scene.rt
+	@echo 'use: LSAN_OPTIONS="suppressions=fsan_supp.supp" ./miniRT asset/<scene>.rt'
+	@echo 'use: TSAN_OPTIONS="suppressions=tsan_supp.supp" ./miniRT asset/<scene>.rt'
 
 val: C_FLAGS += -g3
 val: clean all

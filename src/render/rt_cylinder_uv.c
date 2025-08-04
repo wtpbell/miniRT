@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/02 18:34:31 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/02 18:35:02 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/07 17:15:45 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,13 @@
 	By convention the z-axis is consider the up axis, but in our case it would
 	be the y-axis
 */
-t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point)
+t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point, t_v2f *weight)
 {
 	t_v3f	local_point;
 	float	theta;
 	float	y;
 
+	(void)weight;
 	local_point = mul_v3_m4x4(point, obj->t.to_obj);
 	theta = atan2f(local_point.z, local_point.x) / TAU;
 	y = (local_point.y / obj->cy.height);

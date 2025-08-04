@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:53:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/31 00:21:37 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/04 15:53:32 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,7 @@ t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene)
 		return (NULL);
 	}
 
-	ctx->canvas->instances[0].z = 1000;
-	ctx->canvas->instances[0].enabled = true;
-	mlx_set_instance_depth(&ctx->canvas->instances[0], 1000);
+	// Canvas instance properties are set below after adding to window
 	uint32_t y = 0;
 	uint32_t x = 0;
 	while (y < (uint32_t)mlx->height)
@@ -115,42 +113,22 @@ t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene)
 		}
 		y++;
 	}
-	fprintf(stderr, "Debug: Filled canvas with semi-transparent background\n");
 	t_v2f border_pos = init_v2f(0, 0);
 	t_v2f border_size = init_v2f(panel_width - 1, mlx->height - 1);
 	draw_rect_border(ctx->canvas, border_pos, border_size, 0x333333FF);
-	fprintf(stderr, "Debug: Added border to canvas\n");
+	// Add canvas to window and set properties
 	ctx->canvas_instance = mlx_image_to_window(mlx, ctx->canvas, x_pos, 0);
 	if (ctx->canvas_instance < 0)
 	{
-		fprintf(stderr, "Error: Failed to add canvas to window\n");
 		mlx_delete_image(mlx, ctx->canvas);
 		free(ctx);
 		return NULL;
 	}
 
-	fprintf(stderr, "Setting canvas properties...\n");
-	ctx->canvas->instances[0].z = 1000; // High z-index for UI
+	// Set canvas properties
+	ctx->canvas->instances[0].z = 1000;
 	ctx->canvas->instances[0].enabled = true;
-	ctx->canvas->instances[0].x = x_pos;
-	ctx->canvas->instances[0].y = 0;
 	mlx_set_instance_depth(&ctx->canvas->instances[0], 1000);
-	fprintf(stderr, "Canvas instance ID: %d, z-index: %d, pos=(%d,%d), enabled=%d\n", 
-		ctx->canvas_instance, 
-		ctx->canvas->instances[0].z,
-		(int)ctx->canvas->instances[0].x,
-		(int)ctx->canvas->instances[0].y,
-		ctx->canvas->instances[0].enabled);
-		
-	if (ctx->canvas_instance < 0)
-	{
-		fprintf(stderr, "Error: Failed to add canvas to window\n");
-		mlx_delete_image(mlx, ctx->canvas);
-		free(ctx);
-		return NULL;
-	}
-	fprintf(stderr, "Canvas instance ID: %d\n", ctx->canvas_instance);
-	fprintf(stderr, "Configuring canvas blending and depth...\n");
 	if (ctx->canvas_instance >= 0 && ctx->canvas->count > 0)
 	{
 		t_v2f pos, size;
@@ -168,28 +146,18 @@ t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene)
 			}
 			y++;
 		}
-		
-		// Force the canvas to be on top
-		mlx_set_instance_depth(&ctx->canvas->instances[0], 1000);
-		fprintf(stderr, "Canvas depth set to %d, enabled=%d\n", 
-			ctx->canvas->instances[0].z, 
-			ctx->canvas->instances[0].enabled);
 		pos = init_v2f(0, 0);
 		size = init_v2f((float)ctx->canvas->width, (float)ctx->canvas->height);
 		draw_rect_border(ctx->canvas, pos, size, 0x00FF00FF);
 	}
 	ctx->needs_redraw = true;
-	fprintf(stderr, "Initializing UI images...\n");
 	ctx->images = (t_ui_images *)ft_calloc(1, sizeof(t_ui_images));
 	if (!ctx->images)
 	{
-		fprintf(stderr, "Error: Failed to allocate UI images\n");
 		mlx_delete_image(mlx, ctx->canvas);
 		free(ctx);
 		return (NULL);
 	}
-
-	fprintf(stderr, "UI context created successfully\n");
 	return (ctx);
 }
 
@@ -303,10 +271,8 @@ void	render_ui(t_ui *ui)
 		canvas->instances[0].z = 1000;
 		mlx_set_instance_depth(&canvas->instances[0], 1000);
 	}
-	fprintf(stderr, "Rendering UI elements...\n");
 	render_ui_element(ui->root, ctx);
 	ctx->needs_redraw = true;
-	fprintf(stderr, "UI elements rendered\n");
 }
 
 t_ui_element	*ui_element_create(t_ui_type type, t_v2f pos, t_v2f size)
