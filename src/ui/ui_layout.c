@@ -59,8 +59,8 @@ t_ui_element	*create_value_button(t_ui_context *ctx, float *value,
 		init_v2f(btn_width, size.y), 
 		NULL, NULL);
 
-	// Create value label in the center
-	value_str = ft_itoa((int)*value);
+	// Create value label in the center with 2 decimal places
+	value_str = ft_ftoa(*value, 2);
 	if (value_str)
 	{
 		float label_width = ft_strlen(value_str) * UI_CHAR_WIDTH;

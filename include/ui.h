@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/04 22:34:50 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/04 23:16:29 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,6 +213,7 @@ void		draw_char(mlx_image_t *img, char c, int x, int y, uint32_t color);
 void		draw_text(mlx_image_t *img, const char *str, t_v2f pos, uint32_t color);
 void		draw_rect(mlx_image_t *img, t_v2f pos, t_v2f size, uint32_t color);
 void		draw_rect_border(mlx_image_t *img, t_v2f pos, t_v2f size, uint32_t color);
+char		*ft_ftoa(float f, int precision);
 
 void		layout_vertical(t_ui_element *parent, float spacing);
 void		layout_horizontal(t_ui_element *parent, float spacing);

@@ -6,14 +6,36 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/30 20:35:51 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/04 23:20:08 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
+char	*ft_ftoa(float f, int precision)
+{
+	int		int_part;
+	float	decimal;
+	int		decimal_part;
+	char	*str;
+
+	if (precision < 0)
+		precision = 0;
+	int_part = (int)f;
+	decimal = f - int_part;
+	decimal_part = (int)(decimal * pow(10, precision) + 0.5f);
+	str = (char *)calloc(32, sizeof(char));
+	if (!str)
+		return (NULL);
+	if (precision > 0)
+		snprintf(str, 32, "%d.%0*d", int_part, precision, decimal_part);
+	else
+		snprintf(str, 32, "%d", int_part);
+	return (str);
+}
 // Forward declaration
 void ui_element_setup_handlers(t_ui_element *element);
 
@@ -38,7 +60,6 @@ bool	ui_element_remove_child(t_ui_element *parent, t_ui_element *child,
 
 	if (!parent || !child || child->parent != parent || !ctx)
 		return (false);
-	
 	prev = NULL;
 	current = parent->first_child;
 	while (current && current != child)
@@ -46,21 +67,16 @@ bool	ui_element_remove_child(t_ui_element *parent, t_ui_element *child,
 		prev = current;
 		current = current->next_sibling;
 	}
-	
 	if (!current)
 		return (false);
-
 	if (prev)
 		prev->next_sibling = child->next_sibling;
 	else
 		parent->first_child = child->next_sibling;
-
 	child->parent = NULL;
 	child->next_sibling = NULL;
-
 	if (destroy)
 		destroy_ui_element_recursive(child, ctx, true);
-
 	return (true);
 }
 
@@ -121,11 +137,9 @@ void	layout_vertical(t_ui_element *parent, float spacing)
 
 	if (!parent || !parent->first_child)
 		return ;
-
 	pos = parent->pos;
 	pos.x += parent->style.padding;
 	pos.y += parent->style.padding;
-
 	child = parent->first_child;
 	while (child)
 	{
@@ -145,7 +159,6 @@ void	layout_horizontal(t_ui_element *parent, float spacing)
 
 	if (!parent || !parent->first_child)
 		return ;
-
 	pos = parent->pos;
 	pos.x += parent->style.padding;
 	pos.y += parent->style.padding;

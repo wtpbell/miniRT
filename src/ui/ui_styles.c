@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 16:25:35 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/31 00:10:51 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/04 23:22:31 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 void	default_panel(t_ui_element *panel, t_v2f pos, t_v2f size)
 {
-	if (!panel)
-		return;
-
 	panel->type = UI_PANEL;
 	panel->pos = pos;
 	panel->size = size;
@@ -34,9 +31,6 @@ void	default_panel(t_ui_element *panel, t_v2f pos, t_v2f size)
 
 void	default_label(t_ui_element *label, t_v2f pos, t_v2f size)
 {
-	if (!label)
-		return;
-
 	label->type = UI_LABEL;
 	label->pos = pos;
 	label->size = size;
@@ -54,9 +48,6 @@ void	default_label(t_ui_element *label, t_v2f pos, t_v2f size)
 
 void	default_header(t_ui_element *header, t_v2f pos, t_v2f size)
 {
-	if (!header)
-		return;
-
 	header->type = UI_HEADER;
 	header->pos = pos;
 	header->size = size;
@@ -74,9 +65,6 @@ void	default_header(t_ui_element *header, t_v2f pos, t_v2f size)
 
 void	default_button(t_ui_element *button, t_v2f pos, t_v2f size)
 {
-	if (!button)
-		return;
-
 	button->type = UI_BUTTON;
 	button->pos = pos;
 	button->size = size;
@@ -96,9 +84,6 @@ void	default_value_button(t_ui_element *button, t_v2f pos, t_v2f size, const cha
 {
 	t_ui_button	*btn_data;
 
-	if (!button)
-		return;
-
 	button->type = UI_VALUE_BUTTON;
 	button->pos = pos;
 	button->size = size;
@@ -112,11 +97,11 @@ void	default_value_button(t_ui_element *button, t_v2f pos, t_v2f size, const cha
 		.padding = 4,
 		.visible = true,
 	};
-
 	if (label && *label)
 	{
 		btn_data = (t_ui_button *)button->data;
-		if (!btn_data) {
+		if (!btn_data)
+		{
 			btn_data = (t_ui_button *)ft_calloc(1, sizeof(t_ui_button));
 			if (btn_data)
 			{
@@ -134,9 +119,6 @@ void	default_value_button(t_ui_element *button, t_v2f pos, t_v2f size, const cha
 
 void	default_section(t_ui_element *section, t_v2f pos, t_v2f size)
 {
-	if (!section)
-		return;
-
 	section->type = UI_SECTION;
 	section->pos = pos;
 	section->size = size;
