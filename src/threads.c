@@ -6,10 +6,11 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/11 17:52:35 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/01 18:55:06 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/04 10:19:00 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include "rt_thread.h"
 #include "minirt.h"
 
@@ -74,10 +75,9 @@ bool	thread_rendering(t_scene *scene)
 	t_pthread_instr	instr[THRD_CNT];
 
 	start_time();
-	if (create_index_key() != 0 || !create_threads(instr, THRD_CNT, scene))
+	if (!create_threads(instr, THRD_CNT, scene))
 		return (perror("minirt"), end_time(), false);
 	join_threads(instr, THRD_CNT);
-	delete_index_key();
 	end_time();
 	return (true);
 }
