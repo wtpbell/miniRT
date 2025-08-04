@@ -6,49 +6,36 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/04 16:57:24 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/04 21:46:03 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <time.h>
-#include <stdio.h>
 #include "MLX42/MLX42.h"
 #include "minirt.h"
 #include "parser.h"
 #include "rt_thread.h"
 #include "ui.h"
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "rt_thread.h"
-
-#define WIDTH		1600
-#define HEIGHT		900
 
 typedef struct s_game t_game;
 
 void render_loop(void *param)
 {
-	t_game *game = (t_game *)param;
-	static bool first_render = true;
+	t_game		*game;
+	static bool	render_state = false;
 	
-	if (!game || !game->img || !game->img->pixels)
-		return ;
-
-	if (first_render || game->needs_redraw)
+	game = (t_game *)param;
+	if (!render_state || game->needs_redraw)
 	{
-		// Clear the image
 		ft_memset(game->img->pixels, 0, game->img->width * game->img->height * sizeof(int));
-		
-		// Render the scene
 		if (thread_rendering(game->scene))
 		{
-			// Update the image on screen
 			game->img->instances[0].enabled = true;
 			game->needs_redraw = false;
-			first_render = false;
+			render_state = true;
 		}
-
-		// Update UI if needed
 		if (game->ui && game->ui->context)
 		{
 			game->ui->context->needs_redraw = true;
@@ -65,13 +52,9 @@ void render_loop(void *param)
 	}
 }
 
-t_ui *create_ui(mlx_t *mlx, t_scene *scene)
+t_ui	*create_ui(mlx_t *mlx, t_scene *scene)
 {
-	t_ui		*ui;
-	t_v2f		root_pos;
-	t_v2f		root_size;
-	t_v2f		ambient_pos;
-	t_v2f		ambient_size;
+	t_ui			*ui;
 	t_ui_element	*ambient_section;
 
 	ui = ft_calloc(1, sizeof(t_ui));
@@ -80,14 +63,10 @@ t_ui *create_ui(mlx_t *mlx, t_scene *scene)
 	ui->context = create_ui_context(mlx, scene);
 	if (!ui->context)
 		return (free(ui), NULL);
-	root_pos = g_v2f_zero;
-	root_size = init_v2f(UI_PANEL_WIDTH, HEIGHT);
-	ui->root = create_panel(ui->context, root_pos, root_size);
+	ui->root = create_panel(ui->context, g_v2f_zero, init_v2f(UI_PANEL_WIDTH, HEIGHT));
 	if (!ui->root)
 		return (destroy_ui(ui), NULL);
-	ambient_pos = init_v2f(0, 0);
-	ambient_size = init_v2f(UI_PANEL_WIDTH, 200);
-	ambient_section = create_ambient_section(ui->context, scene, ambient_pos, ambient_size);
+	ambient_section = create_ambient_section(ui->context, scene, g_v2f_zero, init_v2f(UI_PANEL_WIDTH, 200));
 	if (!ambient_section)
 		return (destroy_ui(ui), NULL);
 	attach_child(ui->root, ambient_section);
@@ -100,7 +79,6 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 	t_game	*game;
 
 	game = (t_game *)param;
-
 	if (keydata.key == MLX_KEY_U && keydata.action == MLX_PRESS)
 	{
 		if (game->ui)
@@ -133,7 +111,7 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 void	cleanup_mlx(t_game *game)
 {
 	if (!game)
-		return;
+		return ;
 	if (game->ui)
 	{
 		destroy_ui(game->ui);
@@ -163,19 +141,6 @@ static bool	cam_init(t_cam *cam, mlx_t *mlx)
 	return (true);
 }
 
-bool	init_ui(t_game *game, t_scene *scene)
-{
-	fprintf(stderr, "Initializing UI...\n");
-	game->ui = create_ui(game->mlx, scene);
-	if (!game->ui)
-	{
-		fprintf(stderr, "Error: Failed to initialize UI\n");
-		return (false);
-	}
-	fprintf(stderr, "UI initialized successfully\n");
-	return (true);
-}
-
 int	game(t_scene *scene)
 {
 	t_game	game;
@@ -183,24 +148,34 @@ int	game(t_scene *scene)
 	ft_bzero(&game, sizeof(t_game));
 	game.scene = scene;
 	game.should_exit = false;
-	game.mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
+	game.mlx = mlx_init(WIDTH, HEIGHT, "miniRT", true);
 	if (!game.mlx)
-		return (EXIT_FAILURE);
-	if (!init_ui(&game, scene))
-		fprintf(stderr, "Warning: UI initialization had issues, continuing without UI\n");
+	{
+		fprintf(stderr, "Error: Failed to initialize MLX\n");
+		cleanup_mlx(&game);
+		return (1);
+	}
 	if (!cam_init(&scene->camera, game.mlx))
 	{
 		fprintf(stderr, "Error: Failed to initialize camera\n");
 		cleanup_mlx(&game);
-		return (EXIT_FAILURE);
+		return (1);
 	}
 	game.img = scene->camera.img_plane;
-	if (!game.img)
+	game.scene = scene;
+	game.needs_redraw = true;
+
+	// Initialize UI directly
+	fprintf(stderr, "Initializing UI...\n");
+	game.ui = create_ui(game.mlx, scene);
+	if (!game.ui)
 	{
-		fprintf(stderr, "Error: Failed to initialize game image\n");
+		fprintf(stderr, "Error: Failed to initialize UI\n");
 		cleanup_mlx(&game);
-		return (EXIT_FAILURE);
+		return (1);
 	}
+	fprintf(stderr, "UI initialized successfully\n");
+
 	mlx_set_instance_depth(&game.img->instances[0], 0);
 	mlx_loop_hook(game.mlx, render_loop, &game);
 	mlx_key_hook(game.mlx, key_hook, &game);

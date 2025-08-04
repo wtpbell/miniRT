@@ -138,6 +138,7 @@ t_ui_element	*create_button(t_ui_context *ctx, const char *label_text, t_v2f pos
 		free(button);
 		return (NULL);
 	}
+	button->style.text_color = UI_TEXT_COLOR;
 	return (button);
 }
 
@@ -210,7 +211,7 @@ static void	render_button(t_ui_element *element, t_ui_context *ctx)
 		int text_width = ft_strlen(button->label) * UI_CHAR_WIDTH;
 		int text_x = abs_pos.x + (abs_size.x - text_width) / 2;
 		int text_y = abs_pos.y + (abs_size.y - UI_CHAR_HEIGHT) / 2;
-		draw_text(ctx->canvas, button->label, 
+		draw_text(ctx->canvas, button->label,
 			init_v2f(text_x, text_y), UI_TEXT_COLOR);
 	}
 }

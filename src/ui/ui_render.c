@@ -6,22 +6,24 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 15:03:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/04 15:52:09 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/04 22:50:04 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
+#include <stdio.h>
 #include <string.h>
 #include <stdint.h>
 
 void	draw_char(mlx_image_t *canvas, char c, int x, int y, uint32_t color)
 {
-	static const uint8_t font[128][8] = {
+	// Font array with decimal indices for all printable ASCII characters
+	static const uint8_t font[256][8] = {
 		[0 ... 31] = {0},
 		[' '] = {0},
-		['.'] = {0x00, 0x00, 0x00, 0x18, 0x18, 0x18, 0x18, 0x18},
-		['-'] = {0x00, 0x00, 0x00, 0x7E, 0x7E, 0x00, 0x00, 0x00},
-		['+'] = {0x00, 0x10, 0x10, 0x7C, 0x10, 0x10, 0x00, 0x00},
+		['.'] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0x18},
+		['-'] = {0x00, 0x00, 0x00, 0x7E, 0x7E, 0x00, 0x00, 0x00},  // Horizontal line
+		['+'] = {0x00, 0x18, 0x18, 0x7E, 0x7E, 0x18, 0x18, 0x00},  // Plus sign with thicker lines
 		['0'] = {0x3C, 0x42, 0x46, 0x4A, 0x52, 0x62, 0x42, 0x3C},
 		['1'] = {0x10, 0x30, 0x50, 0x10, 0x10, 0x10, 0x10, 0x7C},
 		['2'] = {0x3C, 0x42, 0x02, 0x0C, 0x30, 0x40, 0x40, 0x7E},
@@ -67,7 +69,9 @@ void	draw_char(mlx_image_t *canvas, char c, int x, int y, uint32_t color)
 
 	uc = (unsigned char)c;
 	dy = 0;
-	if (uc >= 128 || !font[uc][0])
+	if (uc < 32 && uc != ' ')
+		return;
+	if (uc >= 128 || (uc > 0 && ft_memcmp(font[uc], (uint8_t[8]){0}, 8) == 0 && uc != ' '))
 		return ;
 	while (dy < 8)
 	{
@@ -80,8 +84,11 @@ void	draw_char(mlx_image_t *canvas, char c, int x, int y, uint32_t color)
 				py = y + dy;
 				if (px >= 0 && py >= 0 && px < (int)canvas->width && py < (int)canvas->height)
 				{
-					uint32_t *pixel = (uint32_t *)canvas->pixels + py * canvas->width + px;
-					*pixel = color;
+					if ((color >> 24) != 0x00)
+					{
+						uint32_t *pixel = (uint32_t *)canvas->pixels + py * canvas->width + px;
+						*pixel = color;
+					}
 				}
 			}
 			dx++;
@@ -99,6 +106,7 @@ void	draw_text(mlx_image_t *canvas, const char *str, t_v2f pos, uint32_t color)
 	x = (int)pos.x;
 	y = (int)pos.y;
 	i = 0;
+	
 	if (y < 0 || y + 8 > (int)canvas->height)
 		return ;
 	while (str[i])
@@ -212,20 +220,17 @@ void	draw_button(t_ui_element *button, t_ui_context *ctx)
 {
 	t_ui_button	*btn_data;
 	t_v2f		text_pos;
-	int		text_width;
+	int			text_width;
 
-	if (!button || !ctx || !ctx->canvas)
-		return;
-	draw_rect(ctx->canvas, button->abs_pos, button->size, button->style.bg_color);
-	if (button->style.border_color != 0)
-		draw_rect_border(ctx->canvas, button->abs_pos, button->size, button->style.border_color);
+	draw_rect(ctx->canvas, button->abs_pos, button->size, UI_BUTTON_COLOR);
+	draw_rect_border(ctx->canvas, button->abs_pos, button->size, UI_BUTTON_BORDER_COLOR);
 	btn_data = (t_ui_button *)button->data;
 	if (btn_data && btn_data->label)
 	{
 		text_width = ft_strlen(btn_data->label) * UI_CHAR_WIDTH;
 		text_pos.x = button->abs_pos.x + (button->size.x - text_width) / 2;
-		text_pos.y = button->abs_pos.y + (button->size.y - UI_CHAR_HEIGHT) / 2;
-		draw_text(ctx->canvas, btn_data->label, text_pos, button->style.text_color);
+		text_pos.y = button->abs_pos.y + (button->size.y - UI_CHAR_HEIGHT) / 1.5;
+		draw_text(ctx->canvas, btn_data->label, text_pos, UI_TEXT_COLOR);
 	}
 }
 

@@ -79,9 +79,13 @@ t_ui_element	*create_value_button(t_ui_context *ctx, float *value,
 
 	// Attach buttons
 	if (decr_btn)
+	{
 		attach_child(container, decr_btn);
+	}
 	if (incr_btn)
+	{
 		attach_child(container, incr_btn);
+	}
 	(void)range;
 	(void)step;
 	return (container);
