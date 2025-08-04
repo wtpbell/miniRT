@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 15:58:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/04 18:40:45 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/04 22:47:38 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ f 7//1 8//2 9//3
 #define MIN_VAL		-MAX_VAL
 #define MAX_I		99999
 #define MIN_I		-MAX_I
+
+// TODO: Better error messages
 
 static bool	init_obj_file(t_obj_file *obj_file)
 {
@@ -278,8 +280,10 @@ static bool	parse_obj_file(t_mesh *mesh)
 	while (true)
 	{
 		line = get_next_line(fd);
-		if (line == NULL || !parse_line(line, &obj_file))
+		if (line == NULL)
 			break ;
+		if (!parse_line(line, &obj_file))
+			return (cleanup_gnl(line, fd), free_obj_file(&obj_file), false);
 		free(line);
 	}
 	close (fd);
