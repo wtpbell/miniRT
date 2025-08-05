@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_render.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 15:03:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/04 22:50:04 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_render.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 15:03:00 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/05 10:20:28 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,10 +126,11 @@ void	draw_text(mlx_image_t *canvas, const char *str, t_v2f pos, uint32_t color)
 
 void	draw_rect_border(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
 {
-	int x;
-	int y;
-	int end_x;
-	int end_y;
+	int			x;
+	int			y;
+	int			end_x;
+	int			end_y;
+	uint32_t	*pixel;
 
 	x = (int)pos.x;
 	y = (int)pos.y;
@@ -143,7 +144,7 @@ void	draw_rect_border(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color
 			if ((x == (int)pos.x || x == end_x - 1 || y == (int)pos.y || y == end_y - 1) &&
 				x >= 0 && y >= 0 && x < (int)canvas->width && y < (int)canvas->height)
 			{
-				uint32_t *pixel = (uint32_t *)canvas->pixels + y * canvas->width + x;
+				pixel = (uint32_t *)canvas->pixels + y * canvas->width + x;
 				*pixel = color;
 			}
 			x++;
@@ -236,15 +237,12 @@ void	draw_button(t_ui_element *button, t_ui_context *ctx)
 
 void	render_ui_element(t_ui_element *element, t_ui_context *ctx)
 {
-	t_ui_element	*child;
+	t_ui_element		*child;
+	t_ui_label			*label;
+	// t_ui_value_button	*vbutton;
 
-	if (!element || !ctx || !ctx->canvas)
-	{
-		fprintf(stderr, "Error: Invalid parameters in render_ui_element\n");
-		return;
-	}
 	if (!element->visible)
-		return;
+		return ;
 	element->abs_pos = element->pos;
 	if (element->parent)
 	{
@@ -254,23 +252,20 @@ void	render_ui_element(t_ui_element *element, t_ui_context *ctx)
 	if (element->type == UI_PANEL || element->type == UI_HEADER)
 	{
 		draw_rect(ctx->canvas, element->abs_pos, element->size, element->style.bg_color);
-		if (element->style.border_color != 0)
-			draw_rect_border(ctx->canvas, element->abs_pos, element->size, element->style.border_color);
+		draw_rect_border(ctx->canvas, element->abs_pos, element->size, element->style.border_color);
 	}
 	else if (element->type == UI_BUTTON)
-			draw_button(element, ctx);
+		draw_button(element, ctx);
 	else if (element->type == UI_LABEL)
 	{
-		t_ui_label *label = (t_ui_label *)element->data;
-		if (label && label->text)
-			draw_text(ctx->canvas, label->text, element->abs_pos, element->style.text_color);
+		label = (t_ui_label *)element->data;
+		draw_text(ctx->canvas, label->text, element->abs_pos, element->style.text_color);
 	}
-	else if (element->type == UI_VALUE_BUTTON)
-	{
-		t_ui_value_button *vbutton = (t_ui_value_button *)element->data;
-		if (vbutton && vbutton->label)
-			draw_text(ctx->canvas, vbutton->label, element->abs_pos, element->style.text_color);
-	}
+	// else if (element->type == UI_VALUE_BUTTON)
+	// {
+	// 	vbutton = (t_ui_value_button *)element->data;
+	// 	draw_text(ctx->canvas, vbutton->label, element->abs_pos, element->style.text_color);
+	// }
 	child = element->first_child;
 	while (child)
 	{

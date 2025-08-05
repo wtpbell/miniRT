@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_core.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 12:53:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/04 23:00:23 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_core.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 12:53:50 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/05 11:12:14 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,140 +24,40 @@ static void	(*const g_default_stylers[])(t_ui_element *, t_v2f, t_v2f) = {
 	[UI_SECTION] = default_section,
 };
 
-/**
- * @brief Creates and initializes a new UI context
- * 
- * @param mlx The MLX instance to use for rendering
- * @param scene The scene data to be used by the UI
- * @return t_ui_context* The created UI context, or NULL on failure
- */
+
 t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene)
 {
 	t_ui_context	*ctx;
+	unsigned int	*pixels;
+	int				i;
+	int				x_pos;
+	int				panel_width;
 
-	fprintf(stderr, "Creating UI context...\n");
-
-	if (!mlx || !scene)
-	{
-		fprintf(stderr, "Error: MLX or scene is NULL\n");
-		return (NULL);
-	}
-
-	fprintf(stderr, "Allocating UI context memory...\n");
 	ctx = (t_ui_context *)ft_calloc(1, sizeof(t_ui_context));
 	if (!ctx)
-	{
-		fprintf(stderr, "Error: Failed to allocate UI context memory\n");
 		return (NULL);
-	}
-	fprintf(stderr, "Initializing UI context fields...\n");
 	ctx->mlx = mlx;
 	ctx->scene = scene;
 	ctx->is_visible = true;
 	ctx->needs_redraw = true;
-	fprintf(stderr, "Creating UI canvas...\n");
-	fprintf(stderr, "Window dimensions: %dx%d\n", mlx->width, mlx->height);
-	fprintf(stderr, "UI Panel dimensions: %dx%d\n", UI_PANEL_WIDTH, HEIGHT);
-	int panel_width = UI_PANEL_WIDTH;
-	if (panel_width > mlx->width / 2) {
+	panel_width = UI_PANEL_WIDTH;
+	if (panel_width > mlx->width / 2)
 		panel_width = mlx->width / 2;
-		fprintf(stderr, "Warning: UI panel too wide, resizing to %d\n", panel_width);
-	}
 	ctx->canvas = mlx_new_image(mlx, panel_width, mlx->height);
 	if (!ctx->canvas)
-	{
-		fprintf(stderr, "Error: Failed to create UI canvas\n");
-		free(ctx);
-		return (NULL);
-	}
-	fprintf(stderr, "Canvas created successfully at %p\n", (void *)ctx->canvas);
-	unsigned int *pixels = (unsigned int *)ctx->canvas->pixels;
-	int i = 0;
+		return (free(ctx), NULL);
+	pixels = (unsigned int *)ctx->canvas->pixels;
+	i = 0;
 	while (i < panel_width * mlx->height)
 	{
-		pixels[i] = 0x00000000;
+		pixels[i] = UI_TRANSPARENT;
 		i++;
 	}
-	fprintf(stderr, "UI canvas initialized with transparency\n");
-
-	// Add the canvas to the window (positioned on the left side)
-	fprintf(stderr, "Adding canvas to window...\n");
-	
-	// Position the panel on the left side with no margin
-	int x_pos = 0;
-	
-	// Ensure panel fits within the window
-	if (panel_width > (int)mlx->width) {
+	x_pos = 0;
+	if (panel_width > (int)mlx->width)
 		panel_width = mlx->width;
-	}
-	fprintf(stderr, "Canvas position: x=%d, y=0, width=%d, height=%d\n", 
-		x_pos, panel_width, mlx->height);
-	int instance_id = mlx_image_to_window(mlx, ctx->canvas, x_pos, 0);
-	if (instance_id < 0) {
-		fprintf(stderr, "Error: Failed to add canvas to window\n");
-		mlx_delete_image(mlx, ctx->canvas);
-		free(ctx);
-		return (NULL);
-	}
-
-	// Canvas instance properties are set below after adding to window
-	uint32_t y = 0;
-	uint32_t x = 0;
-	while (y < (uint32_t)mlx->height)
-	{
-		while (x < (uint32_t)panel_width)
-		{
-			uint32_t *pixel = (uint32_t *)ctx->canvas->pixels + y * panel_width + x;
-			*pixel = 0x1A1A1AC8; // Dark semi-transparent background
-			x++;
-		}
-		y++;
-	}
-	t_v2f border_pos = init_v2f(0, 0);
-	t_v2f border_size = init_v2f(panel_width - 1, mlx->height - 1);
-	draw_rect_border(ctx->canvas, border_pos, border_size, 0x333333FF);
-	// Add canvas to window and set properties
-	ctx->canvas_instance = mlx_image_to_window(mlx, ctx->canvas, x_pos, 0);
-	if (ctx->canvas_instance < 0)
-	{
-		mlx_delete_image(mlx, ctx->canvas);
-		free(ctx);
-		return NULL;
-	}
-
-	// Set canvas properties
-	ctx->canvas->instances[0].z = 1000;
-	ctx->canvas->instances[0].enabled = true;
-	mlx_set_instance_depth(&ctx->canvas->instances[0], 1000);
-	if (ctx->canvas_instance >= 0 && ctx->canvas->count > 0)
-	{
-		t_v2f pos, size;
-		ctx->canvas->instances[0].z = 1000;
-		ctx->canvas->instances[0].enabled = true;
-		uint32_t y = 0;
-		while (y < ctx->canvas->height)
-		{
-			uint32_t x = 0;
-			while (x < ctx->canvas->width)
-			{
-				uint32_t *pixel = (uint32_t *)ctx->canvas->pixels + y * ctx->canvas->width + x;
-				*pixel = (*pixel & 0x00FFFFFF) | 0xFF000000;
-				x++;
-			}
-			y++;
-		}
-		pos = init_v2f(0, 0);
-		size = init_v2f((float)ctx->canvas->width, (float)ctx->canvas->height);
-		draw_rect_border(ctx->canvas, pos, size, 0x00FF00FF);
-	}
-	ctx->needs_redraw = true;
-	ctx->images = (t_ui_images *)ft_calloc(1, sizeof(t_ui_images));
-	if (!ctx->images)
-	{
-		mlx_delete_image(mlx, ctx->canvas);
-		free(ctx);
-		return (NULL);
-	}
+	if (mlx_image_to_window(mlx, ctx->canvas, x_pos, 0) < 0)
+		return (mlx_delete_image(mlx, ctx->canvas), free(ctx), NULL);
 	return (ctx);
 }
 
@@ -221,19 +121,16 @@ void	toggle_ui_visibility(t_ui *ui)
 
 void	render_ui(t_ui *ui)
 {
-	t_ui_context	*ctx;
 	mlx_image_t		*canvas;
 	int32_t			x_pos;
 	size_t			i;
-	int				instance_id;
 	uint32_t		y;
 	uint32_t		x;
 	uint32_t		*pixel;
 
-	ctx = ui->context;
-	canvas = ctx->canvas;
+	canvas = ui->context->canvas;
 	x_pos = 0;
-	if (!ctx->is_visible)
+	if (!ui->context->is_visible)
 	{
 		i = 0;
 		while (i < canvas->count)
@@ -241,17 +138,12 @@ void	render_ui(t_ui *ui)
 			canvas->instances[i].enabled = false;
 			i++;
 		}
-		fprintf(stderr, "Hiding UI canvas (disabled %zu instances)\n", canvas->count);
 		return;
 	}
-	if (canvas->count == 0)
+	if (canvas->count >= 0)
 	{
-		instance_id = mlx_image_to_window(ctx->mlx, canvas, x_pos, 0);
-		if (instance_id < 0)
-		{
-			fprintf(stderr, "ERROR: Failed to add canvas instance\n");
-			return;
-		}
+		if (mlx_image_to_window(ui->context->mlx, canvas, x_pos, 0) < 0)
+			return ;
 		canvas->instances[0].enabled = true;
 		canvas->instances[0].z = 1000;
 		mlx_set_instance_depth(&canvas->instances[0], 1000);
@@ -271,19 +163,13 @@ void	render_ui(t_ui *ui)
 		while (x < canvas->width)
 		{
 			pixel = (uint32_t *)canvas->pixels + y * canvas->width + x;
-			*pixel = 0x00000000; 
+			*pixel = UI_TRANSPARENT;
 			x++;
 		}
 		y++;
 	}
-	if (canvas->count > 0)
-	{
-		canvas->instances[0].enabled = true;
-		canvas->instances[0].z = 1000;
-		mlx_set_instance_depth(&canvas->instances[0], 1000);
-	}
-	render_ui_element(ui->root, ctx);
-	ctx->needs_redraw = true;
+	render_ui_element(ui->root, ui->context);
+	ui->context->needs_redraw = true;
 }
 
 t_ui_element	*ui_element_create(t_ui_type type, t_v2f pos, t_v2f size)

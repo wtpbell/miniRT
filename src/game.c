@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   game.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/04 23:01:01 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   game.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
+/*   Updated: 2025/08/05 11:22:26 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,22 +91,22 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 	}
 }
 
-// void mouse_hook(mouse_key_t button, action_t action, 
-// 	__attribute__((unused)) modifier_key_t mods, void *param)
-// {
-// 	t_game	*game;
-// 	int32_t	x;
-// 	int32_t	y;
+void mouse_hook(mouse_key_t button, action_t action, 
+	__attribute__((unused)) modifier_key_t mods, void *param)
+{
+	t_game	*game;
+	int32_t	x;
+	int32_t	y;
 
-// 	game = (t_game *)param;
-// 	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS && game->ui
-// 		&& game->ui->root->style.visible)
-// 	{
-// 		mlx_get_mouse_pos(game->mlx, &x, &y);
-// 		handle_ui_click(game->ui->root, x, y, game->ui->ctx);
-// 		render_ui(game->ui);
-// 	}
-// }
+	game = (t_game *)param;
+	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS && game->ui
+		&& game->ui->root->style.visible)
+	{
+		mlx_get_mouse_pos(game->mlx, &x, &y);
+		handle_ui_click(game->ui->root, x, y, game->ui->context);
+		render_ui(game->ui);
+	}
+}
 
 void	cleanup_mlx(t_game *game)
 {
@@ -150,40 +150,19 @@ int	game(t_scene *scene)
 	game.should_exit = false;
 	game.mlx = mlx_init(WIDTH, HEIGHT, "miniRT", true);
 	if (!game.mlx)
-	{
-		fprintf(stderr, "Error: Failed to initialize MLX\n");
-		cleanup_mlx(&game);
-		return (1);
-	}
+		return (cleanup_mlx(&game), 1);
 	if (!cam_init(&scene->camera, game.mlx))
-	{
-		fprintf(stderr, "Error: Failed to initialize camera\n");
-		cleanup_mlx(&game);
-		return (1);
-	}
+		return (cleanup_mlx(&game), 1);
 	game.img = scene->camera.img_plane;
 	game.scene = scene;
 	game.needs_redraw = true;
-
-	// Initialize UI directly
-	fprintf(stderr, "Initializing UI...\n");
 	game.ui = create_ui(game.mlx, scene);
 	if (!game.ui)
-	{
-		fprintf(stderr, "Error: Failed to initialize UI\n");
-		cleanup_mlx(&game);
-		return (1);
-	}
-	fprintf(stderr, "UI initialized successfully\n");
-
+		return (cleanup_mlx(&game), 1);
 	mlx_set_instance_depth(&game.img->instances[0], 0);
 	mlx_loop_hook(game.mlx, render_loop, &game);
 	mlx_key_hook(game.mlx, key_hook, &game);
-	// mlx_mouse_hook(game.mlx, mouse_hook, &game);
-
-	fprintf(stderr, "Starting main game loop...\n");
-
-	// Let the render_loop handle the first render
+	mlx_mouse_hook(game.mlx, mouse_hook, &game);
 	game.needs_redraw = true;
 	mlx_loop(game.mlx);
 	cleanup_mlx(&game);

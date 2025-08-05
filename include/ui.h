@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui.h                                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/04 23:16:29 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui.h                                               :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/05 11:22:48 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,7 @@
 # include "vector.h"
 # include "scene.h"
 # include "game.h"
-
-
-/* Forward declarations */
-typedef struct s_ui t_ui;
-typedef struct s_ui_context t_ui_context;
-typedef struct s_ui_element t_ui_element;
+# include "rt_types.h"
 
 typedef void (*t_ui_destroy_func)(t_ui_element *element, t_ui_context *ctx);
 typedef void (*t_ui_render_func)(t_ui_element *, t_ui_context *);
@@ -78,12 +73,12 @@ typedef void (*t_ui_update_func)(t_ui_element *, void *);
 
 typedef enum e_ui_type
 {
-	UI_PANEL,       /**< Container element for grouping other elements */
-	UI_BUTTON,      /**< Clickable button with text */
-	UI_LABEL,       /**< Text label */
-	UI_HEADER,      /**< Section header */
-	UI_SECTION,     /**< Section container with header */
-	UI_VALUE_BUTTON /**< Button that modifies a numeric value */
+	UI_PANEL,       // Container element for grouping other elements */
+	UI_BUTTON,      // Clickable button with text */
+	UI_LABEL,       // Text label */
+	UI_HEADER,      // Section header */
+	UI_SECTION,     // Section container with header */
+	UI_VALUE_BUTTON // Button that modifies a numeric value */
 } t_ui_type;
 
 typedef struct s_ui_images
@@ -96,11 +91,11 @@ typedef struct s_ui_images
 
 typedef struct s_ui_style
 {
-	uint32_t	bg_color;        /**< Background color in 0xRRGGBBAA format */
-	uint32_t	border_color;    /**< Border color in 0xRRGGBBAA format */
-	uint32_t	text_color;      /**< Text color in 0xRRGGBBAA format */
-	float		padding;         /**< Padding in pixels */
-	bool		visible;        /**< Visibility flag */
+	uint32_t	bg_color;        // Background color in 0xRRGGBBAA format */
+	uint32_t	border_color;    // Border color in 0xRRGGBBAA format */
+	uint32_t	text_color;      // Text color in 0xRRGGBBAA format */
+	float		padding;         // Padding in pixels */
+	bool		visible;        // Visibility flag */
 } t_ui_style;
 
 
@@ -113,51 +108,51 @@ typedef struct s_ui_label
 
 typedef struct s_ui_element
 {
-	t_ui_type			type;           /**< Type of the UI element */
-	t_v2f				pos;            /**< Position relative to parent */
-	t_v2f				size;           /**< Size of the element */
-	t_ui_style			style;          /**< Visual style properties */
-	void				*data;          /**< Type-specific data */
-	struct s_ui_element	*parent;        /**< Parent element (NULL for root) */
-	struct s_ui_element	*first_child;   /**< First child element */
-	struct s_ui_element	*next_sibling;  /**< Next sibling element */
-	void			(*action)(struct s_ui_element *, void *); /**< Click action callback */
-	void			(*render)(struct s_ui_element *, t_ui_context *); /**< Render function */
-	bool			visible;        /**< Visibility flag */
-	t_v2f			abs_pos;        /**< Absolute position in the window */
-	int				state;          /**< Current interaction state */
+	t_ui_type			type;           // Type of the UI element */
+	t_v2f				pos;            // Position relative to parent */
+	t_v2f				size;           // Size of the element */
+	t_ui_style			style;          // Visual style properties */
+	void				*data;          // Type-specific data */
+	struct s_ui_element	*parent;        // Parent element (NULL for root) */
+	struct s_ui_element	*first_child;   // First child element */
+	struct s_ui_element	*next_sibling;  // Next sibling element */
+	void				(*action)(struct s_ui_element *, void *); // Click action callback */
+	void				(*render)(struct s_ui_element *, t_ui_context *); // Render function */
+	bool				visible;        // Visibility flag */
+	t_v2f				abs_pos;        // Absolute position in the window */
+	int					state;          // Current interaction state */
 } t_ui_element;
 
 
 typedef struct s_ui_button
 {
-	void		(*on_click)(t_ui_element *, void *);
-	void			*param;
-	char			*label;
+	void				(*on_click)(t_ui_element *, void *);
+	void				*param;
+	char				*label;
 } t_ui_button;
 
 
 typedef struct s_ui_value_button
 {
-	float			*value;
-	float			step;
-	t_v2f			range;
-	t_ui_element	*value_label;
-	void			(*on_click)(t_ui_element *, void *);
-	void			*param;
-	char			*label;
+	float				*value;
+	float				step;
+	t_v2f				range;
+	t_ui_element		*value_label;
+	void				(*on_click)(t_ui_element *, void *);
+	void				*param;
+	char				*label;
 } t_ui_value_button;
 
 
 typedef struct s_ui_context
 {
-	mlx_t		*mlx;           /**< MLX instance */
-	t_scene		*scene;         /**< Reference to the scene data */
-	mlx_image_t	*canvas;        /**< Main canvas image for UI rendering */
-	int			canvas_instance; /**< Instance ID of the canvas */
-	t_ui_images	*images;        /**< Cached images and textures */
-	bool		is_visible;     /**< UI visibility flag */
-	bool		needs_redraw;   /**< Flag indicating if UI needs redraw */
+	mlx_t				*mlx;           // MLX instance */
+	t_scene				*scene;         // Reference to the scene data */
+	mlx_image_t			*canvas;        // Main canvas image for UI rendering */
+	int					canvas_instance; // Instance ID of the canvas */
+	t_ui_images			*images;        // Cached images and textures */
+	bool				is_visible;     // UI visibility flag */
+	bool				needs_redraw;   // Flag indicating if UI needs redraw */
 } t_ui_context;
 
 typedef struct s_ui
@@ -173,7 +168,6 @@ t_ui		*create_ui(mlx_t *mlx, t_scene *scene);
 void		destroy_ui(t_ui *ui);
 void		render_ui(t_ui *ui);
 void		toggle_ui_visibility(t_ui *ui);
-bool		init_ui(t_game *game, t_scene *scene);
 void		ui_element_setup_handlers(t_ui_element *element);
 void		handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx);
 
@@ -185,7 +179,6 @@ t_ui_element	*create_label(t_ui_context *ctx, const char *text, t_v2f pos, uint3
 t_ui_element	*create_value_button(t_ui_context *ctx, float *value,
 							t_v2f range, float step, t_v2f pos, t_v2f size);
 t_ui_element	*create_ambient_section(t_ui_context *ctx, t_scene *scene, t_v2f pos, t_v2f size);
-t_ui_element	*create_header(t_ui_context *ctx, const char *title, t_v2f pos, t_v2f size);
 
 void			destroy_ui_element(t_ui_element *element, t_ui_context *ctx, bool free_data);
 void			safe_call_destroy_handler(t_ui_element *element, t_ui_context *ctx);

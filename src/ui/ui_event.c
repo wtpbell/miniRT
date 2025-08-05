@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_event.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 12:51:30 by bewong            #+#    #+#             */
-/*   Updated: 2025/07/29 22:57:47 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_event.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 12:51:30 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/05 12:53:04 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 
 bool is_point_in_element(t_ui_element *element, int x, int y)
 {
-	
 	return (x >= element->pos.x &&
 		x <= (element->pos.x + element->size.x) &&
 		y >= element->pos.y &&
@@ -25,10 +24,10 @@ bool is_point_in_element(t_ui_element *element, int x, int y)
 
 void handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx)
 {
-	t_ui_element *child;
+	t_ui_element	*child;
 
 	if (!root || !ctx || !is_point_in_element(root, x, y))
-		return;
+		return ;
 
 	if (root->type == UI_BUTTON && root->data)
 		update_button_value(root, x, ctx);
