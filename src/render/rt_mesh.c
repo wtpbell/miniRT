@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 17:28:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/05 10:19:52 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/05 10:37:33 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_v3f	mesh_normal(t_obj *obj, t_v3f point, t_result *res)
 	tri = (t_tri *)vector_get(&obj->mesh.triangles, res->face_index);
 	if (tri == NULL)
 		return (g_v3f_up);
-	return (tri->vn0);
+	return (mul_dir_m4x4(tri->vn0, obj->t.to_world));
 }
 
 // TODO: Implementation needed
@@ -82,14 +82,17 @@ int	mesh_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_result *res)
 {
 	int		i;
 	t_tri	*tri;
+	t_ray	local_ray;
 
-	if (!aabb_intersect(ray, &obj->mesh.box))
+	local_ray.origin = mul_v3_m4x4(ray->origin, obj->t.to_obj);
+	local_ray.direction = mul_dir_m4x4(ray->direction, obj->t.to_obj);
+	if (!aabb_intersect(&local_ray, &obj->mesh.box))
 		return (false);
 	i = 0;
 	while (i < obj->mesh.triangles.size)
 	{
 		tri = (t_tri *)obj->mesh.triangles.items[i];
-		if (tri_intersect(tri, ray, t, res))
+		if (tri_intersect(tri, &local_ray, t, res))
 		{
 			res->face_index = i;
 			return (true);
