@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 15:58:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/04 23:27:37 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/05 10:21:49 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,9 +334,9 @@ static bool	parse_obj_file(t_mesh *mesh)
 
 bool	handle_mesh_obj(t_scene *scene)
 {
-	t_obj		*obj;
-	int			i;
-	int			size;
+	t_obj	*obj;
+	int		i;
+	int		size;
 
 	i = 0;
 	size = scene->objects.size;

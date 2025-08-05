@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 17:28:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/04 23:35:55 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/05 10:19:52 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,37 +24,36 @@ bool	aabb_intersect(t_ray *ray, t_aabb *box)
 		1.0f / ray->direction.y,
 		1.0f / ray->direction.z
 	);
-	t_v2f	t;
-	t_v2f	ty;
-	t_v2f	tz;
 
-	// min
-	t.x = (box->min.x - ray->origin.x) * invdir.x;
-	ty.x = (box->min.y - ray->origin.y) * invdir.y;
-	tz.x = (box->min.z - ray->origin.z) * invdir.z;
+	t_v3f	t_min;
+	t_v3f	t_max;
 
-	// max
-	t.y = (box->max.x - ray->origin.x) * invdir.x;
-	ty.y = (box->max.y - ray->origin.y) * invdir.y;
-	tz.y = (box->max.z - ray->origin.z) * invdir.z;
+	t_min.x = (box->min.x - ray->origin.x) * invdir.x;
+	t_max.x = (box->max.x - ray->origin.x) * invdir.x;
+
+	t_min.y = (box->min.y - ray->origin.y) * invdir.y;
+	t_max.y = (box->max.y - ray->origin.y) * invdir.y;
+
+	t_min.z = (box->min.z - ray->origin.z) * invdir.z;
+	t_max.z = (box->max.z - ray->origin.z) * invdir.z;
 
 	if (invdir.x < 0.0f)
-		ft_swapf(&t.x, &t.y);
+		ft_swapf(&t_min.x, &t_max.x);
 	if (invdir.y < 0.0f)
-		ft_swapf(&ty.x, &ty.y);
+		ft_swapf(&t_min.y, &t_max.y);
 
-	if ((t.x > ty.y) || (ty.x > t.x))
+	if ((t_min.x > t_max.y) || (t_min.y > t_max.x))
 		return (false);
 
-	if (ty.x > t.x)
-		t.x = ty.x;
-	if (ty.y < t.y)
-		t.y = ty.y;
+	if (t_min.y > t_min.x)
+		t_min.x = t_min.y;
+	if (t_max.y < t_max.x)
+		t_max.x = t_max.y;
 
 	if (invdir.z < 0.0f)
-		ft_swapf(&tz.x, &tz.y);
-	
-	return (!((t.x > tz.y) || (tz.x > t.x)));
+		ft_swapf(&t_min.z, &t_max.z);
+
+	return (!((t_min.x > t_max.z) || (t_min.z > t_max.x)));
 }
 
 // TODO: Implementation needed
