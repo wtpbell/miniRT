@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 10:40:45 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 19:42:31 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,39 @@ char	*ft_ftoa(float f, int precision)
 		snprintf(str, 32, "%d", int_part);
 	return (str);
 }
+
+char	*format_float_value(float value)
+{
+	static char	buf[16];
+
+	snprintf(buf, sizeof(buf), "%.2f", value);
+    return (buf);
+}
+
+char	*format_color_value(float value)
+{
+	static char	buf[16];
+	
+	snprintf(buf, sizeof(buf), "%6.2f", value * 255.0f);
+	return (buf);
+}
+
+t_light	*find_light(t_scene *scene, t_light_type type)
+{
+	t_light	*light;
+	int		i;
+
+	i = 0;
+	while (i < (int)scene->lights.size)
+	{
+		light = (t_light *)vector_get(&scene->lights, i);
+		if (light->type == type)
+			return light;
+		i++;
+	}
+	return NULL;
+}
+
 // Forward declaration
 void ui_element_setup_handlers(t_ui_element *element);
 

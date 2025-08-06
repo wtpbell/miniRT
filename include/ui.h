@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 18:12:52 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 18:55:47 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,13 @@ void			safe_call_destroy_handler(t_ui_element *element, t_ui_context *ctx);
 void		destroy_ui_element_recursive(t_ui_element *element, t_ui_context *ctx, bool free_data);
 bool		ui_element_remove_child(t_ui_element *parent, t_ui_element *child, 
 			bool destroy, t_ui_context *ctx);
+t_ui_element *create_camera_section(t_ui_context *ctx, t_scene *scene,
+				t_v2f pos, t_v2f size);
+t_ui_element *create_light_section(t_ui_context *ctx, t_scene *scene,
+				t_v2f pos, t_v2f size);
+t_ui_element *create_ui_sections(t_ui_context *ctx, t_scene *scene, t_v2f pos, t_v2f size);
+char		*format_float_value(float value);
+t_light		*find_light(t_scene *scene, t_light_type type);
 void		attach_child(t_ui_element *parent, t_ui_element *child);
 void		update_button_value(t_ui_element *button, int32_t click_x, t_ui_context *ctx);
 void		update_label_text(t_ui_element *label, const char *text, t_ui_context *ctx);

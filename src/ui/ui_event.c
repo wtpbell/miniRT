@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:51:30 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 18:15:23 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 19:45:35 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,13 @@ static bool	is_point_in_element(const t_ui_element *element, int32_t x, int32_t 
 			y <= (abs_pos.y + element->size.y));
 }
 
-static void update_value_label(t_ui_value_button *btn, t_ui_context *ctx)
+static void	update_value_label(t_ui_value_button *btn, t_ui_context *ctx)
 {
 	const char	*value_str;
+	t_ui_label	*label_data;
 
 	if (!btn || !btn->value_label || !ctx)
-		return;
-
+		return ;
 	if (btn->formatter)
 		value_str = btn->formatter(*btn->value);
 	else
@@ -53,10 +53,9 @@ static void update_value_label(t_ui_value_button *btn, t_ui_context *ctx)
 		snprintf(fallback_buf, sizeof(fallback_buf), "%.2f", *btn->value);
 		value_str = fallback_buf;
 	}
-
 	if (btn->value_label->type == UI_LABEL)
 	{
-		t_ui_label *label_data = (t_ui_label *)btn->value_label->data;
+		label_data = (t_ui_label *)btn->value_label->data;
 		if (label_data)
 		{
 			if (label_data->text)
@@ -67,9 +66,10 @@ static void update_value_label(t_ui_value_button *btn, t_ui_context *ctx)
 	}
 }
 
-void handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx)
+void	handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx)
 {
-	t_ui_element *child;
+	t_ui_element	*child;
+	t_ui_button		*btn;
 
 	if (!root || !ctx)
 		return ;
@@ -83,16 +83,12 @@ void handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx
 			}
 			else
 			{
-				t_ui_button *btn = (t_ui_button *)root->data;
+				btn = (t_ui_button *)root->data;
 				if (btn->on_click)
 					btn->on_click(root, btn->param);
 			}
 			return ;
 		}
-	}
-	else
-	{
-		printf("  -> Click not within element bounds\n");
 	}
 	child = root->first_child;
 	while (child)
@@ -105,6 +101,7 @@ void handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx
 void	update_label_text(t_ui_element *label, const char *text, t_ui_context *ctx)
 {
 	t_ui_label	*label_data;
+	t_ui_button	*btn_data;
 
 	if (!label || !text || !ctx)
 		return ;
@@ -119,7 +116,7 @@ void	update_label_text(t_ui_element *label, const char *text, t_ui_context *ctx)
 	}
 	else if (label->type == UI_BUTTON || label->type == UI_VALUE_BUTTON)
 	{
-		t_ui_button *btn_data = (t_ui_button *)label->data;
+		btn_data = (t_ui_button *)label->data;
 		if (!btn_data)
 			return;
 		if (btn_data->label)
@@ -129,15 +126,14 @@ void	update_label_text(t_ui_element *label, const char *text, t_ui_context *ctx)
 	ctx->needs_redraw = true;
 }
 
-static void update_value_button(t_ui_element *button, float new_value, 
+static void	update_value_button(t_ui_element *button, float new_value, 
 							  t_ui_context *ctx)
 {
-	t_ui_value_button *value_btn;
-	t_light *light;
+	t_ui_value_button	*value_btn;
+	t_light				*light;
 
 	if (!button || !button->data || !ctx)
-		return;
-
+		return ;
 	value_btn = (t_ui_value_button *)button->data;
 	*value_btn->value = new_value;
 	if (*value_btn->value < value_btn->range.x)
@@ -212,7 +208,7 @@ void	increment_value_button(t_ui_element *btn, void *param)
 		update_value_button(btn, new_value, ctx);
 }
 
-void decrement_value_button(t_ui_element *btn, void *param)
+void	decrement_value_button(t_ui_element *btn, void *param)
 {
 	t_ui_value_button	*vb;
 	t_ui_context		*ctx;

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/06 12:58:20 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 19:03:27 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ void	render_loop(void *param)
 t_ui	*create_ui(mlx_t *mlx, t_scene *scene)
 {
 	t_ui			*ui;
-	t_ui_element	*ambient_section;
+	t_ui_element	*ui_sections;
+	t_v2f			size;
 
 	ui = ft_calloc(1, sizeof(t_ui));
 	if (!ui)
@@ -55,13 +56,17 @@ t_ui	*create_ui(mlx_t *mlx, t_scene *scene)
 	ui->context = create_ui_context(mlx, scene);
 	if (!ui->context)
 		return (free(ui), NULL);
-	ui->root = create_panel(ui->context, g_v2f_zero, init_v2f(UI_PANEL_WIDTH, HEIGHT));
+
+	size = init_v2f(UI_PANEL_WIDTH, HEIGHT);
+	ui->root = create_panel(ui->context, g_v2f_zero, size);
 	if (!ui->root)
 		return (destroy_ui(ui), NULL);
-	ambient_section = create_ambient_section(ui->context, scene, g_v2f_zero, init_v2f(UI_PANEL_WIDTH, 200));
-	if (!ambient_section)
+
+	ui_sections = create_ui_sections(ui->context, scene, g_v2f_zero, size);
+	if (!ui_sections)
 		return (destroy_ui(ui), NULL);
-	attach_child(ui->root, ambient_section);
+
+	attach_child(ui->root, ui_sections);
 	ui->context->needs_redraw = true;
 	return (ui);
 }

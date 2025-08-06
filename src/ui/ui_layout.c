@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 11:39:13 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 18:11:29 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 19:43:06 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ static void	init_value_button_data(t_ui_value_button *value_btn, const t_vbtn_co
 static void	add_inc_dec_buttons(t_ui_element *container,
 						const t_vbtn_config *cfg, t_ui_value_button *value_btn)
 {
-	t_ui_element *decr_btn;
-	t_ui_element *incr_btn;
+	t_ui_element	*decr_btn;
+	t_ui_element	*incr_btn;
 
 	(void)value_btn;
 	decr_btn = create_button(cfg->ctx, "-",
@@ -66,13 +66,13 @@ static void	add_inc_dec_buttons(t_ui_element *container,
 		attach_child(container, incr_btn);
 }
 
-static void add_value_label(t_ui_element *container,
+static void	add_value_label(t_ui_element *container,
 	const t_vbtn_config *cfg, t_ui_value_button *value_btn)
 {
-	char *value_str;
-	float label_width;
-	float label_x;
-	t_ui_element *label;
+	char		*value_str;
+	float		label_width;
+	float		label_x;
+	t_ui_element	*label;
 
 	if (cfg->formatter)
 		value_str = ft_strdup(cfg->formatter(*cfg->value));
@@ -93,7 +93,7 @@ static void add_value_label(t_ui_element *container,
 	free(value_str);
 }
 
-static t_ui_element *create_value_button(t_vbtn_config *cfg)
+static t_ui_element	*create_value_button(t_vbtn_config *cfg)
 {
 	t_ui_element		*container;
 	t_ui_value_button	*value_btn;
@@ -112,15 +112,7 @@ static t_ui_element *create_value_button(t_vbtn_config *cfg)
 	return container;
 }
 
-char*	format_color_value(float value)
-{
-	static char	buf[16];
-	
-	snprintf(buf, sizeof(buf), "%6.2f", value * 255.0f);
-	return (buf);
-}
-
-t_ui_element *create_labeled_control(t_vbtn_config *cfg,
+t_ui_element	*create_labeled_control(t_vbtn_config *cfg,
 						const char *label_text, float total_width)
 {
 	float			label_width;
@@ -146,7 +138,29 @@ t_ui_element *create_labeled_control(t_vbtn_config *cfg,
 	return (container);
 }
 
+t_ui_element	*create_ui_sections(t_ui_context *ctx, t_scene *scene, t_v2f pos, t_v2f size)
+{
+	t_ui_element	*panel;
+	t_v2f			section_size;
+	t_v2f			section_pos;
+	t_v3f			section_heights;
 
-
-
-
+	section_heights = (t_v3f){
+		.x = UI_HEADER_HEIGHT + 8 * (UI_ROW_HEIGHT + UI_PADDING),
+		.y = UI_HEADER_HEIGHT + 8 * (UI_ROW_HEIGHT + UI_PADDING),
+		.z = UI_HEADER_HEIGHT + 5 * (UI_ROW_HEIGHT + UI_PADDING)
+	};
+	panel = create_panel(ctx, pos, size);
+	if (!panel)
+		return (NULL);
+	section_pos = init_v2f(UI_PANEL_PADDING, UI_PANEL_PADDING);
+	section_size = init_v2f(size.x - (2 * UI_PANEL_PADDING), section_heights.x);
+	attach_child(panel, create_camera_section(ctx, scene, section_pos, section_size));
+	section_pos.y += section_heights.x + UI_PANEL_PADDING;
+	section_size.y = section_heights.y;
+	attach_child(panel, create_light_section(ctx, scene, section_pos, section_size));
+	section_pos.y += section_heights.y + UI_PANEL_PADDING;
+	section_size.y = section_heights.z;
+	attach_child(panel, create_ambient_section(ctx, scene, section_pos, section_size));
+	return (panel);
+}
