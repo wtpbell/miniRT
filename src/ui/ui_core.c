@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_core.c                                          :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/27 12:53:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/05 11:12:14 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_core.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/27 12:53:50 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/06 12:38:54 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,8 @@ void	toggle_ui_visibility(t_ui *ui)
 	t_ui_context	*ctx;
 
 	if (!ui || !ui->context || !ui->context->canvas)
-		return ;	
+		return;
+		
 	ctx = ui->context;
 	ctx->is_visible = !ctx->is_visible;
 	i = 0;
@@ -114,23 +115,35 @@ void	toggle_ui_visibility(t_ui *ui)
 		ctx->canvas->instances[i].enabled = ctx->is_visible;
 		i++;
 	}
-	ctx->needs_redraw = true;
 	fprintf(stderr, "UI visibility toggled to: %s\n", 
 		ctx->is_visible ? "VISIBLE" : "HIDDEN");
 }
 
 void	render_ui(t_ui *ui)
 {
+	t_ui_context	*ctx;
 	mlx_image_t		*canvas;
-	int32_t			x_pos;
-	size_t			i;
-	uint32_t		y;
-	uint32_t		x;
-	uint32_t		*pixel;
+	uint32_t		*pixels;
+	uint32_t		i;
 
-	canvas = ui->context->canvas;
-	x_pos = 0;
-	if (!ui->context->is_visible)
+	if (!ui || !ui->context)
+		return;
+	ctx = ui->context;
+	canvas = ctx->canvas;
+	if (!canvas)
+		return;
+
+	if (canvas->count == 0)
+	{
+		if (mlx_image_to_window(ctx->mlx, canvas, 0, 0)< 0)
+		{
+			fprintf(stderr, "Failed to add canvas to window\n");
+			return ;
+		}
+		canvas->instances[0].z = 1000;
+		canvas->instances[0].enabled = true;
+	}
+	if (!ctx->is_visible)
 	{
 		i = 0;
 		while (i < canvas->count)
@@ -138,38 +151,29 @@ void	render_ui(t_ui *ui)
 			canvas->instances[i].enabled = false;
 			i++;
 		}
-		return;
-	}
-	if (canvas->count >= 0)
+		return ;
+	} 
+	else
 	{
-		if (mlx_image_to_window(ui->context->mlx, canvas, x_pos, 0) < 0)
-			return ;
-		canvas->instances[0].enabled = true;
-		canvas->instances[0].z = 1000;
-		mlx_set_instance_depth(&canvas->instances[0], 1000);
+		i = 0;
+		while (i < canvas->count)
+		{
+			canvas->instances[i].enabled = true;
+			i++;
+		}
 	}
+	if (!ctx->needs_redraw)
+		return ;
+	pixels = (uint32_t *)canvas->pixels;
 	i = 0;
-	while (i < canvas->count)
+	while (i < canvas->width * canvas->height)
 	{
-		canvas->instances[i].enabled = true;
-		canvas->instances[i].x = x_pos;
-		canvas->instances[i].y = 0;
+		pixels[i] = UI_TRANSPARENT;
 		i++;
 	}
-	y = 0;
-	while (y < canvas->height)
-	{
-		x = 0;
-		while (x < canvas->width)
-		{
-			pixel = (uint32_t *)canvas->pixels + y * canvas->width + x;
-			*pixel = UI_TRANSPARENT;
-			x++;
-		}
-		y++;
-	}
-	render_ui_element(ui->root, ui->context);
-	ui->context->needs_redraw = true;
+	if (ui->root)
+		render_ui_element(ui->root, ctx);
+	ctx->needs_redraw = false;
 }
 
 t_ui_element	*ui_element_create(t_ui_type type, t_v2f pos, t_v2f size)

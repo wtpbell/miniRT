@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_render.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/27 15:03:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/05 10:20:28 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_render.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/27 15:03:00 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/06 12:47:51 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,9 +237,8 @@ void	draw_button(t_ui_element *button, t_ui_context *ctx)
 
 void	render_ui_element(t_ui_element *element, t_ui_context *ctx)
 {
-	t_ui_element		*child;
-	t_ui_label			*label;
-	// t_ui_value_button	*vbutton;
+	t_ui_element	*child;
+	t_ui_label		*label;
 
 	if (!element->visible)
 		return ;
@@ -261,11 +260,6 @@ void	render_ui_element(t_ui_element *element, t_ui_context *ctx)
 		label = (t_ui_label *)element->data;
 		draw_text(ctx->canvas, label->text, element->abs_pos, element->style.text_color);
 	}
-	// else if (element->type == UI_VALUE_BUTTON)
-	// {
-	// 	vbutton = (t_ui_value_button *)element->data;
-	// 	draw_text(ctx->canvas, vbutton->label, element->abs_pos, element->style.text_color);
-	// }
 	child = element->first_child;
 	while (child)
 	{

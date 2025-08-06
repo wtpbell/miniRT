@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/04 23:20:08 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 10:40:45 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,6 @@ char	*ft_ftoa(float f, int precision)
 }
 // Forward declaration
 void ui_element_setup_handlers(t_ui_element *element);
-
-void	ui_element_destroy(t_ui_element *element, t_ui_context *ctx, bool free_data)
-{
-	if (!element || !ctx)
-		return ;
-	if (free_data && element->data)
-	{
-		safe_call_destroy_handler(element, ctx);
-		element->data = NULL;
-	}
-	// Note: Image cleanup is now handled by the canvas system
-	free(element);
-}
 
 bool	ui_element_remove_child(t_ui_element *parent, t_ui_element *child, 
 							bool destroy, t_ui_context *ctx)
@@ -96,7 +83,7 @@ void	destroy_ui_element_recursive(t_ui_element *element, t_ui_context *ctx, bool
 	}
 	if (element->parent)
 		ui_element_remove_child(element->parent, element, false, ctx);
-	ui_element_destroy(element, ctx, free_data);
+	destroy_ui_element(element, ctx, free_data);
 }
 
 t_ui_element	*create_ui_element(t_ui_type type, t_v2f pos, t_v2f size)

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui.h                                               :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/05 11:22:48 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui.h                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/06 10:40:52 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,6 @@ t_ui_element	*create_ambient_section(t_ui_context *ctx, t_scene *scene, t_v2f po
 void			destroy_ui_element(t_ui_element *element, t_ui_context *ctx, bool free_data);
 void			safe_call_destroy_handler(t_ui_element *element, t_ui_context *ctx);
 
-void		ui_element_destroy(t_ui_element *element, t_ui_context *ctx, bool free_data);
 void		destroy_ui_element_recursive(t_ui_element *element, t_ui_context *ctx, bool free_data);
 bool		ui_element_remove_child(t_ui_element *parent, t_ui_element *child, 
 			bool destroy, t_ui_context *ctx);

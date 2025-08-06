@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   game.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/05 11:22:26 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   game.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
+/*   Updated: 2025/08/06 12:42:11 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,34 +21,26 @@
 
 typedef struct s_game t_game;
 
-void render_loop(void *param)
+void	render_loop(void *param)
 {
-	t_game		*game;
-	static bool	render_state = false;
-	
+	t_game			*game;
+	t_ui_context	*ctx;
+
 	game = (t_game *)param;
-	if (!render_state || game->needs_redraw)
+	if (game->needs_redraw)
 	{
 		ft_memset(game->img->pixels, 0, game->img->width * game->img->height * sizeof(int));
 		if (thread_rendering(game->scene))
 		{
 			game->img->instances[0].enabled = true;
 			game->needs_redraw = false;
-			render_state = true;
 		}
-		if (game->ui && game->ui->context)
-		{
-			game->ui->context->needs_redraw = true;
-			if (game->ui->context->is_visible)
-			{
-				render_ui(game->ui);
-				if (game->ui->context->canvas && game->ui->context->canvas->count > 0)
-				{
-					mlx_set_instance_depth(&game->ui->context->canvas->instances[0], 1000);
-					game->ui->context->canvas->instances[0].enabled = true;
-				}
-			}
-		}
+	}
+	if (game->ui && game->ui->context)
+	{
+		ctx = game->ui->context;
+		if (ctx->is_visible && ctx->canvas)
+			render_ui(game->ui);
 	}
 }
 
@@ -91,22 +83,22 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 	}
 }
 
-void mouse_hook(mouse_key_t button, action_t action, 
-	__attribute__((unused)) modifier_key_t mods, void *param)
-{
-	t_game	*game;
-	int32_t	x;
-	int32_t	y;
+// void mouse_hook(mouse_key_t button, action_t action, 
+// 	__attribute__((unused)) modifier_key_t mods, void *param)
+// {
+// 	t_game	*game;
+// 	int32_t	x;
+// 	int32_t	y;
 
-	game = (t_game *)param;
-	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS && game->ui
-		&& game->ui->root->style.visible)
-	{
-		mlx_get_mouse_pos(game->mlx, &x, &y);
-		handle_ui_click(game->ui->root, x, y, game->ui->context);
-		render_ui(game->ui);
-	}
-}
+// 	game = (t_game *)param;
+// 	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS && game->ui
+// 		&& game->ui->root->style.visible)
+// 	{
+// 		mlx_get_mouse_pos(game->mlx, &x, &y);
+// 		handle_ui_click(game->ui->root, x, y, game->ui->context);
+// 		render_ui(game->ui);
+// 	}
+// }
 
 void	cleanup_mlx(t_game *game)
 {
@@ -162,7 +154,7 @@ int	game(t_scene *scene)
 	mlx_set_instance_depth(&game.img->instances[0], 0);
 	mlx_loop_hook(game.mlx, render_loop, &game);
 	mlx_key_hook(game.mlx, key_hook, &game);
-	mlx_mouse_hook(game.mlx, mouse_hook, &game);
+	// mlx_mouse_hook(game.mlx, mouse_hook, &game);
 	game.needs_redraw = true;
 	mlx_loop(game.mlx);
 	cleanup_mlx(&game);
