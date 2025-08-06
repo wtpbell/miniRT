@@ -29,7 +29,7 @@ SRCS_MAIN  := main.c vector_init.c vector_helper.c vector_operations.c\
 				vector_core.c matrix_space.c rt_material_utils.c rt_triangle_uv.c\
 				rt_cylinder_uv.c ui_core.c ui_layout.c ui_render.c\
 				ui_event.c ui_styles.c ui_utils.c ui_element_handlers.c \
-				threads.c benchmark.c
+				threads.c benchmark.c ui_ambient_section.c
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE)
 OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)

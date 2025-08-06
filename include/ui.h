@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 17:34:01 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 18:12:52 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,17 @@ typedef struct s_ui
 	t_ui_context	*context;
 } t_ui;
 
+typedef struct s_value_button_config
+{
+	t_ui_context *ctx;
+	float *value;
+	t_v2f range;
+	float step;
+	t_v2f pos;
+	t_v2f size;
+	char *(*formatter)(float);
+}   t_vbtn_config;
+
 t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene);
 void		destroy_ui_context(t_ui_context *ctx);
 t_ui		*create_ui(mlx_t *mlx, t_scene *scene);
@@ -176,17 +187,17 @@ void		ui_element_setup_handlers(t_ui_element *element);
 void		handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx);
 
 t_ui_element	*ui_element_create(t_ui_type type, t_v2f pos, t_v2f size);
+t_ui_element	*create_header(t_ui_context *ctx, const char *title, t_v2f pos, t_v2f size);
 t_ui_element	*create_panel(t_ui_context *ctx, t_v2f pos, t_v2f size);
 t_ui_element	*create_button(t_ui_context *ctx, const char *label, t_v2f pos, t_v2f size,
 				void (*on_click)(t_ui_element *, void *), void *param);
 t_ui_element	*create_label(t_ui_context *ctx, const char *text, t_v2f pos, uint32_t color);
-t_ui_element	*create_value_button(t_ui_context *ctx, float *value,
-							t_v2f range, float step, t_v2f pos, t_v2f size, char *(*formatter)(float));
+t_ui_element	*create_labeled_control(t_vbtn_config *cfg,
+					const char *label_text, float total_width);
 t_ui_element	*create_ambient_section(t_ui_context *ctx, t_scene *scene, t_v2f pos, t_v2f size);
-
+char			*format_color_value(float value);
 void			destroy_ui_element(t_ui_element *element, t_ui_context *ctx, bool free_data);
 void			safe_call_destroy_handler(t_ui_element *element, t_ui_context *ctx);
-
 void		destroy_ui_element_recursive(t_ui_element *element, t_ui_context *ctx, bool free_data);
 bool		ui_element_remove_child(t_ui_element *parent, t_ui_element *child, 
 			bool destroy, t_ui_context *ctx);

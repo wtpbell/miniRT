@@ -6,15 +6,13 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:53:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 12:38:54 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 18:18:38 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
 #include <stdint.h>
 #include <stdlib.h>
-
-
 
 static void	(*const g_default_stylers[])(t_ui_element *, t_v2f, t_v2f) = {
 	[UI_PANEL] = default_panel,

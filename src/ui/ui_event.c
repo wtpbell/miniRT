@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:51:30 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 17:19:40 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 18:15:23 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ static void update_value_label(t_ui_value_button *btn, t_ui_context *ctx)
 		}
 	}
 }
-
 
 void handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx)
 {
