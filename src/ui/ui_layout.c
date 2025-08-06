@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 11:39:13 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 14:56:25 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 17:32:35 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,18 @@ static t_light *find_ambient_light(t_scene *scene)
 }
 
 static void init_value_button_data(t_ui_value_button *value_btn, float *value,
-	t_v2f range, float step)
+	t_v2f range, float step, char *(*formatter)(float))
 {
 	value_btn->value = value;
 	value_btn->range = range;
 	value_btn->step = step;
 	value_btn->on_click = NULL;
 	value_btn->param = NULL;
+	value_btn->formatter = formatter;
 }
 
 t_ui_element *create_value_button(t_ui_context *ctx, float *value,
-	t_v2f range, float step, t_v2f pos, t_v2f size)
+	t_v2f range, float step, t_v2f pos, t_v2f size, char *(*formatter)(float))
 {
 	t_ui_element		*container;
 	t_ui_element		*decr_btn;
@@ -74,7 +75,7 @@ t_ui_element *create_value_button(t_ui_context *ctx, float *value,
 	value_btn = (t_ui_value_button *)ft_calloc(1, sizeof(t_ui_value_button));
 	if (!value_btn)
 		return (container);
-	init_value_button_data(value_btn, value, range, step);
+	init_value_button_data(value_btn, value, range, step, formatter);
 	decr_btn = create_button(ctx, "-", init_v2f(0, 0), init_v2f(UI_BUTTON_WIDTH, size.y),
 		decrement_value_button, ctx);
 	if (decr_btn)
@@ -83,7 +84,10 @@ t_ui_element *create_value_button(t_ui_context *ctx, float *value,
 		increment_value_button, ctx);
 	if (incr_btn)
 		attach_child(container, incr_btn);
-	value_str = ft_ftoa(*value, 2);
+	if (formatter)
+		value_str = ft_strdup(formatter(*value));
+	else
+		value_str = ft_ftoa(*value, 2);
 	if (value_str)
 	{
 		label_width = ft_strlen(value_str) * UI_CHAR_WIDTH;
@@ -101,8 +105,16 @@ t_ui_element *create_value_button(t_ui_context *ctx, float *value,
 	return (container);
 }
 
+static char*	format_color_value(float value)
+{
+	static char	buf[16];
+	
+	snprintf(buf, sizeof(buf), "%6.2f", value * 255.0f);
+	return (buf);
+}
+
 static t_ui_element	*create_labeled_control(t_ui_context *ctx, const char *label_text,
-	float *value, t_v2f range, float step, t_v2f pos, float width)
+	float *value, t_v2f range, float step, t_v2f pos, float width, char *(*formatter)(float))
 {
 	float			label_width;
 	float			control_width;
@@ -124,7 +136,8 @@ static t_ui_element	*create_labeled_control(t_ui_context *ctx, const char *label
 		attach_child(container, label);
 	control = create_value_button(ctx, value, range, step,
 		init_v2f(control_x, 0),
-		init_v2f(control_width, UI_ROW_HEIGHT));
+		init_v2f(control_width, UI_ROW_HEIGHT),
+		formatter);
 	if (control)
 		attach_child(container, control);
 	return (container);
@@ -164,9 +177,10 @@ t_ui_element *create_ambient_section(t_ui_context *ctx, t_scene *scene,
 	{
 		control = create_labeled_control(
 			ctx, color_labels[i], color_components[i],
-			init_v2f(0, 255), 1.0f,
+			init_v2f(0, 1.0f), 1.0f/255.0f,
 			init_v2f(UI_PADDING, current_y),
-			content_width
+			content_width,
+			format_color_value
 		);
 		if (control)
 		{
@@ -179,7 +193,8 @@ t_ui_element *create_ambient_section(t_ui_context *ctx, t_scene *scene,
 		ctx, "INTENSITY", &ambient->intensity,
 		init_v2f(0, 1), 0.05f,
 		init_v2f(UI_PADDING, current_y),
-		content_width
+		content_width,
+		NULL
 	);
 	if (intensity)
 		attach_child(section, intensity);

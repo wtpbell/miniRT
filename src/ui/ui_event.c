@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:51:30 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 15:00:34 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 17:19:40 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,20 @@ static bool	is_point_in_element(const t_ui_element *element, int32_t x, int32_t 
 
 static void update_value_label(t_ui_value_button *btn, t_ui_context *ctx)
 {
-	char value_str[VALUE_STR_LEN];
-	
+	const char	*value_str;
+
 	if (!btn || !btn->value_label || !ctx)
 		return;
-	
-	snprintf(value_str, sizeof(value_str), "%.2f", *btn->value);
-	
-	// Ensure the value label is a UI_LABEL
+
+	if (btn->formatter)
+		value_str = btn->formatter(*btn->value);
+	else
+	{
+		static char fallback_buf[VALUE_STR_LEN];
+		snprintf(fallback_buf, sizeof(fallback_buf), "%.2f", *btn->value);
+		value_str = fallback_buf;
+	}
+
 	if (btn->value_label->type == UI_LABEL)
 	{
 		t_ui_label *label_data = (t_ui_label *)btn->value_label->data;
@@ -60,6 +66,7 @@ static void update_value_label(t_ui_value_button *btn, t_ui_context *ctx)
 		}
 	}
 }
+
 
 void handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx)
 {
@@ -81,7 +88,7 @@ void handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx
 				if (btn->on_click)
 					btn->on_click(root, btn->param);
 			}
-			return ;  // Stop propagation after handling
+			return ;
 		}
 	}
 	else

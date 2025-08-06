@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 14:42:43 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 17:34:01 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,7 @@ typedef struct s_ui_value_button
 	void				(*on_click)(t_ui_element *, void *);
 	void				*param;
 	char				*label;
+	char				*(*formatter)(float);
 } t_ui_value_button;
 
 
@@ -165,7 +166,6 @@ typedef struct s_ui
 	t_ui_context	*context;
 } t_ui;
 
-
 t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene);
 void		destroy_ui_context(t_ui_context *ctx);
 t_ui		*create_ui(mlx_t *mlx, t_scene *scene);
@@ -181,7 +181,7 @@ t_ui_element	*create_button(t_ui_context *ctx, const char *label, t_v2f pos, t_v
 				void (*on_click)(t_ui_element *, void *), void *param);
 t_ui_element	*create_label(t_ui_context *ctx, const char *text, t_v2f pos, uint32_t color);
 t_ui_element	*create_value_button(t_ui_context *ctx, float *value,
-							t_v2f range, float step, t_v2f pos, t_v2f size);
+							t_v2f range, float step, t_v2f pos, t_v2f size, char *(*formatter)(float));
 t_ui_element	*create_ambient_section(t_ui_context *ctx, t_scene *scene, t_v2f pos, t_v2f size);
 
 void			destroy_ui_element(t_ui_element *element, t_ui_context *ctx, bool free_data);
