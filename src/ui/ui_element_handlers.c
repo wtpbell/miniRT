@@ -51,7 +51,10 @@ static void	destroy_value_button(t_ui_element *element, t_ui_context *ctx)
 		return ;
 	vbutton = (t_ui_value_button *)element->data;
 	if (vbutton->label)
-		free(vbutton->label);
+	{
+		destroy_ui_element(vbutton->value_label, ctx, true);
+		vbutton->value_label = NULL;
+	}
 	free(vbutton);
 	element->data = NULL;
 }

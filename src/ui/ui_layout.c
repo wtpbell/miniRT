@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 11:39:13 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/04 21:10:26 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 14:56:25 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,144 +33,155 @@ t_ui_element	*create_header(t_ui_context *ctx, const char *title,
 	return (header);
 }
 
-t_ui_element	*create_value_button(t_ui_context *ctx, float *value,
+static t_light *find_ambient_light(t_scene *scene)
+{
+	t_light *light;
+	
+	for (int i = 0; i < (int)scene->lights.size; i++)
+	{
+		light = (t_light *)vector_get(&scene->lights, i);
+		if (light && light->type == LIGHT_AMBIENT)
+			return light;
+	}
+	return NULL;
+}
+
+static void init_value_button_data(t_ui_value_button *value_btn, float *value,
+	t_v2f range, float step)
+{
+	value_btn->value = value;
+	value_btn->range = range;
+	value_btn->step = step;
+	value_btn->on_click = NULL;
+	value_btn->param = NULL;
+}
+
+t_ui_element *create_value_button(t_ui_context *ctx, float *value,
 	t_v2f range, float step, t_v2f pos, t_v2f size)
 {
-	t_ui_element	*container;
-	t_ui_element	*decr_btn;
-	t_ui_element	*incr_btn;
-	t_ui_element	*value_label;
-	char		*value_str;
-	float		btn_width = 30.0f;
-
+	t_ui_element		*container;
+	t_ui_element		*decr_btn;
+	t_ui_element		*incr_btn;
+	t_ui_element		*value_label;
+	t_ui_value_button	*value_btn;
+	char				*value_str;
+	float				label_width;
+	float				label_x;
+	
 	container = create_panel(ctx, pos, size);
 	if (!container)
 		return (NULL);
-
-	// Create - button on the left
-	decr_btn = create_button(ctx, "-", 
-		init_v2f(0, 0), 
-		init_v2f(btn_width, size.y), 
-		NULL, NULL);
-
-	// Create + button on the right
-	incr_btn = create_button(ctx, "+", 
-		init_v2f(size.x - btn_width, 0), 
-		init_v2f(btn_width, size.y), 
-		NULL, NULL);
-
-	// Create value label in the center with 2 decimal places
+	value_btn = (t_ui_value_button *)ft_calloc(1, sizeof(t_ui_value_button));
+	if (!value_btn)
+		return (container);
+	init_value_button_data(value_btn, value, range, step);
+	decr_btn = create_button(ctx, "-", init_v2f(0, 0), init_v2f(UI_BUTTON_WIDTH, size.y),
+		decrement_value_button, ctx);
+	if (decr_btn)
+		attach_child(container, decr_btn);
+	incr_btn = create_button(ctx, "+", init_v2f(size.x - UI_BUTTON_WIDTH, 0), init_v2f(UI_BUTTON_WIDTH, size.y),
+		increment_value_button, ctx);
+	if (incr_btn)
+		attach_child(container, incr_btn);
 	value_str = ft_ftoa(*value, 2);
 	if (value_str)
 	{
-		float label_width = ft_strlen(value_str) * UI_CHAR_WIDTH;
-		float label_x = (size.x - label_width) / 2.0f;
-		
-		value_label = create_label(ctx, value_str, 
-			init_v2f(label_x, (size.y - UI_FONT_HEIGHT) / 2), 
-			0xFFFFFFFF);
-		
+		label_width = ft_strlen(value_str) * UI_CHAR_WIDTH;
+		label_x = (size.x - label_width) / 2.0f;
+		value_label = create_label(ctx, value_str, init_v2f(label_x, (size.y - UI_FONT_HEIGHT) / 2), UI_TEXT_COLOR);
 		if (value_label)
 		{
+			value_btn->value_label = value_label;
 			attach_child(container, value_label);
 		}
 		free(value_str);
 	}
-
-	// Attach buttons
-	if (decr_btn)
-	{
-		attach_child(container, decr_btn);
-	}
-	if (incr_btn)
-	{
-		attach_child(container, incr_btn);
-	}
-	(void)range;
-	(void)step;
+	container->type = UI_VALUE_BUTTON;
+	container->data = value_btn;
 	return (container);
 }
 
-t_ui_element	*create_ambient_section(t_ui_context *ctx, t_scene *scene,
-				t_v2f pos, t_v2f size)
+static t_ui_element	*create_labeled_control(t_ui_context *ctx, const char *label_text,
+	float *value, t_v2f range, float step, t_v2f pos, float width)
 {
-	const char		*labels[] = {"COL R", "COL G", "COL B"};
+	float			label_width;
+	float			control_width;
+	float			control_x;
+	t_ui_element	*container;
+	t_ui_element	*label;
+	t_ui_element	*control;
+	
+	container = create_panel(ctx, pos, init_v2f(width, UI_ROW_HEIGHT));
+	if (!container)
+		return (NULL);
+	label_width = width * UI_LABEL_WIDTH_RATIO;
+	control_width = width - label_width - UI_PADDING;
+	control_x = label_width + UI_PADDING;
+	label = create_label(ctx, label_text,
+		init_v2f(UI_LABEL_PADDING, (UI_ROW_HEIGHT - UI_FONT_HEIGHT) / 2),
+		UI_LABEL_COLOR);
+	if (label)
+		attach_child(container, label);
+	control = create_value_button(ctx, value, range, step,
+		init_v2f(control_x, 0),
+		init_v2f(control_width, UI_ROW_HEIGHT));
+	if (control)
+		attach_child(container, control);
+	return (container);
+}
+
+t_ui_element *create_ambient_section(t_ui_context *ctx, t_scene *scene,
+	t_v2f pos, t_v2f size)
+{
+	const char *color_labels[] = {"COLOR R", "COLOR G", "COLOR B"};
 	t_ui_element	*section;
 	t_light			*ambient;
 	t_ui_element	*header;
-	int				i;
 	float			current_y;
-	float			row_height;
-	float			*components[3];
-	t_ui_element	*intensity_label;
-	t_ui_element	*intensity_control;
-	t_ui_element	*label_elem;
-	// Calculate dimensions using macros from ui.h
-	const float		label_width = size.x * UI_LABEL_WIDTH_RATIO;
-	const float		button_width = size.x * UI_BTN_WIDTH_RATIO;
-	const float		button_height = size.y * UI_BTN_HEIGHT_RATIO;
-	const float		v_padding = size.y * UI_VERT_PADDING_RATIO;
-	const float		h_padding = size.x * UI_HORZ_PADDING_RATIO;
-
+	float			content_width;
+	float			*color_components[3];
+	int				i;
+	t_ui_element	*control;
+	t_ui_element	*intensity;
+	
 	section = create_panel(ctx, pos, size);
 	if (!section)
-		return (NULL);
-	ambient = NULL;
-	for (i = 0; i < (int)scene->lights.size; i++)
-	{
-		ambient = (t_light *)vector_get(&scene->lights, i);
-		if (ambient && ambient->type == LIGHT_AMBIENT)
-			break;
-	}
+		return NULL;
+	ambient = find_ambient_light(scene);
 	if (!ambient)
 		return (section);
 	header = create_header(ctx, "AMBIENT LIGHT",
 		init_v2f(0, 0), init_v2f(size.x, UI_HEADER_HEIGHT));
 	if (header)
 		attach_child(section, header);
-	// Calculate starting position below header
-	current_y = UI_HEADER_HEIGHT + v_padding * 2;
-	row_height = button_height;
-	components[0] = &ambient->color.x;
-	components[1] = &ambient->color.y;
-	components[2] = &ambient->color.z;
+	current_y = UI_HEADER_HEIGHT + UI_PADDING;
+	content_width = size.x - (UI_PADDING * 2);
+	color_components[0] = &ambient->color.x;
+	color_components[1] = &ambient->color.y;
+	color_components[2] = &ambient->color.z;
 	i = 0;
 	while (i < 3)
 	{
-		// Position the label
-		label_elem = create_label(ctx, labels[i], 
-			init_v2f(h_padding, 
-				current_y + (row_height - UI_FONT_HEIGHT) / 2), 
-			0xFFFFFFFF);
-		if (label_elem)
-			attach_child(section, label_elem);
-		
-		// Position the value button
-		intensity_control = create_value_button(ctx, components[i],
+		control = create_labeled_control(
+			ctx, color_labels[i], color_components[i],
 			init_v2f(0, 255), 1.0f,
-			init_v2f(h_padding + label_width, current_y),
-			init_v2f(button_width, row_height));
-		if (intensity_control)
-			attach_child(section, intensity_control);
-		
-		current_y += row_height + 5;
+			init_v2f(UI_PADDING, current_y),
+			content_width
+		);
+		if (control)
+		{
+			attach_child(section, control);
+			current_y += UI_ROW_HEIGHT + UI_PADDING;
+		}
 		i++;
 	}
-	
-	// Position the INTENSITY label
-	intensity_label = create_label(ctx, "INTENSITY",
-		init_v2f(h_padding, 
-			current_y + (row_height - UI_FONT_HEIGHT) / 2), 
-		0xFFFFFFFF);
-	if (intensity_label)
-		attach_child(section, intensity_label);
-		
-	// Position the intensity button
-	intensity_control = create_value_button(ctx, &ambient->intensity,
-		init_v2f(0, 1), 0.05f, 
-		init_v2f(h_padding + label_width, current_y),
-		init_v2f(button_width, row_height));
-	if (intensity_control)
-		attach_child(section, intensity_control);
+	intensity = create_labeled_control(
+		ctx, "INTENSITY", &ambient->intensity,
+		init_v2f(0, 1), 0.05f,
+		init_v2f(UI_PADDING, current_y),
+		content_width
+	);
+	if (intensity)
+		attach_child(section, intensity);
 	return (section);
 }

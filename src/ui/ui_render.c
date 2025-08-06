@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 15:03:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 12:47:51 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 13:31:57 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ void	draw_rect_border(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color
 }
 
 // Helper function for alpha blending
-static uint32_t blend_colors(uint32_t bg, uint32_t fg)
+uint32_t blend_colors(uint32_t bg, uint32_t fg)
 {
 	float alpha = ((fg >> 24) & 0xFF) / 255.0f;
 	float inv_alpha = 1.0f - alpha;

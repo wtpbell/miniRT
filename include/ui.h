@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 10:40:52 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 14:42:43 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ typedef void (*t_ui_update_func)(t_ui_element *, void *);
 # define HEIGHT 900
 // UI Dimensions
 # define UI_PANEL_WIDTH 300
-# define UI_BUTTON_WIDTH 200
+# define UI_BUTTON_WIDTH 30
+# define UI_BUTTON_HEIGHT 30
 
 // Ambient Section Layout Ratios
 # define UI_LABEL_WIDTH_RATIO 0.3f    // 30% of panel width for labels
@@ -58,18 +59,21 @@ typedef void (*t_ui_update_func)(t_ui_element *, void *);
 # define UI_CHAR_WIDTH 8
 # define UI_CHAR_HEIGHT 15
 # define UI_FONT_HEIGHT 8
+# define UI_ROW_HEIGHT 30
+# define UI_PADDING 5
+# define UI_LABEL_PADDING 10
 
 // UI Colors
-# define UI_PANEL_BG_COLOR 0x1E1E2EFF  // Dark blue-gray panel
-# define UI_SECTION_COLOR 0x2A2A3AFF   // Slightly lighter blue-gray for sections
+# define UI_PANEL_BG_COLOR 0x1E1E2EFF
+# define UI_SECTION_COLOR 0x2A2A3AFF
 # define UI_BUTTON_COLOR 0x444444FF
 # define UI_BUTTON_BORDER_COLOR 0x666666FF
 # define UI_TEXT_COLOR 0xFFFFFFFF
-# define UI_SECTION_HEADER_COLOR 0x252538FF  // Darker blue-gray for section headers
-# define UI_HEADER_COLOR 0x242437FF         // Darker blue-gray for main header
-# define UI_BORDER_COLOR 0x3E3E5EFF         // Bluish border color
+# define UI_SECTION_HEADER_COLOR 0x252538FF
+# define UI_HEADER_COLOR 0x242437FF
+# define UI_BORDER_COLOR 0x3E3E5EFF
 # define UI_TRANSPARENT 0x00000000
-
+# define UI_LABEL_COLOR 0xFFFFFFFF
 
 typedef enum e_ui_type
 {
@@ -206,7 +210,7 @@ void		draw_text(mlx_image_t *img, const char *str, t_v2f pos, uint32_t color);
 void		draw_rect(mlx_image_t *img, t_v2f pos, t_v2f size, uint32_t color);
 void		draw_rect_border(mlx_image_t *img, t_v2f pos, t_v2f size, uint32_t color);
 char		*ft_ftoa(float f, int precision);
-
+uint32_t	blend_colors(uint32_t bg, uint32_t fg);
 void		layout_vertical(t_ui_element *parent, float spacing);
 void		layout_horizontal(t_ui_element *parent, float spacing);
 #endif

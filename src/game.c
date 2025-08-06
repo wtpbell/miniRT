@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/06 12:42:11 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 12:58:20 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,22 +83,32 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 	}
 }
 
-// void mouse_hook(mouse_key_t button, action_t action, 
-// 	__attribute__((unused)) modifier_key_t mods, void *param)
-// {
-// 	t_game	*game;
-// 	int32_t	x;
-// 	int32_t	y;
+void mouse_hook(mouse_key_t button, action_t action, 
+	__attribute__((unused)) modifier_key_t mods, void *param)
+{
+	t_game  *game;
+	int32_t x;
+	int32_t y;
 
-// 	game = (t_game *)param;
-// 	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS && game->ui
-// 		&& game->ui->root->style.visible)
-// 	{
-// 		mlx_get_mouse_pos(game->mlx, &x, &y);
-// 		handle_ui_click(game->ui->root, x, y, game->ui->context);
-// 		render_ui(game->ui);
-// 	}
-// }
+	game = (t_game *)param;
+	printf("Mouse hook called - button: %d, action: %d\n", button, action);
+	
+	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS)
+	{
+		printf("Left mouse button pressed\n");
+		if (game->ui && game->ui->context && game->ui->context->is_visible)
+		{
+			mlx_get_mouse_pos(game->mlx, &x, &y);
+			printf("Mouse position: %d, %d\n", x, y);
+			handle_ui_click(game->ui->root, x, y, game->ui->context);
+			render_ui(game->ui);
+		}
+		else
+		{
+			printf("UI not visible or not initialized\n");
+		}
+	}
+}
 
 void	cleanup_mlx(t_game *game)
 {
@@ -154,7 +164,7 @@ int	game(t_scene *scene)
 	mlx_set_instance_depth(&game.img->instances[0], 0);
 	mlx_loop_hook(game.mlx, render_loop, &game);
 	mlx_key_hook(game.mlx, key_hook, &game);
-	// mlx_mouse_hook(game.mlx, mouse_hook, &game);
+	mlx_mouse_hook(game.mlx, mouse_hook, &game);
 	game.needs_redraw = true;
 	mlx_loop(game.mlx);
 	cleanup_mlx(&game);
