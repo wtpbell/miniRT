@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 17:01:40 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/04 18:20:31 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/06 20:29:32 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,21 @@ static bool	mesh_init(t_obj *obj, char *obj_path)
 bool	parse_mesh(char **tokens, t_scene *scene)
 {
 	t_v3f	pos;
+	t_v3f	dir;
 	t_v3f	color;
 	char	*obj_path;
 	t_obj	*obj;
 
-	if (!parse_v3f(&pos, tokens[1]) || !parse_col(&color, tokens[2])
-		|| !parse_path(&obj_path, tokens[3]))
+	if (!parse_v3f(&pos, tokens[1]) || !parse_dir(&dir, tokens[2])
+		|| !parse_col(&color, tokens[3]) || !parse_path(&obj_path, tokens[4]))
 		return (false);
 	obj = ft_calloc(1, sizeof(t_obj));
 	if (!obj)
 		return (free(obj_path), false);
-	init_obj_transform(obj, pos, g_v3f_forward, g_v3f_up);
+	init_obj_transform(obj, pos, dir, g_v3f_up);
 	init_obj_renderer(obj, color, mesh_texcoord);
 	if (!mesh_init(obj, obj_path)
-		|| !assign_material(obj, &scene->shared_materials, tokens[4])
+		|| !assign_material(obj, &scene->shared_materials, tokens[5])
 		|| !vector_add(&scene->objects, obj))
 		return (free_obj(obj), false);
 	return (true);

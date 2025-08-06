@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/04 22:58:26 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/06 20:28:00 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static const t_ele	g_parsers[EP_SIZE] = {
 {"tri", SCENE_NONE, 5, 6, parse_triangle},
 {"cy", SCENE_NONE, 6, 7, parse_cylinder},
 {"co", SCENE_NONE, 6, 7, parse_cone},
-{"obj", SCENE_NONE, 4, 5, parse_mesh},
+{"obj", SCENE_NONE, 5, 6, parse_mesh},
 [EP_SIZE - 1] = {"m_", SCENE_NONE, 2, -1, parse_material}
 };
 

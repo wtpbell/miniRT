@@ -6,51 +6,12 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 15:58:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/05 10:21:49 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/06 22:40:15 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-
-# still a comment. NOICE!
-
-# vertices are stored in a counter-clockwise order by default
-
-# List of geometric vertices, with (x, y, z, [w]) coordinates [w] optional and defaults to 1.0
-# These may contain colors after each coordinate (range 0..1)
-v x y z [w]
-v x y z [w]
-...
-
-# List of texture coordinates (u, [v, w]) coordinates, between 0 and 1, v and w are optional and default to 0
-vt 0.500 1 [0]
-vt u [v] [w]
-...
-
-# List of vertex normals in (x, y, z); normals might not be unit vectors
-vn 0.707 0.707 0.707
-vn x y z
-...
-
-# Polygonal face element (starts at 1, -1 refers the to the last element)
-# A face can contain three or more vertices
-f v1 v2 v3 ...
-f v3/vt1 4/2 5/3
-f 6/4/1 3/5/3 7/6/5
-f 7//1 8//2 9//3
-...
-
-# Line element
-1 5 8 1 2 4 9
-
-*/
-
-//
 // Need a struct to store the obj file into
 // Need temporary vector lists for storing the vertices, texture coordinates and normals;
-// The face element tells me which vertices are stored together...
-// Obj files are parsed after the main parser is complete (gnl bonus is also an option)
-// Optimization would be to construct an AABB around the model and have the ray caster intersect test it first
 
 #include "parser.h"
 #include "errno.h"
@@ -62,14 +23,6 @@ f 7//1 8//2 9//3
 #define MIN_I		-MAX_I
 
 // TODO: Better error messages
-
-float	ft_minf(float a, float b)
-{
-	if (a < b)
-		return (a);
-	return (b);
-}
-
 static bool	init_obj_file(t_obj_file *obj_file)
 {
 	ft_bzero(obj_file, sizeof(obj_file));
@@ -96,6 +49,7 @@ static void	free_obj_file(t_obj_file *obj_file)
 
 static inline void assign_v3f(t_v3f *v, t_vector *cont, int i)
 {
+	// TODO: If index isn't valid have it fail or print error message (missing index)
 	if (vector_get(cont, i) != NULL)
 		*v = *((t_v3f *)cont->items[i]);
 }
@@ -120,13 +74,13 @@ static void	construct_mesh_aabb(t_mesh *mesh)
 	{
 		tri = (t_tri *)mesh->triangles.items[i];
 
-		min.x = ft_minf(ft_minf(ft_minf(min.x, tri->v0.x), tri->v1.x), tri->v2.x);
-		min.y = ft_minf(ft_minf(ft_minf(min.y, tri->v0.y), tri->v1.y), tri->v2.y);
-		min.z = ft_minf(ft_minf(ft_minf(min.z, tri->v0.z), tri->v1.z), tri->v2.z);
+		min.x = fminf(fminf(fminf(min.x, tri->v0.x), tri->v1.x), tri->v2.x);
+		min.y = fminf(fminf(fminf(min.y, tri->v0.y), tri->v1.y), tri->v2.y);
+		min.z = fminf(fminf(fminf(min.z, tri->v0.z), tri->v1.z), tri->v2.z);
 
-		max.x = ft_maxf(ft_maxf(ft_maxf(max.x, tri->v0.x), tri->v1.x), tri->v2.x);
-		max.y = ft_maxf(ft_maxf(ft_maxf(max.y, tri->v0.y), tri->v1.y), tri->v2.y);
-		max.z = ft_maxf(ft_maxf(ft_maxf(max.z, tri->v0.z), tri->v1.z), tri->v2.z);
+		max.x = fmaxf(fmaxf(fmaxf(max.x, tri->v0.x), tri->v1.x), tri->v2.x);
+		max.y = fmaxf(fmaxf(fmaxf(max.y, tri->v0.y), tri->v1.y), tri->v2.y);
+		max.z = fmaxf(fmaxf(fmaxf(max.z, tri->v0.z), tri->v1.z), tri->v2.z);
 		++i;
 	}
 	mesh->box.min = min;
@@ -134,7 +88,7 @@ static void	construct_mesh_aabb(t_mesh *mesh)
 }
 
 // TODO: vn and vt are optional; If none are supplied within the obj file then it must be calcaluted.
-static bool	load_obj_into_mesh(t_obj_file *obj_file, t_mesh *mesh)
+static bool	load_obj_into_mesh(t_obj_file *obj_file, t_mesh *mesh, t_mat4x4 local)
 {
 	int		i;
 	int		*indices;
@@ -150,69 +104,110 @@ static bool	load_obj_into_mesh(t_obj_file *obj_file, t_mesh *mesh)
 		assign_v3f(&tri->v0, &obj_file->v, *(indices + 0) - 1);
 		assign_v3f(&tri->v1, &obj_file->v, *(indices + 3) - 1);
 		assign_v3f(&tri->v2, &obj_file->v, *(indices + 6) - 1);
-		assign_v3f(&tri->vt0, &obj_file->vt, *(indices + 1) - 1);
-		assign_v3f(&tri->vt1, &obj_file->vt, *(indices + 4) - 1);
-		assign_v3f(&tri->vt2, &obj_file->vt, *(indices + 7) - 1);
-		assign_v3f(&tri->vn0, &obj_file->vn, *(indices + 2) - 1);
-		assign_v3f(&tri->vn1, &obj_file->vn, *(indices + 5) - 1);
-		assign_v3f(&tri->vt2, &obj_file->vn, *(indices + 8) - 1);
 
-		t_v3f norm = get_normal(tri->v0, tri->v1, tri->v2);
-		tri->vn0 = norm;
-		tri->vn1 = norm;
-		tri->vn2 = norm;
+		if (*(indices + 1) != 0) // No vt were assigned
+		{
+			assign_v3f(&tri->vt0, &obj_file->vt, *(indices + 1) - 1);
+			assign_v3f(&tri->vt1, &obj_file->vt, *(indices + 4) - 1);
+			assign_v3f(&tri->vt2, &obj_file->vt, *(indices + 7) - 1);
+		}
+		else
+		{
+			generate_uv_vertices(tri, local);
+		}
+
+		if (*(indices + 2) == 0) // No vn were assigned
+		{
+			// Needs to be normalized
+			assign_v3f(&tri->vn0, &obj_file->vn, *(indices + 2) - 1);
+			assign_v3f(&tri->vn1, &obj_file->vn, *(indices + 5) - 1);
+			assign_v3f(&tri->vt2, &obj_file->vn, *(indices + 8) - 1);
+		}
+		else
+		{
+			t_v3f norm = get_normal(tri->v0, tri->v1, tri->v2);
+			tri->vn0 = norm;
+			tri->vn1 = norm;
+			tri->vn2 = norm;
+		}
 
 		if (!vector_add(&mesh->triangles, tri))
 			return (false);
 		++i;
 	}
-	// TODO: This needs to be put in world space
 	construct_mesh_aabb(mesh);
 	printf("%f %f %f || %f %f %f\n", mesh->box.min.x, mesh->box.min.y, mesh->box.min.z, mesh->box.max.x, mesh->box.max.y, mesh->box.max.z);
+	printf("triangles: %i\n", mesh->triangles.size);
 	return (true);
+}
+
+static int	to_v3f(t_v3f *dst, char *saveptr, t_v2f lim)
+{
+	int		count;
+	char	*token;
+
+	count = 0;
+	while (true)
+	{
+		token = rt_strtok(NULL, WHITESPACE, &saveptr);
+		if (token == NULL)
+			break ;
+		if (count < 3 && !parse_float(dst->_axis + count, token, lim, token))
+			return (0);
+		++count;
+	}
+	return (count);
+}
+
+static bool	copy_v3f_to(const t_v3f point, t_vector *v)
+{
+	t_v3f	*copy;
+
+	copy = malloc(sizeof(t_v3f));
+	if (copy == NULL)
+		return (false);
+	*copy = point;
+	if (vector_add(v, copy))
+		return (true);
+	return (free(copy), false);
 }
 
 static bool	parse_vertex(char *str, t_vector *v)
 {
-	const	t_v2f	lim = init_v2f(MIN_VAL, MAX_VAL);
-	char			*token;
-	int				count;
-	t_v3f			point;
-	t_v3f			*item;
+	int		count;
+	t_v3f	point;
 
-	count = 0;
-	while (count < 3)
-	{
-		token = rt_strtok(NULL, WHITESPACE, &str);
-		if (token == NULL)
-			break ;
-		if (!parse_float(point._axis + count, token, lim, token))
-			return (false);
-		++count;
-	}
-	if (count < 3)
+	count = to_v3f(&point, str, init_v2f(MIN_VAL, MAX_VAL));
+	if (count != 3 && count != 4)
 		return (false);
-	item = malloc(sizeof(t_v3f));
-	if (item == NULL)
-		return (false);
-	*item = point;
-	if (vector_add(v, item))
-		return (true);
-	return (free(item), false);
+	return (copy_v3f_to(point, v));
 }
 
 static bool	parse_vertex_texcoord(char *str, t_vector *vt)
 {
-	(void)str;
-	(void)vt;
-	return (true);
+	int		count;
+	t_v3f	point;
+
+	count = to_v3f(&point, str, init_v2f(0.0f, 1.0f));
+	if (count < 1 || count > 3)
+		return (false);
+	while (count < 3)
+	{
+		point._axis[count] = 0.0f;
+		++count;
+	}
+	return (copy_v3f_to(point, vt));
 }
 
 static bool	parse_vertex_normal(char *str, t_vector *vn)
 {
-	(void)str;
-	(void)vn;
-	return (true);
+	int		count;
+	t_v3f	point;
+
+	count = to_v3f(&point, str, init_v2f(MIN_VAL, MAX_VAL));
+	if (count != 3)
+		return (false);
+	return (copy_v3f_to(point, vn));
 }
 
 static bool	is_valid_face_syntax(const char *face)
@@ -302,7 +297,7 @@ static bool	parse_line(char *line, t_obj_file *obj_file)
 	return (true);
 }
 
-static bool	parse_obj_file(t_mesh *mesh)
+static bool	parse_obj_file(t_mesh *mesh, t_mat4x4 local)
 {
 	const char	*file_name = mesh->obj_path;
 	char		*line;
@@ -327,7 +322,7 @@ static bool	parse_obj_file(t_mesh *mesh)
 	get_next_line(-1);
 	if (errno != 0)
 		return (perror("parse mesh"), free_obj_file(&obj_file), false);
-	if (!load_obj_into_mesh(&obj_file, mesh))
+	if (!load_obj_into_mesh(&obj_file, mesh, local))
 		return (free_obj_file(&obj_file), false);
 	return (free_obj_file(&obj_file), true);
 }
@@ -344,7 +339,7 @@ bool	handle_mesh_obj(t_scene *scene)
 	{
 		obj = (t_obj *)scene->objects.items[i];
 		// TODO: Cache the obj files for faster re-use
-		if (obj->type == OBJ_MESH && !parse_obj_file(&obj->mesh))
+		if (obj->type == OBJ_MESH && !parse_obj_file(&obj->mesh, obj->t.to_obj))
 			return (false);
 		++i;
 	}

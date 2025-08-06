@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 17:28:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/05 10:37:33 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/06 21:57:57 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 #include "ray.h"
 #include "minirt.h"
 
-
 bool	aabb_intersect(t_ray *ray, t_aabb *box)
 {
-	// TODO: Make function static
 	const t_v3f	invdir = init_v3f(
 		1.0f / ray->direction.x,
 		1.0f / ray->direction.y,
@@ -56,28 +54,52 @@ bool	aabb_intersect(t_ray *ray, t_aabb *box)
 	return (!((t_min.x > t_max.z) || (t_min.z > t_max.x)));
 }
 
-// TODO: Implementation needed
 t_v3f	mesh_normal(t_obj *obj, t_v3f point, t_result *res)
 {
 	t_tri	*tri;
+	float	u;
+	float	v;
+	float	w;
 
 	(void)point;
 	tri = (t_tri *)vector_get(&obj->mesh.triangles, res->face_index);
 	if (tri == NULL)
 		return (g_v3f_up);
-	return (mul_dir_m4x4(tri->vn0, obj->t.to_world));
+
+	u = res->tri_weight.u;
+	v = res->tri_weight.v;
+	w = 1.0f - u - v;
+
+	return (mul_dir_m4x4(
+		v3f_add(v3f_scale(tri->vn2, v),
+			v3f_add(v3f_scale(tri->vn1, u), v3f_scale(tri->vn0, w))),
+			obj->t.to_world));
 }
 
-// TODO: Implementation needed
-t_v2f	mesh_texcoord(t_obj *obj, t_v3f world_point, t_result *res)
+// TODO: Same code as triangle_texcoord
+t_v2f	mesh_texcoord(t_obj *obj, t_v3f point, t_result *res)
 {
-	(void)obj;
-	(void)world_point;
-	(void)res;
-	return (g_v2f_zero);
+	float	w;
+	float	u;
+	float	v;
+	t_tri	*tri;
+
+	(void)point;
+	tri = (t_tri *)vector_get(&obj->mesh.triangles, res->face_index);
+	if (tri == NULL)
+		return (g_v2f_zero);
+
+	tri = &obj->tri;
+	u = res->tri_weight.u;
+	v = res->tri_weight.v;
+	w = 1.0f - u - v;
+
+	return (init_v2f(
+			w * tri->vt0.x + u * tri->vt1.x + v * tri->vt2.x,
+			w * tri->vt0.y + u * tri->vt1.y + v * tri->vt2.y)
+	);
 }
 
-// TODO: Implementation needed
 int	mesh_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_result *res)
 {
 	int		i;
