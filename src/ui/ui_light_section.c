@@ -17,10 +17,13 @@ static void	add_light_pos_controls(t_ui_context *ctx, t_light *light,
 {
 	t_vbtn_config	cfg;
 	const char		*labels[] = {"POS X", "POS Y", "POS Z"};
-	float			*values[] = {&light->pos.x, &light->pos.y, &light->pos.z};
+	float			*values[3];
 	int				i;
 
 	i = 0;
+	values[0] = &light->pos.x;
+	values[1] = &light->pos.y;
+	values[2] = &light->pos.z;
 	while (i < 3)
 	{
 		cfg.ctx = ctx;

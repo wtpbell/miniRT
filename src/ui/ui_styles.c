@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 16:25:35 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 13:26:00 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 23:16:03 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ void	default_panel(t_ui_element *panel, t_v2f pos, t_v2f size)
 	panel->visible = true;
 	panel->first_child = NULL;
 	panel->next_sibling = NULL;
+	panel->parent = NULL;
+	panel->data = NULL;
+	panel->action = NULL;
+	panel->abs_pos = init_v2f(0, 0);
 	panel->style = (t_ui_style){
 		.bg_color = UI_PANEL_BG_COLOR,
 		.text_color = UI_TEXT_COLOR,
@@ -37,6 +41,11 @@ void	default_label(t_ui_element *label, t_v2f pos, t_v2f size)
 	label->visible = true;
 	label->first_child = NULL;
 	label->next_sibling = NULL;
+	label->parent = NULL;
+	label->data = NULL;
+	label->action = NULL;
+	label->visible = true;
+	label->abs_pos = init_v2f(0, 0);
 	label->style = (t_ui_style){
 		.bg_color = UI_TRANSPARENT,
 		.text_color = UI_TEXT_COLOR,
@@ -54,6 +63,11 @@ void	default_header(t_ui_element *header, t_v2f pos, t_v2f size)
 	header->visible = true;
 	header->first_child = NULL;
 	header->next_sibling = NULL;
+	header->parent = NULL;
+	header->data = NULL;
+	header->action = NULL;
+	header->visible = true;
+	header->abs_pos = init_v2f(0, 0);
 	header->style = (t_ui_style){
 		.bg_color = UI_HEADER_COLOR,
 		.text_color = UI_TEXT_COLOR,
@@ -71,6 +85,10 @@ void	default_button(t_ui_element *button, t_v2f pos, t_v2f size)
 	button->visible = true;
 	button->first_child = NULL;
 	button->next_sibling = NULL;
+	button->parent = NULL;
+	button->data = NULL;
+	button->action = NULL;
+	button->abs_pos = init_v2f(0, 0);
 	button->style = (t_ui_style){
 		.bg_color = UI_BUTTON_COLOR,
 		.text_color = UI_TEXT_COLOR,
@@ -90,6 +108,9 @@ void	default_value_button(t_ui_element *button, t_v2f pos, t_v2f size, const cha
 	button->visible = true;
 	button->first_child = NULL;
 	button->next_sibling = NULL;
+	button->parent = NULL;
+	button->action = NULL;
+	button->abs_pos = init_v2f(0, 0);
 	button->style = (t_ui_style){
 		.bg_color = UI_BUTTON_COLOR,
 		.text_color = UI_TEXT_COLOR,
@@ -125,6 +146,10 @@ void	default_section(t_ui_element *section, t_v2f pos, t_v2f size)
 	section->visible = true;
 	section->first_child = NULL;
 	section->next_sibling = NULL;
+	section->parent = NULL;
+	section->data = NULL;
+	section->action = NULL;
+	section->abs_pos = init_v2f(0, 0);
 	section->style = (t_ui_style){
 		.bg_color = UI_SECTION_COLOR,
 		.text_color = UI_TEXT_COLOR,

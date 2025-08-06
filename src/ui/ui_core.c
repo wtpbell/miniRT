@@ -6,22 +6,13 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:53:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 18:18:38 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 23:21:48 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
 #include <stdint.h>
 #include <stdlib.h>
-
-static void	(*const g_default_stylers[])(t_ui_element *, t_v2f, t_v2f) = {
-	[UI_PANEL] = default_panel,
-	[UI_BUTTON] = default_button,
-	[UI_LABEL] = default_label,
-	[UI_HEADER] = default_header,
-	[UI_SECTION] = default_section,
-};
-
 
 t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene)
 {
@@ -91,7 +82,7 @@ void	destroy_ui(t_ui *ui)
 	if (!ui)
 		return;
 	if (ui->root)
-		destroy_ui_element_recursive(ui->root, ui->context, true);
+		destroy_ui_element_recursive(ui->root, ui->context);
 	if (ui->context)
 		destroy_ui_context(ui->context);
 	free(ui);
@@ -172,28 +163,6 @@ void	render_ui(t_ui *ui)
 	if (ui->root)
 		render_ui_element(ui->root, ctx);
 	ctx->needs_redraw = false;
-}
-
-t_ui_element	*ui_element_create(t_ui_type type, t_v2f pos, t_v2f size)
-{
-	t_ui_element	*element;
-
-	element = (t_ui_element *)ft_calloc(1, sizeof(t_ui_element));
-	if (!element)
-		return (NULL);
-	element->type = type;
-	element->pos = pos;
-	element->size = size;
-	element->parent = NULL;
-	element->first_child = NULL;
-	element->next_sibling = NULL;
-	element->data = NULL;
-	element->action = NULL;
-	element->visible = true;
-	if (type < (sizeof(g_default_stylers) / sizeof(g_default_stylers[0])) && 
-		g_default_stylers[type] != NULL)
-		g_default_stylers[type](element, pos, size);
-	return (element);
 }
 
 void	attach_child(t_ui_element *parent, t_ui_element *child)

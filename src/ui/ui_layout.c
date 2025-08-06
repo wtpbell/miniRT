@@ -6,34 +6,13 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 11:39:13 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 19:43:06 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 21:53:18 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
 
-t_ui_element	*create_header(t_ui_context *ctx, const char *title,
-	t_v2f pos, t_v2f size)
-{
-	t_ui_element	*header;
-	t_ui_element	*title_label;
-
-	header = create_panel(ctx, pos, size);
-	if (!header)
-		return (NULL);
-	if (title)
-	{
-		title_label = create_label(ctx, title, init_v2f(10, 10), 0xFFFFFFFF);
-		if (title_label)
-		{
-			title_label->pos = init_v2f(10, (size.y - UI_FONT_HEIGHT) / 2);
-			attach_child(header, title_label);
-		}
-	}
-	return (header);
-}
-
-static void	init_value_button_data(t_ui_value_button *value_btn, const t_vbtn_config *cfg)
+void	init_value_button_data(t_ui_value_button *value_btn, const t_vbtn_config *cfg)
 {
 	if (!value_btn || !cfg)
 		return ;
@@ -45,7 +24,7 @@ static void	init_value_button_data(t_ui_value_button *value_btn, const t_vbtn_co
 	value_btn->formatter = cfg->formatter;
 }
 
-static void	add_inc_dec_buttons(t_ui_element *container,
+void	add_inc_dec_buttons(t_ui_element *container,
 						const t_vbtn_config *cfg, t_ui_value_button *value_btn)
 {
 	t_ui_element	*decr_btn;
@@ -66,7 +45,7 @@ static void	add_inc_dec_buttons(t_ui_element *container,
 		attach_child(container, incr_btn);
 }
 
-static void	add_value_label(t_ui_element *container,
+void	add_value_label(t_ui_element *container,
 	const t_vbtn_config *cfg, t_ui_value_button *value_btn)
 {
 	char		*value_str;
@@ -91,51 +70,6 @@ static void	add_value_label(t_ui_element *container,
 		attach_child(container, label);
 	}
 	free(value_str);
-}
-
-static t_ui_element	*create_value_button(t_vbtn_config *cfg)
-{
-	t_ui_element		*container;
-	t_ui_value_button	*value_btn;
-
-	container = create_panel(cfg->ctx, cfg->pos, cfg->size);
-	if (!container)
-		return (NULL);
-	value_btn = (t_ui_value_button *)ft_calloc(1, sizeof(t_ui_value_button));
-	if (!value_btn)
-		return container;
-	init_value_button_data(value_btn, cfg);
-	add_inc_dec_buttons(container, cfg, value_btn);
-	add_value_label(container, cfg, value_btn);
-	container->type = UI_VALUE_BUTTON;
-	container->data = value_btn;
-	return container;
-}
-
-t_ui_element	*create_labeled_control(t_vbtn_config *cfg,
-						const char *label_text, float total_width)
-{
-	float			label_width;
-	float			control_width;
-	float			control_x;
-	t_ui_element	*container;
-	t_ui_element	*label;
-
-	container = create_panel(cfg->ctx, cfg->pos, init_v2f(total_width, UI_ROW_HEIGHT));
-	if (!container)
-		return (NULL);
-	label_width = total_width * UI_LABEL_WIDTH_RATIO;
-	control_width = total_width - label_width - UI_PADDING;
-	control_x = label_width + UI_PADDING;
-	label = create_label(cfg->ctx, label_text,
-		init_v2f(UI_LABEL_PADDING, (UI_ROW_HEIGHT - UI_FONT_HEIGHT) / 2),
-		UI_LABEL_COLOR);
-	if (label)
-		attach_child(container, label);
-	cfg->pos = init_v2f(control_x, 0);
-	cfg->size = init_v2f(control_width, UI_ROW_HEIGHT);
-	attach_child(container, create_value_button(cfg));
-	return (container);
 }
 
 t_ui_element	*create_ui_sections(t_ui_context *ctx, t_scene *scene, t_v2f pos, t_v2f size)

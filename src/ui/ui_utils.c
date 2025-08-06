@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 19:42:31 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/06 23:26:04 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,6 @@ t_light	*find_light(t_scene *scene, t_light_type type)
 	return NULL;
 }
 
-// Forward declaration
-void ui_element_setup_handlers(t_ui_element *element);
-
 bool	ui_element_remove_child(t_ui_element *parent, t_ui_element *child, 
 							bool destroy, t_ui_context *ctx)
 {
@@ -96,11 +93,11 @@ bool	ui_element_remove_child(t_ui_element *parent, t_ui_element *child,
 	child->parent = NULL;
 	child->next_sibling = NULL;
 	if (destroy)
-		destroy_ui_element_recursive(child, ctx, true);
+		destroy_ui_element_recursive(child, ctx);
 	return (true);
 }
 
-void	destroy_ui_element_recursive(t_ui_element *element, t_ui_context *ctx, bool free_data)
+void	destroy_ui_element_recursive(t_ui_element *element, t_ui_context *ctx)
 {
 	t_ui_element	*child;
 	t_ui_element	*next;
@@ -116,81 +113,5 @@ void	destroy_ui_element_recursive(t_ui_element *element, t_ui_context *ctx, bool
 	}
 	if (element->parent)
 		ui_element_remove_child(element->parent, element, false, ctx);
-	destroy_ui_element(element, ctx, free_data);
-}
-
-t_ui_element	*create_ui_element(t_ui_type type, t_v2f pos, t_v2f size)
-{
-	t_ui_element	*element;
-
-	element = ft_calloc(1, sizeof(t_ui_element));
-	if (!element)
-		return (NULL);
-	element->type = type;
-	element->pos = pos;
-	element->size = size;
-	element->visible = true;
-	element->first_child = NULL;
-	element->next_sibling = NULL;
-	element->parent = NULL;
-	element->data = NULL;
-	element->action = NULL;
-	element->render = NULL;
-	element->state = 0;
-	element->abs_pos = init_v2f(0, 0);
-	element->style = (t_ui_style){
-		.bg_color = 0x00000000,
-		.border_color = 0x00000000,
-		.text_color = 0xFFFFFFFF,
-		.padding = 0,
-		.visible = true
-	};
-	// Set up the element's handlers based on its type
-	ui_element_setup_handlers(element);
-	return (element);
-}
-
-void	layout_vertical(t_ui_element *parent, float spacing)
-{
-	t_ui_element	*child;
-	t_v2f			pos;
-
-	if (!parent || !parent->first_child)
-		return ;
-	pos = parent->pos;
-	pos.x += parent->style.padding;
-	pos.y += parent->style.padding;
-	child = parent->first_child;
-	while (child)
-	{
-		if (child->visible)
-		{
-			child->pos = pos;
-			pos.y += child->size.y + spacing;
-		}
-		child = child->next_sibling;
-	}
-}
-
-void	layout_horizontal(t_ui_element *parent, float spacing)
-{
-	t_ui_element	*child;
-	t_v2f			pos;
-
-	if (!parent || !parent->first_child)
-		return ;
-	pos = parent->pos;
-	pos.x += parent->style.padding;
-	pos.y += parent->style.padding;
-
-	child = parent->first_child;
-	while (child)
-	{
-		if (child->visible)
-		{
-			child->pos = pos;
-			pos.x += child->size.x + spacing;
-		}
-		child = child->next_sibling;
-	}
+	destroy_ui_element(element, ctx);
 }
