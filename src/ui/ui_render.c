@@ -164,7 +164,7 @@ uint32_t blend_colors(uint32_t bg, uint32_t fg)
 	uint8_t b = (uint8_t)((bg & 0xFF) * inv_alpha + (fg & 0xFF) * alpha);
 	uint8_t a = (uint8_t)(0xFF);
 
-	return (a << 24) | (r << 16) | (g << 8) | b;
+	return ((uint32_t)a << 24) | ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
 }
 
 void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
