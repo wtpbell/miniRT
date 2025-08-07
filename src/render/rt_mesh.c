@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 17:28:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/07 11:59:13 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/07 17:26:25 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ t_v3f	mesh_normal(t_obj *obj, t_v3f point, t_result *res)
 	(void)point;
 	tri = (t_tri *)obj->mesh.triangles.items[res->face_index];
 	return (mul_dir_m4x4(
-		v3f_add(v3f_scale(tri->vn2, res->tri_weight.v),
-			v3f_add(v3f_scale(tri->vn1, res->tri_weight.u),
-						v3f_scale(tri->vn0, w))),
+			v3f_add(v3f_scale(tri->vn2, res->tri_weight.v),
+				v3f_add(v3f_scale(tri->vn1, res->tri_weight.u),
+					v3f_scale(tri->vn0, w))),
 			obj->t.to_world));
 }
 
@@ -34,8 +34,8 @@ t_v2f	mesh_texcoord(t_obj *obj, t_v3f point, t_result *res)
 	(void)point;
 	return (
 		tri_uv_texcoord((t_tri *)obj->mesh.triangles.items[res->face_index],
-		res->tri_weight
-	));
+			res->tri_weight
+		));
 }
 
 int	mesh_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_result *res)

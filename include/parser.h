@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/04 18:33:48 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/07 18:57:00 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include "rt_math.h"
 
 # define MAX_POS			10000.0f
+# define MIN_POS			-MAX_POS
 # define MAX_RADIUS			1000.0f
 # define MIN_RADIUS			0.0f
 # define MAX_HEIGHT			1000.0f
@@ -40,6 +41,9 @@
 # define MIN_LIGHT_RATIO	0.0f
 # define MAX_DIR			1.0f
 # define MIN_DIR			-1.0f
+# define WHITESPACE			" \f\r\t\v\n"
+# define MAX_VERT_PER_SET	9
+# define MAX_VERT_PER_FACE	3
 
 # define RED 			"\033[31m"
 # define GREEN 			"\033[32m"
@@ -126,6 +130,13 @@ typedef struct s_obj_file
 	t_vector	vn;	// Vertex normals (i, j, k)
 	t_vector	f;	// Faces (v1[/vt1/vn1] v2[/vt2/vn2] v3[/vt3/vn3] ...)
 }	t_obj_file;
+
+typedef struct s_vert_ran
+{
+	t_v2f	comp; // TODO: Change comp to v2i, once perlin is merged
+	t_v2f	lim;
+	t_v4f	def;
+}	t_vert_ran;
 
 /* ---------------------Core--------------------- */
 // file_parser.c
@@ -237,6 +248,6 @@ bool		load_texture(t_tex *tex, const char *path);
 void		assign_textures(t_mat *mat);
 
 // obj.c
-bool		handle_mesh_obj(t_scene *scene);
+bool		construct_mesh(t_scene *scene);
 
 #endif
