@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 11:37:50 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/04 14:51:26 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/07 21:21:35 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,4 @@ t_v3f	cone_normal(t_obj *obj, t_v3f point);
 t_ray	get_ray_with_dof(t_cam *cam, float u, float v);
 void	update_camera_view(t_cam *cam);
 void	generate_uv_vertices(t_tri *tri, t_mat4x4 local);
-int		game(t_scene *scene);
 #endif

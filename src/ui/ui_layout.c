@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_layout.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/25 11:39:13 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/07 19:23:07 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_layout.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/25 11:39:13 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/07 22:31:15 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,24 +80,28 @@ t_ui_element	*create_ui_sections(t_ui_context *ctx, t_sample *sample, t_v2f pos,
 	t_v3f			section_heights;
 
 	section_heights = (t_v3f){
-		.x = UI_HEADER_HEIGHT + 7.5 * (UI_ROW_HEIGHT + UI_PADDING),
-		.y = UI_HEADER_HEIGHT + 7.5 * (UI_ROW_HEIGHT + UI_PADDING),
-		.z = UI_HEADER_HEIGHT + 4.5 * (UI_ROW_HEIGHT + UI_PADDING)
+		.x = UI_HEADER_HEIGHT + 8.3 * (UI_ROW_HEIGHT),
+		.y = UI_HEADER_HEIGHT + 4.85 * (UI_ROW_HEIGHT),
+		.z = UI_HEADER_HEIGHT
 	};
 	panel = create_panel(ctx, pos, size);
 	if (!panel)
 		return (NULL);
+	panel->style.bg_color = UI_TRANSPARENT;
 	section_pos = init_v2f(UI_PANEL_PADDING, UI_PANEL_PADDING);
 	section_size = init_v2f(size.x - (2 * UI_PANEL_PADDING), section_heights.x);
 	attach_child(panel, create_camera_section(ctx, sample, section_pos, section_size));
-	section_pos.y += section_heights.x + UI_PANEL_PADDING;
+	section_pos.y += section_heights.x;
 	section_size.y = section_heights.y;
 	attach_child(panel, create_light_section(ctx, sample, section_pos, section_size));
-	section_pos.y += section_heights.y + UI_PANEL_PADDING;
+	section_pos.y += section_heights.x;
 	section_size.y = section_heights.z;
 	attach_child(panel, create_ambient_section(ctx, sample, section_pos, section_size));
-	section_pos.y += section_heights.z + UI_PANEL_PADDING;
+	section_pos.y += section_heights.y;
 	section_size.y = section_heights.z;
 	attach_child(panel, create_dof_section(ctx, sample, section_pos, section_size));
+	section_pos.y += section_heights.z;
+	section_size.y = section_heights.z;
+	attach_child(panel, create_sample_section(ctx, sample, section_pos, section_size));
 	return (panel);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_dof_section.c                                   :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/08/07 17:28:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/07 19:24:56 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_dof_section.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/07 17:28:06 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/07 22:15:27 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ t_ui_element	*create_dof_section(t_ui_context *ctx, t_sample *sample,
 	camera = &ctx->scene->camera;
 	size.y = UI_HEADER_HEIGHT;
 	section = create_panel(ctx, pos, size);
+	section->style.bg_color = UI_COLOR_DOF_SECTION;
 	if (!section || !camera)
 		return (section);
 	add_dof_control(ctx, camera, section, size);

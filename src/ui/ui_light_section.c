@@ -95,6 +95,7 @@ t_ui_element	*create_light_section(t_ui_context *ctx, t_sample *sample,
 		return (NULL);
 	size.y = UI_HEADER_HEIGHT + 7 * (UI_ROW_HEIGHT + UI_PADDING) + UI_PADDING;
 	section = create_panel(ctx, pos, size);
+	section->style.bg_color = UI_COLOR_LIGHT_SECTION;
 	if (!section)
 		return (NULL);
 	attach_child(section, create_header(ctx, "LIGHT",

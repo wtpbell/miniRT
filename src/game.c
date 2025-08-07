@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   game.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/07 19:37:31 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   game.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
+/*   Updated: 2025/08/07 21:16:29 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ static bool	cam_init(t_cam *cam, mlx_t *mlx)
 	return (true);
 }
 
-int	game(t_scene *scene)
+int	game(t_scene *scene, t_sample *sample)
 {
 	t_game	game;
 
@@ -160,8 +160,7 @@ int	game(t_scene *scene)
 	game.img = scene->camera.img_plane;
 	game.scene = scene;
 	game.needs_redraw = true;
-	game.sample->max_depth = 8;
-	game.sample->sample_pxl = 12;
+	game.sample = sample;
 	game.ui = create_ui(game.mlx, scene, game.sample);
 	if (!game.ui)
 		return (cleanup_mlx(&game), 1);

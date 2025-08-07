@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui.h                                               :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/07 19:24:13 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui.h                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/07 22:18:39 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,12 @@
 # define UI_BORDER_COLOR 0x3E3E5EFF
 # define UI_TRANSPARENT 0x00000000
 # define UI_LABEL_COLOR 0xFFFFFFFF
+// UI Colors
+# define UI_COLOR_CAMERA_SECTION   0xFF6B6BFF  // Soft red
+# define UI_COLOR_LIGHT_SECTION    0xFFB86BFF  // Soft orange
+# define UI_COLOR_AMBIENT_SECTION  0x6B8EFFFF  // Soft blue
+# define UI_COLOR_DOF_SECTION      0xFFB6C1FF  // Soft pink
+# define UI_COLOR_SAMPLE_SECTION   0x2A2A3AFF  // Darker gray for better contrast
 
 typedef enum e_ui_type
 {
@@ -185,7 +191,7 @@ t_ui_element	*create_camera_section(t_ui_context *ctx, t_sample *sample, t_v2f p
 t_ui_element	*create_light_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
 t_ui_element	*create_ui_sections(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
 t_ui_element	*create_dof_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
-
+t_ui_element	*create_sample_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
 /* UI Element Management */
 void			destroy_ui_element(t_ui_element *element, t_ui_context *ctx);
 void			destroy_ui_element_recursive(t_ui_element *element, t_ui_context *ctx);

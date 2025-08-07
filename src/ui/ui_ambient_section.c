@@ -70,6 +70,7 @@ t_ui_element	*create_ambient_section(t_ui_context *ctx, t_sample *sample,
 	// Calculate required height: header + 4 rows (3 color + 1 intensity) + padding
 	size.y = UI_HEADER_HEIGHT + 4 * (UI_ROW_HEIGHT + UI_PADDING) + UI_PADDING;
 	section = create_panel(ctx, pos, size);
+	section->style.bg_color = UI_COLOR_AMBIENT_SECTION;
 	if (!section)
 		return (NULL);
 	attach_child(section, create_header(ctx, "AMBIENT LIGHT",

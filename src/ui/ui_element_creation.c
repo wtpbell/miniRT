@@ -53,6 +53,7 @@ t_ui_element	*create_panel(t_ui_context *ctx, t_v2f pos, t_v2f size)
 	if (!panel)
 		return (NULL);
 	default_panel(panel, pos, size);
+	panel->style.bg_color = UI_TRANSPARENT;
 	return (panel);
 }
 

@@ -53,9 +53,17 @@ static void	init_scene_and_vector(t_scene *scene)
 	}
 }
 
+static void	init_sample(t_sample *sample)
+{
+	ft_bzero(sample, sizeof(t_sample));
+	sample->max_depth = 8;
+	sample->sample_pxl = 12;
+}
+
 int	main(int argc, char **argv)
 {
 	t_scene	scene;
+	t_sample	*sample;
 
 	ft_bzero(&scene, sizeof(t_scene));
 	if (!valid_input(argc, argv))
@@ -65,7 +73,12 @@ int	main(int argc, char **argv)
 		return (print_error(ERR_PARSE_FAIL, "map", argv[1]), EXIT_FAILURE);
 	else if (!validate_scene(&scene))
 		return (cleanup_scene(&scene), EXIT_FAILURE);
-	game(&scene);
+	sample = malloc(sizeof(t_sample));
+	if (!sample)
+		return (cleanup_scene(&scene), EXIT_FAILURE);
+	init_sample(sample);
+	game(&scene, sample);
 	cleanup_scene(&scene);
+	free(sample);
 	return (EXIT_SUCCESS);
 }
