@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   game.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/06 19:03:27 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   game.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
+/*   Updated: 2025/08/07 19:37:31 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	render_loop(void *param)
 	if (game->needs_redraw)
 	{
 		ft_memset(game->img->pixels, 0, game->img->width * game->img->height * sizeof(int));
-		if (thread_rendering(game->scene))
+		if (thread_rendering(game->scene, game->sample))
 		{
 			game->img->instances[0].enabled = true;
 			game->needs_redraw = false;
@@ -44,7 +44,7 @@ void	render_loop(void *param)
 	}
 }
 
-t_ui	*create_ui(mlx_t *mlx, t_scene *scene)
+t_ui	*create_ui(mlx_t *mlx, t_scene *scene, t_sample *sample)
 {
 	t_ui			*ui;
 	t_ui_element	*ui_sections;
@@ -56,16 +56,13 @@ t_ui	*create_ui(mlx_t *mlx, t_scene *scene)
 	ui->context = create_ui_context(mlx, scene);
 	if (!ui->context)
 		return (free(ui), NULL);
-
 	size = init_v2f(UI_PANEL_WIDTH, HEIGHT);
 	ui->root = create_panel(ui->context, g_v2f_zero, size);
 	if (!ui->root)
 		return (destroy_ui(ui), NULL);
-
-	ui_sections = create_ui_sections(ui->context, scene, g_v2f_zero, size);
+	ui_sections = create_ui_sections(ui->context, sample, g_v2f_zero, size);
 	if (!ui_sections)
 		return (destroy_ui(ui), NULL);
-
 	attach_child(ui->root, ui_sections);
 	ui->context->needs_redraw = true;
 	return (ui);
@@ -155,7 +152,7 @@ int	game(t_scene *scene)
 	ft_bzero(&game, sizeof(t_game));
 	game.scene = scene;
 	game.should_exit = false;
-	game.mlx = mlx_init(WIDTH, HEIGHT, "miniRT", true);
+	game.mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
 	if (!game.mlx)
 		return (cleanup_mlx(&game), 1);
 	if (!cam_init(&scene->camera, game.mlx))
@@ -163,7 +160,9 @@ int	game(t_scene *scene)
 	game.img = scene->camera.img_plane;
 	game.scene = scene;
 	game.needs_redraw = true;
-	game.ui = create_ui(game.mlx, scene);
+	game.sample->max_depth = 8;
+	game.sample->sample_pxl = 12;
+	game.ui = create_ui(game.mlx, scene, game.sample);
 	if (!game.ui)
 		return (cleanup_mlx(&game), 1);
 	mlx_set_instance_depth(&game.img->instances[0], 0);

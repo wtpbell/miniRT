@@ -57,13 +57,14 @@ static void	add_ambient_intensity_control(t_ui_context *ctx, t_light *ambient,
 		"INTENSITY", size.x - (UI_PADDING * 2)));
 }
 
-t_ui_element	*create_ambient_section(t_ui_context *ctx, t_scene *scene,
+t_ui_element	*create_ambient_section(t_ui_context *ctx, t_sample *sample,
 	t_v2f pos, t_v2f size)
 {
 	t_ui_element	*section;
 	t_light			*ambient;
 
-	ambient = find_light(scene, LIGHT_AMBIENT);
+	(void)sample;
+	ambient = find_light(ctx->scene, LIGHT_AMBIENT);
 	if (!ambient)
 		return (NULL);
 	// Calculate required height: header + 4 rows (3 color + 1 intensity) + padding
@@ -72,7 +73,7 @@ t_ui_element	*create_ambient_section(t_ui_context *ctx, t_scene *scene,
 	if (!section)
 		return (NULL);
 	attach_child(section, create_header(ctx, "AMBIENT LIGHT",
-		init_v2f(0, 0), init_v2f(size.x, UI_HEADER_HEIGHT)));
+		g_v2f_zero, init_v2f(size.x, UI_HEADER_HEIGHT)));
 	add_ambient_color_controls(ctx, ambient, section, size);
 	add_ambient_intensity_control(ctx, ambient, section, size);
 	return (section);

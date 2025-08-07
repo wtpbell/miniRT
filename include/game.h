@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 15:01:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/05 09:30:18 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/07 19:08:06 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,21 @@
 # include "scene.h"
 # include "rt_types.h"
 
-typedef struct	s_game
+struct	s_sample
+{
+	int			max_depth;
+	uint32_t	sample_pxl;
+};
+
+struct	s_game
 {
 	mlx_t		*mlx;
 	mlx_image_t	*img;
 	t_ui		*ui;
 	t_scene		*scene;
+	t_sample	*sample;
 	bool		needs_redraw;
 	bool		should_exit;
-} t_game;
+};
 
 #endif

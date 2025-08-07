@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui.h                                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 23:26:23 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui.h                                               :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/07 19:24:13 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ typedef struct s_value_button_config
 /* UI Context Management */
 t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene);
 void			destroy_ui_context(t_ui_context *ctx);
-t_ui			*create_ui(mlx_t *mlx, t_scene *scene);
+t_ui			*create_ui(mlx_t *mlx, t_scene *scene, t_sample *sample);
 void			destroy_ui(t_ui *ui);
 void			render_ui(t_ui *ui);
 void			toggle_ui_visibility(t_ui *ui);
@@ -180,10 +180,11 @@ t_ui_element	*create_button(t_ui_context *ctx, const char *label, t_v2f pos, t_v
 					void (*on_click)(t_ui_element *, void *), void *param);
 t_ui_element	*create_label(t_ui_context *ctx, const char *text, t_v2f pos, uint32_t color);
 t_ui_element	*create_labeled_control(t_vbtn_config *cfg, const char *label_text, float total_width);
-t_ui_element	*create_ambient_section(t_ui_context *ctx, t_scene *scene, t_v2f pos, t_v2f size);
-t_ui_element	*create_camera_section(t_ui_context *ctx, t_scene *scene, t_v2f pos, t_v2f size);
-t_ui_element	*create_light_section(t_ui_context *ctx, t_scene *scene, t_v2f pos, t_v2f size);
-t_ui_element	*create_ui_sections(t_ui_context *ctx, t_scene *scene, t_v2f pos, t_v2f size);
+t_ui_element	*create_ambient_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
+t_ui_element	*create_camera_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
+t_ui_element	*create_light_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
+t_ui_element	*create_ui_sections(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
+t_ui_element	*create_dof_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
 
 /* UI Element Management */
 void			destroy_ui_element(t_ui_element *element, t_ui_context *ctx);

@@ -19,11 +19,11 @@ L -5,8,5 0.8 255,255,255
 
 # Room walls (slightly transparent for better visualization)
 pl 0,-1,0	0,1,0		255,255,255  m_metal
-pl 0,10,0	0,-1,0		255,255,255 
-pl -10,0,0	1,0,0		255,255,255  
-pl 10,0,0	-1,0,0		255,255,255  
+pl 0,10,0	0,-1,0		255,255,255 m_metal
+pl -10,0,0	1,0,0		255,255,255 m_metal
+pl 10,0,0	-1,0,0		255,255,255 m_metal
 pl 0,0,-15	0,0,1		255,255,255  m_metal
-pl 0,0,20	0,0,-1		255,255,255  
+pl 0,0,20	0,0,-1		255,255,255  m_metal
 
 # Atomic Nucleus (central sphere) - much larger
 sp 0,4,0 2.5 100,200,255

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/28 11:47:55 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/07 15:25:10 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include "minirt.h"
 #include "vector.h"
 
-#define WIDTH 1600
-#define HEIGHT 900
 #define CAMERA_MIN_TOKENS 4
 
 static bool	parse_fov(float *fov, const char *str)

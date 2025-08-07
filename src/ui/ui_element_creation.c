@@ -152,7 +152,7 @@ static t_ui_element	*create_value_button(t_vbtn_config *cfg)
 	add_value_label(container, cfg, value_btn);
 	container->type = UI_VALUE_BUTTON;
 	container->data = value_btn;
-	return container;
+	return (container);
 }
 
 t_ui_element	*create_labeled_control(t_vbtn_config *cfg,

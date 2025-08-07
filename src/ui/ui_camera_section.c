@@ -17,10 +17,13 @@ static void	add_camera_pos_controls(t_ui_context *ctx, t_cam *camera,
 {
 	t_vbtn_config	cfg;
 	const char		*labels[] = {"POS X", "POS Y", "POS Z"};
-	float			*values[] = {&camera->t.pos.x, &camera->t.pos.y, &camera->t.pos.z};
+	float			*values[3];
 	int				i;
 
 	i = 0;
+	values[0] = &camera->t.pos.x;
+	values[1] = &camera->t.pos.y;
+	values[2] = &camera->t.pos.z;
 	while (i < 3)
 	{
 		cfg.ctx = ctx;
@@ -53,7 +56,7 @@ static void	add_camera_dir_controls(t_ui_context *ctx, t_cam *camera,
 		cfg.ctx = ctx;
 		cfg.value = values[i];
 		cfg.range = init_v2f(MIN_DIR, MAX_DIR);
-		cfg.step = 0.01f;
+		cfg.step = 0.1f;
 		cfg.pos = init_v2f(UI_PADDING,
 			UI_HEADER_HEIGHT + UI_PADDING + 3 * (UI_ROW_HEIGHT + UI_PADDING) + 
 			i * (UI_ROW_HEIGHT + UI_PADDING));
@@ -80,21 +83,20 @@ static void	add_camera_fov_control(t_ui_context *ctx, t_cam *camera,
 	attach_child(section, create_labeled_control(&cfg, "FOV", size.x - (UI_PADDING * 2)));
 }
 
-t_ui_element	*create_camera_section(t_ui_context *ctx, t_scene *scene,
+t_ui_element	*create_camera_section(t_ui_context *ctx, t_sample *sample,
 	t_v2f pos, t_v2f size)
 {
 	t_ui_element	*section;
 	t_cam			*camera;
 
-	if (!scene)
-		return (NULL);
-	camera = &scene->camera;
-	size.y = UI_HEADER_HEIGHT + 7 * (UI_ROW_HEIGHT + UI_PADDING);
+	(void)sample;
+	camera = &ctx->scene->camera;
+	size.y = UI_HEADER_HEIGHT + 7 * (UI_ROW_HEIGHT + UI_PADDING) + UI_PADDING;
 	section = create_panel(ctx, pos, size);
 	if (!section || !camera)
 		return (section);
 	attach_child(section, create_header(ctx, "CAMERA",
-		init_v2f(0, 0), init_v2f(size.x, UI_HEADER_HEIGHT)));
+		g_v2f_zero, init_v2f(size.x, UI_HEADER_HEIGHT)));
 	add_camera_pos_controls(ctx, camera, section, size);
 	add_camera_dir_controls(ctx, camera, section, size);
 	add_camera_fov_control(ctx, camera, section, size);
