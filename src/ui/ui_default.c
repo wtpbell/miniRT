@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_default.c                                       :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/25 16:25:35 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/07 11:41:29 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_default.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/25 16:25:35 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/07 23:25:24 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	default_button(t_ui_element *button, t_v2f pos, t_v2f size)
 
 void	default_value_button(t_ui_element *button, t_v2f pos, t_v2f size, const char *label)
 {
-	t_ui_button	*btn_data;
+	t_ui_btn	*btn_data;
 
 	button->type = UI_VALUE_BUTTON;
 	button->pos = pos;
@@ -120,10 +120,10 @@ void	default_value_button(t_ui_element *button, t_v2f pos, t_v2f size, const cha
 	};
 	if (label && *label)
 	{
-		btn_data = (t_ui_button *)button->data;
+		btn_data = (t_ui_btn *)button->data;
 		if (!btn_data)
 		{
-			btn_data = (t_ui_button *)ft_calloc(1, sizeof(t_ui_button));
+			btn_data = (t_ui_btn *)ft_calloc(1, sizeof(t_ui_btn));
 			if (btn_data)
 			{
 				btn_data->label = ft_strdup(label);

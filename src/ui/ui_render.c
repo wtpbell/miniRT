@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 15:03:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 13:31:57 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/07 23:25:24 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,13 +219,13 @@ void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
 
 void	draw_button(t_ui_element *button, t_ui_context *ctx)
 {
-	t_ui_button	*btn_data;
+	t_ui_btn	*btn_data;
 	t_v2f		text_pos;
 	int			text_width;
 
 	draw_rect(ctx->canvas, button->abs_pos, button->size, UI_BUTTON_COLOR);
 	draw_rect_border(ctx->canvas, button->abs_pos, button->size, UI_BUTTON_BORDER_COLOR);
-	btn_data = (t_ui_button *)button->data;
+	btn_data = (t_ui_btn *)button->data;
 	if (btn_data && btn_data->label)
 	{
 		text_width = ft_strlen(btn_data->label) * UI_CHAR_WIDTH;

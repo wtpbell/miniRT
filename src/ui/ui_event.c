@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:51:30 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 19:45:35 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/07 23:25:24 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static bool	is_point_in_element(const t_ui_element *element, int32_t x, int32_t 
 			y <= (abs_pos.y + element->size.y));
 }
 
-static void	update_value_label(t_ui_value_button *btn, t_ui_context *ctx)
+static void	update_value_label(t_ui_vbtn *btn, t_ui_context *ctx)
 {
 	const char	*value_str;
 	t_ui_label	*label_data;
@@ -69,7 +69,7 @@ static void	update_value_label(t_ui_value_button *btn, t_ui_context *ctx)
 void	handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx)
 {
 	t_ui_element	*child;
-	t_ui_button		*btn;
+	t_ui_btn		*btn;
 
 	if (!root || !ctx)
 		return ;
@@ -83,7 +83,7 @@ void	handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx
 			}
 			else
 			{
-				btn = (t_ui_button *)root->data;
+				btn = (t_ui_btn *)root->data;
 				if (btn->on_click)
 					btn->on_click(root, btn->param);
 			}
@@ -101,7 +101,7 @@ void	handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx
 void	update_label_text(t_ui_element *label, const char *text, t_ui_context *ctx)
 {
 	t_ui_label	*label_data;
-	t_ui_button	*btn_data;
+	t_ui_btn	*btn_data;
 
 	if (!label || !text || !ctx)
 		return ;
@@ -116,7 +116,7 @@ void	update_label_text(t_ui_element *label, const char *text, t_ui_context *ctx)
 	}
 	else if (label->type == UI_BUTTON || label->type == UI_VALUE_BUTTON)
 	{
-		btn_data = (t_ui_button *)label->data;
+		btn_data = (t_ui_btn *)label->data;
 		if (!btn_data)
 			return;
 		if (btn_data->label)
@@ -129,12 +129,12 @@ void	update_label_text(t_ui_element *label, const char *text, t_ui_context *ctx)
 static void	update_value_button(t_ui_element *button, float new_value, 
 							  t_ui_context *ctx)
 {
-	t_ui_value_button	*value_btn;
+	t_ui_vbtn	*value_btn;
 	t_light				*light;
 
 	if (!button || !button->data || !ctx)
 		return ;
-	value_btn = (t_ui_value_button *)button->data;
+	value_btn = (t_ui_vbtn *)button->data;
 	*value_btn->value = new_value;
 	if (*value_btn->value < value_btn->range.x)
 		*value_btn->value = value_btn->range.x;
@@ -158,7 +158,7 @@ static void	update_value_button(t_ui_element *button, float new_value,
 
 void	update_button_value(t_ui_element *button, int32_t click_x, t_ui_context *ctx)
 {
-	t_ui_value_button	*value_btn;
+	t_ui_vbtn	*value_btn;
 	float				relative_x;
 	float				button_mid;
 	float				old_value;
@@ -181,7 +181,7 @@ void	update_button_value(t_ui_element *button, int32_t click_x, t_ui_context *ct
 		printf("Click outside button bounds\n");
 		return ;
 	}
-	value_btn = (t_ui_value_button *)button->data;
+	value_btn = (t_ui_vbtn *)button->data;
 	relative_x = click_x - abs_pos.x;
 	button_mid = button->size.x / 2.0f;
 	old_value = *value_btn->value;
@@ -193,13 +193,13 @@ void	update_button_value(t_ui_element *button, int32_t click_x, t_ui_context *ct
 
 void	increment_value_button(t_ui_element *btn, void *param)
 {
-	t_ui_value_button	*vb;
+	t_ui_vbtn	*vb;
 	t_ui_context		*ctx;
 	float				new_value;
 
 	if (!btn || btn->type != UI_VALUE_BUTTON || !btn->data || !param)
 		return ;
-	vb = (t_ui_value_button *)btn->data;
+	vb = (t_ui_vbtn *)btn->data;
 	ctx = (t_ui_context *)param;
 	new_value = *vb->value + vb->step;
 	if (new_value > vb->range.y)
@@ -210,13 +210,13 @@ void	increment_value_button(t_ui_element *btn, void *param)
 
 void	decrement_value_button(t_ui_element *btn, void *param)
 {
-	t_ui_value_button	*vb;
+	t_ui_vbtn	*vb;
 	t_ui_context		*ctx;
 	float				new_value;
 
 	if (!btn || btn->type != UI_VALUE_BUTTON || !btn->data || !param)
 		return;
-	vb = (t_ui_value_button *)btn->data;
+	vb = (t_ui_vbtn *)btn->data;
 	ctx = (t_ui_context *)param;
 	new_value = *vb->value - vb->step;
 	if (new_value < vb->range.x)

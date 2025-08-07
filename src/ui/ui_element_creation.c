@@ -61,7 +61,7 @@ t_ui_element	*create_button(t_ui_context *ctx, const char *label_text, t_v2f pos
 	void (*on_click)(t_ui_element *, void *), void *param)
 {
 	t_ui_element	*button;
-	t_ui_button		*btn_data;
+	t_ui_btn		*btn_data;
 
 	(void)ctx;
 	button = create_ui_element(UI_BUTTON, pos, size);
@@ -69,10 +69,10 @@ t_ui_element	*create_button(t_ui_context *ctx, const char *label_text, t_v2f pos
 		return (NULL);
 	default_button(button, pos, size);
 	button->action = on_click;
-	button->data = ft_calloc(1, sizeof(t_ui_button));
+	button->data = ft_calloc(1, sizeof(t_ui_btn));
 	if (!button->data)
 		return (free(button), NULL);
-	btn_data = (t_ui_button *)button->data;
+	btn_data = (t_ui_btn *)button->data;
 	btn_data->on_click = on_click;
 	btn_data->param = param;
 	btn_data->label = ft_strdup(label_text);
@@ -140,12 +140,12 @@ t_ui_element	*create_header(t_ui_context *ctx, const char *title,
 static t_ui_element	*create_value_button(t_vbtn_config *cfg)
 {
 	t_ui_element		*container;
-	t_ui_value_button	*value_btn;
+	t_ui_vbtn	*value_btn;
 
 	container = create_panel(cfg->ctx, cfg->pos, cfg->size);
 	if (!container)
 		return (NULL);
-	value_btn = (t_ui_value_button *)ft_calloc(1, sizeof(t_ui_value_button));
+	value_btn = (t_ui_vbtn *)ft_calloc(1, sizeof(t_ui_vbtn));
 	if (!value_btn)
 		return container;
 	init_value_button_data(value_btn, cfg);

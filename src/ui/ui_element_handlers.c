@@ -30,12 +30,12 @@ static void	destroy_label(t_ui_element *element, t_ui_context *ctx)
 
 static void	destroy_button(t_ui_element *element, t_ui_context *ctx)
 {
-	t_ui_button	*button;
+	t_ui_btn	*button;
 	
 	(void)ctx;
 	if (!element || !element->data)
 		return ;
-	button = (t_ui_button *)element->data;
+	button = (t_ui_btn *)element->data;
 	if (button->label)
 		free(button->label);
 	free(button);
@@ -44,12 +44,12 @@ static void	destroy_button(t_ui_element *element, t_ui_context *ctx)
 
 static void	destroy_value_button(t_ui_element *element, t_ui_context *ctx)
 {
-	t_ui_value_button	*vbutton;
+	t_ui_vbtn	*vbutton;
 	
 	(void)ctx;
 	if (!element || !element->data)
 		return ;
-	vbutton = (t_ui_value_button *)element->data;
+	vbutton = (t_ui_vbtn *)element->data;
 	if (vbutton->label)
 		free(vbutton->label);
 	free(vbutton);

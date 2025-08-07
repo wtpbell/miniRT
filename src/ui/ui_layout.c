@@ -6,13 +6,13 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 11:39:13 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/07 22:31:15 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/07 23:31:58 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
 
-void	init_value_button_data(t_ui_value_button *value_btn, const t_vbtn_config *cfg)
+void	init_value_button_data(t_ui_vbtn *value_btn, const t_vbtn_config *cfg)
 {
 	if (!value_btn || !cfg)
 		return ;
@@ -25,7 +25,7 @@ void	init_value_button_data(t_ui_value_button *value_btn, const t_vbtn_config *c
 }
 
 void	add_inc_dec_buttons(t_ui_element *container,
-						const t_vbtn_config *cfg, t_ui_value_button *value_btn)
+						const t_vbtn_config *cfg, t_ui_vbtn *value_btn)
 {
 	t_ui_element	*decr_btn;
 	t_ui_element	*incr_btn;
@@ -46,7 +46,7 @@ void	add_inc_dec_buttons(t_ui_element *container,
 }
 
 void	add_value_label(t_ui_element *container,
-	const t_vbtn_config *cfg, t_ui_value_button *value_btn)
+	const t_vbtn_config *cfg, t_ui_vbtn *value_btn)
 {
 	char		*value_str;
 	float		label_width;
@@ -105,3 +105,4 @@ t_ui_element	*create_ui_sections(t_ui_context *ctx, t_sample *sample, t_v2f pos,
 	attach_child(panel, create_sample_section(ctx, sample, section_pos, section_size));
 	return (panel);
 }
+

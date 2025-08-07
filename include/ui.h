@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/07 22:18:39 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/07 23:30:52 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,14 +123,14 @@ typedef struct s_ui_element
 	t_v2f				abs_pos;        // Absolute position in the window
 }	t_ui_element;
 
-typedef struct s_ui_button
+typedef struct s_ui_btn
 {
 	void				(*on_click)(t_ui_element *, void *);
 	void				*param;
 	char				*label;
-}	t_ui_button;
+}	t_ui_btn;
 
-typedef struct s_ui_value_button
+typedef struct s_ui_vbtn
 {
 	float				*value;
 	float				step;
@@ -140,7 +140,7 @@ typedef struct s_ui_value_button
 	void				*param;
 	char				*label;
 	char				*(*formatter)(float);
-}	t_ui_value_button;
+}	t_ui_vbtn;
 
 typedef struct s_ui_context
 {
@@ -159,7 +159,7 @@ typedef struct s_ui
 	t_ui_context	*context;
 }	t_ui;
 
-typedef struct s_value_button_config
+typedef struct s_vbtn_config
 {
 	t_ui_context	*ctx;
 	float			*value;
@@ -214,9 +214,9 @@ char			*format_color_value(float value);
 t_light			*find_light(t_scene *scene, t_light_type type);
 void			decrement_value_button(t_ui_element *btn, void *param);
 void			increment_value_button(t_ui_element *btn, void *param);
-void			init_value_button_data(t_ui_value_button *value_btn, const t_vbtn_config *cfg);
-void			add_inc_dec_buttons(t_ui_element *container, const t_vbtn_config *cfg, t_ui_value_button *value_btn);
-void			add_value_label(t_ui_element *container, const t_vbtn_config *cfg, t_ui_value_button *value_btn);
+void			init_value_button_data(t_ui_vbtn *value_btn, const t_vbtn_config *cfg);
+void			add_inc_dec_buttons(t_ui_element *container, const t_vbtn_config *cfg, t_ui_vbtn *value_btn);
+void			add_value_label(t_ui_element *container, const t_vbtn_config *cfg, t_ui_vbtn *value_btn);
 
 /* Default Styling */
 void			default_button(t_ui_element *button, t_v2f pos, t_v2f size);
