@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/04 17:47:25 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/07 11:41:46 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,5 +105,6 @@ t_v3f	perturb_normal(const t_mat *mat, const t_v2f texcoord,
 t_v3f	sample_texture(const mlx_texture_t *tex, const t_v2f uv,
 			const t_v3f mod);
 t_v3f	display_normal(t_ray_hit *hit_info);
+t_v2f	tri_uv_texcoord(t_tri *tri, const t_v2f weight);
 
 #endif
