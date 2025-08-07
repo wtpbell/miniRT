@@ -25,7 +25,7 @@ static void	add_camera_pos_controls(t_ui_context *ctx, t_cam *camera,
 	{
 		cfg.ctx = ctx;
 		cfg.value = values[i];
-		cfg.range = init_v2f(-1000.0f, 1000.0f);
+		cfg.range = init_v2f(-FLT_MAX, FLT_MAX);
 		cfg.step = 0.1f;
 		cfg.pos = init_v2f(UI_PADDING,
 			UI_HEADER_HEIGHT + UI_PADDING + i * (UI_ROW_HEIGHT + UI_PADDING));
@@ -44,15 +44,15 @@ static void	add_camera_dir_controls(t_ui_context *ctx, t_cam *camera,
 	float			*values[3];
 	int				i;
 
+	i = 0;
 	values[0] = &camera->t.dir.x;
 	values[1] = &camera->t.dir.y;
 	values[2] = &camera->t.dir.z;
-	i = 0;
 	while (i < 3)
 	{
 		cfg.ctx = ctx;
 		cfg.value = values[i];
-		cfg.range = init_v2f(-1.0f, 1.0f);
+		cfg.range = init_v2f(MIN_DIR, MAX_DIR);
 		cfg.step = 0.01f;
 		cfg.pos = init_v2f(UI_PADDING,
 			UI_HEADER_HEIGHT + UI_PADDING + 3 * (UI_ROW_HEIGHT + UI_PADDING) + 
@@ -71,7 +71,7 @@ static void	add_camera_fov_control(t_ui_context *ctx, t_cam *camera,
 
 	cfg.ctx = ctx;
 	cfg.value = &camera->fov;
-	cfg.range = init_v2f(0.0f, 180.0f);
+	cfg.range = init_v2f(MIN_FOV, MAX_FOV);
 	cfg.step = 1.0f;
 	cfg.pos = init_v2f(UI_PADDING,
 		UI_HEADER_HEIGHT + UI_PADDING + 6 * (UI_ROW_HEIGHT + UI_PADDING));

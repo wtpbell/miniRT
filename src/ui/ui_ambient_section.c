@@ -12,22 +12,6 @@
 
 #include "ui.h"
 
-static t_light *find_ambient_light(t_scene *scene)
-{
-	t_light	*light;
-	int		i;
-	
-	i = 0;
-	while (i < (int)scene->lights.size)
-	{
-		light = (t_light *)vector_get(&scene->lights, i);
-		if (light && light->type == LIGHT_AMBIENT)
-			return light;
-		i++;
-	}
-	return (NULL);
-}
-
 static void	add_ambient_color_controls(t_ui_context *ctx, t_light *ambient,
 	t_ui_element *section, t_v2f size)
 {
@@ -36,10 +20,10 @@ static void	add_ambient_color_controls(t_ui_context *ctx, t_light *ambient,
 	float			*values[3];
 	int				i;
 
+	i = 0;
 	values[0] = &ambient->color.x;
 	values[1] = &ambient->color.y;
 	values[2] = &ambient->color.z;
-	i = 0;
 	while (i < 3)
 	{
 		cfg.ctx = ctx;
@@ -50,7 +34,7 @@ static void	add_ambient_color_controls(t_ui_context *ctx, t_light *ambient,
 			UI_HEADER_HEIGHT + UI_PADDING + i * (UI_ROW_HEIGHT + UI_PADDING));
 		cfg.size = g_v2f_zero;
 		cfg.formatter = format_color_value;
-		attach_child(section, create_labeled_control(&cfg, labels[i], 
+		attach_child(section, create_labeled_control(&cfg, labels[i],
 			size.x - (UI_PADDING * 2)));
 		i++;
 	}
@@ -79,22 +63,17 @@ t_ui_element	*create_ambient_section(t_ui_context *ctx, t_scene *scene,
 	t_ui_element	*section;
 	t_light			*ambient;
 
-	ambient = find_ambient_light(scene);
+	ambient = find_light(scene, LIGHT_AMBIENT);
 	if (!ambient)
 		return (NULL);
-
 	// Calculate required height: header + 4 rows (3 color + 1 intensity) + padding
 	size.y = UI_HEADER_HEIGHT + 4 * (UI_ROW_HEIGHT + UI_PADDING) + UI_PADDING;
-
 	section = create_panel(ctx, pos, size);
 	if (!section)
 		return (NULL);
-
 	attach_child(section, create_header(ctx, "AMBIENT LIGHT",
 		init_v2f(0, 0), init_v2f(size.x, UI_HEADER_HEIGHT)));
-
 	add_ambient_color_controls(ctx, ambient, section, size);
 	add_ambient_intensity_control(ctx, ambient, section, size);
-
 	return (section);
 }

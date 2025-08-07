@@ -31,13 +31,6 @@ t_ui_element	*create_ui_element(t_ui_type type, t_v2f pos, t_v2f size)
 	element->pos = pos;
 	element->size = size;
 	element->visible = true;
-	element->first_child = NULL;
-	element->next_sibling = NULL;
-	element->parent = NULL;
-	element->data = NULL;
-	element->action = NULL;
-	element->visible = true;
-	element->abs_pos = init_v2f(0, 0);
 	element->style = (t_ui_style){
 		.bg_color = UI_TRANSPARENT,
 		.border_color = UI_TRANSPARENT,

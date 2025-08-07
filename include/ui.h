@@ -32,6 +32,7 @@
 # include "scene.h"
 # include "game.h"
 # include "rt_types.h"
+# include "parser.h"
 
 // UI Dimensions
 # define UI_PANEL_WIDTH 300
@@ -49,11 +50,11 @@
 # define UI_SECTION_HEADER_HEIGHT 30
 # define UI_SECTION_PADDING 10
 # define UI_PANEL_PADDING 0
+# define UI_PADDING 5
 # define UI_CHAR_WIDTH 8
 # define UI_CHAR_HEIGHT 15
 # define UI_FONT_HEIGHT 8
 # define UI_ROW_HEIGHT 30
-# define UI_PADDING 5
 # define UI_LABEL_PADDING 10
 # define UI_LABEL_HEIGHT 20
 

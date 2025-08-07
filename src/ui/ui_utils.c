@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_utils.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 23:26:04 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_utils.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 22:38:00 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/07 11:23:21 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*format_float_value(float value)
 	static char	buf[16];
 
 	snprintf(buf, sizeof(buf), "%.2f", value);
-    return (buf);
+	return (buf);
 }
 
 char	*format_color_value(float value)
