@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/04 18:16:30 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/07 11:19:17 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int		mesh_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_result *res);
 int		cone_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_result *res);
 int		tri_intersect(t_tri *tri, t_ray *ray, t_v2f t, t_result *res);
 int		intersect_disc(float r, float h, t_ray *ray, t_v2f *t_lim);
+bool	aabb_intersect(t_ray *ray, t_aabb *box);
 t_obj	*find_intersection(t_ray *ray, t_scene *scene, t_result *res);
 t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth);
 t_v3f	sphere_normal(t_obj *obj, t_v3f point, t_result *res);
