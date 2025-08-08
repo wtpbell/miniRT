@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/08 10:35:23 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/08 17:17:15 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,11 @@ typedef enum e_error
 	ERR_UNKNOWN_FIELD,
 	ERR_REQ_FIELD,
 	ERR_LOAD_TEXTURE,
+	ERR_OBJ_VTX_FACE,
+	ERR_OBJ_FACE_FORMAT,
+	ERR_OBJ_VERT_INDEX,
+	ERR_OBJ_VERT_COMP,
+	ERR_OBJ_FAIL,
 	ERR_COUNT
 }	t_error;
 
@@ -250,7 +255,8 @@ void		assign_textures(t_mat *mat);
 // obj
 bool		init_obj_file(t_obj_file *obj_file);
 void		free_obj_file(t_obj_file *obj_file);
-bool		load_obj_into_mesh(t_obj_file *obj_file, t_mesh *mesh, t_mat4x4 local);
+bool		load_obj_into_mesh(t_obj_file *obj_file, t_mesh *mesh,
+				t_mat4x4 local);
 bool		construct_mesh(t_scene *scene);
 bool		assign_v3f(t_v3f *dst[3], t_vector *cont, int *indices, int curr);
 void		set_normal(t_tri *tri);

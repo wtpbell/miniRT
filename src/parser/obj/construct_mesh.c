@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/07 18:35:30 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/07 18:43:21 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/08 17:15:45 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ static bool	parse_line(char *line, t_obj_file *obj_file)
 {
 	const t_vert_ran	ran[3] = {
 		(t_vert_ran){init_v2f(1, 4), init_v2f(MIN_POS, MAX_POS),
-			init_v4f(0.0f, 0.0f, 0.0f, 1.0f)},
+		init_v4f(0.0f, 0.0f, 0.0f, 1.0f)},
 		(t_vert_ran){init_v2f(1, 3), init_v2f(0.0f, 1.0f),
-			init_v4f(1.0f, 1.0f, 1.0f, 1.0f)},
+		init_v4f(1.0f, 1.0f, 1.0f, 1.0f)},
 		(t_vert_ran){init_v2f(3, 3), init_v2f(MIN_POS, MAX_POS),
-			init_v4f(0.0f, 0.0f, 0.0f, 0.0f)}};
-	char	*token;
-	char	*saveptr;
+		init_v4f(0.0f, 0.0f, 0.0f, 0.0f)}};
+	char				*token;
+	char				*saveptr;
 
 	token = rt_strtok(line, WHITESPACE, &saveptr);
 	if (token == NULL || *token == '#')
@@ -81,7 +81,8 @@ bool	construct_mesh(t_scene *scene)
 		obj = (t_obj *)scene->objects.items[i];
 		// TODO: Cache the obj files for faster re-use
 		if (obj->type == OBJ_MESH && !parse_obj_file(&obj->mesh, obj->t.to_obj))
-			return (false);
+			return (print_error(ERR_OBJ_FAIL, "obj", obj->mesh.obj_path),
+				false);
 		++i;
 	}
 	return (true);
