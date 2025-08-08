@@ -82,10 +82,20 @@ t_ui_element	*create_button(t_ui_context *ctx, const char *label_text, t_v2f pos
 	return (button);
 }
 
+t_ui_element	*create_rerender_button(t_ui *ui, t_v2f pos, t_v2f size)
+{
+	t_ui_element	*btn;
+
+	btn = create_button(ui, "RE_RENDER", pos, size, render, ui->context);
+	btn->data = ui;
+	return (btn);
+}
+
+
 t_ui_element	*create_label(t_ui_context *ctx, const char *text, t_v2f pos, uint32_t color)
 {
 	t_ui_element	*label_elem;
-	t_ui_label	*label_data;
+	t_ui_label		*label_data;
 
 	(void)ctx;
 	label_elem = create_ui_element(UI_LABEL, pos, init_v2f(0, 0));
@@ -102,11 +112,7 @@ t_ui_element	*create_label(t_ui_context *ctx, const char *text, t_v2f pos, uint3
 	label_data = (t_ui_label *)label_elem->data;
 	label_data->text = ft_strdup(text);
 	if (!label_data->text)
-	{
-		free(label_elem->data);
-		free(label_elem);
-		return (NULL);
-	}
+		return (free(label_elem->data), free(label_elem), NULL);
 	label_elem->size.x = ft_strlen(text) * UI_CHAR_WIDTH;
 	label_elem->size.y = UI_CHAR_HEIGHT;
 	return (label_elem);
@@ -135,8 +141,8 @@ t_ui_element	*create_header(t_ui_context *ctx, const char *title,
 
 static t_ui_element	*create_value_button(t_vbtn_config *cfg)
 {
-	t_ui_element		*container;
-	t_ui_vbtn	*value_btn;
+	t_ui_element	*container;
+	t_ui_vbtn		*value_btn;
 
 	container = create_panel(cfg->ctx, cfg->pos, cfg->size);
 	if (!container)
@@ -177,3 +183,4 @@ t_ui_element	*create_labeled_control(t_vbtn_config *cfg,
 	attach_child(container, create_value_button(cfg));
 	return (container);
 }
+

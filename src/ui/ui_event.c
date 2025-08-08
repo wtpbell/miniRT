@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 12:51:30 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/08 16:52:20 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/08 17:33:49 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,12 @@ static void	update_value_label(t_ui_vbtn *btn, t_ui_context *ctx)
 {
 	const char	*value_str;
 	t_ui_label	*label_data;
+	static char	fallback_buf[VALUE_STR_LEN];
 
-	if (!btn || !btn->value_label || !ctx)
-		return ;
 	if (btn->formatter)
 		value_str = btn->formatter(*btn->value);
 	else
 	{
-		static char fallback_buf[VALUE_STR_LEN];
 		snprintf(fallback_buf, sizeof(fallback_buf), "%.2f", *btn->value);
 		value_str = fallback_buf;
 	}
@@ -94,37 +92,10 @@ void	handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx
 	}
 }
 
-void	update_label_text(t_ui_element *label, const char *text, t_ui_context *ctx)
-{
-	t_ui_label	*label_data;
-	t_ui_btn	*btn_data;
-
-	if (label->type == UI_LABEL)
-	{
-		label_data = (t_ui_label *)label->data;
-		if (!label_data)
-			return ;
-		if (label_data->text)
-			free(label_data->text);
-		label_data->text = ft_strdup(text);
-	}
-	else if (label->type == UI_BUTTON || label->type == UI_VALUE_BUTTON)
-	{
-		btn_data = (t_ui_btn *)label->data;
-		if (!btn_data)
-			return;
-		if (btn_data->label)
-			free(btn_data->label);
-		btn_data->label = ft_strdup(text);
-	}
-	ctx->needs_redraw = true;
-}
-
 static void	update_value_button(t_ui_element *button, float new_value,
 							t_ui_context *ctx)
 {
 	t_ui_vbtn	*value_btn;
-	t_light		*light;
 
 	if (!button || !button->data || !ctx)
 		return ;
@@ -135,45 +106,26 @@ static void	update_value_button(t_ui_element *button, float new_value,
 	else if (*value_btn->value > value_btn->range.y)
 		*value_btn->value = value_btn->range.y;
 	update_value_label(value_btn, ctx);
-	if (button->parent && button->parent->parent)
-	{
-		light = (t_light *)button->parent->parent->data;
-		if (light && value_btn->value >= &light->color.x &&
-			value_btn->value <= &light->color.z + 1)
-		{
-			*value_btn->value = (int)(*value_btn->value);
-			update_value_label(value_btn, ctx);
-		}
-	}
-	ctx->needs_redraw = true;
 	if (button->action)
 		button->action(button, ctx);
 }
 
 void	update_button_value(t_ui_element *button, int32_t click_x, t_ui_context *ctx)
 {
+	const t_ui_element	*parent = button->parent;
 	t_ui_vbtn			*value_btn;
 	float				relative_x;
 	float				button_mid;
 	float				old_value;
-	t_v2f				abs_pos = button->pos;
-	const t_ui_element	*parent = button->parent;
+	t_v2f				abs_pos;
 	float				new_value;
 
-	if (!button || button->type != UI_VALUE_BUTTON || !button->data || !ctx)
-		return;
+	abs_pos = button->pos;
 	while (parent)
 	{
 		abs_pos.x += parent->pos.x;
 		abs_pos.y += parent->pos.y;
 		parent = parent->parent;
-	}
-	if (click_x < abs_pos.x || 
-		click_x > (abs_pos.x + button->size.x) ||
-		click_x < 0)
-	{
-		printf("Click outside button bounds\n");
-		return ;
 	}
 	value_btn = (t_ui_vbtn *)button->data;
 	relative_x = click_x - abs_pos.x;

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/08 16:53:04 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/08 17:25:07 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,12 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 	}
 }
 
-void mouse_hook(mouse_key_t button, action_t action, 
+void	mouse_hook(mouse_key_t button, action_t action,
 	__attribute__((unused)) modifier_key_t mods, void *param)
 {
-	t_game  *game;
-	int32_t x;
-	int32_t y;
+	t_game	*game;
+	int32_t	x;
+	int32_t	y;
 
 	game = (t_game *)param;
 	printf("Mouse hook called - button: %d, action: %d\n", button, action);
