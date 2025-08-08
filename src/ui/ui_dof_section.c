@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_dof_section.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/07 17:28:06 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/07 22:15:27 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_dof_section.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/08/07 17:28:06 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/08 14:13:39 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	add_dof_control(t_ui_context *ctx, t_cam *camera,
 	cfg.value = &camera->focus_dist;
 	cfg.range = init_v2f(0.1f, FLT_MAX);
 	cfg.step = 0.1f;
-	cfg.pos = init_v2f(UI_PADDING, 0);
+	cfg.pos = init_v2f(UI_PADDING,-215);
 	cfg.size = g_v2f_zero;
 	cfg.formatter = format_float_value;
 	attach_child(section, create_labeled_control(&cfg, "DOF", size.x -(UI_PADDING * 2)));

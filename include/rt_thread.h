@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/03 17:35:16 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/07 19:02:47 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/08 09:44:07 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include "MLX42/MLX42.h"
 # include "scene.h"
 
-# define THRD_CNT	4
+# define THRD_CNT	15
 
 typedef struct s_pthread_instr
 {

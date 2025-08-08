@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_render.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 15:03:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/07 23:25:24 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_render.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 15:03:00 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/08 11:34:26 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,6 @@ void	draw_rect_border(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color
 	}
 }
 
-// Helper function for alpha blending
 uint32_t blend_colors(uint32_t bg, uint32_t fg)
 {
 	float alpha = ((fg >> 24) & 0xFF) / 255.0f;
@@ -171,6 +170,7 @@ void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
 {
 	int x, y;
 	int start_x, start_y, end_x, end_y;
+	uint32_t *pixel;
 
 	start_x = (int)pos.x;
 	start_y = (int)pos.y;
@@ -185,7 +185,7 @@ void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
 		return;
 	if ((color >> 24) == 0x00)
 		return;
-	if ((color >> 24) == 0xFF)
+	if ((color >> 24) != 0xFF)
 	{
 		y = start_y;
 		while (y < end_y)
@@ -193,22 +193,7 @@ void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
 			x = start_x;
 			while (x < end_x)
 			{
-				uint32_t *pixel = (uint32_t *)canvas->pixels + y * canvas->width + x;
-				*pixel = color;
-				x++;
-			}
-			y++;
-		}
-	}
-	else
-	{
-		y = start_y;
-		while (y < end_y)
-		{
-			x = start_x;
-			while (x < end_x)
-			{
-				uint32_t *pixel = (uint32_t *)canvas->pixels + y * canvas->width + x;
+				pixel = (uint32_t *)canvas->pixels + y * canvas->width + x;
 				*pixel = blend_colors(*pixel, color);
 				x++;
 			}

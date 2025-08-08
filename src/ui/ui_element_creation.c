@@ -53,7 +53,7 @@ t_ui_element	*create_panel(t_ui_context *ctx, t_v2f pos, t_v2f size)
 	if (!panel)
 		return (NULL);
 	default_panel(panel, pos, size);
-	panel->style.bg_color = UI_TRANSPARENT;
+	panel->style.bg_color = UI_PANEL_BG_COLOR;
 	return (panel);
 }
 
@@ -77,11 +77,7 @@ t_ui_element	*create_button(t_ui_context *ctx, const char *label_text, t_v2f pos
 	btn_data->param = param;
 	btn_data->label = ft_strdup(label_text);
 	if (!btn_data->label)
-	{
-		free(button->data);
-		free(button);
-		return (NULL);
-	}
+		return (free(button->data), free(button), NULL);
 	button->style.text_color = UI_TEXT_COLOR;
 	return (button);
 }

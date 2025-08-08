@@ -1,16 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_layout.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/25 11:39:13 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/07 23:31:58 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_layout.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/25 11:39:13 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/08 16:56:22 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
+
+struct s_ui_sections g_sections[] = {
+	{8.3f, create_camera_section},
+	{8.3f, create_light_section},
+	{12.0f, create_ambient_section},
+	{0.1f, create_dof_section},
+	{1.0f, create_sample_section}
+};
 
 void	init_value_button_data(t_ui_vbtn *value_btn, const t_vbtn_config *cfg)
 {
@@ -32,7 +40,7 @@ void	add_inc_dec_buttons(t_ui_element *container,
 
 	(void)value_btn;
 	decr_btn = create_button(cfg->ctx, "-",
-		init_v2f(0, 0),
+		g_v2f_zero,
 		init_v2f(UI_BUTTON_WIDTH, cfg->size.y),
 		decrement_value_button, cfg->ctx);
 	incr_btn = create_button(cfg->ctx, "+",
@@ -74,35 +82,26 @@ void	add_value_label(t_ui_element *container,
 
 t_ui_element	*create_ui_sections(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size)
 {
+	const int		num_sections = sizeof(g_sections) / sizeof(g_sections[0]);
 	t_ui_element	*panel;
 	t_v2f			section_size;
 	t_v2f			section_pos;
-	t_v3f			section_heights;
+	int				i;
 
-	section_heights = (t_v3f){
-		.x = UI_HEADER_HEIGHT + 8.3 * (UI_ROW_HEIGHT),
-		.y = UI_HEADER_HEIGHT + 4.85 * (UI_ROW_HEIGHT),
-		.z = UI_HEADER_HEIGHT
-	};
 	panel = create_panel(ctx, pos, size);
 	if (!panel)
 		return (NULL);
-	panel->style.bg_color = UI_TRANSPARENT;
 	section_pos = init_v2f(UI_PANEL_PADDING, UI_PANEL_PADDING);
-	section_size = init_v2f(size.x - (2 * UI_PANEL_PADDING), section_heights.x);
-	attach_child(panel, create_camera_section(ctx, sample, section_pos, section_size));
-	section_pos.y += section_heights.x;
-	section_size.y = section_heights.y;
-	attach_child(panel, create_light_section(ctx, sample, section_pos, section_size));
-	section_pos.y += section_heights.x;
-	section_size.y = section_heights.z;
-	attach_child(panel, create_ambient_section(ctx, sample, section_pos, section_size));
-	section_pos.y += section_heights.y;
-	section_size.y = section_heights.z;
-	attach_child(panel, create_dof_section(ctx, sample, section_pos, section_size));
-	section_pos.y += section_heights.z;
-	section_size.y = section_heights.z;
-	attach_child(panel, create_sample_section(ctx, sample, section_pos, section_size));
+	section_size = init_v2f(size.x - (2 * UI_PANEL_PADDING), 0);
+	i = 0;
+	while (i < num_sections)
+	{
+		section_size.y = UI_HEADER_HEIGHT + g_sections[i].height_scale * UI_ROW_HEIGHT;
+		attach_child(panel, g_sections[i].create_func(ctx, sample, section_pos, section_size));
+		section_pos.y += section_size.y;
+		i++;
+	}
 	return (panel);
 }
+
 

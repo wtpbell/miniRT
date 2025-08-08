@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_core.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 12:53:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/06 23:21:48 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_core.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 12:53:50 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/08 16:54:22 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ void	render_ui(t_ui *ui)
 	canvas = ctx->canvas;
 	if (!canvas)
 		return;
-
 	if (canvas->count == 0)
 	{
 		if (mlx_image_to_window(ctx->mlx, canvas, 0, 0)< 0)

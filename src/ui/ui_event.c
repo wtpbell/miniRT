@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_event.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 12:51:30 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/07 23:25:24 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_event.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 12:51:30 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/08 16:52:20 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 
 static bool	is_point_in_element(const t_ui_element *element, int32_t x, int32_t y)
 {
-	t_v2f	abs_pos;
-	const	t_ui_element *parent;
+	t_v2f				abs_pos;
+	const t_ui_element	*parent;
 
 	if (!element)
 		return (false);
@@ -71,16 +71,12 @@ void	handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx
 	t_ui_element	*child;
 	t_ui_btn		*btn;
 
-	if (!root || !ctx)
-		return ;
 	if (is_point_in_element(root, x, y))
 	{
 		if ((root->type == UI_BUTTON || root->type == UI_VALUE_BUTTON) && root->data)
 		{
 			if (root->type == UI_VALUE_BUTTON)
-			{
 				update_button_value(root, x, ctx);
-			}
 			else
 			{
 				btn = (t_ui_btn *)root->data;
@@ -103,8 +99,6 @@ void	update_label_text(t_ui_element *label, const char *text, t_ui_context *ctx)
 	t_ui_label	*label_data;
 	t_ui_btn	*btn_data;
 
-	if (!label || !text || !ctx)
-		return ;
 	if (label->type == UI_LABEL)
 	{
 		label_data = (t_ui_label *)label->data;
@@ -126,11 +120,11 @@ void	update_label_text(t_ui_element *label, const char *text, t_ui_context *ctx)
 	ctx->needs_redraw = true;
 }
 
-static void	update_value_button(t_ui_element *button, float new_value, 
-							  t_ui_context *ctx)
+static void	update_value_button(t_ui_element *button, float new_value,
+							t_ui_context *ctx)
 {
 	t_ui_vbtn	*value_btn;
-	t_light				*light;
+	t_light		*light;
 
 	if (!button || !button->data || !ctx)
 		return ;
@@ -158,7 +152,7 @@ static void	update_value_button(t_ui_element *button, float new_value,
 
 void	update_button_value(t_ui_element *button, int32_t click_x, t_ui_context *ctx)
 {
-	t_ui_vbtn	*value_btn;
+	t_ui_vbtn			*value_btn;
 	float				relative_x;
 	float				button_mid;
 	float				old_value;
@@ -186,16 +180,16 @@ void	update_button_value(t_ui_element *button, int32_t click_x, t_ui_context *ct
 	button_mid = button->size.x / 2.0f;
 	old_value = *value_btn->value;
 	new_value = old_value + 
-					 ((relative_x < button_mid) ? -value_btn->step : value_btn->step);
+					((relative_x < button_mid) ? -value_btn->step : value_btn->step);
 	if (new_value != old_value)
 		update_value_button(button, new_value, ctx);
 }
 
 void	increment_value_button(t_ui_element *btn, void *param)
 {
-	t_ui_vbtn	*vb;
-	t_ui_context		*ctx;
-	float				new_value;
+	t_ui_vbtn		*vb;
+	t_ui_context	*ctx;
+	float			new_value;
 
 	if (!btn || btn->type != UI_VALUE_BUTTON || !btn->data || !param)
 		return ;
@@ -210,9 +204,9 @@ void	increment_value_button(t_ui_element *btn, void *param)
 
 void	decrement_value_button(t_ui_element *btn, void *param)
 {
-	t_ui_vbtn	*vb;
-	t_ui_context		*ctx;
-	float				new_value;
+	t_ui_vbtn		*vb;
+	t_ui_context	*ctx;
+	float			new_value;
 
 	if (!btn || btn->type != UI_VALUE_BUTTON || !btn->data || !param)
 		return;

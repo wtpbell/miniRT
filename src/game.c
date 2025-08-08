@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   game.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/07 21:16:29 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   game.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
+/*   Updated: 2025/08/08 16:53:04 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void mouse_hook(mouse_key_t button, action_t action,
 			mlx_get_mouse_pos(game->mlx, &x, &y);
 			printf("Mouse position: %d, %d\n", x, y);
 			handle_ui_click(game->ui->root, x, y, game->ui->context);
-			render_ui(game->ui);
+			// render_ui(game->ui);
 		}
 		else
 		{
@@ -161,6 +161,7 @@ int	game(t_scene *scene, t_sample *sample)
 	game.scene = scene;
 	game.needs_redraw = true;
 	game.sample = sample;
+	printf("sample: %f, depth: %f\n", game.sample->sample_pxl, game.sample->max_depth);
 	game.ui = create_ui(game.mlx, scene, game.sample);
 	if (!game.ui)
 		return (cleanup_mlx(&game), 1);

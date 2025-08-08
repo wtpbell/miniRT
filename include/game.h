@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   game.h                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 15:01:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/07 21:16:47 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   game.h                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 15:01:00 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/08 11:43:28 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 
 struct	s_sample
 {
-	int			max_depth;
-	uint32_t	sample_pxl;
+	float		max_depth;
+	float		sample_pxl;
 };
 
 struct	s_game
@@ -33,6 +33,8 @@ struct	s_game
 	bool		needs_redraw;
 	bool		should_exit;
 };
+
+
 
 int	game(t_scene *scene, t_sample *sample);
 

@@ -55,9 +55,8 @@ static void	init_scene_and_vector(t_scene *scene)
 
 static void	init_sample(t_sample *sample)
 {
-	ft_bzero(sample, sizeof(t_sample));
-	sample->max_depth = 8;
-	sample->sample_pxl = 12;
+	sample->max_depth = 1.0f;
+	sample->sample_pxl = 2.0f;
 }
 
 int	main(int argc, char **argv)
@@ -73,7 +72,7 @@ int	main(int argc, char **argv)
 		return (print_error(ERR_PARSE_FAIL, "map", argv[1]), EXIT_FAILURE);
 	else if (!validate_scene(&scene))
 		return (cleanup_scene(&scene), EXIT_FAILURE);
-	sample = malloc(sizeof(t_sample));
+	sample = ft_calloc(1, sizeof(t_sample));
 	if (!sample)
 		return (cleanup_scene(&scene), EXIT_FAILURE);
 	init_sample(sample);

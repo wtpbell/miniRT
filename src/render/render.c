@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/07 19:09:18 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/08 11:04:31 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ static t_v3f	sample_pixel(t_scene *scene, t_sample *sample, float x, float y)
 		color = v3f_add(color, trace(&ray, scene, sample->max_depth));
 		++i;
 	}
-	return (v3f_scale(color, 1.0f / (float)sample->sample_pxl));
+	return (v3f_scale(color, 1.0f / sample->sample_pxl));
 }
 
 void	*render(void *ctx)

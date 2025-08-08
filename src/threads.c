@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/11 17:52:35 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/07 19:29:11 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/08 14:24:54 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ static bool	init_thread(t_pthread_instr *instr, t_scene *scene, uint32_t start,
 	instr->start_y = start;
 	instr->end_y = end;
 	instr->img = scene->camera.img_plane;
-	instr->sample->sample_pxl = 24;
-	instr->sample->max_depth = 8;
 	return (pthread_create(&instr->thread, NULL, render, instr) == 0);
 }
 
