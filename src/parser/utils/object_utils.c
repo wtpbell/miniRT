@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/10 10:17:07 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 16:39:39 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/08 10:39:14 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	init_object_matrices(t_obj *obj)
 	invert_m4x4(obj->t.to_obj, obj->t.to_world);
 }
 
-void	init_obj_transform(t_obj *obj, t_v3f pos, t_v3f dir, t_v3f up)
+void	init_object_transform(t_obj *obj, t_v3f pos, t_v3f dir, t_v3f up)
 {
 	obj->t.pos = pos;
 	obj->t.dir = dir;
@@ -31,7 +31,7 @@ void	init_obj_transform(t_obj *obj, t_v3f pos, t_v3f dir, t_v3f up)
 	init_object_matrices(obj);
 }
 
-void	init_obj_renderer(t_obj *obj, t_v3f col, t_texcoord coord)
+void	init_object_renderer(t_obj *obj, t_v3f col, t_texcoord coord)
 {
 	obj->r.color = col;
 	obj->r.get_texcoord = coord;

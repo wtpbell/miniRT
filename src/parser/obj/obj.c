@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 15:58:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/07 19:39:41 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/08 11:26:25 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,7 @@ static bool	init_vertices(t_tri *tri, t_obj_file *obj_file, int face_index,
 bool	load_obj_into_mesh(t_obj_file *obj_file, t_mesh *mesh, t_mat4x4 local)
 {
 	int		i;
-	int		*indices;
 	t_tri	*tri;
-	t_v3f	*v[3];
 
 	i = 0;
 	while (i < obj_file->f.size)

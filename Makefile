@@ -18,16 +18,18 @@ INC			:= -I ./include -I $(MLX42_DIR)/include -I $(LIBFT_DIR)/include
 PARSER_CORE	:= parser.c element_parser.c camera.c light.c sphere.c plane.c\
 				cylinder.c cone.c string_utils.c vector_utils.c error.c cleanup.c\
 				string_to_num.c general_utils.c validate_utils.c triangle.c\
-				field.c material.c texture.c texture_utils.c
+				field.c material.c texture.c texture_utils.c obj.c mesh.c\
+				construct_mesh.c obj_utils.c parse_face.c parse_vertex.c\
+				object_utils.c
 SRCS_MAIN	:= main.c vector_init.c vector_helper.c vector_operations.c\
 				vec_container.c vec_container_utils.c color.c render.c\
 				rt_math.c range.c matrix.c game.c rt_sphere.c rt_plane.c rt_cylinder.c\
 				color_utils.c random_utils.c rt_light.c rt_dof.c \
 				quit.c rt_triangle.c rt_material.c material_init.c light_utils.c\
-				material_utils.c obj_utils.c procedural_texturing.c rt_cone.c\
-				random_vector.c matrix_utils.c bump_map.c rt_texture.c v2f.c\
+				material_utils.c procedural_texturing.c rt_cone.c random_vector.c\
+				matrix_utils.c bump_map.c rt_texture.c v2f.c\
 				vector_core.c matrix_space.c rt_material_utils.c rt_triangle_uv.c\
-				rt_cylinder_uv.c threads.c benchmark.c rt_mesh.c rt_strtok.c obj.c mesh.c\
+				rt_cylinder_uv.c threads.c benchmark.c rt_mesh.c rt_strtok.c\
 				aabb.c
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE)

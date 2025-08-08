@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/27 15:39:22 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/08 10:39:14 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ bool	parse_cylinder(char **tokens, t_scene *scene)
 	obj = ft_calloc(1, sizeof(t_obj));
 	if (!obj)
 		return (false);
-	init_obj_transform(obj, pos, dir, g_v3f_up);
-	init_obj_renderer(obj, color, cylinder_texcoord);
+	init_object_transform(obj, pos, dir, g_v3f_up);
+	init_object_renderer(obj, color, cylinder_texcoord);
 	cylinder_init(obj, dm);
 	if (!assign_material(obj, &scene->shared_materials, tokens[6]))
 		return (free(obj), false);

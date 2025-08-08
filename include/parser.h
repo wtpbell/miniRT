@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/07 18:57:00 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/08 10:35:23 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,7 +247,16 @@ void		cleanup_texture(t_tex *tex);
 bool		load_texture(t_tex *tex, const char *path);
 void		assign_textures(t_mat *mat);
 
-// obj.c
+// obj
+bool		init_obj_file(t_obj_file *obj_file);
+void		free_obj_file(t_obj_file *obj_file);
+bool		load_obj_into_mesh(t_obj_file *obj_file, t_mesh *mesh, t_mat4x4 local);
 bool		construct_mesh(t_scene *scene);
+bool		assign_v3f(t_v3f *dst[3], t_vector *cont, int *indices, int curr);
+void		set_normal(t_tri *tri);
+void		construct_mesh_aabb(t_mesh *mesh);
+bool		construct_mesh(t_scene *scene);
+bool		parse_face(char *token, t_vector *f);
+bool		parse_vertex(char *str, t_vector *v, const t_vert_ran *ran);
 
 #endif

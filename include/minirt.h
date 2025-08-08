@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/07 11:19:17 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/08 11:14:40 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ typedef struct s_game
 int		game(t_scene *scene);
 void	quit_on_escape(mlx_key_data_t keydata, void *param);
 void	init_object_matrices(t_obj *obj);
-void	init_obj_transform(t_obj *obj, t_v3f pos, t_v3f dir, t_v3f up);
-void	init_obj_renderer(t_obj *obj, t_v3f col, t_texcoord coord);
+void	init_object_transform(t_obj *obj, t_v3f pos, t_v3f dir, t_v3f up);
+void	init_object_renderer(t_obj *obj, t_v3f col, t_texcoord coord);
 void	*render(void *ctx);
 bool	solve_quadratic(t_v3f *abc, float *x0, float *x1);
 int		sphere_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_result *res);

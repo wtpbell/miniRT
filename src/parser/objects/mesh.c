@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 17:01:40 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/06 20:29:32 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/08 10:39:14 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ bool	parse_mesh(char **tokens, t_scene *scene)
 	obj = ft_calloc(1, sizeof(t_obj));
 	if (!obj)
 		return (free(obj_path), false);
-	init_obj_transform(obj, pos, dir, g_v3f_up);
-	init_obj_renderer(obj, color, mesh_texcoord);
+	init_object_transform(obj, pos, dir, g_v3f_up);
+	init_object_renderer(obj, color, mesh_texcoord);
 	if (!mesh_init(obj, obj_path)
 		|| !assign_material(obj, &scene->shared_materials, tokens[5])
 		|| !vector_add(&scene->objects, obj))
