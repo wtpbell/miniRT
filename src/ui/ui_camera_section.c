@@ -30,11 +30,12 @@ static void	add_camera_pos_controls(t_ui_context *ctx, t_cam *camera,
 		cfg.value = values[i];
 		cfg.range = init_v2f(-FLT_MAX, FLT_MAX);
 		cfg.step = 0.1f;
-		cfg.pos = init_v2f(UI_PADDING,
-			UI_HEADER_HEIGHT + UI_PADDING + i * (UI_ROW_HEIGHT + UI_PADDING));
+		cfg.pos = init_v2f(UI_PADDING, UI_HEADER_HEIGHT + UI_PADDING + i
+				* (UI_ROW_HEIGHT + UI_PADDING));
 		cfg.size = g_v2f_zero;
 		cfg.formatter = format_float_value;
-		attach_child(section, create_labeled_control(&cfg, labels[i], size.x - (UI_PADDING * 2)));
+		attach_child(section, create_labeled_control(
+				&cfg, labels[i], size.x - (2 * UI_PADDING)));
 		i++;
 	}
 }
@@ -57,12 +58,13 @@ static void	add_camera_dir_controls(t_ui_context *ctx, t_cam *camera,
 		cfg.value = values[i];
 		cfg.range = init_v2f(MIN_DIR, MAX_DIR);
 		cfg.step = 0.1f;
-		cfg.pos = init_v2f(UI_PADDING,
-			UI_HEADER_HEIGHT + UI_PADDING + 3 * (UI_ROW_HEIGHT + UI_PADDING) + 
-			i * (UI_ROW_HEIGHT + UI_PADDING));
+		cfg.pos = init_v2f(UI_PADDING, UI_HEADER_HEIGHT + UI_PADDING + 3
+				* (UI_ROW_HEIGHT + UI_PADDING) + i
+				* (UI_ROW_HEIGHT + UI_PADDING));
 		cfg.size = g_v2f_zero;
 		cfg.formatter = format_float_value;
-		attach_child(section, create_labeled_control(&cfg, labels[i], size.x - (UI_PADDING * 2)));
+		attach_child(section, create_labeled_control(
+				&cfg, labels[i], size.x - (2 * UI_PADDING)));
 		i++;
 	}
 }
@@ -76,30 +78,33 @@ static void	add_camera_fov_control(t_ui_context *ctx, t_cam *camera,
 	cfg.value = &camera->fov;
 	cfg.range = init_v2f(MIN_FOV, MAX_FOV);
 	cfg.step = 1.0f;
-	cfg.pos = init_v2f(UI_PADDING,
-		UI_HEADER_HEIGHT + UI_PADDING + 6 * (UI_ROW_HEIGHT + UI_PADDING));
+	cfg.pos = init_v2f(UI_PADDING, UI_HEADER_HEIGHT + UI_PADDING + 6
+			* (UI_ROW_HEIGHT + UI_PADDING));
 	cfg.size = g_v2f_zero;
 	cfg.formatter = format_float_value;
-	attach_child(section, create_labeled_control(&cfg, "FOV", size.x - (UI_PADDING * 2)));
+	attach_child(section, create_labeled_control(
+			&cfg, "FOV", size.x - (2 * UI_PADDING)));
 }
 
-t_ui_element	*create_camera_section(t_ui_context *ctx, t_sample *sample,
-	t_v2f pos, t_v2f size)
+t_ui_element	*create_camera_section(t_section_config *cfg)
 {
 	t_ui_element	*section;
 	t_cam			*camera;
+	t_v2f			size;
 
-	(void)sample;
-	camera = &ctx->scene->camera;
-	size.y = UI_HEADER_HEIGHT + 7 * (UI_ROW_HEIGHT + UI_PADDING) + UI_PADDING;
-	section = create_panel(ctx, pos, size);
+	if (!cfg || !cfg->ctx || !cfg->ctx->scene)
+		return (NULL);
+	camera = &cfg->ctx->scene->camera;
+	size = init_v2f(cfg->size.x,
+			UI_HEADER_HEIGHT + 7 * (UI_ROW_HEIGHT + UI_PADDING) + UI_PADDING);
+	section = create_panel(cfg->ctx, cfg->pos, size);
+	if (!section)
+		return (NULL);
 	section->style.bg_color = UI_COLOR_CAMERA_SECTION;
-	if (!section || !camera)
-		return (section);
-	attach_child(section, create_header(ctx, "CAMERA",
-		g_v2f_zero, init_v2f(size.x, UI_HEADER_HEIGHT)));
-	add_camera_pos_controls(ctx, camera, section, size);
-	add_camera_dir_controls(ctx, camera, section, size);
-	add_camera_fov_control(ctx, camera, section, size);
+	attach_child(section, create_header(cfg->ctx, "CAMERA",
+			g_v2f_zero, init_v2f(size.x, UI_HEADER_HEIGHT)));
+	add_camera_pos_controls(cfg->ctx, camera, section, size);
+	add_camera_dir_controls(cfg->ctx, camera, section, size);
+	add_camera_fov_control(cfg->ctx, camera, section, size);
 	return (section);
 }

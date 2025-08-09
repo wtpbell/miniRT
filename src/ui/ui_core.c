@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:53:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/09 14:15:08 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/09 17:55:03 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,29 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene, void *game_ptr)
+static void	init_ui_context(t_ui_context *ctx, mlx_t *mlx,
+						t_scene *scene, void *game_ptr)
 {
-	t_ui_context	*ctx;
-	unsigned int	*pixels;
-	int				i;
-	int				x_pos;
-	int				panel_width;
-
-	ctx = (t_ui_context *)ft_calloc(1, sizeof(t_ui_context));
 	if (!ctx)
-		return (NULL);
+		return ;
 	ctx->mlx = mlx;
 	ctx->scene = scene;
 	ctx->game = game_ptr;
 	ctx->is_visible = true;
 	ctx->needs_redraw = true;
+}
+
+t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene, void *game_ptr)
+{
+	t_ui_context	*ctx;
+	unsigned int	*pixels;
+	int				i;
+	int				panel_width;
+
+	ctx = (t_ui_context *)ft_calloc(1, sizeof(t_ui_context));
+	if (!ctx)
+		return (NULL);
+	init_ui_context(ctx, mlx, scene, game_ptr);
 	panel_width = UI_PANEL_WIDTH;
 	if (panel_width > mlx->width / 2)
 		panel_width = mlx->width / 2;
@@ -39,14 +46,10 @@ t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene, void *game_ptr)
 	pixels = (unsigned int *)ctx->canvas->pixels;
 	i = 0;
 	while (i < panel_width * mlx->height)
-	{
-		pixels[i] = UI_PANEL_BG_COLOR;
-		i++;
-	}
-	x_pos = 0;
+		pixels[i++] = UI_PANEL_BG_COLOR;
 	if (panel_width > (int)mlx->width)
 		panel_width = mlx->width;
-	if (mlx_image_to_window(mlx, ctx->canvas, x_pos, 0) < 0)
+	if (mlx_image_to_window(mlx, ctx->canvas, 0, 0) < 0)
 		return (mlx_delete_image(mlx, ctx->canvas), free(ctx), NULL);
 	return (ctx);
 }
@@ -54,7 +57,7 @@ t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene, void *game_ptr)
 static void	ui_images_destroy(mlx_t *mlx, t_ui_images *images)
 {
 	if (!images)
-		return;
+		return ;
 	if (mlx)
 	{
 		if (images->button_img)
@@ -70,7 +73,7 @@ static void	ui_images_destroy(mlx_t *mlx, t_ui_images *images)
 void	destroy_ui_context(t_ui_context *ctx)
 {
 	if (!ctx)
-		return;
+		return ;
 	if (ctx->canvas)
 		mlx_delete_image(ctx->mlx, ctx->canvas);
 	if (ctx->images)
@@ -81,7 +84,7 @@ void	destroy_ui_context(t_ui_context *ctx)
 void	destroy_ui(t_ui *ui)
 {
 	if (!ui)
-		return;
+		return ;
 	if (ui->root)
 		destroy_ui_element_recursive(ui->root, ui->context);
 	if (ui->context)
@@ -95,8 +98,7 @@ void	toggle_ui_visibility(t_ui *ui)
 	t_ui_context	*ctx;
 
 	if (!ui || !ui->context || !ui->context->canvas)
-		return;
-		
+		return ;
 	ctx = ui->context;
 	ctx->is_visible = !ctx->is_visible;
 	i = 0;
@@ -105,61 +107,45 @@ void	toggle_ui_visibility(t_ui *ui)
 		ctx->canvas->instances[i].enabled = ctx->is_visible;
 		i++;
 	}
-	fprintf(stderr, "UI visibility toggled to: %s\n", 
-		ctx->is_visible ? "VISIBLE" : "HIDDEN");
+}
+
+static void	attach_canvas_to_window(t_ui_context *ctx)
+{
+	mlx_image_t	*canvas;
+
+	canvas = ctx->canvas;
+	if (canvas->count == 0 && \
+		mlx_image_to_window(ctx->mlx, canvas, 0, 0) >= 0)
+	{
+		canvas->instances[0].z = 1000;
+		canvas->instances[0].enabled = true;
+	}
+}
+
+static void	set_canvas_visibility(mlx_image_t *canvas, bool visible)
+{
+	uint32_t	i;
+
+	i = 0;
+	while (i < canvas->count)
+		canvas->instances[i++].enabled = visible;
 }
 
 void	render_ui(t_ui *ui)
 {
 	t_ui_context	*ctx;
-	mlx_image_t		*canvas;
 	uint32_t		*pixels;
 	uint32_t		i;
 
-	if (!ui || !ui->context)
-		return;
 	ctx = ui->context;
-	canvas = ctx->canvas;
-	if (!canvas)
-		return;
-	if (canvas->count == 0)
-	{
-		if (mlx_image_to_window(ctx->mlx, canvas, 0, 0)< 0)
-		{
-			fprintf(stderr, "Failed to add canvas to window\n");
-			return ;
-		}
-		canvas->instances[0].z = 1000;
-		canvas->instances[0].enabled = true;
-	}
-	if (!ctx->is_visible)
-	{
-		i = 0;
-		while (i < canvas->count)
-		{
-			canvas->instances[i].enabled = false;
-			i++;
-		}
+	attach_canvas_to_window(ctx);
+	set_canvas_visibility(ctx->canvas, ctx->is_visible);
+	if (!ctx->is_visible || !ctx->needs_redraw)
 		return ;
-	} 
-	else
-	{
-		i = 0;
-		while (i < canvas->count)
-		{
-			canvas->instances[i].enabled = true;
-			i++;
-		}
-	}
-	if (!ctx->needs_redraw)
-		return ;
-	pixels = (uint32_t *)canvas->pixels;
+	pixels = (uint32_t *)ctx->canvas->pixels;
 	i = 0;
-	while (i < canvas->width * canvas->height)
-	{
-		pixels[i] = UI_PANEL_BG_COLOR;
-		i++;
-	}
+	while (i < ctx->canvas->width * ctx->canvas->height)
+		pixels[i++] = UI_PANEL_BG_COLOR;
 	if (ui->root)
 		render_ui_element(ui->root, ctx);
 	ctx->needs_redraw = false;
@@ -168,7 +154,7 @@ void	render_ui(t_ui *ui)
 void	attach_child(t_ui_element *parent, t_ui_element *child)
 {
 	if (!parent || !child)
-		return;
+		return ;
 	child->parent = parent;
 	child->next_sibling = parent->first_child;
 	parent->first_child = child;

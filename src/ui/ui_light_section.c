@@ -30,11 +30,12 @@ static void	add_light_pos_controls(t_ui_context *ctx, t_light *light,
 		cfg.value = values[i];
 		cfg.range = init_v2f(-1000.0f, 1000.0f);
 		cfg.step = 0.1f;
-		cfg.pos = init_v2f(UI_PADDING,
-			UI_HEADER_HEIGHT + UI_PADDING + i * (UI_ROW_HEIGHT + UI_PADDING));
+		cfg.pos = init_v2f(UI_PADDING, UI_HEADER_HEIGHT + UI_PADDING + i
+				* (UI_ROW_HEIGHT + UI_PADDING));
 		cfg.size = g_v2f_zero;
 		cfg.formatter = format_float_value;
-		attach_child(section, create_labeled_control(&cfg, labels[i], size.x - (UI_PADDING * 2)));
+		attach_child(section, create_labeled_control(&cfg, labels[i],
+				size.x - (2 * UI_PADDING)));
 		i++;
 	}
 }
@@ -57,12 +58,13 @@ static void	add_light_color_controls(t_ui_context *ctx, t_light *light,
 		cfg.value = values[i];
 		cfg.range = init_v2f(0.0f, 1.0f);
 		cfg.step = 10.0f / 255.0f;
-		cfg.pos = init_v2f(UI_PADDING,
-			UI_HEADER_HEIGHT + 3 * (UI_ROW_HEIGHT + UI_PADDING) + 
-			i * (UI_ROW_HEIGHT + UI_PADDING));
+		cfg.pos = init_v2f(UI_PADDING, UI_HEADER_HEIGHT
+				+ 3 * (UI_ROW_HEIGHT + UI_PADDING)
+				+ i * (UI_ROW_HEIGHT + UI_PADDING));
 		cfg.size = g_v2f_zero;
 		cfg.formatter = format_color_value;
-		attach_child(section, create_labeled_control(&cfg, labels[i], size.x - (UI_PADDING * 2)));
+		attach_child(section, create_labeled_control(&cfg, labels[i],
+				size.x - (2 * UI_PADDING)));
 		i++;
 	}
 }
@@ -76,32 +78,35 @@ static void	add_light_intensity_control(t_ui_context *ctx, t_light *light,
 	cfg.value = &light->intensity;
 	cfg.range = init_v2f(0.0f, 10.0f);
 	cfg.step = 0.1f;
-	cfg.pos = init_v2f(UI_PADDING,
-		UI_HEADER_HEIGHT + UI_PADDING + 6 * (UI_ROW_HEIGHT + UI_PADDING));
+	cfg.pos = init_v2f(UI_PADDING, UI_HEADER_HEIGHT + UI_PADDING + 6
+			* (UI_ROW_HEIGHT + UI_PADDING));
 	cfg.size = g_v2f_zero;
 	cfg.formatter = format_float_value;
-	attach_child(section, create_labeled_control(&cfg, "INTENSITY", size.x - (UI_PADDING * 2)));
+	attach_child(section, create_labeled_control(&cfg, "INTENSITY",
+			size.x - (2 * UI_PADDING)));
 }
 
-t_ui_element	*create_light_section(t_ui_context *ctx, t_sample *sample,
-	t_v2f pos, t_v2f size)
+t_ui_element	*create_light_section(t_section_config *cfg)
 {
 	t_ui_element	*section;
 	t_light			*light;
+	t_v2f			size;
 
-	(void)sample;
-	light = find_light(ctx->scene, LIGHT_POINT);
+	if (!cfg || !cfg->ctx || !cfg->sample || !cfg->ctx->scene)
+		return (NULL);
+	light = find_light(cfg->ctx->scene, LIGHT_POINT);
 	if (!light)
 		return (NULL);
-	size.y = UI_HEADER_HEIGHT + 7 * (UI_ROW_HEIGHT + UI_PADDING) + UI_PADDING;
-	section = create_panel(ctx, pos, size);
-	section->style.bg_color = UI_COLOR_LIGHT_SECTION;
+	size = init_v2f(cfg->size.x,
+			UI_HEADER_HEIGHT + 7 * (UI_ROW_HEIGHT + UI_PADDING) + UI_PADDING);
+	section = create_panel(cfg->ctx, cfg->pos, size);
 	if (!section)
 		return (NULL);
-	attach_child(section, create_header(ctx, "LIGHT",
-		g_v2f_zero, init_v2f(size.x, UI_HEADER_HEIGHT)));
-	add_light_pos_controls(ctx, light, section, size);
-	add_light_color_controls(ctx, light, section, size);
-	add_light_intensity_control(ctx, light, section, size);
+	section->style.bg_color = UI_COLOR_LIGHT_SECTION;
+	attach_child(section, create_header(cfg->ctx, "LIGHT",
+			g_v2f_zero, init_v2f(size.x, UI_HEADER_HEIGHT)));
+	add_light_pos_controls(cfg->ctx, light, section, size);
+	add_light_color_controls(cfg->ctx, light, section, size);
+	add_light_intensity_control(cfg->ctx, light, section, size);
 	return (section);
 }

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/09 16:04:30 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/09 16:45:44 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,21 +47,21 @@
 # define UI_LABEL_PADDING 10
 # define UI_LABEL_HEIGHT 20
 
-
 /* Base UI Colors */
-# define UI_PANEL_BG_COLOR		0x1A1A1A77
-# define UI_SECTION_COLOR		0x2D2D2DCC
-# define UI_BUTTON_COLOR		0x4A90E2FF
-# define UI_BUTTON_HOVER_COLOR	0x6AA8FFFF
-# define UI_BUTTON_ACTIVE_COLOR	0x1A5FB4FF
-# define UI_BUTTON_BORDER_COLOR	0xFFFFFFFF
-# define UI_TEXT_COLOR			0xFFFFFFFF
+# define UI_PANEL_BG_COLOR			0x1A1A1A77
+# define UI_SECTION_COLOR			0x2D2D2DCC
+# define UI_BUTTON_COLOR			0x4A90E2FF
+# define UI_BUTTON_HOVER_COLOR		0x6AA8FFFF
+# define UI_BUTTON_ACTIVE_COLOR		0x1A5FB4FF
+# define UI_BUTTON_BORDER_COLOR		0xFFFFFFFF
+# define UI_TEXT_COLOR				0xFFFFFFFF
 # define UI_TEXT_SECONDARY_COLOR	0xAAAAAAFF
 # define UI_SECTION_HEADER_COLOR	0x2D2D2DFF
-# define UI_HEADER_COLOR		0x1A1A1AFF
-# define UI_BORDER_COLOR		0x4A4A4AFF
-# define UI_TRANSPARENT			0x00000000
-# define UI_LABEL_COLOR			0xFFFFFFFF
+# define UI_HEADER_COLOR			0x1A1A1AFF
+# define UI_BORDER_COLOR			0x4A4A4AFF
+# define UI_TRANSPARENT				0x00000000
+# define UI_LABEL_COLOR				0xFFFFFFFF
+# define UI_RENDER_BUTTON_COLOR		0x2ECC71FF
 
 /* Section Colors */
 # define UI_COLOR_CAMERA_SECTION	0xE74C3CFF
@@ -69,16 +69,6 @@
 # define UI_COLOR_AMBIENT_SECTION	0xF1C40FFF
 # define UI_COLOR_DOF_SECTION		0xd14d25FF
 # define UI_COLOR_SAMPLE_SECTION	0xD125ACFF 
-
-// /* Special Elements */
-# define UI_RENDER_BUTTON_COLOR		0x2ECC71FF
-
-t_ui_element	*create_ambient_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
-t_ui_element	*create_camera_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
-t_ui_element	*create_light_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
-t_ui_element	*create_ui_sections(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
-t_ui_element	*create_dof_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
-t_ui_element	*create_sample_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
 
 typedef enum e_ui_type
 {
@@ -175,10 +165,28 @@ typedef struct s_vbtn_config
 	char			*(*formatter)(float);
 }	t_vbtn_config;
 
+typedef struct s_btn_config
+{
+	t_ui_context	*ctx;
+	const char		*label_text;
+	t_v2f			pos;
+	t_v2f			size;
+	void			(*on_click)(t_ui_element *, void *);
+	void			*param;
+} t_btn_config;
+
+typedef struct s_section_config
+{
+	t_ui_context	*ctx;
+	t_sample			*sample;
+	t_v2f			pos;
+	t_v2f			size;
+} t_section_config;
+
 struct s_ui_sections
 {
 	float			height_scale;
-	t_ui_element	*(*create_func)(t_ui_context*, t_sample*, t_v2f, t_v2f);
+	t_ui_element	*(*create_func)(t_section_config*);
 };
 
 extern struct s_ui_sections g_sections[];
@@ -197,14 +205,13 @@ t_ui_element	*create_header(t_ui_context *ctx, const char *title, t_v2f pos, t_v
 t_ui_element	*create_label(t_ui_context *ctx, const char *text, t_v2f pos, uint32_t color);
 t_ui_element	*create_labeled_control(t_vbtn_config *cfg, const char *label_text, float total_width);
 t_ui_element	*create_panel(t_ui_context *ctx, t_v2f pos, t_v2f size);
-t_ui_element	*create_button(t_ui_context *ctx, const char *label_text, t_v2f pos, t_v2f size,
-					void (*on_click)(t_ui_element *, void *), void *param);
-t_ui_element	*create_ambient_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
-t_ui_element	*create_camera_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
-t_ui_element	*create_light_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
-t_ui_element	*create_ui_sections(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
-t_ui_element	*create_dof_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
-t_ui_element	*create_sample_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
+t_ui_element	*create_button(t_btn_config *cfg);
+t_ui_element	*create_ambient_section(t_section_config *cfg);
+t_ui_element	*create_camera_section(t_section_config *cfg);
+t_ui_element	*create_light_section(t_section_config *cfg);
+t_ui_element	*create_ui_sections(t_section_config *cfg);
+t_ui_element	*create_dof_section(t_section_config *cfg);
+t_ui_element	*create_sample_section(t_section_config *cfg);
 
 /* UI Element Management */
 void			destroy_ui_element(t_ui_element *element, t_ui_context *ctx);

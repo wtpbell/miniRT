@@ -12,12 +12,12 @@
 
 #include "ui.h"
 
-static void	(*const g_default_stylers[])(t_ui_element *, t_v2f, t_v2f) = {
-	[UI_PANEL] = default_panel,
-	[UI_BUTTON] = default_button,
-	[UI_LABEL] = default_label,
-	[UI_HEADER] = default_header,
-	[UI_SECTION] = default_section,
+static void (*const	g_default_stylers[])(t_ui_element *, t_v2f, t_v2f) = {
+[UI_PANEL] = default_panel,
+[UI_BUTTON] = default_button,
+[UI_LABEL] = default_label,
+[UI_HEADER] = default_header,
+[UI_SECTION] = default_section,
 };
 
 t_ui_element	*create_ui_element(t_ui_type type, t_v2f pos, t_v2f size)
@@ -38,8 +38,8 @@ t_ui_element	*create_ui_element(t_ui_type type, t_v2f pos, t_v2f size)
 		.padding = UI_PANEL_PADDING,
 		.visible = true
 	};
-	if (type < (sizeof(g_default_stylers) / sizeof(g_default_stylers[0])) && 
-		g_default_stylers[type] != NULL)
+	if (type < (sizeof(g_default_stylers) / sizeof(g_default_stylers[0]))
+		&& g_default_stylers[type] != NULL)
 		g_default_stylers[type](element, pos, size);
 	return (element);
 }
@@ -57,32 +57,33 @@ t_ui_element	*create_panel(t_ui_context *ctx, t_v2f pos, t_v2f size)
 	return (panel);
 }
 
-t_ui_element	*create_button(t_ui_context *ctx, const char *label_text, t_v2f pos, t_v2f size,
-	void (*on_click)(t_ui_element *, void *), void *param)
+t_ui_element	*create_button(t_btn_config *cfg)
 {
 	t_ui_element	*button;
 	t_ui_btn		*btn_data;
 
-	(void)ctx;
-	button = create_ui_element(UI_BUTTON, pos, size);
+	if (!cfg || !cfg->label_text)
+		return (NULL);
+	button = create_ui_element(UI_BUTTON, cfg->pos, cfg->size);
 	if (!button)
 		return (NULL);
-	default_button(button, pos, size);
-	button->action = on_click;
-	button->data = ft_calloc(1, sizeof(t_ui_btn));
-	if (!button->data)
-		return (free(button), NULL);
-	btn_data = (t_ui_btn *)button->data;
-	btn_data->on_click = on_click;
-	btn_data->param = param;
-	btn_data->label = ft_strdup(label_text);
+	btn_data = ft_calloc(1, sizeof(t_ui_btn));
+	if (!btn_data)
+		return (destroy_ui_element(button, NULL), NULL);
+	btn_data->on_click = cfg->on_click;
+	btn_data->param = cfg->param;
+	btn_data->label = ft_strdup(cfg->label_text);
 	if (!btn_data->label)
-		return (free(button->data), free(button), NULL);
-	button->style.text_color = UI_TEXT_COLOR;
+	{
+		free(btn_data);
+		return (destroy_ui_element(button, NULL), NULL);
+	}
+	button->data = btn_data;
 	return (button);
 }
 
-t_ui_element	*create_label(t_ui_context *ctx, const char *text, t_v2f pos, uint32_t color)
+t_ui_element	*create_label(t_ui_context *ctx, const char *text,
+							t_v2f pos, uint32_t color)
 {
 	t_ui_element	*label_elem;
 	t_ui_label		*label_data;
@@ -95,10 +96,7 @@ t_ui_element	*create_label(t_ui_context *ctx, const char *text, t_v2f pos, uint3
 	label_elem->style.text_color = color;
 	label_elem->data = ft_calloc(1, sizeof(t_ui_label));
 	if (!label_elem->data)
-	{
-		free(label_elem);
-		return (NULL);
-	}
+		return (free(label_elem), NULL);
 	label_data = (t_ui_label *)label_elem->data;
 	label_data->text = ft_strdup(text);
 	if (!label_data->text)
@@ -139,7 +137,7 @@ static t_ui_element	*create_value_button(t_vbtn_config *cfg)
 		return (NULL);
 	value_btn = (t_ui_vbtn *)ft_calloc(1, sizeof(t_ui_vbtn));
 	if (!value_btn)
-		return container;
+		return (free(container), NULL);
 	init_value_button_data(value_btn, cfg);
 	add_inc_dec_buttons(container, cfg, value_btn);
 	add_value_label(container, cfg, value_btn);
@@ -157,15 +155,15 @@ t_ui_element	*create_labeled_control(t_vbtn_config *cfg,
 	t_ui_element	*container;
 	t_ui_element	*label;
 
-	container = create_panel(cfg->ctx, cfg->pos, init_v2f(total_width, UI_ROW_HEIGHT));
+	container = create_panel(cfg->ctx, cfg->pos,
+			init_v2f(total_width, UI_ROW_HEIGHT));
 	if (!container)
 		return (NULL);
 	label_width = total_width * UI_LABEL_WIDTH_RATIO;
 	control_width = total_width - label_width - UI_PADDING;
 	control_x = label_width + UI_PADDING;
-	label = create_label(cfg->ctx, label_text,
-	init_v2f(UI_LABEL_PADDING, (UI_ROW_HEIGHT - UI_FONT_HEIGHT) / 2),
-	UI_LABEL_COLOR);
+	label = create_label(cfg->ctx, label_text, init_v2f(UI_LABEL_PADDING,
+				(UI_ROW_HEIGHT - UI_FONT_HEIGHT) / 2), UI_LABEL_COLOR);
 	if (label)
 		attach_child(container, label);
 	cfg->pos = init_v2f(control_x, 0);
@@ -173,4 +171,3 @@ t_ui_element	*create_labeled_control(t_vbtn_config *cfg,
 	attach_child(container, create_value_button(cfg));
 	return (container);
 }
-

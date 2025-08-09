@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/09 16:06:29 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/09 16:51:39 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,9 @@ t_ui	*create_ui(mlx_t *mlx, t_scene *scene, t_sample *sample, void *game_ptr)
 	t_ui			*ui;
 	t_ui_element	*ui_sections;
 	t_v2f			size;
+	t_section_config section_cfg;
 
-	ui = ft_calloc(1, sizeof(t_ui));
+	ui = (t_ui *)ft_calloc(1, sizeof(t_ui));
 	if (!ui)
 		return (NULL);
 	ui->context = create_ui_context(mlx, scene, game_ptr);
@@ -60,9 +61,19 @@ t_ui	*create_ui(mlx_t *mlx, t_scene *scene, t_sample *sample, void *game_ptr)
 	ui->root = create_panel(ui->context, g_v2f_zero, size);
 	if (!ui->root)
 		return (destroy_ui(ui), NULL);
-	ui_sections = create_ui_sections(ui->context, sample, g_v2f_zero, size);
+
+	// Create section configuration
+	section_cfg = (t_section_config){
+		.ctx = ui->context,
+		.sample = sample,
+		.pos = g_v2f_zero,
+		.size = size
+	};
+
+	ui_sections = create_ui_sections(&section_cfg);
 	if (!ui_sections)
 		return (destroy_ui(ui), NULL);
+
 	attach_child(ui->root, ui_sections);
 	ui->context->needs_redraw = true;
 	return (ui);

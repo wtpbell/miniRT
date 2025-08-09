@@ -31,7 +31,7 @@ static void	destroy_label(t_ui_element *element, t_ui_context *ctx)
 static void	destroy_button(t_ui_element *element, t_ui_context *ctx)
 {
 	t_ui_btn	*button;
-	
+
 	(void)ctx;
 	if (!element || !element->data)
 		return ;
@@ -45,7 +45,7 @@ static void	destroy_button(t_ui_element *element, t_ui_context *ctx)
 static void	destroy_value_button(t_ui_element *element, t_ui_context *ctx)
 {
 	t_ui_vbtn	*vbutton;
-	
+
 	(void)ctx;
 	if (!element || !element->data)
 		return ;
@@ -56,23 +56,24 @@ static void	destroy_value_button(t_ui_element *element, t_ui_context *ctx)
 	element->data = NULL;
 }
 
-void (*const g_destroy_handlers[])(t_ui_element *, t_ui_context *) = {
-	[UI_PANEL] = NULL,
-	[UI_BUTTON] = destroy_button,
-	[UI_LABEL] = destroy_label,
-	[UI_HEADER] = NULL,
-	[UI_SECTION] = NULL,
-	[UI_VALUE_BUTTON] = destroy_value_button
+void (*const	g_destroy_handlers[])(t_ui_element *, t_ui_context *) = {
+[UI_PANEL] = NULL,
+[UI_BUTTON] = destroy_button,
+[UI_LABEL] = destroy_label,
+[UI_HEADER] = NULL,
+[UI_SECTION] = NULL,
+[UI_VALUE_BUTTON] = destroy_value_button
 };
 
 static void	safe_call_destroy_handler(t_ui_element *element, t_ui_context *ctx)
 {
 	if (!element || !ctx)
-		return;
-	if (element->type < 0 || element->type >= (int)(sizeof(g_destroy_handlers) / sizeof(g_destroy_handlers[0])))
-		return;
+		return ;
+	if (element->type < 0 || element->type >= (int)(sizeof(
+			g_destroy_handlers) / sizeof(g_destroy_handlers[0])))
+		return ;
 	if (g_destroy_handlers[element->type] == NULL)
-		return;
+		return ;
 	g_destroy_handlers[element->type](element, ctx);
 }
 

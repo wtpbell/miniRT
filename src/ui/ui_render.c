@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 15:03:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/09 16:05:44 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/09 19:34:39 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ void	draw_char(mlx_image_t *canvas, char c, int x, int y, uint32_t color)
 	}
 }
 
-void	draw_text(mlx_image_t *canvas, const char *str, t_v2f pos, uint32_t color)
+void	draw_text(mlx_image_t *canvas, const char *str,
+			t_v2f pos, uint32_t color)
 {
 	int		x;
 	int		y;
@@ -107,7 +108,6 @@ void	draw_text(mlx_image_t *canvas, const char *str, t_v2f pos, uint32_t color)
 	x = (int)pos.x;
 	y = (int)pos.y;
 	i = 0;
-	
 	if (y < 0 || y + 8 > (int)canvas->height)
 		return ;
 	while (str[i])
@@ -125,7 +125,8 @@ void	draw_text(mlx_image_t *canvas, const char *str, t_v2f pos, uint32_t color)
 	}
 }
 
-void	draw_rect_border(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
+void	draw_rect_border(mlx_image_t *canvas, t_v2f pos,
+			t_v2f size, uint32_t color)
 {
 	int			x;
 	int			y;
@@ -154,54 +155,45 @@ void	draw_rect_border(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color
 	}
 }
 
-uint32_t blend_colors(uint32_t bg, uint32_t fg)
+uint32_t	blend_colors(uint32_t bg, uint32_t fg)
 {
-	// Convert colors to vector format for easier manipulation
-	t_v3f bg_color = col32_to_v3f(bg);
-	t_v3f fg_color = col32_to_v3f(fg);
-	
-	// Get alpha from foreground color (last byte in RGBA format)
-	float alpha = (fg & 0xFF) / 255.0f;
-	
-	// Blend colors using vector operations
-	t_v3f result = {
-		.x = bg_color.x * (1.0f - alpha) + fg_color.x * alpha,
-		.y = bg_color.y * (1.0f - alpha) + fg_color.y * alpha,
-		.z = bg_color.z * (1.0f - alpha) + fg_color.z * alpha
-	};
-	
-	// Convert back to RGBA format (fully opaque)
-	return v3f_to_col32(result);
+	t_v3f	bg_color;
+	t_v3f	fg_color;
+	float	alpha;
+
+	bg_color = col32_to_v3f(bg);
+	fg_color = col32_to_v3f(fg);
+	alpha = (fg & 0xFF) / 255.0f;
+	return (v3f_to_col32(init_v3f(
+				bg_color.x * (1.0f - alpha) + fg_color.x * alpha,
+				bg_color.y * (1.0f - alpha) + fg_color.y * alpha,
+				bg_color.z * (1.0f - alpha) + fg_color.z * alpha
+			)));
 }
 
 void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
 {
 	uint32_t	*pixel;
-	uint32_t	x;
-	uint32_t	y;
-	uint32_t	start_x;
-	uint32_t	start_y;
-	uint32_t	end_x;
-	uint32_t	end_y;
+	t_v2f		_pos;
+	t_v2f		start;
+	t_v2f		end;
 
 	if (!canvas)
 		return ;
 	pixel = (uint32_t *)canvas->pixels;
-	start_x = (uint32_t)fmax(0, pos.x);
-	start_y = (uint32_t)fmax(0, pos.y);
-	end_x = (uint32_t)fmin(canvas->width - 1, pos.x + size.x - 1);
-	end_y = (uint32_t)fmin(canvas->height - 1, pos.y + size.y - 1);
-	y = start_y;
-	while (y <= end_y)
+	start = init_v2f(fmax(0, pos.x), fmax(0, pos.y));
+	end = init_v2f(fmin(canvas->width - 1, pos.x + size.x - 1), fmin(canvas->height - 1, pos.y + size.y - 1));
+	_pos.x = start.x;
+	while (_pos.x <= end.x)
 	{
-		x = start_x;
-		while (x <= end_x)
+		_pos.y = start.y;
+		while (_pos.y <= end.y)
 		{
-				pixel = (uint32_t *)canvas->pixels + y * canvas->width + x;
-				*pixel = blend_colors(*pixel, color);
-			x++;
+			pixel = (uint32_t *)canvas->pixels + (int)_pos.y * canvas->width + (int)_pos.x;
+			*pixel = blend_colors(*pixel, color);
+			_pos.y++;
 		}
-		y++;
+		_pos.x++;
 	}
 }
 

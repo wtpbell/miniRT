@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/09 13:57:43 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/09 19:21:10 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*format_float_value(float value)
 char	*format_color_value(float value)
 {
 	static char	buf[16];
-	
+
 	snprintf(buf, sizeof(buf), "%6.2f", value * 255.0f);
 	return (buf);
 }
@@ -63,13 +63,13 @@ t_light	*find_light(t_scene *scene, t_light_type type)
 	{
 		light = (t_light *)vector_get(&scene->lights, i);
 		if (light->type == type)
-			return light;
+			return (light);
 		i++;
 	}
-	return NULL;
+	return (NULL);
 }
 
-bool	ui_element_remove_child(t_ui_element *parent, t_ui_element *child, 
+bool	ui_element_remove_child(t_ui_element *parent, t_ui_element *child,
 							bool destroy, t_ui_context *ctx)
 {
 	t_ui_element	*current;

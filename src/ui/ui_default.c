@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 16:25:35 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/07 23:25:24 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/09 18:01:50 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,9 @@ void	default_button(t_ui_element *button, t_v2f pos, t_v2f size)
 	};
 }
 
-void	default_value_button(t_ui_element *button, t_v2f pos, t_v2f size, const char *label)
+static void	init_value_button_defaults(t_ui_element *button,
+								t_v2f pos, t_v2f size)
 {
-	t_ui_btn	*btn_data;
-
 	button->type = UI_VALUE_BUTTON;
 	button->pos = pos;
 	button->size = size;
@@ -118,23 +117,32 @@ void	default_value_button(t_ui_element *button, t_v2f pos, t_v2f size, const cha
 		.padding = 4,
 		.visible = true,
 	};
-	if (label && *label)
+}
+
+void	default_value_button(t_ui_element *button, t_v2f pos,
+						t_v2f size, const char *label)
+{
+	t_ui_btn	*btn_data;
+
+	init_value_button_defaults(button, pos, size);
+	btn_data = (t_ui_btn *)button->data;
+	if (!btn_data)
 	{
-		btn_data = (t_ui_btn *)button->data;
+		btn_data = (t_ui_btn *)ft_calloc(1, sizeof(t_ui_btn));
 		if (!btn_data)
+			return ;
+		btn_data->label = ft_strdup(label);
+		if (!btn_data->label)
 		{
-			btn_data = (t_ui_btn *)ft_calloc(1, sizeof(t_ui_btn));
-			if (btn_data)
-			{
-				btn_data->label = ft_strdup(label);
-				button->data = btn_data;
-			}
-		} 
-		else if (btn_data->label)
-		{
-			free(btn_data->label);
-			btn_data->label = ft_strdup(label);
+			free(btn_data);
+			return ;
 		}
+		button->data = btn_data;
+	}
+	else
+	{
+		free(btn_data->label);
+		btn_data->label = ft_strdup(label);
 	}
 }
 

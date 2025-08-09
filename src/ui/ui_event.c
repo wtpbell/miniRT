@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:51:30 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/09 15:34:18 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/09 18:15:58 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 
 #define VALUE_STR_LEN 32
 
-static bool	is_point_in_element(const t_ui_element *element, int32_t x, int32_t y)
+static bool	is_point_in_element(const t_ui_element *element,
+				int32_t x, int32_t y)
 {
 	t_v2f				abs_pos;
 	const t_ui_element	*parent;
@@ -32,10 +33,8 @@ static bool	is_point_in_element(const t_ui_element *element, int32_t x, int32_t 
 		abs_pos.y += parent->pos.y;
 		parent = parent->parent;
 	}
-	return (x >= abs_pos.x &&
-			x <= (abs_pos.x + element->size.x) &&
-			y >= abs_pos.y &&
-			y <= (abs_pos.y + element->size.y));
+	return (x >= abs_pos.x && x <= (abs_pos.x + element->size.x)
+		&& y >= abs_pos.y && y <= (abs_pos.y + element->size.y));
 }
 
 void	update_value_label(t_ui_vbtn *btn, t_ui_context *ctx)
@@ -64,14 +63,16 @@ void	update_value_label(t_ui_vbtn *btn, t_ui_context *ctx)
 	}
 }
 
-void	handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx)
+void	handle_ui_click(t_ui_element *root, int32_t x,
+				int32_t y, t_ui_context *ctx)
 {
 	t_ui_element	*child;
 	t_ui_btn		*btn;
 
 	if (is_point_in_element(root, x, y))
 	{
-		if ((root->type == UI_BUTTON || root->type == UI_VALUE_BUTTON) && root->data)
+		if ((root->type == UI_BUTTON || root->type == UI_VALUE_BUTTON)
+			&& root->data)
 		{
 			if (root->type == UI_VALUE_BUTTON)
 				update_button_value(root, x, ctx);
@@ -110,31 +111,31 @@ void	update_value_button(t_ui_element *button, float new_value,
 		button->action(button, ctx);
 }
 
-void	update_button_value(t_ui_element *button, int32_t click_x, t_ui_context *ctx)
+void	update_button_value(t_ui_element *button, int32_t click_x,
+							t_ui_context *ctx)
 {
-	const t_ui_element	*parent = button->parent;
-	t_ui_vbtn			*value_btn;
-	float				relative_x;
-	float				button_mid;
-	float				old_value;
-	t_v2f				abs_pos;
-	float				new_value;
+	t_v2f			abs_pos;
+	t_ui_element	*p;
+	t_ui_vbtn		*vb;
+	float			old_val;
+	float			new_val;
 
 	abs_pos = button->pos;
-	while (parent)
+	p = button->parent;
+	while (p)
 	{
-		abs_pos.x += parent->pos.x;
-		abs_pos.y += parent->pos.y;
-		parent = parent->parent;
+		abs_pos.x += p->pos.x;
+		abs_pos.y += p->pos.y;
+		p = p->parent;
 	}
-	value_btn = (t_ui_vbtn *)button->data;
-	relative_x = click_x - abs_pos.x;
-	button_mid = button->size.x / 2.0f;
-	old_value = *value_btn->value;
-	new_value = old_value + 
-					((relative_x < button_mid) ? -value_btn->step : value_btn->step);
-	if (new_value != old_value)
-		update_value_button(button, new_value, ctx);
+	vb = (t_ui_vbtn *)button->data;
+	old_val = *vb->value;
+	if (click_x - abs_pos.x < button->size.x / 2.0f)
+		new_val = old_val - vb->step;
+	else
+		new_val = old_val + vb->step;
+	if (new_val != old_val)
+		update_value_button(button, new_val, ctx);
 }
 
 void	increment_value_button(t_ui_element *btn, void *param)
@@ -161,7 +162,7 @@ void	decrement_value_button(t_ui_element *btn, void *param)
 	float			new_value;
 
 	if (!btn || btn->type != UI_VALUE_BUTTON || !btn->data || !param)
-		return;
+		return ;
 	vb = (t_ui_vbtn *)btn->data;
 	ctx = (t_ui_context *)param;
 	new_value = *vb->value - vb->step;
