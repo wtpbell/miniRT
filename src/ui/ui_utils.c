@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_utils.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/27 22:38:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/07 11:23:21 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_utils.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/08 21:18:25 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,4 +114,16 @@ void	destroy_ui_element_recursive(t_ui_element *element, t_ui_context *ctx)
 	if (element->parent)
 		ui_element_remove_child(element->parent, element, false, ctx);
 	destroy_ui_element(element, ctx);
+}
+
+void	render_button_clicked(t_ui_element *button, void *param)
+{
+	t_ui_context	*ctx;
+
+	(void)button;
+	if (!param)
+		return ;
+	ctx = (t_ui_context *)param;
+	// Set the needs_redraw flag to true to trigger a re-render
+	ctx->needs_redraw = true;
 }

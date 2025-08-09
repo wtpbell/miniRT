@@ -52,9 +52,9 @@ static void	add_ambient_intensity_control(t_ui_context *ctx, t_light *ambient,
 	cfg.pos = init_v2f(UI_PADDING,
 		UI_HEADER_HEIGHT + UI_PADDING + 3 * (UI_ROW_HEIGHT + UI_PADDING));
 	cfg.size = g_v2f_zero;
-	cfg.formatter = NULL;
-	attach_child(section, create_labeled_control(&cfg,
-		"INTENSITY", size.x - (UI_PADDING * 2)));
+	cfg.formatter = format_float_value;
+	attach_child(section, create_labeled_control(&cfg, "INTENSITY",
+		size.x - (UI_PADDING * 2)));
 }
 
 t_ui_element	*create_ambient_section(t_ui_context *ctx, t_sample *sample,

@@ -82,16 +82,6 @@ t_ui_element	*create_button(t_ui_context *ctx, const char *label_text, t_v2f pos
 	return (button);
 }
 
-t_ui_element	*create_rerender_button(t_ui *ui, t_v2f pos, t_v2f size)
-{
-	t_ui_element	*btn;
-
-	btn = create_button(ui, "RE_RENDER", pos, size, render, ui->context);
-	btn->data = ui;
-	return (btn);
-}
-
-
 t_ui_element	*create_label(t_ui_context *ctx, const char *text, t_v2f pos, uint32_t color)
 {
 	t_ui_element	*label_elem;
