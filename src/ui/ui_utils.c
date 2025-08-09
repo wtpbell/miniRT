@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/08 21:18:25 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/09 13:57:43 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,11 +119,16 @@ void	destroy_ui_element_recursive(t_ui_element *element, t_ui_context *ctx)
 void	render_button_clicked(t_ui_element *button, void *param)
 {
 	t_ui_context	*ctx;
+	t_game			*game;
 
 	(void)button;
 	if (!param)
 		return ;
 	ctx = (t_ui_context *)param;
-	// Set the needs_redraw flag to true to trigger a re-render
-	ctx->needs_redraw = true;
+	game = (t_game *)ctx->game;
+	if (game)
+	{
+		game->needs_redraw = true;
+		printf("Re-render triggered!\n");
+	}
 }

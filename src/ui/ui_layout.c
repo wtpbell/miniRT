@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 11:39:13 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/08 23:40:05 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/09 16:06:59 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ struct s_ui_sections g_sections[] = {
 	{9.2f, create_light_section},
 	{5.8f, create_ambient_section},
 	{1.0f, create_dof_section},
-	{3.0f, create_sample_section},
+	{2.0f, create_sample_section},
 	{0.5f, create_render_button_section}
 };
 
@@ -103,14 +103,11 @@ static t_ui_element	*create_render_button_section(t_ui_context *ctx, t_sample *s
 		render_button_clicked, ctx);
 	if (render_btn)
 	{
-		render_btn->style.bg_color = 0x4CAF50FF;
-		render_btn->style.text_color = 0xFFFFFFFF;
+		render_btn->style.bg_color = UI_RENDER_BUTTON_COLOR;
+		render_btn->style.text_color = UI_TEXT_COLOR;
 		attach_child(panel, render_btn);
-		
-		printf("Render button created at (%.1f, %.1f) with size (%.1f, %.1f)\n",
-			btn_pos.x, btn_pos.y, btn_size.x, btn_size.y);
 	}
-	panel->style.bg_color = 0x333333AA;
+	panel->style.bg_color = UI_SECTION_COLOR;
 	return (panel);
 }
 

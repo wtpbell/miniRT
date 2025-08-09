@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   game.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/08 17:25:07 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   game.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
+/*   Updated: 2025/08/09 16:06:29 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	render_loop(void *param)
 	}
 }
 
-t_ui	*create_ui(mlx_t *mlx, t_scene *scene, t_sample *sample)
+t_ui	*create_ui(mlx_t *mlx, t_scene *scene, t_sample *sample, void *game_ptr)
 {
 	t_ui			*ui;
 	t_ui_element	*ui_sections;
@@ -53,7 +53,7 @@ t_ui	*create_ui(mlx_t *mlx, t_scene *scene, t_sample *sample)
 	ui = ft_calloc(1, sizeof(t_ui));
 	if (!ui)
 		return (NULL);
-	ui->context = create_ui_context(mlx, scene);
+	ui->context = create_ui_context(mlx, scene, game_ptr);
 	if (!ui->context)
 		return (free(ui), NULL);
 	size = init_v2f(UI_PANEL_WIDTH, HEIGHT);
@@ -93,21 +93,12 @@ void	mouse_hook(mouse_key_t button, action_t action,
 	int32_t	y;
 
 	game = (t_game *)param;
-	printf("Mouse hook called - button: %d, action: %d\n", button, action);
-	
 	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS)
 	{
-		printf("Left mouse button pressed\n");
 		if (game->ui && game->ui->context && game->ui->context->is_visible)
 		{
 			mlx_get_mouse_pos(game->mlx, &x, &y);
-			printf("Mouse position: %d, %d\n", x, y);
 			handle_ui_click(game->ui->root, x, y, game->ui->context);
-			// render_ui(game->ui);
-		}
-		else
-		{
-			printf("UI not visible or not initialized\n");
 		}
 	}
 }
@@ -161,8 +152,7 @@ int	game(t_scene *scene, t_sample *sample)
 	game.scene = scene;
 	game.needs_redraw = true;
 	game.sample = sample;
-	printf("sample: %f, depth: %f\n", game.sample->sample_pxl, game.sample->max_depth);
-	game.ui = create_ui(game.mlx, scene, game.sample);
+	game.ui = create_ui(game.mlx, scene, game.sample, &game);
 	if (!game.ui)
 		return (cleanup_mlx(&game), 1);
 	mlx_set_instance_depth(&game.img->instances[0], 0);

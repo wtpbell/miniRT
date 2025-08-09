@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_core.c                                          :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/27 12:53:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/08 16:54:22 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_core.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/27 12:53:50 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/09 14:15:08 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene)
+t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene, void *game_ptr)
 {
 	t_ui_context	*ctx;
 	unsigned int	*pixels;
@@ -27,6 +27,7 @@ t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene)
 		return (NULL);
 	ctx->mlx = mlx;
 	ctx->scene = scene;
+	ctx->game = game_ptr;
 	ctx->is_visible = true;
 	ctx->needs_redraw = true;
 	panel_width = UI_PANEL_WIDTH;
@@ -39,7 +40,7 @@ t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene)
 	i = 0;
 	while (i < panel_width * mlx->height)
 	{
-		pixels[i] = UI_TRANSPARENT;
+		pixels[i] = UI_PANEL_BG_COLOR;
 		i++;
 	}
 	x_pos = 0;
@@ -156,7 +157,7 @@ void	render_ui(t_ui *ui)
 	i = 0;
 	while (i < canvas->width * canvas->height)
 	{
-		pixels[i] = UI_TRANSPARENT;
+		pixels[i] = UI_PANEL_BG_COLOR;
 		i++;
 	}
 	if (ui->root)

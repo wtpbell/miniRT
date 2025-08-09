@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_render.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/27 15:03:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/08 11:34:26 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_render.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/27 15:03:00 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/09 16:05:44 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
+#include "color.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
@@ -155,50 +156,52 @@ void	draw_rect_border(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color
 
 uint32_t blend_colors(uint32_t bg, uint32_t fg)
 {
-	float alpha = ((fg >> 24) & 0xFF) / 255.0f;
-	float inv_alpha = 1.0f - alpha;
-
-	uint8_t r = (uint8_t)(((bg >> 16) & 0xFF) * inv_alpha + ((fg >> 16) & 0xFF) * alpha);
-	uint8_t g = (uint8_t)(((bg >> 8) & 0xFF) * inv_alpha + ((fg >> 8) & 0xFF) * alpha);
-	uint8_t b = (uint8_t)((bg & 0xFF) * inv_alpha + (fg & 0xFF) * alpha);
-	uint8_t a = (uint8_t)(0xFF);
-
-	return ((uint32_t)a << 24) | ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
+	// Convert colors to vector format for easier manipulation
+	t_v3f bg_color = col32_to_v3f(bg);
+	t_v3f fg_color = col32_to_v3f(fg);
+	
+	// Get alpha from foreground color (last byte in RGBA format)
+	float alpha = (fg & 0xFF) / 255.0f;
+	
+	// Blend colors using vector operations
+	t_v3f result = {
+		.x = bg_color.x * (1.0f - alpha) + fg_color.x * alpha,
+		.y = bg_color.y * (1.0f - alpha) + fg_color.y * alpha,
+		.z = bg_color.z * (1.0f - alpha) + fg_color.z * alpha
+	};
+	
+	// Convert back to RGBA format (fully opaque)
+	return v3f_to_col32(result);
 }
 
 void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
 {
-	int x, y;
-	int start_x, start_y, end_x, end_y;
-	uint32_t *pixel;
+	uint32_t	*pixel;
+	uint32_t	x;
+	uint32_t	y;
+	uint32_t	start_x;
+	uint32_t	start_y;
+	uint32_t	end_x;
+	uint32_t	end_y;
 
-	start_x = (int)pos.x;
-	start_y = (int)pos.y;
-	end_x = start_x + (int)size.x;
-	end_y = start_y + (int)size.y;
-	if (start_x < 0) start_x = 0;
-	if (start_y < 0) start_y = 0;
-	if (end_x > (int)canvas->width) end_x = canvas->width;
-	if (end_y > (int)canvas->height) end_y = canvas->height;
-	if (start_x >= (int)canvas->width || start_y >= (int)canvas->height ||
-		end_x <= 0 || end_y <= 0)
-		return;
-	if ((color >> 24) == 0x00)
-		return;
-	if ((color >> 24) != 0xFF)
+	if (!canvas)
+		return ;
+	pixel = (uint32_t *)canvas->pixels;
+	start_x = (uint32_t)fmax(0, pos.x);
+	start_y = (uint32_t)fmax(0, pos.y);
+	end_x = (uint32_t)fmin(canvas->width - 1, pos.x + size.x - 1);
+	end_y = (uint32_t)fmin(canvas->height - 1, pos.y + size.y - 1);
+	y = start_y;
+	while (y <= end_y)
 	{
-		y = start_y;
-		while (y < end_y)
+		x = start_x;
+		while (x <= end_x)
 		{
-			x = start_x;
-			while (x < end_x)
-			{
 				pixel = (uint32_t *)canvas->pixels + y * canvas->width + x;
 				*pixel = blend_colors(*pixel, color);
-				x++;
-			}
-			y++;
+			x++;
 		}
+		y++;
 	}
 }
 

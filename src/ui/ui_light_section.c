@@ -56,7 +56,7 @@ static void	add_light_color_controls(t_ui_context *ctx, t_light *light,
 		cfg.ctx = ctx;
 		cfg.value = values[i];
 		cfg.range = init_v2f(0.0f, 1.0f);
-		cfg.step = 1.0f / 255.0f;
+		cfg.step = 10.0f / 255.0f;
 		cfg.pos = init_v2f(UI_PADDING,
 			UI_HEADER_HEIGHT + 3 * (UI_ROW_HEIGHT + UI_PADDING) + 
 			i * (UI_ROW_HEIGHT + UI_PADDING));

@@ -29,7 +29,7 @@ static void	add_ambient_color_controls(t_ui_context *ctx, t_light *ambient,
 		cfg.ctx = ctx;
 		cfg.value = values[i];
 		cfg.range = init_v2f(0, 1.0f);
-		cfg.step = 1.0f / 255.0f;
+		cfg.step = 10.0f / 255.0f;
 		cfg.pos = init_v2f(UI_PADDING,
 			UI_HEADER_HEIGHT + UI_PADDING + i * (UI_ROW_HEIGHT + UI_PADDING));
 		cfg.size = g_v2f_zero;
@@ -48,7 +48,7 @@ static void	add_ambient_intensity_control(t_ui_context *ctx, t_light *ambient,
 	cfg.ctx = ctx;
 	cfg.value = &ambient->intensity;
 	cfg.range = init_v2f(0, 1);
-	cfg.step = 0.05f;
+	cfg.step = 0.1f;
 	cfg.pos = init_v2f(UI_PADDING,
 		UI_HEADER_HEIGHT + UI_PADDING + 3 * (UI_ROW_HEIGHT + UI_PADDING));
 	cfg.size = g_v2f_zero;
@@ -67,7 +67,6 @@ t_ui_element	*create_ambient_section(t_ui_context *ctx, t_sample *sample,
 	ambient = find_light(ctx->scene, LIGHT_AMBIENT);
 	if (!ambient)
 		return (NULL);
-	// Calculate required height: header + 4 rows (3 color + 1 intensity) + padding
 	size.y = UI_HEADER_HEIGHT + 4 * (UI_ROW_HEIGHT + UI_PADDING) + UI_PADDING;
 	section = create_panel(ctx, pos, size);
 	section->style.bg_color = UI_COLOR_AMBIENT_SECTION;

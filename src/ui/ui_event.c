@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_event.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/27 12:51:30 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/08 17:33:49 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_event.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/27 12:51:30 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/09 15:34:18 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static bool	is_point_in_element(const t_ui_element *element, int32_t x, int32_t 
 			y <= (abs_pos.y + element->size.y));
 }
 
-static void	update_value_label(t_ui_vbtn *btn, t_ui_context *ctx)
+void	update_value_label(t_ui_vbtn *btn, t_ui_context *ctx)
 {
 	const char	*value_str;
 	t_ui_label	*label_data;
@@ -92,7 +92,7 @@ void	handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx
 	}
 }
 
-static void	update_value_button(t_ui_element *button, float new_value,
+void	update_value_button(t_ui_element *button, float new_value,
 							t_ui_context *ctx)
 {
 	t_ui_vbtn	*value_btn;

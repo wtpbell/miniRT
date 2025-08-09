@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui.h                                               :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/08 16:30:38 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui.h                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/09 16:04:30 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 # define UI_SECTION_HEADER_HEIGHT 30
 # define UI_SECTION_PADDING 10
 # define UI_PANEL_PADDING 0
-# define UI_PADDING 5
+# define UI_PADDING 4
 # define UI_CHAR_WIDTH 8
 # define UI_CHAR_HEIGHT 15
 # define UI_FONT_HEIGHT 8
@@ -47,21 +47,31 @@
 # define UI_LABEL_PADDING 10
 # define UI_LABEL_HEIGHT 20
 
-# define UI_PANEL_BG_COLOR			0x1E1E2EFF
-# define UI_SECTION_COLOR			0x2A2A3AFF
-# define UI_BUTTON_COLOR			0x444444FF
-# define UI_BUTTON_BORDER_COLOR		0x666666FF
-# define UI_TEXT_COLOR				0xFFFFFFFF
-# define UI_SECTION_HEADER_COLOR	0x252538FF
-# define UI_HEADER_COLOR			0x242437FF
-# define UI_BORDER_COLOR			0x3E3E5EFF
-# define UI_TRANSPARENT				0x00000000
-# define UI_LABEL_COLOR				0xFFFFFFFF
-# define UI_COLOR_CAMERA_SECTION	0x8B0000FF
-# define UI_COLOR_LIGHT_SECTION		0xa45506ff
-# define UI_COLOR_AMBIENT_SECTION	0xD2EE1BFF
-# define UI_COLOR_DOF_SECTION		0x014421FF
-# define UI_COLOR_SAMPLE_SECTION	0x3A0066FF
+
+/* Base UI Colors */
+# define UI_PANEL_BG_COLOR		0x1A1A1A77
+# define UI_SECTION_COLOR		0x2D2D2DCC
+# define UI_BUTTON_COLOR		0x4A90E2FF
+# define UI_BUTTON_HOVER_COLOR	0x6AA8FFFF
+# define UI_BUTTON_ACTIVE_COLOR	0x1A5FB4FF
+# define UI_BUTTON_BORDER_COLOR	0xFFFFFFFF
+# define UI_TEXT_COLOR			0xFFFFFFFF
+# define UI_TEXT_SECONDARY_COLOR	0xAAAAAAFF
+# define UI_SECTION_HEADER_COLOR	0x2D2D2DFF
+# define UI_HEADER_COLOR		0x1A1A1AFF
+# define UI_BORDER_COLOR		0x4A4A4AFF
+# define UI_TRANSPARENT			0x00000000
+# define UI_LABEL_COLOR			0xFFFFFFFF
+
+/* Section Colors */
+# define UI_COLOR_CAMERA_SECTION	0xE74C3CFF
+# define UI_COLOR_LIGHT_SECTION		0x9B59B6FF
+# define UI_COLOR_AMBIENT_SECTION	0xF1C40FFF
+# define UI_COLOR_DOF_SECTION		0xd14d25FF
+# define UI_COLOR_SAMPLE_SECTION	0xD125ACFF 
+
+// /* Special Elements */
+# define UI_RENDER_BUTTON_COLOR		0x2ECC71FF
 
 t_ui_element	*create_ambient_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
 t_ui_element	*create_camera_section(t_ui_context *ctx, t_sample *sample, t_v2f pos, t_v2f size);
@@ -73,7 +83,7 @@ t_ui_element	*create_sample_section(t_ui_context *ctx, t_sample *sample, t_v2f p
 typedef enum e_ui_type
 {
 	UI_PANEL,
-	UI_BUTTON,	//hello
+	UI_BUTTON,
 	UI_LABEL,
 	UI_HEADER,
 	UI_SECTION,
@@ -145,6 +155,7 @@ typedef struct s_ui_context
 	t_ui_images			*images;
 	bool				is_visible;
 	bool				needs_redraw;
+	void				*game;
 }	t_ui_context;
 
 typedef struct s_ui
@@ -173,9 +184,9 @@ struct s_ui_sections
 extern struct s_ui_sections g_sections[];
 
 /* UI Context Management */
-t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene);
+t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene, void *game_ptr);
 void			destroy_ui_context(t_ui_context *ctx);
-t_ui			*create_ui(mlx_t *mlx, t_scene *scene, t_sample *sample);
+t_ui			*create_ui(mlx_t *mlx, t_scene *scene, t_sample *sample, void *game_ptr);
 void			destroy_ui(t_ui *ui);
 void			render_ui(t_ui *ui);
 void			toggle_ui_visibility(t_ui *ui);

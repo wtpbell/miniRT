@@ -32,7 +32,7 @@ t_ui_element	*create_ui_element(t_ui_type type, t_v2f pos, t_v2f size)
 	element->size = size;
 	element->visible = true;
 	element->style = (t_ui_style){
-		.bg_color = UI_TRANSPARENT,
+		.bg_color = UI_PANEL_BG_COLOR,
 		.border_color = UI_TRANSPARENT,
 		.text_color = UI_TEXT_COLOR,
 		.padding = UI_PANEL_PADDING,
