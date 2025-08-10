@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/07 18:35:30 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/10 14:43:24 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/10 20:02:16 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ bool	construct_mesh(t_scene *scene)
 					return (free_mesh(shared_mesh), perror("obj"), false);
 			}
 			// I would have prefered to just pass store the pointer of shared_mesh directly, but the obj_path is preventing that.
-			obj->mesh.box = shared_mesh->box;
+			obj->mesh.bhv = shared_mesh->bhv;
 			obj->mesh.tri_count = shared_mesh->tri_count;
 			obj->mesh.triangles = shared_mesh->triangles;
 		}

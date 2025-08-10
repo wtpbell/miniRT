@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/10 13:08:13 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/10 20:23:45 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,15 @@ typedef enum e_scene_flags
 	SCENE_POINT_LIGHT = 1 << 1,
 	SCENE_CAMERA = 1 << 3,
 }	t_scene_flags;
+
+typedef struct s_bvh_node
+{
+	t_aabb		box;
+	uint32_t	left;
+	uint32_t	right;
+	uint32_t	first_prim;
+	uint32_t	prim_count;
+}	t_bhv_node;
 
 struct s_transform
 {
@@ -114,15 +123,16 @@ struct s_triangle
 	t_v3f	vn0;
 	t_v3f	vn1;
 	t_v3f	vn2;
+	t_v3f	centroid;
 };
 
 struct s_mesh
 {
 	char		*obj_path;
+	t_bhv_node	*bhv;
 	t_aabb		box;
 	int			tri_count;
 	t_tri		*triangles; // All instances of the same obj_path share the same triangles
-	// t_vector	triangles;
 };
 
 struct s_light
