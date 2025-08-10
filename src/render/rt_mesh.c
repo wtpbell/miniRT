@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 17:28:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/07 17:26:25 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/10 10:25:56 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,24 +40,27 @@ t_v2f	mesh_texcoord(t_obj *obj, t_v3f point, t_result *res)
 
 int	mesh_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_result *res)
 {
-	int		i;
-	t_tri	*tri;
-	t_ray	local_ray;
+	int			i;
+	t_tri		*tri;
+	t_result	curr;
+	t_ray		local_ray;
 
 	local_ray.origin = mul_v3_m4x4(ray->origin, obj->t.to_obj);
 	local_ray.direction = mul_dir_m4x4(ray->direction, obj->t.to_obj);
 	if (!aabb_intersect(&local_ray, &obj->mesh.box))
 		return (false);
 	i = 0;
+	res->face_index = -1;
 	while (i < obj->mesh.triangles.size)
 	{
 		tri = (t_tri *)obj->mesh.triangles.items[i];
-		if (tri_intersect(tri, &local_ray, t, res))
+		if (tri_intersect(tri, &local_ray, t, &curr))
 		{
+			*res = curr;
+			t.y = curr.t;
 			res->face_index = i;
-			return (true);
 		}
 		++i;
 	}
-	return (false);
+	return (res->face_index != -1);
 }
