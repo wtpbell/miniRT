@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/08 17:17:15 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/10 13:41:20 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,7 @@ void		free_tokens(char **tokens);
 void		cleanup_gnl(char *line, int fd);
 void		free_material(void *ptr);
 void		free_obj(void *ptr);
+void		free_mesh(void *ptr);
 void		cleanup_scene(t_scene *scene);
 
 // field.c
@@ -255,8 +256,7 @@ void		assign_textures(t_mat *mat);
 // obj
 bool		init_obj_file(t_obj_file *obj_file);
 void		free_obj_file(t_obj_file *obj_file);
-bool		load_obj_into_mesh(t_obj_file *obj_file, t_mesh *mesh,
-				t_mat4x4 local);
+t_mesh		*load_obj_into_mesh(const char *obj_path, t_obj_file *obj_file);
 bool		construct_mesh(t_scene *scene);
 bool		assign_v3f(t_v3f *dst[3], t_vector *cont, int *indices, int curr);
 void		set_normal(t_tri *tri);

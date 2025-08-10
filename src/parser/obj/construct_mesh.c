@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/07 18:35:30 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/10 11:14:48 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/10 14:43:24 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,16 @@ static bool	parse_line(char *line, t_obj_file *obj_file)
 	return (true);
 }
 
-static bool	parse_obj_file(t_mesh *mesh, t_mat4x4 local)
+static t_mesh	*parse_obj_file(const char *obj_path)
 {
-	const char	*file_name = mesh->obj_path;
 	char		*line;
 	int			fd;
 	t_obj_file	obj_file;
+	t_mesh		*mesh;
 
-	fd = open(file_name, O_RDONLY);
+	fd = open(obj_path, O_RDONLY);
 	if (fd < 0 || !init_obj_file(&obj_file))
-		return (perror("parse mesh"), close(fd), false);
+		return (perror("parse mesh"), cleanup_gnl(NULL, fd), NULL);
 	errno = 0;
 	while (true)
 	{
@@ -57,21 +57,26 @@ static bool	parse_obj_file(t_mesh *mesh, t_mat4x4 local)
 		if (line == NULL)
 			break ;
 		if (!parse_line(line, &obj_file))
-			return (cleanup_gnl(line, fd), free_obj_file(&obj_file), false);
+			return (cleanup_gnl(line, fd), free_obj_file(&obj_file), NULL);
 		free(line);
 	}
-	close (fd);
-	get_next_line(-1);
+	cleanup_gnl(NULL, fd);
 	if (errno != 0)
-		return (perror("parse mesh"), free_obj_file(&obj_file), false);
-	if (!load_obj_into_mesh(&obj_file, mesh, local))
-		return (free_obj_file(&obj_file), false);
-	return (free_obj_file(&obj_file), true);
+		return (perror("parse mesh"), free_obj_file(&obj_file), NULL);
+	mesh = load_obj_into_mesh(obj_path, &obj_file);
+	return (free_obj_file(&obj_file), mesh);
+}
+
+static int	find_shared_mesh(int i, void *item, void *ctx)
+{
+	(void)i;
+	return (ft_strcmp(((t_mesh *)item)->obj_path, (const char *)ctx));
 }
 
 bool	construct_mesh(t_scene *scene)
 {
 	t_obj	*obj;
+	t_mesh	*shared_mesh;
 	int		i;
 	int		size;
 
@@ -80,10 +85,20 @@ bool	construct_mesh(t_scene *scene)
 	while (i < size)
 	{
 		obj = (t_obj *)scene->objects.items[i];
-		// TODO: Cache the obj files for faster re-use
-		if (obj->type == OBJ_MESH && !parse_obj_file(&obj->mesh, obj->t.to_obj))
-			return (print_error(ERR_OBJ_FAIL, "obj", obj->mesh.obj_path),
-				false);
+		if (obj->type == OBJ_MESH)
+		{
+			shared_mesh = (t_mesh *)vector_find(&scene->shared_mesh, obj->mesh.obj_path, find_shared_mesh);
+			if (shared_mesh == NULL)
+			{
+				shared_mesh = parse_obj_file(obj->mesh.obj_path); // TODO: What if it is an empty file? What about no vertices or faces?
+				if (shared_mesh == NULL || !vector_add(&scene->shared_mesh, shared_mesh))
+					return (free_mesh(shared_mesh), perror("obj"), false);
+			}
+			// I would have prefered to just pass store the pointer of shared_mesh directly, but the obj_path is preventing that.
+			obj->mesh.box = shared_mesh->box;
+			obj->mesh.tri_count = shared_mesh->tri_count;
+			obj->mesh.triangles = shared_mesh->triangles;
+		}
 		++i;
 	}
 	return (true);

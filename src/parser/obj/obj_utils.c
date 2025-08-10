@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/07 19:19:47 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/07 19:36:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/10 13:34:44 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ void	construct_mesh_aabb(t_mesh *mesh)
 	i = 0;
 	min = g_v3f_zero;
 	max = g_v3f_zero;
-	while (i < mesh->triangles.size)
+	while (i < mesh->tri_count)
 	{
-		tri = (t_tri *)mesh->triangles.items[i];
+		tri = mesh->triangles + i;
 		min.x = fminf(fminf(fminf(min.x, tri->v0.x), tri->v1.x), tri->v2.x);
 		min.y = fminf(fminf(fminf(min.y, tri->v0.y), tri->v1.y), tri->v2.y);
 		min.z = fminf(fminf(fminf(min.z, tri->v0.z), tri->v1.z), tri->v2.z);

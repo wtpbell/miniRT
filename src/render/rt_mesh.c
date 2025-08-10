@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 17:28:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/10 10:25:56 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/10 14:30:09 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_v3f	mesh_normal(t_obj *obj, t_v3f point, t_result *res)
 	t_tri		*tri;
 
 	(void)point;
-	tri = (t_tri *)obj->mesh.triangles.items[res->face_index];
+	tri = obj->mesh.triangles + res->face_index;
 	return (mul_dir_m4x4(
 			v3f_add(v3f_scale(tri->vn2, res->tri_weight.v),
 				v3f_add(v3f_scale(tri->vn1, res->tri_weight.u),
@@ -33,7 +33,7 @@ t_v2f	mesh_texcoord(t_obj *obj, t_v3f point, t_result *res)
 {
 	(void)point;
 	return (
-		tri_uv_texcoord((t_tri *)obj->mesh.triangles.items[res->face_index],
+		tri_uv_texcoord(obj->mesh.triangles + res->face_index,
 			res->tri_weight
 		));
 }
@@ -41,7 +41,6 @@ t_v2f	mesh_texcoord(t_obj *obj, t_v3f point, t_result *res)
 int	mesh_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_result *res)
 {
 	int			i;
-	t_tri		*tri;
 	t_result	curr;
 	t_ray		local_ray;
 
@@ -51,10 +50,9 @@ int	mesh_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_result *res)
 		return (false);
 	i = 0;
 	res->face_index = -1;
-	while (i < obj->mesh.triangles.size)
+	while (i < obj->mesh.tri_count)
 	{
-		tri = (t_tri *)obj->mesh.triangles.items[i];
-		if (tri_intersect(tri, &local_ray, t, &curr))
+		if (tri_intersect(obj->mesh.triangles + i, &local_ray, t, &curr))
 		{
 			*res = curr;
 			t.y = curr.t;

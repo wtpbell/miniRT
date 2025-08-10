@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:44:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/03 11:19:47 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/10 14:06:29 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ void	free_tokens(char **tokens)
 
 void	cleanup_gnl(char *line, int fd)
 {
-	if (line)
-		free(line);
+	free(line);
 	close(fd);
 	get_next_line(-1);
 }
@@ -55,11 +54,18 @@ void	free_obj(void *ptr)
 
 	obj = (t_obj *)ptr;
 	if (obj != NULL && obj->type == OBJ_MESH)
-	{
 		free(obj->mesh.obj_path);
-		vector_free(&obj->mesh.triangles, free);
-	}
 	free(obj);
+}
+
+void	free_mesh(void *ptr)
+{
+	t_mesh	*mesh;
+
+	mesh = (t_mesh *)ptr;
+	free(mesh->obj_path);
+	free(mesh->triangles);
+	free(ptr);
 }
 
 void	cleanup_scene(t_scene *scene)
@@ -67,4 +73,5 @@ void	cleanup_scene(t_scene *scene)
 	vector_free(&scene->objects, free_obj);
 	vector_free(&scene->lights, free);
 	vector_free(&scene->shared_materials, free_material);
+	vector_free(&scene->shared_mesh, free_mesh);
 }

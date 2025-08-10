@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:21:05 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/02 17:10:45 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/10 13:08:13 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ static void	init_scene_and_vector(t_scene *scene)
 	ft_bzero(scene, sizeof(t_scene));
 	if (!vector_init(&scene->objects, 8) || !vector_init(&scene->lights, 8)
 		|| !vector_init(&scene->shared_materials, 8)
+		|| !vector_init(&scene->shared_mesh, 8)
 		|| !create_default_materials(&scene->shared_materials))
 	{
 		perror("init_scene_and_vector");

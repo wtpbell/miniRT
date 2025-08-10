@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 17:01:40 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/08 10:39:14 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/10 14:28:59 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ static bool	mesh_init(t_obj *obj, char *obj_path)
 	obj->mesh.obj_path = obj_path;
 	obj->intersect = mesh_intersect;
 	obj->calc_norm = mesh_normal;
-	if (!vector_init(&obj->mesh.triangles, 10))
-		return (false);
 	return (true);
 }
 

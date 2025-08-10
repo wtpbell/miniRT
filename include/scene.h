@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/04 17:25:01 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/10 13:08:13 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,9 @@ struct s_mesh
 {
 	char		*obj_path;
 	t_aabb		box;
-	t_vector	triangles;
+	int			tri_count;
+	t_tri		*triangles; // All instances of the same obj_path share the same triangles
+	// t_vector	triangles;
 };
 
 struct s_light
@@ -168,6 +170,7 @@ struct s_scene
 	t_vector	objects;
 	t_vector	lights;
 	t_vector	shared_materials;
+	t_vector	shared_mesh;
 	t_cam		camera;
 	int			scene_flags;
 };

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 15:58:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/08 17:16:01 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/10 14:00:06 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,21 @@ void	free_obj_file(t_obj_file *obj_file)
 	vector_free(&obj_file->vt, free);
 	vector_free(&obj_file->vn, free);
 	vector_free(&obj_file->f, free);
+}
+
+static t_mesh	*init_mesh(const char *obj_path, t_obj_file *obj_file)
+{
+	t_mesh	*mesh;
+	
+	mesh = malloc(sizeof(t_mesh));
+	if (mesh == NULL)
+		return (NULL);
+	mesh->obj_path = ft_strdup(obj_path);
+	mesh->tri_count = obj_file->f.size;
+	mesh->triangles = malloc(mesh->tri_count * sizeof(t_tri));
+	if (mesh->obj_path == NULL || mesh->triangles == NULL)
+		return (free_mesh(mesh), NULL);
+	return (mesh);
 }
 
 static bool	init_vertices(t_tri *tri, t_obj_file *obj_file, int face_index,
@@ -66,35 +81,27 @@ static bool	init_vertices(t_tri *tri, t_obj_file *obj_file, int face_index,
 	return (true);
 }
 
-bool	load_obj_into_mesh(t_obj_file *obj_file, t_mesh *mesh, t_mat4x4 local)
+t_mesh	*load_obj_into_mesh(const char *obj_path, t_obj_file *obj_file)
 {
-	int		i;
-	t_tri	*tri;
+	int			i;
+	t_tri		*tri;
+	t_mesh		*mesh;
+	t_mat4x4	local;
 
+	if (obj_file->f.size == 0)
+		return (NULL); // TODO: PRINT ERROR
+	mesh = init_mesh(obj_path, obj_file);
+	if (mesh == NULL)
+		return (perror("minirt"), NULL);
 	i = 0;
+	id_m4x4(local);
 	while (i < obj_file->f.size)
 	{
-		tri = ft_calloc(1, sizeof(t_tri));
-		if (tri == NULL)
-			return (perror("minirt"), false);
+		tri = (mesh->triangles + i);
 		if (!init_vertices(tri, obj_file, i, local))
-			return (free(tri), false);
-		if (!vector_add(&mesh->triangles, tri))
-			return (perror("minirt"), free(tri), false);
+			return (free_mesh(mesh), NULL);
 		++i;
 	}
 	construct_mesh_aabb(mesh);
-	// TODO: DELETE THIS PART
-	// i = 0;
-	// while (i < mesh->triangles.size)
-	// {
-	// 	tri = mesh->triangles.items[i];
-	// 	printf("%f %f %f | %f %f %f | %f %f %f\n",
-	// 		tri->vn0.x, tri->vn0.y, tri->vn0.z,
-	// 		tri->vn1.x, tri->vn1.y, tri->vn1.z,
-	// 		tri->vn2.x, tri->vn2.y, tri->vn2.z
-	// 	);
-	// 	++i;
-	// }
-	return (true);
+	return (mesh);
 }
