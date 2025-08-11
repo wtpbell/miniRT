@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 15:58:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/11 17:44:25 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/11 22:28:28 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,8 @@ t_mesh	*load_obj_into_mesh(const char *obj_path, t_obj_file *obj_file)
 			return (free_mesh(mesh), NULL);
 		++i;
 	}
-	mesh->bhv = construct_bhv(mesh);
-	if (mesh->bhv == NULL)
+	mesh->bvh = construct_bvh(mesh);
+	if (mesh->bvh == NULL)
 		return (free_mesh(mesh), perror("minirt"), NULL);
 	return (mesh);
 }

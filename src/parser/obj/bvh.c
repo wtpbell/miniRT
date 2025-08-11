@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   bhv.c                                              :+:    :+:            */
+/*   bvh.c                                              :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/10 19:43:26 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/11 17:50:23 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/11 22:27:55 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,18 @@ static bool	is_leaf_node(t_bhv_node *node, uint32_t idx, uint32_t *nodes_used, u
 	if (remaining == 0 || remaining == node[idx].prim_count)
 		return (true);
 	leftIdx = *nodes_used;
-	node[idx].left = leftIdx;
 	node[leftIdx].left = node[idx].left;
 	node[leftIdx].prim_count = remaining;
-	node[leftIdx + 1].left = i;
-	node[leftIdx + 1].prim_count = node[idx].prim_count - remaining;
+	
+	node[leftIdx + 1u].left = i;
+	node[leftIdx + 1u].prim_count = node[idx].prim_count - remaining;
+
+	node[idx].left = leftIdx;
 	node[idx].prim_count = 0;
+
+	// printf("LEFT (%d): %d %d\n", leftIdx, node[leftIdx].left, node[leftIdx].prim_count);
+	// printf("RIGHT (%d): %d %d\n", leftIdx + 1u, node[leftIdx + 1u].left, node[leftIdx + 1u].prim_count);
+
 	(*nodes_used) += 2;
 	return (false);
 }
@@ -120,6 +126,9 @@ static void	subdivide(t_bhv_node *node, uint32_t idx, uint32_t *nodes_used, t_me
 		return ;
 	update_node_bounds(node + node[idx].left, mesh);
 	update_node_bounds(node + (node[idx].left + 1u), mesh);
+
+	// printf ("WHAT IS %d? %d\n", node[idx].prim_count,  node[idx].left);
+	
 	subdivide(node, node[idx].left, nodes_used, mesh);
 	subdivide(node, node[idx].left + 1u, nodes_used, mesh);
 }
@@ -135,7 +144,7 @@ void	display_nodes(t_bhv_node *node, uint32_t idx)
 	display_nodes(node, node[idx].left + 1);
 }
 
-t_bhv_node	*construct_bhv(t_mesh *mesh)
+t_bhv_node	*construct_bvh(t_mesh *mesh)
 {
 	t_bhv_node	*root;
 	uint32_t	nodes_used;

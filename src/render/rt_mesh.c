@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 17:28:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/11 15:06:05 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/11 22:28:20 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static t_result	intersect_bhv(t_ray *ray, t_mesh *mesh, uint32_t idx, t_v2f t)
 
 	final.t = FLT_MAX;
 	final.face_index = -1;
-	node = &mesh->bhv[idx];
+	node = &mesh->bvh[idx];
 	if (!aabb_intersect(ray, &node->box))
 		return (final);
 	if (node->prim_count != 0)

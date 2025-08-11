@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:44:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/11 10:48:57 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/11 22:28:20 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	free_mesh(void *ptr)
 		return ;
 	mesh = (t_mesh *)ptr;
 	free(mesh->obj_path);
-	free(mesh->bhv);
+	free(mesh->bvh);
 	free(mesh->triangles);
 	free(ptr);
 }
