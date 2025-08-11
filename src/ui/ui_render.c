@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_render.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 15:03:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/09 19:34:39 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_render.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 15:03:00 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/11 14:11:35 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,19 +157,22 @@ void	draw_rect_border(mlx_image_t *canvas, t_v2f pos,
 
 uint32_t	blend_colors(uint32_t bg, uint32_t fg)
 {
-	t_v3f	bg_color;
-	t_v3f	fg_color;
 	float	alpha;
+	float	inv_alpha;
+	uint8_t	r;
+	uint8_t	g;
+	uint8_t	b;
 
-	bg_color = col32_to_v3f(bg);
-	fg_color = col32_to_v3f(fg);
-	alpha = (fg & 0xFF) / 255.0f;
-	return (v3f_to_col32(init_v3f(
-				bg_color.x * (1.0f - alpha) + fg_color.x * alpha,
-				bg_color.y * (1.0f - alpha) + fg_color.y * alpha,
-				bg_color.z * (1.0f - alpha) + fg_color.z * alpha
-			)));
+	alpha = ((fg >> 24) & 0xFF) / 255.0f;
+	inv_alpha = 1.0f - alpha;
+	r = (uint8_t)(((bg >> 16) & 0xFF) * inv_alpha + ((fg >> 16) & 0xFF) * alpha);
+	g = (uint8_t)(((bg >> 8) & 0xFF) * inv_alpha + ((fg >> 8) & 0xFF) * alpha);
+	b = (uint8_t)((bg & 0xFF) * inv_alpha + (fg & 0xFF) * alpha);
+	return ((0xFF << 24) | (r << 16) | (g << 8) | b);
 }
+
+
+
 
 void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
 {
@@ -177,12 +180,13 @@ void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
 	t_v2f		_pos;
 	t_v2f		start;
 	t_v2f		end;
+	float		alpha;
 
-	if (!canvas)
-		return ;
-	pixel = (uint32_t *)canvas->pixels;
+
+	alpha = (color & 0xFF) / 255.0f;
 	start = init_v2f(fmax(0, pos.x), fmax(0, pos.y));
-	end = init_v2f(fmin(canvas->width - 1, pos.x + size.x - 1), fmin(canvas->height - 1, pos.y + size.y - 1));
+	end = init_v2f(fmin(canvas->width - 1, pos.x + size.x - 1),
+				fmin(canvas->height - 1, pos.y + size.y - 1));
 	_pos.x = start.x;
 	while (_pos.x <= end.x)
 	{
@@ -190,12 +194,16 @@ void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
 		while (_pos.y <= end.y)
 		{
 			pixel = (uint32_t *)canvas->pixels + (int)_pos.y * canvas->width + (int)_pos.x;
-			*pixel = blend_colors(*pixel, color);
+			if (alpha >= 1.0f)
+				*pixel = color;
+			else
+				*pixel = blend_colors(*pixel, color);
 			_pos.y++;
 		}
 		_pos.x++;
 	}
 }
+
 
 void	draw_button(t_ui_element *button, t_ui_context *ctx)
 {

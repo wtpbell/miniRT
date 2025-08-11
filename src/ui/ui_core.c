@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_core.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 12:53:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/09 17:55:03 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_core.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 12:53:50 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/11 14:08:40 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene, void *game_ptr)
 		return (free(ctx), NULL);
 	pixels = (unsigned int *)ctx->canvas->pixels;
 	i = 0;
-	while (i < panel_width * mlx->height)
-		pixels[i++] = UI_PANEL_BG_COLOR;
+	// while (i < panel_width * mlx->height)
+	// 	pixels[i++] = UI_PANEL_BG_COLOR;
 	if (panel_width > (int)mlx->width)
 		panel_width = mlx->width;
 	if (mlx_image_to_window(mlx, ctx->canvas, 0, 0) < 0)
