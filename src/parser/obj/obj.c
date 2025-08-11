@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 15:58:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/10 20:01:22 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/11 17:44:25 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	free_obj_file(t_obj_file *obj_file)
 static t_mesh	*init_mesh(const char *obj_path, t_obj_file *obj_file)
 {
 	t_mesh	*mesh;
-	
+
 	mesh = malloc(sizeof(t_mesh));
 	if (mesh == NULL)
 		return (NULL);
@@ -102,7 +102,7 @@ t_mesh	*load_obj_into_mesh(const char *obj_path, t_obj_file *obj_file)
 			return (free_mesh(mesh), NULL);
 		++i;
 	}
-	mesh->bhv = construct_hierarchy_aabb(mesh);
+	mesh->bhv = construct_bhv(mesh);
 	if (mesh->bhv == NULL)
 		return (free_mesh(mesh), perror("minirt"), NULL);
 	return (mesh);

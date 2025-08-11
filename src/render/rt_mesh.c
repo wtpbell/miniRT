@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 17:28:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/10 21:03:31 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/11 15:06:05 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,11 @@ static t_result	intersect_bhv(t_ray *ray, t_mesh *mesh, uint32_t idx, t_v2f t)
 		i = 0;
 		while (i < node->prim_count)
 		{
-			tri = mesh->triangles + node->first_prim + i;
+			tri = mesh->triangles + node->left + i;
 			if (tri_intersect(tri, ray, t, &curr))
 			{
 				final = curr;
-				final.face_index = node->first_prim + i;
+				final.face_index = node->left + i;
 				t.y = curr.t;
 			}
 			++i;
@@ -73,7 +73,7 @@ static t_result	intersect_bhv(t_ray *ray, t_mesh *mesh, uint32_t idx, t_v2f t)
 		final = curr;
 		t.y = final.t;
 	}
-	curr = intersect_bhv(ray, mesh, node->right, t);
+	curr = intersect_bhv(ray, mesh, node->left + 1, t);
 	if (curr.t < final.t)
 		return (curr);
 	return (final);
@@ -81,26 +81,10 @@ static t_result	intersect_bhv(t_ray *ray, t_mesh *mesh, uint32_t idx, t_v2f t)
 
 int	mesh_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_result *res)
 {
-	// int			i;
-	// t_result	curr;
-	t_ray		local_ray;
+	t_ray	local_ray;
 
 	local_ray.origin = mul_v3_m4x4(ray->origin, obj->t.to_obj);
 	local_ray.direction = mul_dir_m4x4(ray->direction, obj->t.to_obj);
 	*res = intersect_bhv(&local_ray, &obj->mesh, 0, t);
-	// if (!aabb_intersect(&local_ray, &obj->mesh.box))
-	// 	return (false);
-	// i = 0;
-	// res->face_index = -1;
-	// while (i < obj->mesh.tri_count)
-	// {
-	// 	if (tri_intersect(obj->mesh.triangles + i, &local_ray, t, &curr))
-	// 	{
-	// 		*res = curr;
-	// 		t.y = curr.t;
-	// 		res->face_index = i;
-	// 	}
-	// 	++i;
-	// }
 	return (res->face_index != -1);
 }

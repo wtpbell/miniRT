@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/10 20:23:45 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/11 18:17:09 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ typedef struct s_bvh_node
 {
 	t_aabb		box;
 	uint32_t	left;
-	uint32_t	right;
-	uint32_t	first_prim;
 	uint32_t	prim_count;
 }	t_bhv_node;
 
