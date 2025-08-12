@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/11 14:21:05 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/12 17:01:42 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@
 /* Base UI Colors */
 # define UI_PANEL_BG_COLOR			0x1A1A1A55
 # define UI_SECTION_COLOR			0x2D2D2DCC
-# define UI_BUTTON_COLOR			0xFF3A70D2  
+# define UI_BUTTON_COLOR			0xFF3A70D2
 
 # define UI_BUTTON_HOVER_COLOR		0x6AA8FFFF
 # define UI_BUTTON_ACTIVE_COLOR		0x1A5FB4FF
@@ -65,11 +65,11 @@
 # define UI_RENDER_BUTTON_COLOR		0x2ECC71FF
 
 /* Section Colors */
-# define UI_COLOR_CAMERA_SECTION	0xE74C3CFF
-# define UI_COLOR_LIGHT_SECTION		0x9B59B6FF
-# define UI_COLOR_AMBIENT_SECTION	0xF1C40FFF
-# define UI_COLOR_DOF_SECTION		0xD14D25FF
-# define UI_COLOR_SAMPLE_SECTION	0xD125ACFF 
+# define UI_COLOR_CAMERA_SECTION	0xD14D25FF
+# define UI_COLOR_LIGHT_SECTION		0xF79903FF
+# define UI_COLOR_AMBIENT_SECTION	0xEDC835FF
+# define UI_COLOR_DOF_SECTION		0x00396DFF
+# define UI_COLOR_SAMPLE_SECTION	0x2F6BA4FF
 
 typedef enum e_ui_type
 {

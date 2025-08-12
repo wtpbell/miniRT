@@ -76,7 +76,7 @@ static void	add_light_intensity_control(t_ui_context *ctx, t_light *light,
 
 	cfg.ctx = ctx;
 	cfg.value = &light->intensity;
-	cfg.range = init_v2f(0.0f, 10.0f);
+	cfg.range = init_v2f(0.0f, 1.0f);
 	cfg.step = 0.1f;
 	cfg.pos = init_v2f(UI_PADDING, UI_HEADER_HEIGHT + UI_PADDING + 6
 			* (UI_ROW_HEIGHT + UI_PADDING));

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_layout.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/25 11:39:13 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/09 19:11:46 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_layout.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/25 11:39:13 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/12 17:02:56 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ static t_ui_element	*create_render_button_section(t_section_config *cfg)
 	btn_size = init_v2f(cfg->size.x - (2 * UI_PADDING), UI_ROW_HEIGHT * 1.5f);
 	btn_cfg = (t_btn_config){
 		.ctx = cfg->ctx,
-		.label_text = "RE RENDER",
+		.label_text = "RENDER",
 		.size = btn_size,
 		.pos = init_v2f(UI_PADDING, (panel->size.y - btn_size.y) / 2),
 		.on_click = render_button_clicked,

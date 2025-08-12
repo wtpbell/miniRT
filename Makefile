@@ -31,7 +31,7 @@ SRCS_MAIN  := main.c vector_init.c vector_helper.c vector_operations.c\
 				ui_event.c ui_default.c ui_utils.c ui_element_handlers.c \
 				threads.c benchmark.c ui_ambient_section.c ui_light_section.c \
 				ui_camera_section.c ui_element_creation.c ui_dof_section.c \
-				ui_sample_section.c
+				ui_sample_section.c ui_cleanup.c
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE)
 OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)

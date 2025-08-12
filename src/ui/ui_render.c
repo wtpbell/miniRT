@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 15:03:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/12 09:18:44 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/12 09:47:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,9 +171,6 @@ uint32_t	blend_colors(uint32_t bg, uint32_t fg)
 	return ((0xFF << 24) | (r << 16) | (g << 8) | b);
 }
 
-
-
-
 void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
 {
 	uint32_t	*pixel;
@@ -181,7 +178,6 @@ void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
 	t_v2f		start;
 	t_v2f		end;
 	float		alpha;
-
 
 	alpha = (color & 0xFF) / 255.0f;
 	start = init_v2f(fmax(0, pos.x), fmax(0, pos.y));
@@ -203,7 +199,6 @@ void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
 		_pos.x++;
 	}
 }
-
 
 void	draw_button(t_ui_element *button, t_ui_context *ctx)
 {

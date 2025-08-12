@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 12:53:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/11 14:08:40 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/12 17:54:40 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene, void *game_ptr)
 {
 	t_ui_context	*ctx;
 	unsigned int	*pixels;
-	int				i;
 	int				panel_width;
 
 	ctx = (t_ui_context *)ft_calloc(1, sizeof(t_ui_context));
@@ -44,52 +43,11 @@ t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene, void *game_ptr)
 	if (!ctx->canvas)
 		return (free(ctx), NULL);
 	pixels = (unsigned int *)ctx->canvas->pixels;
-	i = 0;
-	// while (i < panel_width * mlx->height)
-	// 	pixels[i++] = UI_PANEL_BG_COLOR;
 	if (panel_width > (int)mlx->width)
 		panel_width = mlx->width;
 	if (mlx_image_to_window(mlx, ctx->canvas, 0, 0) < 0)
 		return (mlx_delete_image(mlx, ctx->canvas), free(ctx), NULL);
 	return (ctx);
-}
-
-static void	ui_images_destroy(mlx_t *mlx, t_ui_images *images)
-{
-	if (!images)
-		return ;
-	if (mlx)
-	{
-		if (images->button_img)
-			mlx_delete_image(mlx, images->button_img);
-		if (images->header_img)
-			mlx_delete_image(mlx, images->header_img);
-		if (images->panel_img)
-			mlx_delete_image(mlx, images->panel_img);
-	}
-	free(images);
-}
-
-void	destroy_ui_context(t_ui_context *ctx)
-{
-	if (!ctx)
-		return ;
-	if (ctx->canvas)
-		mlx_delete_image(ctx->mlx, ctx->canvas);
-	if (ctx->images)
-		ui_images_destroy(ctx->mlx, ctx->images);
-	free(ctx);
-}
-
-void	destroy_ui(t_ui *ui)
-{
-	if (!ui)
-		return ;
-	if (ui->root)
-		destroy_ui_element_recursive(ui->root, ui->context);
-	if (ui->context)
-		destroy_ui_context(ui->context);
-	free(ui);
 }
 
 void	toggle_ui_visibility(t_ui *ui)

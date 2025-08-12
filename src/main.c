@@ -61,7 +61,7 @@ static void	init_sample(t_sample *sample)
 
 int	main(int argc, char **argv)
 {
-	t_scene	scene;
+	t_scene		scene;
 	t_sample	*sample;
 
 	ft_bzero(&scene, sizeof(t_scene));

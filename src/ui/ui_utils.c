@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 22:38:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/12 09:11:11 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/12 17:53:57 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,53 +69,6 @@ t_light	*find_light(t_scene *scene, t_light_type type)
 	return (NULL);
 }
 
-bool	ui_element_remove_child(t_ui_element *parent, t_ui_element *child,
-							bool destroy, t_ui_context *ctx)
-{
-	t_ui_element	*current;
-	t_ui_element	*prev;
-
-	if (!parent || !child || child->parent != parent || !ctx)
-		return (false);
-	prev = NULL;
-	current = parent->first_child;
-	while (current && current != child)
-	{
-		prev = current;
-		current = current->next_sibling;
-	}
-	if (!current)
-		return (false);
-	if (prev)
-		prev->next_sibling = child->next_sibling;
-	else
-		parent->first_child = child->next_sibling;
-	child->parent = NULL;
-	child->next_sibling = NULL;
-	if (destroy)
-		destroy_ui_element_recursive(child, ctx);
-	return (true);
-}
-
-void	destroy_ui_element_recursive(t_ui_element *element, t_ui_context *ctx)
-{
-	t_ui_element	*child;
-	t_ui_element	*next;
-
-	if (!element || !ctx)
-		return ;
-	child = element->first_child;
-	while (child)
-	{
-		next = child->next_sibling;
-		ui_element_remove_child(element, child, true, ctx);
-		child = next;
-	}
-	if (element->parent)
-		ui_element_remove_child(element->parent, element, false, ctx);
-	destroy_ui_element(element, ctx);
-}
-
 void	render_button_clicked(t_ui_element *button, void *param)
 {
 	t_ui_context	*ctx;
@@ -129,6 +82,7 @@ void	render_button_clicked(t_ui_element *button, void *param)
 	if (game)
 	{
 		game->needs_redraw = true;
+		update_camera_view(&game->scene->camera);
 		printf("Re-render triggered!\n");
 	}
 }

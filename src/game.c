@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   game.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/09 16:51:39 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   game.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
+/*   Updated: 2025/08/12 09:53:46 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,22 +61,38 @@ t_ui	*create_ui(mlx_t *mlx, t_scene *scene, t_sample *sample, void *game_ptr)
 	ui->root = create_panel(ui->context, g_v2f_zero, size);
 	if (!ui->root)
 		return (destroy_ui(ui), NULL);
-
-	// Create section configuration
 	section_cfg = (t_section_config){
 		.ctx = ui->context,
 		.sample = sample,
 		.pos = g_v2f_zero,
 		.size = size
 	};
-
 	ui_sections = create_ui_sections(&section_cfg);
 	if (!ui_sections)
 		return (destroy_ui(ui), NULL);
-
 	attach_child(ui->root, ui_sections);
 	ui->context->needs_redraw = true;
 	return (ui);
+}
+
+void	cleanup_mlx(t_game *game)
+{
+	if (!game)
+		return ;
+	if (game->ui)
+	{
+		destroy_ui(game->ui);
+		game->ui = NULL;
+	}
+	if (game->scene)
+	{
+		// Add any scene-specific cleanup here
+	}
+	if (game->mlx)
+	{
+		mlx_terminate(game->mlx);
+		game->mlx = NULL;
+	}
 }
 
 void	key_hook(mlx_key_data_t keydata, void *param)
@@ -114,25 +130,7 @@ void	mouse_hook(mouse_key_t button, action_t action,
 	}
 }
 
-void	cleanup_mlx(t_game *game)
-{
-	if (!game)
-		return ;
-	if (game->ui)
-	{
-		destroy_ui(game->ui);
-		game->ui = NULL;
-	}
-	if (game->scene)
-	{
-		// Add any scene-specific cleanup here
-	}
-	if (game->mlx)
-	{
-		mlx_terminate(game->mlx);
-		game->mlx = NULL;
-	}
-}
+
 
 static bool	cam_init(t_cam *cam, mlx_t *mlx)
 {

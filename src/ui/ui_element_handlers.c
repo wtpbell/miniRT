@@ -65,22 +65,13 @@ void (*const	g_destroy_handlers[])(t_ui_element *, t_ui_context *) = {
 [UI_VALUE_BUTTON] = destroy_value_button
 };
 
-static void	safe_call_destroy_handler(t_ui_element *element, t_ui_context *ctx)
-{
-	if (!element || !ctx)
-		return ;
-	if (element->type < 0 || element->type >= (int)(sizeof(
-			g_destroy_handlers) / sizeof(g_destroy_handlers[0])))
-		return ;
-	if (g_destroy_handlers[element->type] == NULL)
-		return ;
-	g_destroy_handlers[element->type](element, ctx);
-}
-
 void	destroy_ui_element(t_ui_element *element, t_ui_context *ctx)
 {
-	if (!element || !ctx)
-		return ;
-	safe_call_destroy_handler(element, ctx);
+	if (!element)
+        return;
+	if (element->type >= 0 &&
+		element->type < (int)(sizeof(g_destroy_handlers) / sizeof(g_destroy_handlers[0])) &&
+		g_destroy_handlers[element->type] != NULL)
+		g_destroy_handlers[element->type](element, ctx);
 	free(element);
 }
