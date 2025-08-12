@@ -1,4 +1,4 @@
-vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/render:src/render:src/ui:src/parser/obj
+vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/render:src/render:src/ui:src/parser/obj:src/bvh
 
 NAME		:= miniRT
 CC			:= cc
@@ -20,7 +20,7 @@ PARSER_CORE	:= parser.c element_parser.c camera.c light.c sphere.c plane.c\
 				string_to_num.c general_utils.c validate_utils.c triangle.c\
 				field.c material.c texture.c texture_utils.c obj.c mesh.c\
 				construct_mesh.c obj_utils.c parse_face.c parse_vertex.c\
-				object_utils.c bvh.c
+				object_utils.c
 SRCS_MAIN	:= main.c vector_init.c vector_helper.c vector_operations.c\
 				vec_container.c vec_container_utils.c color.c render.c\
 				rt_math.c range.c matrix.c game.c rt_sphere.c rt_plane.c rt_cylinder.c\
@@ -30,7 +30,7 @@ SRCS_MAIN	:= main.c vector_init.c vector_helper.c vector_operations.c\
 				matrix_utils.c bump_map.c rt_texture.c v2f.c\
 				vector_core.c matrix_space.c rt_material_utils.c rt_triangle_uv.c\
 				rt_cylinder_uv.c threads.c benchmark.c rt_mesh.c rt_strtok.c\
-				aabb.c
+				aabb.c bvh.c bvh_utils.c
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE)
 OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)

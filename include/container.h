@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/09 10:07:36 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/10 12:47:46 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/12 16:42:42 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void			vector_set(t_vector *vec, int i, void *item);
 void			*vector_get(t_vector *vec, int i);
 bool			vector_rm(t_vector *vec, int i, void (*del)(void *));
 void			vector_free(t_vector *vec, void (*del)(void *));
-void			*vector_find(t_vector *vec, void *ctx, int (*fn)(int i, void *item, void *ctx));
+void			*vector_find(t_vector *vec, void *ctx,
+					int (*fn)(int i, void *item, void *ctx));
 
 #endif

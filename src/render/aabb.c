@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/07 11:13:10 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/07 11:19:48 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/12 17:26:41 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,9 @@ bool	aabb_intersect(t_ray *ray, t_aabb *box)
 	t_v3f		t_min;
 	t_v3f		t_max;
 	const t_v3f	invdir = init_v3f(
-		1.0f / ray->direction.x,
-		1.0f / ray->direction.y,
-		1.0f / ray->direction.z
-	);
+			1.0f / ray->direction.x,
+			1.0f / ray->direction.y,
+			1.0f / ray->direction.z);
 
 	t_min.x = (box->min.x - ray->origin.x) * invdir.x;
 	t_max.x = (box->max.x - ray->origin.x) * invdir.x;

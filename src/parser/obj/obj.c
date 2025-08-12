@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 15:58:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/11 22:28:28 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/12 17:23:12 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ t_mesh	*load_obj_into_mesh(const char *obj_path, t_obj_file *obj_file)
 	t_mat4x4	local;
 
 	if (obj_file->f.size == 0)
-		return (NULL); // TODO: PRINT ERROR
+		return (print_error(ERR_OBJ_FACE, NULL, NULL), NULL);
 	mesh = init_mesh(obj_path, obj_file);
 	if (mesh == NULL)
 		return (perror("minirt"), NULL);

@@ -6,39 +6,11 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/10 19:43:26 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/11 22:27:55 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/12 16:59:44 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-/*
- source: https://jacco.ompf2.com/2022/04/13/how-to-build-a-bvh-part-1-basics/
-*/
-
-void	tri_swap(t_tri *a, t_tri *b) // Replace with int version
-{
-	t_tri	tmp;
-
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
-}
-
-static void	calc_tri_centroid(t_mesh *mesh)
-{
-	int		i;
-	t_tri	*tri;
-
-	i = 0;
-	while (i < mesh->tri_count)
-	{
-		tri = mesh->triangles + i;
-		tri->centroid = v3f_scale(
-			v3f_add(v3f_add(tri->v0, tri->v1), tri->v2), 1.0f/3.0f);
-		++i;
-	}
-}
 
 static void	update_node_bounds(t_bhv_node *node, t_mesh *mesh)
 {
@@ -65,26 +37,21 @@ static void	update_node_bounds(t_bhv_node *node, t_mesh *mesh)
 	node->box.max = max;
 }
 
-static bool	is_leaf_node(t_bhv_node *node, uint32_t idx, uint32_t *nodes_used, uint32_t i)
+static bool	is_leaf_node(t_bhv_node *node, uint32_t idx, uint32_t *nodes_used,
+	uint32_t i)
 {
 	const uint32_t	remaining = i - node[idx].left;
-	int				leftIdx;
+	int				left_idx;
 
 	if (remaining == 0 || remaining == node[idx].prim_count)
 		return (true);
-	leftIdx = *nodes_used;
-	node[leftIdx].left = node[idx].left;
-	node[leftIdx].prim_count = remaining;
-	
-	node[leftIdx + 1u].left = i;
-	node[leftIdx + 1u].prim_count = node[idx].prim_count - remaining;
-
-	node[idx].left = leftIdx;
+	left_idx = *nodes_used;
+	node[left_idx].left = node[idx].left;
+	node[left_idx].prim_count = remaining;
+	node[left_idx + 1u].left = i;
+	node[left_idx + 1u].prim_count = node[idx].prim_count - remaining;
+	node[idx].left = left_idx;
 	node[idx].prim_count = 0;
-
-	// printf("LEFT (%d): %d %d\n", leftIdx, node[leftIdx].left, node[leftIdx].prim_count);
-	// printf("RIGHT (%d): %d %d\n", leftIdx + 1u, node[leftIdx + 1u].left, node[leftIdx + 1u].prim_count);
-
 	(*nodes_used) += 2;
 	return (false);
 }
@@ -101,7 +68,8 @@ static int	get_longest_axis(t_v3f extent)
 	return (axis);
 }
 
-static void	subdivide(t_bhv_node *node, uint32_t idx, uint32_t *nodes_used, t_mesh *mesh)
+static void	subdivide(t_bhv_node *node, uint32_t idx, uint32_t *nodes_used,
+	t_mesh *mesh)
 {
 	const t_v3f	extent = v3f_sub(node[idx].box.max, node[idx].box.min);
 	const int	axis = get_longest_axis(extent);
@@ -126,40 +94,26 @@ static void	subdivide(t_bhv_node *node, uint32_t idx, uint32_t *nodes_used, t_me
 		return ;
 	update_node_bounds(node + node[idx].left, mesh);
 	update_node_bounds(node + (node[idx].left + 1u), mesh);
-
-	// printf ("WHAT IS %d? %d\n", node[idx].prim_count,  node[idx].left);
-	
 	subdivide(node, node[idx].left, nodes_used, mesh);
 	subdivide(node, node[idx].left + 1u, nodes_used, mesh);
 }
 
-void	display_nodes(t_bhv_node *node, uint32_t idx)
-{
-	if (node[idx].prim_count != 0)
-	{
-		printf("LEAF: %d %d\n", node[idx].left, node[idx].prim_count);
-		return ;
-	}
-	display_nodes(node, node[idx].left);
-	display_nodes(node, node[idx].left + 1);
-}
-
+/*
+ source: https://jacco.ompf2.com/2022/04/13/how-to-build-a-bvh-part-1-basics/
+*/
 t_bhv_node	*construct_bvh(t_mesh *mesh)
 {
 	t_bhv_node	*root;
 	uint32_t	nodes_used;
 
-	printf("tri count: %d\n", mesh->tri_count);
 	root = malloc((mesh->tri_count * 2 - 1) * sizeof(t_bhv_node));
 	if (root == NULL)
 		return (NULL);
 	nodes_used = 1;
 	root->left = 0;
 	root->prim_count = mesh->tri_count;
-	calc_tri_centroid(mesh);
+	calc_tri_centroid(mesh->triangles, mesh->tri_count);
 	update_node_bounds(root, mesh);
 	subdivide(root, 0, &nodes_used, mesh);
-	printf("nodes: %d\n", nodes_used);
-	display_nodes(root, 0);
 	return (root);
 }

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/07 18:35:30 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/11 22:28:20 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/12 17:07:59 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,17 @@ static int	find_shared_mesh(int i, void *item, void *ctx)
 	return (ft_strcmp(((t_mesh *)item)->obj_path, (const char *)ctx));
 }
 
+static void	assign_mesh(t_mesh *mesh, const t_mesh *shared_mesh)
+{
+	mesh->bvh = shared_mesh->bvh;
+	mesh->tri_count = shared_mesh->tri_count;
+	mesh->triangles = shared_mesh->triangles;
+}
+
 bool	construct_mesh(t_scene *scene)
 {
 	t_obj	*obj;
-	t_mesh	*shared_mesh;
+	t_mesh	*shared;
 	int		i;
 	int		size;
 
@@ -87,17 +94,15 @@ bool	construct_mesh(t_scene *scene)
 		obj = (t_obj *)scene->objects.items[i];
 		if (obj->type == OBJ_MESH)
 		{
-			shared_mesh = (t_mesh *)vector_find(&scene->shared_mesh, obj->mesh.obj_path, find_shared_mesh);
-			if (shared_mesh == NULL)
+			shared = (t_mesh *)vector_find(&scene->shared_mesh,
+					obj->mesh.obj_path, find_shared_mesh);
+			if (shared == NULL)
 			{
-				shared_mesh = parse_obj_file(obj->mesh.obj_path); // TODO: What if it is an empty file? What about no vertices or faces?
-				if (shared_mesh == NULL || !vector_add(&scene->shared_mesh, shared_mesh))
-					return (free_mesh(shared_mesh), perror("obj"), false);
+				shared = parse_obj_file(obj->mesh.obj_path);
+				if (shared == NULL || !vector_add(&scene->shared_mesh, shared))
+					return (free_mesh(shared), perror("obj"), false);
 			}
-			// I would have prefered to just pass store the pointer of shared_mesh directly, but the obj_path is preventing that.
-			obj->mesh.bvh = shared_mesh->bvh;
-			obj->mesh.tri_count = shared_mesh->tri_count;
-			obj->mesh.triangles = shared_mesh->triangles;
+			assign_mesh(&obj->mesh, shared);
 		}
 		++i;
 	}

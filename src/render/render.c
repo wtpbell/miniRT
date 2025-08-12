@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/04 18:18:14 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/12 17:28:07 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray,
 	hit_info->distance = res->t;
 	hit_info->front_face = v3f_dot(ray->direction, hit_info->normal) < 0;
 	hit_info->obj = obj;
-	// hit_info->weight = init_v2f(s->y, s->z);
+	hit_info->weight = res->tri_weight; // DOUBLE CHECK THIS~!!!
 	if (!hit_info->front_face)
 		hit_info->normal = v3f_scale(hit_info->normal, -1.0f);
 	hit_info->texcoord = obj->r.get_texcoord(obj, hit_info->hit, res);

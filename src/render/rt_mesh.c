@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 17:28:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/11 22:28:20 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/12 16:13:40 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_v2f	mesh_texcoord(t_obj *obj, t_v3f point, t_result *res)
 		));
 }
 
-static t_result	intersect_bhv(t_ray *ray, t_mesh *mesh, uint32_t idx, t_v2f t)
+static t_result	intersect_bvh(t_ray *ray, t_mesh *mesh, uint32_t idx, t_v2f t)
 {
 	t_bhv_node			*node;
 	uint32_t			i;
@@ -67,13 +67,13 @@ static t_result	intersect_bhv(t_ray *ray, t_mesh *mesh, uint32_t idx, t_v2f t)
 		}
 		return (final);
 	}
-	curr = intersect_bhv(ray, mesh, node->left, t);
+	curr = intersect_bvh(ray, mesh, node->left, t);
 	if (curr.t < final.t)
 	{
 		final = curr;
 		t.y = final.t;
 	}
-	curr = intersect_bhv(ray, mesh, node->left + 1, t);
+	curr = intersect_bvh(ray, mesh, node->left + 1, t);
 	if (curr.t < final.t)
 		return (curr);
 	return (final);
@@ -85,6 +85,6 @@ int	mesh_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_result *res)
 
 	local_ray.origin = mul_v3_m4x4(ray->origin, obj->t.to_obj);
 	local_ray.direction = mul_dir_m4x4(ray->direction, obj->t.to_obj);
-	*res = intersect_bhv(&local_ray, &obj->mesh, 0, t);
+	*res = intersect_bvh(&local_ray, &obj->mesh, 0, t);
 	return (res->face_index != -1);
 }

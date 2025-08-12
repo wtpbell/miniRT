@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/14 15:50:07 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/12 17:22:51 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,13 @@ static const char *const	g_err_msg[ERR_COUNT] = {
 [ERR_UNKNOWN_MAT] = "Unknown material type",
 [ERR_UNKNOWN_FIELD] = "Unknown field (<field>:<value>)",
 [ERR_REQ_FIELD] = "Required field is missing",
-[ERR_LOAD_TEXTURE] = "Failed to load texture"
+[ERR_LOAD_TEXTURE] = "Failed to load texture",
+[ERR_OBJ_VTX_FACE] = "Face must have 3 vertices assigned",
+[ERR_OBJ_FACE_FORMAT] = "Invalid formatting of face element",
+[ERR_OBJ_VERT_INDEX] = "Invalid v, vt or vn index",
+[ERR_OBJ_VERT_COMP] = "Incorrect amount of required components for v, vt or vn",
+[ERR_OBJ_FAIL] = "Failed to parse obj file",
+[ERR_OBJ_FACE] = "Empty face list"
 };
 
 static const char	*get_err_msg(t_error type)

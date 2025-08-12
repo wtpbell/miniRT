@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/11 21:53:13 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/12 17:23:32 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef enum e_error
 	ERR_OBJ_VERT_INDEX,
 	ERR_OBJ_VERT_COMP,
 	ERR_OBJ_FAIL,
+	ERR_OBJ_FACE,
 	ERR_COUNT
 }	t_error;
 
@@ -260,10 +261,8 @@ t_mesh		*load_obj_into_mesh(const char *obj_path, t_obj_file *obj_file);
 bool		construct_mesh(t_scene *scene);
 bool		assign_v3f(t_v3f *dst[3], t_vector *cont, int *indices, int curr);
 void		set_normal(t_tri *tri);
-void		construct_mesh_aabb(t_mesh *mesh);
 bool		construct_mesh(t_scene *scene);
 bool		parse_face(char *token, t_vector *f);
 bool		parse_vertex(char *str, t_vector *v, const t_vert_ran *ran);
-t_bhv_node	*construct_bvh(t_mesh *mesh);
 
 #endif

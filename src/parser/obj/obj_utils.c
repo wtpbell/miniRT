@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/07 19:19:47 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/10 13:34:44 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/12 17:23:38 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,29 +36,4 @@ void	set_normal(t_tri *tri)
 	tri->vn0 = norm;
 	tri->vn1 = norm;
 	tri->vn2 = norm;
-}
-
-void	construct_mesh_aabb(t_mesh *mesh)
-{
-	int		i;
-	t_tri	*tri;
-	t_v3f	min;
-	t_v3f	max;
-
-	i = 0;
-	min = g_v3f_zero;
-	max = g_v3f_zero;
-	while (i < mesh->tri_count)
-	{
-		tri = mesh->triangles + i;
-		min.x = fminf(fminf(fminf(min.x, tri->v0.x), tri->v1.x), tri->v2.x);
-		min.y = fminf(fminf(fminf(min.y, tri->v0.y), tri->v1.y), tri->v2.y);
-		min.z = fminf(fminf(fminf(min.z, tri->v0.z), tri->v1.z), tri->v2.z);
-		max.x = fmaxf(fmaxf(fmaxf(max.x, tri->v0.x), tri->v1.x), tri->v2.x);
-		max.y = fmaxf(fmaxf(fmaxf(max.y, tri->v0.y), tri->v1.y), tri->v2.y);
-		max.z = fmaxf(fmaxf(fmaxf(max.z, tri->v0.z), tri->v1.z), tri->v2.z);
-		++i;
-	}
-	mesh->box.min = min;
-	mesh->box.max = max;
 }
