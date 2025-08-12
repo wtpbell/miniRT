@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_utils.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/09 19:21:10 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_utils.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 22:38:00 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/12 09:11:11 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ char	*ft_ftoa(float f, int precision)
 	if (!str)
 		return (NULL);
 	if (precision > 0)
-		snprintf(str, 32, "%d.%0*d", int_part, precision, decimal_part);
+		snprintf(str, 2, "%d.%0*d", int_part, precision, decimal_part);
 	else
-		snprintf(str, 32, "%d", int_part);
+		snprintf(str, 2, "%d", int_part);
 	return (str);
 }
 
