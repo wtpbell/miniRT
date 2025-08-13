@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_event.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/27 12:51:30 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/12 09:51:13 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_event.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/27 12:51:30 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/13 12:19:29 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void	update_value_label(t_ui_vbtn *btn, t_ui_context *ctx)
 	t_ui_label	*label_data;
 	static char	fallback_buf[VALUE_STR_LEN];
 
+	if (!btn || !ctx)
+		return;
 	if (btn->formatter)
 		value_str = btn->formatter(*btn->value);
 	else
@@ -50,16 +52,12 @@ void	update_value_label(t_ui_vbtn *btn, t_ui_context *ctx)
 		snprintf(fallback_buf, sizeof(fallback_buf), "%.2f", *btn->value);
 		value_str = fallback_buf;
 	}
-	if (btn->value_label->type == UI_LABEL)
+	label_data = (t_ui_label *)btn->value_label->data;
+	if (label_data && label_data->text)
 	{
-		label_data = (t_ui_label *)btn->value_label->data;
-		if (label_data)
-		{
-			if (label_data->text)
-				free(label_data->text);
-			label_data->text = ft_strdup(value_str);
-			ctx->needs_redraw = true;
-		}
+		free(label_data->text);
+		label_data->text = ft_strdup(value_str);
+		ui_mark_dirty(ctx);
 	}
 }
 
@@ -96,23 +94,29 @@ void	handle_ui_click(t_ui_element *root, int32_t x,
 void	update_value_button(t_ui_element *button, float new_value,
 							t_ui_context *ctx)
 {
-	t_ui_vbtn	*value_btn;
+	t_ui_vbtn	*btn;
 
-	if (!button || !button->data || !ctx)
+	if (!button || button->type != UI_VALUE_BUTTON || !ctx)
 		return ;
-	value_btn = (t_ui_vbtn *)button->data;
-	*value_btn->value = new_value;
-	if (*value_btn->value < value_btn->range.x)
-		*value_btn->value = value_btn->range.x;
-	else if (*value_btn->value > value_btn->range.y)
-		*value_btn->value = value_btn->range.y;
-	update_value_label(value_btn, ctx);
-	if (button->action)
-		button->action(button, ctx);
+	btn = (t_ui_vbtn *)button->data;
+	if (btn && btn->value)
+	{
+		if (new_value < btn->range.x)
+			new_value = btn->range.x;
+		else if (new_value > btn->range.y)
+			new_value = btn->range.y;
+		if (*btn->value != new_value)
+		{
+			*btn->value = new_value;
+			if (btn->on_click)
+				btn->on_click(button, btn->param);
+			update_value_label(btn, ctx);
+			ui_mark_dirty(ctx);
+		}
+	}
 }
 
-void	update_button_value(t_ui_element *button, int32_t click_x,
-							t_ui_context *ctx)
+void	update_button_value(t_ui_element *button, int32_t click_x, t_ui_context *ctx)
 {
 	t_v2f			abs_pos;
 	t_ui_element	*p;
@@ -129,45 +133,59 @@ void	update_button_value(t_ui_element *button, int32_t click_x,
 		p = p->parent;
 	}
 	vb = (t_ui_vbtn *)button->data;
+	if (!vb->value)
+		return ;
 	old_val = *vb->value;
 	if (click_x - abs_pos.x < button->size.x / 2.0f)
 		new_val = old_val - vb->step;
 	else
 		new_val = old_val + vb->step;
+	if (new_val < vb->range.x)
+		new_val = vb->range.x;
+	else if (new_val > vb->range.y)
+		new_val = vb->range.y;
 	if (new_val != old_val)
 		update_value_button(button, new_val, ctx);
 }
 
 void	increment_value_button(t_ui_element *btn, void *param)
 {
-	t_ui_vbtn		*vb;
 	t_ui_context	*ctx;
-	float			new_value;
+	t_ui_vbtn		*btn_data;
 
-	if (!btn || btn->type != UI_VALUE_BUTTON || !btn->data || !param)
+	if (!btn || btn->type != UI_VALUE_BUTTON || !param)
 		return ;
-	vb = (t_ui_vbtn *)btn->data;
 	ctx = (t_ui_context *)param;
-	new_value = *vb->value + vb->step;
-	if (new_value > vb->range.y)
-		new_value = vb->range.y;
-	if (new_value != *vb->value)
-		update_value_button(btn, new_value, ctx);
+	btn_data = (t_ui_vbtn *)btn->data;
+	if (btn_data && btn_data->value)
+	{
+		*btn_data->value += btn_data->step;
+		if (*btn_data->value > btn_data->range.y)
+			*btn_data->value = btn_data->range.y;
+		update_value_label(btn_data, ctx);
+		if (btn_data->on_click)
+			btn_data->on_click(btn, btn_data->param);
+		ui_mark_dirty(ctx);
+	}
 }
 
 void	decrement_value_button(t_ui_element *btn, void *param)
 {
-	t_ui_vbtn		*vb;
 	t_ui_context	*ctx;
-	float			new_value;
+	t_ui_vbtn		*btn_data;
 
-	if (!btn || btn->type != UI_VALUE_BUTTON || !btn->data || !param)
+	if (!btn || btn->type != UI_VALUE_BUTTON || !param)
 		return ;
-	vb = (t_ui_vbtn *)btn->data;
 	ctx = (t_ui_context *)param;
-	new_value = *vb->value - vb->step;
-	if (new_value < vb->range.x)
-		new_value = vb->range.x;
-	if (new_value != *vb->value)
-		update_value_button(btn, new_value, ctx);
+	btn_data = (t_ui_vbtn *)btn->data;
+	if (btn_data && btn_data->value)
+	{
+		*btn_data->value -= btn_data->step;
+		if (*btn_data->value < btn_data->range.x)
+			*btn_data->value = btn_data->range.x;
+		update_value_label(btn_data, ctx);
+		if (btn_data->on_click)
+			btn_data->on_click(btn, btn_data->param);
+		ui_mark_dirty(ctx);
+	}
 }

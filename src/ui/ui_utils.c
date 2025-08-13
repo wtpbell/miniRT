@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 09:54:50 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/13 12:20:07 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,28 +25,17 @@ char	*ft_ftoa(float f, int precision)
 
 	if (precision < 0)
 		precision = 0;
-	
-	// Calculate maximum needed buffer size:
-	// - sign: 1
-	// - integer part: up to 10 digits (INT_MIN is -2147483648)
-	// - decimal point: 1
-	// - decimal digits: precision
-	// - null terminator: 1
 	len = 1 + 10 + 1 + precision + 1;
-	
 	str = (char *)ft_calloc(len, sizeof(char));
 	if (!str)
 		return (NULL);
-
 	int_part = (int)f;
 	decimal = f - int_part;
 	decimal_part = (int)(decimal * pow(10, precision) + 0.5f);
-
 	if (precision > 0)
 		snprintf(str, len, "%d.%0*d", int_part, precision, decimal_part);
 	else
 		snprintf(str, len, "%d", int_part);
-	
 	return (str);
 }
 
@@ -82,6 +71,14 @@ t_light	*find_light(t_scene *scene, t_light_type type)
 	return (NULL);
 }
 
+void	ui_mark_dirty(t_ui_context *ctx)
+{
+	if (ctx) {
+		ctx->is_dirty = true;
+		ctx->needs_redraw = true;
+	}
+}
+
 void	render_button_clicked(t_ui_element *button, void *param)
 {
 	t_ui_context	*ctx;
@@ -96,6 +93,7 @@ void	render_button_clicked(t_ui_element *button, void *param)
 	{
 		game->needs_redraw = true;
 		update_camera_view(&game->scene->camera);
+		ui_mark_dirty(ctx);
 		printf("Re-render triggered!\n");
 	}
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui.h                                               :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/12 17:01:42 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui.h                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/13 12:08:51 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,8 @@
 # define UI_PANEL_BG_COLOR			0x1A1A1A55
 # define UI_SECTION_COLOR			0x2D2D2DCC
 # define UI_BUTTON_COLOR			0xFF3A70D2
-
-# define UI_BUTTON_HOVER_COLOR		0x6AA8FFFF
-# define UI_BUTTON_ACTIVE_COLOR		0x1A5FB4FF
 # define UI_BUTTON_BORDER_COLOR		0xFFFFFFFF
 # define UI_TEXT_COLOR				0xFFFFFFFF
-# define UI_TEXT_SECONDARY_COLOR	0xAAAAAAFF
-# define UI_SECTION_HEADER_COLOR	0x2D2D2DFF
 # define UI_HEADER_COLOR			0x1A1A1AFF
 # define UI_BORDER_COLOR			0x4A4A4AFF
 # define UI_TRANSPARENT				0x00000000
@@ -147,6 +142,7 @@ typedef struct s_ui_context
 	bool				is_visible;
 	bool				needs_redraw;
 	void				*game;
+	bool				is_dirty;  // Simple dirty flag
 }	t_ui_context;
 
 typedef struct s_ui
@@ -230,6 +226,7 @@ void			draw_char(mlx_image_t *img, char c, int x, int y, uint32_t color);
 void			draw_text(mlx_image_t *img, const char *str, t_v2f pos, uint32_t color);
 void			draw_rect(mlx_image_t *img, t_v2f pos, t_v2f size, uint32_t color);
 void			draw_rect_border(mlx_image_t *img, t_v2f pos, t_v2f size, uint32_t color);
+void			ui_mark_dirty(t_ui_context *ctx);
 
 /* UI Helpers */
 char			*format_float_value(float value);

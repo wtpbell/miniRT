@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:53:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 11:10:10 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/13 11:59:07 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,15 @@ void	toggle_ui_visibility(t_ui *ui)
 	}
 }
 
+static void	set_canvas_visibility(mlx_image_t *canvas, bool visible)
+{
+	uint32_t	i;
+
+	i = 0;
+	while (i < canvas->count)
+		canvas->instances[i++].enabled = visible;
+}
+
 static void	attach_canvas_to_window(t_ui_context *ctx)
 {
 	mlx_image_t	*canvas;
@@ -94,25 +103,23 @@ static void	attach_canvas_to_window(t_ui_context *ctx)
 	}
 }
 
-static void	set_canvas_visibility(mlx_image_t *canvas, bool visible)
-{
-	uint32_t	i;
-
-	i = 0;
-	while (i < canvas->count)
-		canvas->instances[i++].enabled = visible;
-}
-
 void	render_ui(t_ui *ui)
 {
 	t_ui_context	*ctx;
 	uint32_t		*pixels;
 	uint32_t		i;
 
+	if (!ui || !ui->context || !ui->context->canvas)
+		return ;
 	ctx = ui->context;
 	attach_canvas_to_window(ctx);
-	set_canvas_visibility(ctx->canvas, ctx->is_visible);
-	if (!ctx->is_visible || !ctx->needs_redraw)
+	if (!ctx->is_visible)
+	{
+		set_canvas_visibility(ctx->canvas, false);
+		return ;
+	}
+	set_canvas_visibility(ctx->canvas, true);
+	if (!ctx->needs_redraw && !ctx->is_dirty)
 		return ;
 	pixels = (uint32_t *)ctx->canvas->pixels;
 	i = 0;
@@ -120,6 +127,7 @@ void	render_ui(t_ui *ui)
 		pixels[i++] = UI_PANEL_BG_COLOR;
 	if (ui->root)
 		render_ui_element(ui->root, ctx);
+	ctx->is_dirty = false;
 	ctx->needs_redraw = false;
 }
 

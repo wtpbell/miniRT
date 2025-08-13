@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 17:42:36 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 11:01:43 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/13 12:21:04 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,6 @@ static void	ui_images_destroy(mlx_t *mlx, t_ui_images *images)
 		mlx_delete_image(mlx, images->header_img);
 	if (images->panel_img)
 		mlx_delete_image(mlx, images->panel_img);
-	
-	// Clear the pointers
 	images->button_img = NULL;
 	images->header_img = NULL;
 	images->panel_img = NULL;
@@ -83,28 +81,21 @@ void	destroy_ui_context(t_ui_context *ctx)
 {
 	if (!ctx)
 		return ;
-
-	// Delete canvas if it exists
 	if (ctx->canvas)
 	{
 		if (ctx->mlx)
 			mlx_delete_image(ctx->mlx, ctx->canvas);
 		ctx->canvas = NULL;
 	}
-
-	// Delete images if they exist
 	if (ctx->images)
 	{
 		ui_images_destroy(ctx->mlx, ctx->images);
 		free(ctx->images);  
 		ctx->images = NULL;
 	}
-
-	// Clear all pointers
 	ctx->mlx = NULL;
 	ctx->scene = NULL;
 	ctx->game = NULL;
-
 	free(ctx);
 }
 
@@ -112,7 +103,6 @@ void	destroy_ui(t_ui *ui)
 {
 	if (!ui)
 		return ;
-	
 	printf("Starting UI destruction\n");
 	if (ui->root)
 	{
