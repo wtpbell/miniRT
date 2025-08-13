@@ -1,35 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_render.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 15:03:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 19:09:20 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_render.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 15:03:00 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/13 20:31:44 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
-#include "color.h"
 #include "rt_thread.h"
-#include <stdio.h>
-#include <string.h>
-#include <stdint.h>
-
-void	put_pixel_if_visible(mlx_image_t *c, t_v2f p, uint32_t col)
-{
-	uint32_t	*pix;
-
-	if (p.x >= 0 && p.y >= 0 && p.x < c->width && p.y < c->height)
-	{
-		if ((col >> 24) != 0x00)
-		{
-			pix = (uint32_t *)c->pixels + (int)p.y * c->width + (int)p.x;
-			*pix = col;
-		}
-	}
-}
 
 uint32_t	blend_colors(uint32_t bg, uint32_t fg)
 {

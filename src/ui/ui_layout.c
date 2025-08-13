@@ -1,22 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_layout.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/25 11:39:13 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 18:19:39 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_layout.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/25 11:39:13 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/13 20:28:20 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
 
-// Forward declarations
-void				render_button_clicked(t_ui_element *button, void *param);
-t_ui_element		*create_section(t_ui_context *ctx, const char *title,
-						t_v2f pos, t_v2f size);
-static t_ui_element	*create_render_button_section(t_section_config *cfg);
+static t_ui_element	*create_render_button_section(t_section_config *cfg)
+{
+	t_ui_element	*panel;
+	t_ui_element	*render_btn;
+	t_btn_config	btn_cfg;
+	t_v2f			btn_size;
+
+	panel = create_panel(cfg->ctx, cfg->pos,
+			init_v2f(cfg->size.x, UI_ROW_HEIGHT * 2.0f));
+	if (!panel)
+		return (NULL);
+	btn_size = init_v2f(cfg->size.x - (2 * UI_PADDING), UI_ROW_HEIGHT * 1.5f);
+	btn_cfg = (t_btn_config){
+		.ctx = cfg->ctx,
+		.label_text = "RENDER",
+		.size = btn_size,
+		.pos = init_v2f(UI_PADDING, (panel->size.y - btn_size.y) / 2),
+		.on_click = render_button_clicked,
+		.param = cfg->ctx
+	};
+	render_btn = create_button(&btn_cfg);
+	if (render_btn)
+	{
+		render_btn->style.bg_color = UI_RENDER_BUTTON_COLOR;
+		attach_child(panel, render_btn);
+	}
+	return (panel);
+}
 
 struct s_ui_sections	g_sections[] = {
 {9.2f, create_camera_section},
@@ -52,35 +75,6 @@ void	add_value_label(t_ui_element *container,
 		attach_child(container, label);
 	}
 	free(value_str);
-}
-
-static t_ui_element	*create_render_button_section(t_section_config *cfg)
-{
-	t_ui_element	*panel;
-	t_ui_element	*render_btn;
-	t_btn_config	btn_cfg;
-	t_v2f			btn_size;
-
-	panel = create_panel(cfg->ctx, cfg->pos,
-			init_v2f(cfg->size.x, UI_ROW_HEIGHT * 2.0f));
-	if (!panel)
-		return (NULL);
-	btn_size = init_v2f(cfg->size.x - (2 * UI_PADDING), UI_ROW_HEIGHT * 1.5f);
-	btn_cfg = (t_btn_config){
-		.ctx = cfg->ctx,
-		.label_text = "RENDER",
-		.size = btn_size,
-		.pos = init_v2f(UI_PADDING, (panel->size.y - btn_size.y) / 2),
-		.on_click = render_button_clicked,
-		.param = cfg->ctx
-	};
-	render_btn = create_button(&btn_cfg);
-	if (render_btn)
-	{
-		render_btn->style.bg_color = UI_RENDER_BUTTON_COLOR;
-		attach_child(panel, render_btn);
-	}
-	return (panel);
 }
 
 static float	total_height_scale(void)

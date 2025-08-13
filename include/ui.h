@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui.h                                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 20:08:09 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui.h                                               :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/13 20:35:12 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,7 @@
 # define UI_BUTTON_HEIGHT 30
 
 # define UI_LABEL_WIDTH_RATIO 0.3f
-# define UI_BTN_WIDTH_RATIO 0.6f
-# define UI_BTN_HEIGHT_RATIO 0.15f
-# define UI_VERT_PADDING_RATIO 0.04f
-# define UI_HORZ_PADDING_RATIO 0.05f
-
 # define UI_HEADER_HEIGHT 30
-# define UI_SECTION_HEADER_HEIGHT 30
 # define UI_SECTION_PADDING 10
 # define UI_PANEL_PADDING 0
 # define UI_PADDING 4
@@ -45,7 +39,6 @@
 # define UI_FONT_HEIGHT 8
 # define UI_ROW_HEIGHT 30
 # define UI_LABEL_PADDING 10
-# define UI_LABEL_HEIGHT 20
 
 /* Base UI Colors */
 # define UI_PANEL_BG_COLOR			0x1A1A1A55
@@ -199,7 +192,6 @@ void			render_ui(t_ui *ui);
 void			toggle_ui_visibility(t_ui *ui);
 
 /* UI Element Creation */
-t_ui_element	*create_ui_element(t_ui_type type, t_v2f pos, t_v2f size);
 t_ui_element	*create_header(t_ui_context *ctx, const char *title,
 					t_v2f pos, t_v2f size);
 t_ui_element	*create_label(t_ui_context *ctx, const char *text,
@@ -217,16 +209,8 @@ t_ui_element	*create_sample_section(t_section_config *cfg);
 
 /* UI Element Management */
 void			destroy_ui_element(t_ui_element *element, t_ui_context *ctx);
-void			destroy_ui_element_recursive(t_ui_element *element,
-					t_ui_context *ctx);
-bool			ui_element_remove_child(t_ui_element *parent,
-					t_ui_element *child, bool destroy, t_ui_context *ctx);
 void			attach_child(t_ui_element *parent, t_ui_element *child);
 void			update_button_value(t_ui_element *button, int32_t click_x,
-					t_ui_context *ctx);
-void			update_value_button(t_ui_element *button, float new_value,
-					t_ui_context *ctx);
-void			update_label_text(t_ui_element *label, const char *text,
 					t_ui_context *ctx);
 void			handle_ui_click(t_ui_element *root, int32_t x, int32_t y,
 					t_ui_context *ctx);
@@ -235,7 +219,6 @@ void			handle_ui_click(t_ui_element *root, int32_t x, int32_t y,
 void			render_loop(void *param);
 void			render_ui_element(t_ui_element *e, t_ui_context *c);
 void			draw_button(t_ui_element *button, t_ui_context *ctx);
-void			draw_char(mlx_image_t *img, char c, t_v2f pos, uint32_t color);
 void			draw_text(mlx_image_t *img, const char *str,
 					t_v2f pos, uint32_t color);
 void			draw_rect(mlx_image_t *img, t_v2f pos, t_v2f size,
@@ -243,7 +226,6 @@ void			draw_rect(mlx_image_t *img, t_v2f pos, t_v2f size,
 void			draw_rect_border(mlx_image_t *img, t_v2f pos, t_v2f size,
 					uint32_t color);
 void			ui_mark_dirty(t_ui_context *ctx);
-void			put_pixel_if_visible(mlx_image_t *c, t_v2f p, uint32_t col);
 
 /* UI Helpers */
 char			*format_float_value(float value);
@@ -258,11 +240,10 @@ void			add_inc_dec_buttons(t_ui_element *container,
 					const t_vbtn_config *cfg, t_ui_vbtn *value_btn);
 void			add_value_label(t_ui_element *container,
 					const t_vbtn_config *cfg, t_ui_vbtn *value_btn);
+void			render_button_clicked(t_ui_element *button, void *param);
 
 /* Default Styling */
 void			default_button(t_ui_element *button, t_v2f pos, t_v2f size);
-void			default_value_button(t_ui_element *button, t_v2f pos,
-					t_v2f size, const char *label);
 void			default_section(t_ui_element *section, t_v2f pos, t_v2f size);
 void			default_header(t_ui_element *header, t_v2f pos, t_v2f size);
 void			default_panel(t_ui_element *panel, t_v2f pos, t_v2f size);

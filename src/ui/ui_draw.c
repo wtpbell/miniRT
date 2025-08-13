@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "ui.h"
-#include "color.h"
-#include <stdio.h>
 
 const uint8_t	g_font[256][8] = {
 [0 ... 31] = {0},
@@ -58,7 +56,7 @@ const uint8_t	g_font[256][8] = {
 ['Z'] = {0x7E, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x7E},
 };
 
-void	draw_char(mlx_image_t *canvas, char c, t_v2f pos, uint32_t color)
+static void	draw_char(mlx_image_t *canvas, char c, t_v2f pos, uint32_t color)
 {
 	unsigned char	uc;
 	t_v2f			d;

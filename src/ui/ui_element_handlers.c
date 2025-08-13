@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "ui.h"
-#include "libft.h"
-#include <stdlib.h>
 
 static void	destroy_label(t_ui_element *element, t_ui_context *ctx)
 {

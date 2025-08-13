@@ -1,18 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_core.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 12:53:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 18:54:30 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_core.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 12:53:50 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/13 20:32:33 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
-#include <stdint.h>
-#include <stdlib.h>
 
 static void	set_canvas_visibility(mlx_image_t *canvas, bool visible)
 {

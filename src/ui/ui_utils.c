@@ -1,19 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_utils.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 18:52:26 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_utils.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 22:38:00 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/13 20:34:32 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
 
 char	*ft_ftoa(float f, int precision)
 {

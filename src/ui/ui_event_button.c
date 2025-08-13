@@ -12,7 +12,7 @@
 
 #include "ui.h"
 
-void	update_value_button(t_ui_element *button, float new_value,
+static void	update_value_button(t_ui_element *button, float new_value,
 						t_ui_context *ctx)
 {
 	t_ui_vbtn	*btn;

@@ -20,7 +20,7 @@ static void (*const	g_default_stylers[])(t_ui_element *, t_v2f, t_v2f) = {
 [UI_SECTION] = default_section,
 };
 
-t_ui_element	*create_ui_element(t_ui_type type, t_v2f pos, t_v2f size)
+static t_ui_element	*create_ui_element(t_ui_type type, t_v2f pos, t_v2f size)
 {
 	t_ui_element	*element;
 
