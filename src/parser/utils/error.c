@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/02 18:08:00 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/14 15:50:07 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,4 @@ void	print_error(t_error type, const char *ctx, const char *value)
 	}
 	ft_putstr_fd("\n", STDERR);
 	ft_putstr_fd(RESET, STDERR);
-}
-
-void	exit_err(t_error type, const char *ctx, const char *value)
-{
-	print_error(type, ctx, value);
-	exit(type);
 }

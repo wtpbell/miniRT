@@ -1,38 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ray.h                                              :+:    :+:            */
+/*   benchmark.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/06/02 11:37:29 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/07 16:59:55 by jboon         ########   odam.nl         */
+/*   Created: 2025/07/11 18:00:10 by jboon         #+#    #+#                 */
+/*   Updated: 2025/07/27 11:47:03 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RAY_H
-# define RAY_H
+#include <time.h>
+#include <stdio.h>
+#include "rt_thread.h"
 
-# include "vector.h"
-# include "rt_types.h"
+static float g_starttime;
 
-struct s_ray
+void start_time(void)
 {
-	t_v3f	origin;
-	t_v3f	direction;
-};
+	g_starttime = (float)clock() / CLOCKS_PER_SEC;
+}
 
-struct s_ray_hit
+void end_time(void)
 {
-	t_v3f	hit;
-	t_v3f	normal;
-	t_v2f	texcoord;
-	t_v3f	hit_color;
-	float	distance;
-	bool	front_face;
-	t_obj	*obj;
-	t_ray	*ray;
-	t_v2f	weight;
-};
+	float	endtime;
 
-#endif
+	endtime = (float)clock() / CLOCKS_PER_SEC;
+	printf("TIME: %f\n", (endtime - g_starttime) / THRD_CNT);
+}

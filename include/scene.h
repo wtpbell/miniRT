@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/27 15:38:56 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/07 17:00:01 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ struct s_triangle
 	t_v3f	vt0;
 	t_v3f	vt1;
 	t_v3f	vt2;
-	t_v2f	weight;
 };
 
 struct s_light

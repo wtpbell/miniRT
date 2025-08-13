@@ -6,15 +6,18 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/02 18:17:10 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/11 18:12:34 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <time.h>
+#include <stdio.h>
 #include "MLX42/MLX42.h"
 #include "minirt.h"
+#include "rt_thread.h"
 
-#define WIDTH	1600
-#define HEIGHT	900
+#define WIDTH		1600
+#define HEIGHT		900
 
 static bool	cam_init(t_cam *cam, mlx_t *mlx)
 {
@@ -51,8 +54,8 @@ int	game(t_scene *scene)
 	if (!cam_init(&scene->camera, game.mlx))
 		return (cleanup_mlx(&game), 1);
 	mlx_key_hook(game.mlx, quit_on_escape, &game);
-	render(scene);
-	mlx_loop(game.mlx);
+	if (thread_rendering(scene))
+		mlx_loop(game.mlx);
 	cleanup_mlx(&game);
 	return (0);
 }
