@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:31:03 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/07 23:29:15 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/13 20:05:59 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,6 @@ typedef enum e_ui_type			t_ui_type;
 typedef struct s_ui				t_ui;
 typedef struct s_ui_context		t_ui_context;
 typedef struct s_ui_element		t_ui_element;
-
-
 
 typedef int						(*t_intsct)(t_obj *obj, t_ray *ray,
 									t_v2f t, t_v3f *s);
