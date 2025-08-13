@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 12:51:30 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 12:19:29 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/13 18:08:50 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	update_value_label(t_ui_vbtn *btn, t_ui_context *ctx)
 	static char	fallback_buf[VALUE_STR_LEN];
 
 	if (!btn || !ctx)
-		return;
+		return ;
 	if (btn->formatter)
 		value_str = btn->formatter(*btn->value);
 	else
@@ -116,36 +116,38 @@ void	update_value_button(t_ui_element *button, float new_value,
 	}
 }
 
-void	update_button_value(t_ui_element *button, int32_t click_x, t_ui_context *ctx)
+static void	update_value(t_ui_vbtn *v, float new_val,
+				t_ui_element *b, t_ui_context *c)
 {
-	t_v2f			abs_pos;
-	t_ui_element	*p;
-	t_ui_vbtn		*vb;
-	float			old_val;
-	float			new_val;
+	if (new_val < v->range.x)
+		new_val = v->range.x;
+	else if (new_val > v->range.y)
+		new_val = v->range.y;
+	if (new_val != *v->value)
+		update_value_button(b, new_val, c);
+}
 
-	abs_pos = button->pos;
-	p = button->parent;
+void	update_button_value(t_ui_element *b, int32_t x, t_ui_context *c)
+{
+	t_v2f			pos;
+	t_ui_vbtn		*v;
+	t_ui_element	*p;
+
+	pos = b->pos;
+	p = b->parent;
 	while (p)
 	{
-		abs_pos.x += p->pos.x;
-		abs_pos.y += p->pos.y;
+		pos.x += p->pos.x;
+		pos.y += p->pos.y;
 		p = p->parent;
 	}
-	vb = (t_ui_vbtn *)button->data;
-	if (!vb->value)
+	v = (t_ui_vbtn *)b->data;
+	if (!v->value)
 		return ;
-	old_val = *vb->value;
-	if (click_x - abs_pos.x < button->size.x / 2.0f)
-		new_val = old_val - vb->step;
+	if (x - pos.x < b->size.x / 2.0f)
+		update_value(v, *v->value - v->step, b, c);
 	else
-		new_val = old_val + vb->step;
-	if (new_val < vb->range.x)
-		new_val = vb->range.x;
-	else if (new_val > vb->range.y)
-		new_val = vb->range.y;
-	if (new_val != old_val)
-		update_value_button(button, new_val, ctx);
+		update_value(v, *v->value + v->step, b, c);
 }
 
 void	increment_value_button(t_ui_element *btn, void *param)

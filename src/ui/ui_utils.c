@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 12:20:07 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/13 17:46:22 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ t_light	*find_light(t_scene *scene, t_light_type type)
 
 void	ui_mark_dirty(t_ui_context *ctx)
 {
-	if (ctx) {
+	if (ctx)
+	{
 		ctx->is_dirty = true;
 		ctx->needs_redraw = true;
 	}

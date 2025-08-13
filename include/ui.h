@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 16:08:48 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/13 18:19:13 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,11 @@ void			update_label_text(t_ui_element *label, const char *text, t_ui_context *ct
 void			handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx);
 
 /* UI Rendering */
+<<<<<<< HEAD
 void			render_ui_element(t_ui_element *e, t_ui_context *ctx);
+=======
+void			render_ui_element(t_ui_element *e, t_ui_context *c);
+>>>>>>> 1439618 (fixed the button non-clickable)
 void			draw_button(t_ui_element *button, t_ui_context *ctx);
 void			draw_char(mlx_image_t *img, char c, t_v2f pos, uint32_t color);
 void			draw_text(mlx_image_t *img, const char *str, t_v2f pos, uint32_t color);

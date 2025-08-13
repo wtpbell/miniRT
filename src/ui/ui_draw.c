@@ -62,7 +62,6 @@ void	draw_char(mlx_image_t *canvas, char c, t_v2f pos, uint32_t color)
 {
 	unsigned char	uc;
 	t_v2f			d;
-	t_v2f			p;
 
 	uc = (unsigned char)c;
 	if ((uc < 32 && uc != ' ') || (uc >= 128 || (uc > 0 && ft_memcmp(g_font[uc],
@@ -76,8 +75,13 @@ void	draw_char(mlx_image_t *canvas, char c, t_v2f pos, uint32_t color)
 		{
 			if (g_font[uc][(int)d.y] & (1 << (7 - (int)d.x)))
 			{
-				p = init_v2f(pos.x + d.x, pos.y + d.y);
-				put_pixel_if_visible(canvas, p, color);
+				if (pos.x + d.x >= 0 && pos.y + d.y >= 0
+					&& pos.x + d.x < (int)canvas->width
+					&& pos.y + d.y < (int)canvas->height)
+				{
+					((uint32_t *)canvas->pixels)[((int)pos.y + (int)d.y)
+						* canvas->width + (int)pos.x + (int)d.x] = color;
+				}
 			}
 		}
 	}
@@ -126,7 +130,7 @@ void	draw_rect_border(mlx_image_t *canvas, t_v2f pos,
 				&& p.x >= 0 && p.y >= 0 && p.x < canvas->width
 				&& p.y < canvas->height)
 			{
-				pix = (uint32_t*)canvas->pixels + (int)p.y
+				pix = (uint32_t *)canvas->pixels + (int)p.y
 					* canvas->width + (int)p.x;
 				*pix = color;
 			}
