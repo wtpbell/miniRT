@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/29 16:47:20 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/30 21:57:52 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/13 15:35:24 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	init_perlin(void)
 	int	j;
 
 	i = 0;
+	seed_rand(109348543);
 	while (i < g_verts)
 	{
 		g_gradients[i] = frand_sphere();
