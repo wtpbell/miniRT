@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 12:08:51 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/13 16:08:48 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@
 # define UI_COLOR_AMBIENT_SECTION	0xEDC835FF
 # define UI_COLOR_DOF_SECTION		0x00396DFF
 # define UI_COLOR_SAMPLE_SECTION	0x2F6BA4FF
+
+extern const uint8_t	g_font[256][8];
 
 typedef enum e_ui_type
 {
@@ -142,7 +144,7 @@ typedef struct s_ui_context
 	bool				is_visible;
 	bool				needs_redraw;
 	void				*game;
-	bool				is_dirty;  // Simple dirty flag
+	bool				is_dirty;
 }	t_ui_context;
 
 typedef struct s_ui
@@ -170,15 +172,15 @@ typedef struct s_btn_config
 	t_v2f			size;
 	void			(*on_click)(t_ui_element *, void *);
 	void			*param;
-} t_btn_config;
+}	t_btn_config;
 
 typedef struct s_section_config
 {
 	t_ui_context	*ctx;
-	t_sample			*sample;
+	t_sample		*sample;
 	t_v2f			pos;
 	t_v2f			size;
-} t_section_config;
+}	t_section_config;
 
 struct s_ui_sections
 {
@@ -186,7 +188,7 @@ struct s_ui_sections
 	t_ui_element	*(*create_func)(t_section_config*);
 };
 
-extern struct s_ui_sections g_sections[];
+extern struct s_ui_sections	g_sections[];
 
 /* UI Context Management */
 t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene, void *game_ptr);
@@ -220,13 +222,14 @@ void			update_label_text(t_ui_element *label, const char *text, t_ui_context *ct
 void			handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx);
 
 /* UI Rendering */
-void			render_ui_element(t_ui_element *element, t_ui_context *ctx);
+void			render_ui_element(t_ui_element *e, t_ui_context *ctx);
 void			draw_button(t_ui_element *button, t_ui_context *ctx);
-void			draw_char(mlx_image_t *img, char c, int x, int y, uint32_t color);
+void			draw_char(mlx_image_t *img, char c, t_v2f pos, uint32_t color);
 void			draw_text(mlx_image_t *img, const char *str, t_v2f pos, uint32_t color);
 void			draw_rect(mlx_image_t *img, t_v2f pos, t_v2f size, uint32_t color);
 void			draw_rect_border(mlx_image_t *img, t_v2f pos, t_v2f size, uint32_t color);
 void			ui_mark_dirty(t_ui_context *ctx);
+void			put_pixel_if_visible(mlx_image_t *c, t_v2f p, uint32_t col);
 
 /* UI Helpers */
 char			*format_float_value(float value);

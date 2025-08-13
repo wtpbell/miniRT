@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_layout.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/25 11:39:13 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/12 17:02:56 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_layout.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/25 11:39:13 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/13 16:08:05 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,74 +26,6 @@ struct s_ui_sections	g_sections[] = {
 {2.0f, create_sample_section},
 {0.5f, create_render_button_section}
 };
-
-void	init_value_button_data(t_ui_vbtn *value_btn, const t_vbtn_config *cfg)
-{
-	if (!value_btn || !cfg)
-		return ;
-	value_btn->value = cfg->value;
-	value_btn->range = cfg->range;
-	value_btn->step = cfg->step;
-	value_btn->on_click = NULL;
-	value_btn->param = NULL;
-	value_btn->formatter = cfg->formatter;
-}
-
-void	add_inc_dec_buttons(t_ui_element *container,
-						const t_vbtn_config *cfg, t_ui_vbtn *value_btn)
-{
-	t_btn_config	decr_cfg;
-	t_btn_config	incr_cfg;
-
-	(void)value_btn;
-	decr_cfg = (t_btn_config){
-		.ctx = cfg->ctx,
-		.label_text = "-",
-		.pos = g_v2f_zero,
-		.size = init_v2f(UI_BUTTON_WIDTH, cfg->size.y),
-		.on_click = decrement_value_button,
-		.param = (void *)cfg->ctx
-	};
-	incr_cfg = (t_btn_config){
-		.ctx = cfg->ctx,
-		.label_text = "+",
-		.pos = init_v2f(cfg->size.x - UI_BUTTON_WIDTH, 0),
-		.size = init_v2f(UI_BUTTON_WIDTH, cfg->size.y),
-		.on_click = increment_value_button,
-		.param = (void *)cfg->ctx
-	};
-	if (create_button(&decr_cfg))
-		attach_child(container, create_button(&decr_cfg));
-	if (create_button(&incr_cfg))
-		attach_child(container, create_button(&incr_cfg));
-}
-
-void	add_value_label(t_ui_element *container,
-	const t_vbtn_config *cfg, t_ui_vbtn *value_btn)
-{
-	char			*value_str;
-	float			label_width;
-	float			label_x;
-	t_ui_element	*label;
-
-	if (cfg->formatter)
-		value_str = ft_strdup(cfg->formatter(*cfg->value));
-	else
-		value_str = ft_ftoa(*cfg->value, 2);
-	if (!value_str)
-		return ;
-	label_width = ft_strlen(value_str) * UI_CHAR_WIDTH;
-	label_x = (cfg->size.x - label_width) / 2.0f;
-	label = create_label(cfg->ctx, value_str,
-			init_v2f(label_x, (cfg->size.y - UI_FONT_HEIGHT) / 2),
-			UI_TEXT_COLOR);
-	if (label)
-	{
-		value_btn->value_label = label;
-		attach_child(container, label);
-	}
-	free(value_str);
-}
 
 static t_ui_element	*create_render_button_section(t_section_config *cfg)
 {
@@ -142,7 +74,7 @@ static float	total_height_scale(void)
 }
 
 static void	create_and_attach_sections(t_ui_element *panel,
-				t_section_config *cfg, t_v2f pos, t_v2f size)
+			t_section_config *cfg, t_v2f pos, t_v2f size)
 {
 	t_v2f				section_size;
 	t_section_config	scfg;

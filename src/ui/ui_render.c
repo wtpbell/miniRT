@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 15:03:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 10:08:06 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/13 15:53:21 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,142 +16,17 @@
 #include <string.h>
 #include <stdint.h>
 
-void	draw_char(mlx_image_t *canvas, char c, int x, int y, uint32_t color)
+void	put_pixel_if_visible(mlx_image_t *c, t_v2f p, uint32_t col)
 {
-	// Font array with decimal indices for all printable ASCII characters
-	static const uint8_t font[256][8] = {
-		[0 ... 31] = {0},
-		[' '] = {0},
-		['.'] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0x18},
-		['-'] = {0x00, 0x00, 0x00, 0x7E, 0x7E, 0x00, 0x00, 0x00},  // Horizontal line
-		['+'] = {0x00, 0x18, 0x18, 0x7E, 0x7E, 0x18, 0x18, 0x00},  // Plus sign with thicker lines
-		['0'] = {0x3C, 0x42, 0x46, 0x4A, 0x52, 0x62, 0x42, 0x3C},
-		['1'] = {0x10, 0x30, 0x50, 0x10, 0x10, 0x10, 0x10, 0x7C},
-		['2'] = {0x3C, 0x42, 0x02, 0x0C, 0x30, 0x40, 0x40, 0x7E},
-		['3'] = {0x3C, 0x42, 0x02, 0x1C, 0x02, 0x02, 0x42, 0x3C},
-		['4'] = {0x04, 0x0C, 0x14, 0x24, 0x44, 0x7E, 0x04, 0x04},
-		['5'] = {0x7E, 0x40, 0x40, 0x7C, 0x02, 0x02, 0x42, 0x3C},
-		['6'] = {0x1C, 0x20, 0x40, 0x7C, 0x42, 0x42, 0x42, 0x3C},
-		['7'] = {0x7E, 0x02, 0x04, 0x08, 0x10, 0x20, 0x20, 0x20},
-		['8'] = {0x3C, 0x42, 0x42, 0x3C, 0x42, 0x42, 0x42, 0x3C},
-		['9'] = {0x3C, 0x42, 0x42, 0x42, 0x3E, 0x02, 0x04, 0x38},
-		['A'] = {0x18, 0x24, 0x42, 0x42, 0x7E, 0x42, 0x42, 0x42},
-		['B'] = {0x7C, 0x42, 0x42, 0x7C, 0x42, 0x42, 0x42, 0x7C},
-		['C'] = {0x3C, 0x42, 0x40, 0x40, 0x40, 0x40, 0x42, 0x3C},
-		['D'] = {0x78, 0x44, 0x42, 0x42, 0x42, 0x42, 0x44, 0x78},
-		['E'] = {0x7E, 0x40, 0x40, 0x7C, 0x40, 0x40, 0x40, 0x7E},
-		['F'] = {0x7E, 0x40, 0x40, 0x7C, 0x40, 0x40, 0x40, 0x40},
-		['G'] = {0x3C, 0x42, 0x40, 0x4E, 0x42, 0x42, 0x42, 0x3C},
-		['H'] = {0x42, 0x42, 0x42, 0x7E, 0x42, 0x42, 0x42, 0x42},
-		['I'] = {0x7C, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x7C},
-		['J'] = {0x3E, 0x08, 0x08, 0x08, 0x08, 0x08, 0x48, 0x30},
-		['K'] = {0x42, 0x44, 0x48, 0x70, 0x48, 0x44, 0x42, 0x42},
-		['L'] = {0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x7E},
-		['M'] = {0x42, 0x66, 0x5A, 0x5A, 0x42, 0x42, 0x42, 0x42},
-		['N'] = {0x42, 0x62, 0x52, 0x4A, 0x46, 0x42, 0x42, 0x42},
-		['O'] = {0x3C, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x3C},
-		['P'] = {0x7C, 0x42, 0x42, 0x7C, 0x40, 0x40, 0x40, 0x40},
-		['Q'] = {0x3C, 0x42, 0x42, 0x42, 0x4A, 0x44, 0x3A, 0x00},
-		['R'] = {0x7C, 0x42, 0x42, 0x7C, 0x48, 0x44, 0x42, 0x42},
-		['S'] = {0x3C, 0x42, 0x40, 0x3C, 0x02, 0x02, 0x42, 0x3C},
-		['T'] = {0xFE, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10},
-		['U'] = {0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x3C},
-		['V'] = {0x42, 0x42, 0x42, 0x24, 0x24, 0x24, 0x18, 0x18},
-		['W'] = {0x42, 0x42, 0x42, 0x42, 0x5A, 0x5A, 0x66, 0x42},
-		['X'] = {0x42, 0x42, 0x24, 0x18, 0x18, 0x24, 0x42, 0x42},
-		['Y'] = {0x82, 0x44, 0x28, 0x10, 0x10, 0x10, 0x10, 0x10},
-		['Z'] = {0x7E, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x7E},
-	};
-	unsigned char	uc;
-	int				dx;
-	int				dy;
-	int				px;
-	int				py;
+	uint32_t	*pix;
 
-	uc = (unsigned char)c;
-	dy = 0;
-	if (uc < 32 && uc != ' ')
-		return;
-	if (uc >= 128 || (uc > 0 && ft_memcmp(font[uc], (uint8_t[8]){0}, 8) == 0 && uc != ' '))
-		return ;
-	while (dy < 8)
+	if (p.x >= 0 && p.y >= 0 && p.x < c->width && p.y < c->height)
 	{
-		dx = 0;
-		while (dx < 8)
+		if ((col >> 24) != 0x00)
 		{
-			if (font[uc][dy] & (1 << (7 - dx)))
-			{
-				px = x + dx;
-				py = y + dy;
-				if (px >= 0 && py >= 0 && px < (int)canvas->width && py < (int)canvas->height)
-				{
-					if ((color >> 24) != 0x00)
-					{
-						uint32_t *pixel = (uint32_t *)canvas->pixels + py * canvas->width + px;
-						*pixel = color;
-					}
-				}
-			}
-			dx++;
+			pix = (uint32_t *)c->pixels + (int)p.y * c->width + (int)p.x;
+			*pix = col;
 		}
-		dy++;
-	}
-}
-
-void	draw_text(mlx_image_t *canvas, const char *str,
-			t_v2f pos, uint32_t color)
-{
-	int		x;
-	int		y;
-	size_t	i;
-
-	x = (int)pos.x;
-	y = (int)pos.y;
-	i = 0;
-	if (y < 0 || y + 8 > (int)canvas->height)
-		return ;
-	while (str[i])
-	{
-		if (x + 8 > (int)canvas->width)
-		{
-			x = (int)pos.x;
-			y += 10;
-			if (y + 8 > (int)canvas->height)
-				break ;
-		}
-		draw_char(canvas, str[i], x, y, color);
-		x += UI_CHAR_WIDTH;
-		i++;
-	}
-}
-
-void	draw_rect_border(mlx_image_t *canvas, t_v2f pos,
-			t_v2f size, uint32_t color)
-{
-	int			x;
-	int			y;
-	int			end_x;
-	int			end_y;
-	uint32_t	*pixel;
-
-	x = (int)pos.x;
-	y = (int)pos.y;
-	end_x = x + (int)size.x;
-	end_y = y + (int)size.y;
-	while (y < end_y)
-	{
-		x = (int)pos.x;
-		while (x < end_x)
-		{
-			if ((x == (int)pos.x || x == end_x - 1 || y == (int)pos.y || y == end_y - 1) &&
-				x >= 0 && y >= 0 && x < (int)canvas->width && y < (int)canvas->height)
-			{
-				pixel = (uint32_t *)canvas->pixels + y * canvas->width + x;
-				*pixel = color;
-			}
-			x++;
-		}
-		y++;
 	}
 }
 
@@ -165,88 +40,38 @@ uint32_t	blend_colors(uint32_t bg, uint32_t fg)
 
 	alpha = ((fg >> 24) & 0xFF) / 255.0f;
 	inv_alpha = 1.0f - alpha;
-	r = (uint8_t)(((bg >> 16) & 0xFF) * inv_alpha + ((fg >> 16) & 0xFF) * alpha);
-	g = (uint8_t)(((bg >> 8) & 0xFF) * inv_alpha + ((fg >> 8) & 0xFF) * alpha);
+	r = (uint8_t)(((bg >> 16) & 0xFF) * inv_alpha
+			+ ((fg >> 16) & 0xFF) * alpha);
+	g = (uint8_t)(((bg >> 8) & 0xFF) * inv_alpha
+			+ ((fg >> 8) & 0xFF) * alpha);
 	b = (uint8_t)((bg & 0xFF) * inv_alpha + (fg & 0xFF) * alpha);
 	return ((0xFFu << 24) | (r << 16) | (g << 8) | b);
 }
 
-void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
+void	render_ui_element(t_ui_element *e, t_ui_context *ctx)
 {
-	uint32_t	*pixel;
-	t_v2f		_pos;
-	t_v2f		start;
-	t_v2f		end;
-	float		alpha;
-
-	alpha = (color & 0xFF) / 255.0f;
-	start = init_v2f(fmax(0, pos.x), fmax(0, pos.y));
-	end = init_v2f(fmin(canvas->width - 1, pos.x + size.x - 1),
-				fmin(canvas->height - 1, pos.y + size.y - 1));
-	_pos.x = start.x;
-	while (_pos.x <= end.x)
-	{
-		_pos.y = start.y;
-		while (_pos.y <= end.y)
-		{
-			pixel = (uint32_t *)canvas->pixels + (int)_pos.y * canvas->width + (int)_pos.x;
-			if (alpha >= 1.0f)
-				*pixel = color;
-			else
-				*pixel = blend_colors(*pixel, color);
-			_pos.y++;
-		}
-		_pos.x++;
-	}
-}
-
-void	draw_button(t_ui_element *button, t_ui_context *ctx)
-{
-	t_ui_btn	*btn_data;
-	t_v2f		text_pos;
-	int			text_width;
-
-	draw_rect(ctx->canvas, button->abs_pos, button->size, UI_BUTTON_COLOR);
-	draw_rect_border(ctx->canvas, button->abs_pos, button->size, UI_BUTTON_BORDER_COLOR);
-	btn_data = (t_ui_btn *)button->data;
-	if (btn_data && btn_data->label)
-	{
-		text_width = ft_strlen(btn_data->label) * UI_CHAR_WIDTH;
-		text_pos.x = button->abs_pos.x + (button->size.x - text_width) / 2;
-		text_pos.y = button->abs_pos.y + (button->size.y - UI_CHAR_HEIGHT) / 1.5;
-		draw_text(ctx->canvas, btn_data->label, text_pos, UI_TEXT_COLOR);
-	}
-}
-
-void	render_ui_element(t_ui_element *element, t_ui_context *ctx)
-{
-	t_ui_element	*child;
-	t_ui_label		*label;
-
-	if (!element->visible)
+	if (!e->visible)
 		return ;
-	element->abs_pos = element->pos;
-	if (element->parent)
+	e->abs_pos = e->pos;
+	if (e->parent)
 	{
-		element->abs_pos.x += element->parent->abs_pos.x + element->parent->style.padding;
-		element->abs_pos.y += element->parent->abs_pos.y + element->parent->style.padding;
+		e->abs_pos.x += e->parent->abs_pos.x + e->parent->style.padding;
+		e->abs_pos.y += e->parent->abs_pos.y + e->parent->style.padding;
 	}
-	if (element->type == UI_PANEL || element->type == UI_HEADER)
+	if (e->type == UI_PANEL || e->type == UI_HEADER)
 	{
-		draw_rect(ctx->canvas, element->abs_pos, element->size, element->style.bg_color);
-		draw_rect_border(ctx->canvas, element->abs_pos, element->size, element->style.border_color);
+		draw_rect(ctx->canvas, e->abs_pos, e->size, e->style.bg_color);
+		draw_rect_border(ctx->canvas, e->abs_pos,
+			e->size, e->style.border_color);
 	}
-	else if (element->type == UI_BUTTON)
-		draw_button(element, ctx);
-	else if (element->type == UI_LABEL)
+	else if (e->type == UI_BUTTON)
+		draw_button(e, ctx);
+	else if (e->type == UI_LABEL)
+		draw_text(ctx->canvas, ((t_ui_label *)e->data)->text,
+			e->abs_pos, e->style.text_color);
+	while (e->first_child)
 	{
-		label = (t_ui_label *)element->data;
-		draw_text(ctx->canvas, label->text, element->abs_pos, element->style.text_color);
-	}
-	child = element->first_child;
-	while (child)
-	{
-		render_ui_element(child, ctx);
-		child = child->next_sibling;
+		render_ui_element(e->first_child, ctx);
+		e->first_child = e->first_child->next_sibling;
 	}
 }
