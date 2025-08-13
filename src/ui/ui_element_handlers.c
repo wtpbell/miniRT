@@ -33,13 +33,19 @@ static void	destroy_button(t_ui_element *element, t_ui_context *ctx)
 	t_ui_btn	*button;
 
 	(void)ctx;
-	if (!element || !element->data)
-		return ;
+	if (!element)
+		return;
 	button = (t_ui_btn *)element->data;
-	if (button->label)
-		free(button->label);
-	free(button);
-	element->data = NULL;
+	if (button)
+	{
+		if (button->label)
+		{
+			free(button->label);
+			button->label = NULL;
+		}
+		free(button);
+		element->data = NULL;
+	}
 }
 
 static void	destroy_value_button(t_ui_element *element, t_ui_context *ctx)
@@ -69,9 +75,14 @@ void	destroy_ui_element(t_ui_element *element, t_ui_context *ctx)
 {
 	if (!element)
         return;
-	if (element->type >= 0 &&
-		element->type < (int)(sizeof(g_destroy_handlers) / sizeof(g_destroy_handlers[0])) &&
-		g_destroy_handlers[element->type] != NULL)
-		g_destroy_handlers[element->type](element, ctx);
-	free(element);
+    if (element->type >= 0 &&
+        element->type < (int)(sizeof(g_destroy_handlers) / sizeof(g_destroy_handlers[0])) &&
+        g_destroy_handlers[element->type] != NULL)
+        g_destroy_handlers[element->type](element, ctx);
+    else if (element->data)
+    {
+        free(element->data);
+        element->data = NULL;
+	}
+    free(element);
 }

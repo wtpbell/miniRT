@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_render.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/27 15:03:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/12 09:47:37 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_render.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/27 15:03:00 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/13 10:08:06 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ uint32_t	blend_colors(uint32_t bg, uint32_t fg)
 	r = (uint8_t)(((bg >> 16) & 0xFF) * inv_alpha + ((fg >> 16) & 0xFF) * alpha);
 	g = (uint8_t)(((bg >> 8) & 0xFF) * inv_alpha + ((fg >> 8) & 0xFF) * alpha);
 	b = (uint8_t)((bg & 0xFF) * inv_alpha + (fg & 0xFF) * alpha);
-	return ((0xFF << 24) | (r << 16) | (g << 8) | b);
+	return ((0xFFu << 24) | (r << 16) | (g << 8) | b);
 }
 
 void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)

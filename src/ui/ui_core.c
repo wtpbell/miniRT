@@ -1,18 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_core.c                                          :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/27 12:53:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/12 17:54:40 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_core.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/27 12:53:50 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/13 11:10:10 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
 #include <stdint.h>
 #include <stdlib.h>
+
+static t_ui_images	*init_ui_images(void)
+{
+	t_ui_images	*images;
+
+	images = ft_calloc(1, sizeof(t_ui_images));
+	if (!images)
+		return (NULL);
+	images->button_img = NULL;
+	images->header_img = NULL;
+	images->panel_img = NULL;
+	return (images);
+}
 
 static void	init_ui_context(t_ui_context *ctx, mlx_t *mlx,
 						t_scene *scene, void *game_ptr)
@@ -29,7 +42,6 @@ static void	init_ui_context(t_ui_context *ctx, mlx_t *mlx,
 t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene, void *game_ptr)
 {
 	t_ui_context	*ctx;
-	unsigned int	*pixels;
 	int				panel_width;
 
 	ctx = (t_ui_context *)ft_calloc(1, sizeof(t_ui_context));
@@ -39,14 +51,16 @@ t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene, void *game_ptr)
 	panel_width = UI_PANEL_WIDTH;
 	if (panel_width > mlx->width / 2)
 		panel_width = mlx->width / 2;
+	ctx->images = init_ui_images();
+	if (!ctx->images)
+		return (free(ctx), NULL);
 	ctx->canvas = mlx_new_image(mlx, panel_width, mlx->height);
 	if (!ctx->canvas)
-		return (free(ctx), NULL);
-	pixels = (unsigned int *)ctx->canvas->pixels;
+		return (destroy_ui_context(ctx), NULL);
 	if (panel_width > (int)mlx->width)
 		panel_width = mlx->width;
 	if (mlx_image_to_window(mlx, ctx->canvas, 0, 0) < 0)
-		return (mlx_delete_image(mlx, ctx->canvas), free(ctx), NULL);
+		return (destroy_ui_context(ctx), NULL);
 	return (ctx);
 }
 

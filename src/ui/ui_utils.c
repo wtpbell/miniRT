@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_utils.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/27 22:38:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/12 17:53:57 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_utils.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/13 09:54:50 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,32 @@ char	*ft_ftoa(float f, int precision)
 	float	decimal;
 	int		decimal_part;
 	char	*str;
+	int		len;
 
 	if (precision < 0)
 		precision = 0;
+	
+	// Calculate maximum needed buffer size:
+	// - sign: 1
+	// - integer part: up to 10 digits (INT_MIN is -2147483648)
+	// - decimal point: 1
+	// - decimal digits: precision
+	// - null terminator: 1
+	len = 1 + 10 + 1 + precision + 1;
+	
+	str = (char *)ft_calloc(len, sizeof(char));
+	if (!str)
+		return (NULL);
+
 	int_part = (int)f;
 	decimal = f - int_part;
 	decimal_part = (int)(decimal * pow(10, precision) + 0.5f);
-	str = (char *)calloc(32, sizeof(char));
-	if (!str)
-		return (NULL);
+
 	if (precision > 0)
-		snprintf(str, 2, "%d.%0*d", int_part, precision, decimal_part);
+		snprintf(str, len, "%d.%0*d", int_part, precision, decimal_part);
 	else
-		snprintf(str, 2, "%d", int_part);
+		snprintf(str, len, "%d", int_part);
+	
 	return (str);
 }
 

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_cleanup.c                                       :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/08/12 17:42:36 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/12 18:02:44 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_cleanup.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/12 17:42:36 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/13 11:01:43 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ void	destroy_ui_element_recursive(t_ui_element *element, t_ui_context *ctx)
 
 	if (!element || !ctx)
 		return ;
-	printf("Destroying element type: %d\n", element->type);
 	child = element->first_child;
 	while (child)
 	{
@@ -64,28 +63,48 @@ void	destroy_ui_element_recursive(t_ui_element *element, t_ui_context *ctx)
 
 static void	ui_images_destroy(mlx_t *mlx, t_ui_images *images)
 {
-	if (!images)
+	if (!images || !mlx)
 		return ;
-	if (mlx)
-	{
-		if (images->button_img)
-			mlx_delete_image(mlx, images->button_img);
-		if (images->header_img)
-			mlx_delete_image(mlx, images->header_img);
-		if (images->panel_img)
-			mlx_delete_image(mlx, images->panel_img);
-	}
-	free(images);
+
+	if (images->button_img)
+		mlx_delete_image(mlx, images->button_img);
+	if (images->header_img)
+		mlx_delete_image(mlx, images->header_img);
+	if (images->panel_img)
+		mlx_delete_image(mlx, images->panel_img);
+	
+	// Clear the pointers
+	images->button_img = NULL;
+	images->header_img = NULL;
+	images->panel_img = NULL;
 }
 
 void	destroy_ui_context(t_ui_context *ctx)
 {
 	if (!ctx)
 		return ;
+
+	// Delete canvas if it exists
 	if (ctx->canvas)
-		mlx_delete_image(ctx->mlx, ctx->canvas);
+	{
+		if (ctx->mlx)
+			mlx_delete_image(ctx->mlx, ctx->canvas);
+		ctx->canvas = NULL;
+	}
+
+	// Delete images if they exist
 	if (ctx->images)
+	{
 		ui_images_destroy(ctx->mlx, ctx->images);
+		free(ctx->images);  
+		ctx->images = NULL;
+	}
+
+	// Clear all pointers
+	ctx->mlx = NULL;
+	ctx->scene = NULL;
+	ctx->game = NULL;
+
 	free(ctx);
 }
 
@@ -93,16 +112,19 @@ void	destroy_ui(t_ui *ui)
 {
 	if (!ui)
 		return ;
+	
 	printf("Starting UI destruction\n");
 	if (ui->root)
 	{
 		printf("Destroying root element\n");
 		destroy_ui_element_recursive(ui->root, ui->context);
+		ui->root = NULL;
 	}
 	if (ui->context)
 	{
 		printf("Destroying UI context\n");
 		destroy_ui_context(ui->context);
+		ui->context = NULL;
 	}
 	printf("Freeing UI structure\n");
 	free(ui);
