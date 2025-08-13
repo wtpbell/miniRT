@@ -1,4 +1,4 @@
-vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/render:src/render:src/ui
+vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/render:src/render:src/ui:src/rt_snprintf
 
 NAME		:= miniRT
 CC			:= cc
@@ -28,8 +28,9 @@ SRCS_MAIN	:= main.c vector_init.c vector_helper.c vector_operations.c\
 				random_vector.c matrix_utils.c bump_map.c rt_texture.c v2f.c\
 				vector_core.c matrix_space.c rt_material_utils.c rt_triangle_uv.c\
 				rt_cylinder_uv.c threads.c benchmark.c
+SNPRINTF	:= rt_snprintf.c rt_snprintf_str.c rt_snprintf_num.c
 SRCS_DEBUG	:= print_var.c
-SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE)
+SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE) $(SNPRINTF)
 OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)
 
 all: $(LIBFT) $(MLX42) $(NAME)
