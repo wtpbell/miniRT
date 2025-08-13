@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   ui_core.c                                          :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 12:53:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/13 20:32:33 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/13 22:12:44 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ static void	attach_canvas_to_window(t_ui_context *ctx)
 	mlx_image_t	*canvas;
 
 	canvas = ctx->canvas;
-	if (canvas->count == 0 && \
-		mlx_image_to_window(ctx->mlx, canvas, 0, 0) >= 0)
+	if (canvas->count == 0 && mlx_image_to_window(ctx->mlx, canvas, 0, 0) >= 0)
 	{
 		canvas->instances[0].z = 1000;
 		canvas->instances[0].enabled = true;
