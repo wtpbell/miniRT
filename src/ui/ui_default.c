@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_default.c                                       :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/25 16:25:35 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/11 14:14:13 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_default.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/25 16:25:35 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/13 18:49:22 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,54 +96,6 @@ void	default_button(t_ui_element *button, t_v2f pos, t_v2f size)
 		.padding = 4,
 		.visible = true,
 	};
-}
-
-static void	init_value_button_defaults(t_ui_element *button,
-								t_v2f pos, t_v2f size)
-{
-	button->type = UI_VALUE_BUTTON;
-	button->pos = pos;
-	button->size = size;
-	button->visible = true;
-	button->first_child = NULL;
-	button->next_sibling = NULL;
-	button->parent = NULL;
-	button->action = NULL;
-	button->abs_pos = g_v2f_zero;
-	button->style = (t_ui_style){
-		.bg_color = UI_BUTTON_COLOR,
-		.text_color = UI_TEXT_COLOR,
-		.border_color = UI_BUTTON_BORDER_COLOR,
-		.padding = 4,
-		.visible = true,
-	};
-}
-
-void	default_value_button(t_ui_element *button, t_v2f pos,
-						t_v2f size, const char *label)
-{
-	t_ui_btn	*btn_data;
-
-	init_value_button_defaults(button, pos, size);
-	btn_data = (t_ui_btn *)button->data;
-	if (!btn_data)
-	{
-		btn_data = (t_ui_btn *)ft_calloc(1, sizeof(t_ui_btn));
-		if (!btn_data)
-			return ;
-		btn_data->label = ft_strdup(label);
-		if (!btn_data->label)
-		{
-			free(btn_data);
-			return ;
-		}
-		button->data = btn_data;
-	}
-	else
-	{
-		free(btn_data->label);
-		btn_data->label = ft_strdup(label);
-	}
 }
 
 void	default_section(t_ui_element *section, t_v2f pos, t_v2f size)

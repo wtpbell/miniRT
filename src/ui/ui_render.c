@@ -6,12 +6,13 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 15:03:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 18:19:49 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/13 19:09:20 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
 #include "color.h"
+#include "rt_thread.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
@@ -70,4 +71,28 @@ void	render_ui_element(t_ui_element *e, t_ui_context *c)
 	child = e->first_child;
 	while (child && (render_ui_element(child, c), 1))
 		child = child->next_sibling;
+}
+
+void	render_loop(void *param)
+{
+	t_game			*game;
+	t_ui_context	*ctx;
+
+	game = (t_game *)param;
+	if (game->needs_redraw)
+	{
+		ft_memset(game->img->pixels, 0, game->img->width
+			* game->img->height * sizeof(int));
+		if (thread_rendering(game->scene, game->sample))
+		{
+			game->img->instances[0].enabled = true;
+			game->needs_redraw = false;
+		}
+	}
+	if (game->ui && game->ui->context)
+	{
+		ctx = game->ui->context;
+		if (ctx->is_visible && ctx->canvas)
+			render_ui(game->ui);
+	}
 }

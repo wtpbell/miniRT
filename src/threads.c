@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   threads.c                                          :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/11 17:52:35 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/08 14:24:54 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   threads.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/11 17:52:35 by jboon             #+#    #+#             */
+/*   Updated: 2025/08/13 19:00:45 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ static void	join_threads(t_pthread_instr *instr, int count)
 		pthread_join(instr[i++].thread, NULL);
 }
 
-static bool	create_threads(t_pthread_instr *instr, int count, t_scene *scene, t_sample *sample)
+static bool	create_threads(t_pthread_instr *instr,
+		int count, t_scene *scene, t_sample *sample)
 {
 	uint32_t	delta;
 	uint32_t	start_y;

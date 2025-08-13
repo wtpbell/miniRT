@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   render.c                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/12 16:54:38 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   render.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/10 17:15:02 by jboon             #+#    #+#             */
+/*   Updated: 2025/08/13 19:13:41 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,8 @@ void	*render(void *ctx)
 		x = 0;
 		while (x < instr->img->width)
 		{
-			color = sample_pixel(instr->scene, instr->sample, (float)x, (float)y);
+			color = sample_pixel(instr->scene, instr->sample,
+					(float)x, (float)y);
 			color = v3f_apply_gamma(color, GAMMA);
 			mlx_put_pixel(instr->img, x, y, v3f_to_col32(color));
 			++x;
@@ -152,4 +153,3 @@ void	*render(void *ctx)
 	}
 	return (NULL);
 }
-

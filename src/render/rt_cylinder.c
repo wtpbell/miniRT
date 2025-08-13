@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 11:59:52 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/04 14:56:28 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/13 19:13:59 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	check_body(t_v3f coeff, t_ray *ray, float h, t_v2f *t)
 	i = 0;
 	while (i < 2)
 	{
-		if (roots[i] > t->x && roots[i] < t->y) // t0 is negative, so this condition fails
+		if (roots[i] > t->x && roots[i] < t->y)
 		{
 			p = v3f_add(ray->origin, v3f_scale(ray->direction, roots[i]));
 			if (p.y >= -h * 0.5f && p.y <= h * 0.5f)

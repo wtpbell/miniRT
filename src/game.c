@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   game.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/12 09:53:46 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   game.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
+/*   Updated: 2025/08/13 19:00:24 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,62 +19,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct s_game t_game;
-
-void	render_loop(void *param)
-{
-	t_game			*game;
-	t_ui_context	*ctx;
-
-	game = (t_game *)param;
-	if (game->needs_redraw)
-	{
-		ft_memset(game->img->pixels, 0, game->img->width * game->img->height * sizeof(int));
-		if (thread_rendering(game->scene, game->sample))
-		{
-			game->img->instances[0].enabled = true;
-			game->needs_redraw = false;
-		}
-	}
-	if (game->ui && game->ui->context)
-	{
-		ctx = game->ui->context;
-		if (ctx->is_visible && ctx->canvas)
-			render_ui(game->ui);
-	}
-}
-
-t_ui	*create_ui(mlx_t *mlx, t_scene *scene, t_sample *sample, void *game_ptr)
-{
-	t_ui			*ui;
-	t_ui_element	*ui_sections;
-	t_v2f			size;
-	t_section_config section_cfg;
-
-	ui = (t_ui *)ft_calloc(1, sizeof(t_ui));
-	if (!ui)
-		return (NULL);
-	ui->context = create_ui_context(mlx, scene, game_ptr);
-	if (!ui->context)
-		return (free(ui), NULL);
-	size = init_v2f(UI_PANEL_WIDTH, HEIGHT);
-	ui->root = create_panel(ui->context, g_v2f_zero, size);
-	if (!ui->root)
-		return (destroy_ui(ui), NULL);
-	section_cfg = (t_section_config){
-		.ctx = ui->context,
-		.sample = sample,
-		.pos = g_v2f_zero,
-		.size = size
-	};
-	ui_sections = create_ui_sections(&section_cfg);
-	if (!ui_sections)
-		return (destroy_ui(ui), NULL);
-	attach_child(ui->root, ui_sections);
-	ui->context->needs_redraw = true;
-	return (ui);
-}
-
 void	cleanup_mlx(t_game *game)
 {
 	if (!game)
@@ -83,10 +27,6 @@ void	cleanup_mlx(t_game *game)
 	{
 		destroy_ui(game->ui);
 		game->ui = NULL;
-	}
-	if (game->scene)
-	{
-		// Add any scene-specific cleanup here
 	}
 	if (game->mlx)
 	{
@@ -129,8 +69,6 @@ void	mouse_hook(mouse_key_t button, action_t action,
 		}
 	}
 }
-
-
 
 static bool	cam_init(t_cam *cam, mlx_t *mlx)
 {

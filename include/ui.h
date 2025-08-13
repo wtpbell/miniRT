@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 18:24:18 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/13 19:11:14 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,6 @@ struct s_ui_sections
 extern struct s_ui_sections	g_sections[];
 
 /* UI Context Management */
-t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene, void *game_ptr);
 void			destroy_ui_context(t_ui_context *ctx);
 t_ui			*create_ui(mlx_t *mlx, t_scene *scene, t_sample *sample, void *game_ptr);
 void			destroy_ui(t_ui *ui);
@@ -202,6 +201,7 @@ void			toggle_ui_visibility(t_ui *ui);
 t_ui_element	*create_ui_element(t_ui_type type, t_v2f pos, t_v2f size);
 t_ui_element	*create_header(t_ui_context *ctx, const char *title, t_v2f pos, t_v2f size);
 t_ui_element	*create_label(t_ui_context *ctx, const char *text, t_v2f pos, uint32_t color);
+t_ui_element	*create_value_button(t_vbtn_config *cfg);
 t_ui_element	*create_labeled_control(t_vbtn_config *cfg, const char *label_text, float total_width);
 t_ui_element	*create_panel(t_ui_context *ctx, t_v2f pos, t_v2f size);
 t_ui_element	*create_button(t_btn_config *cfg);
@@ -218,10 +218,13 @@ void			destroy_ui_element_recursive(t_ui_element *element, t_ui_context *ctx);
 bool			ui_element_remove_child(t_ui_element *parent, t_ui_element *child, bool destroy, t_ui_context *ctx);
 void			attach_child(t_ui_element *parent, t_ui_element *child);
 void			update_button_value(t_ui_element *button, int32_t click_x, t_ui_context *ctx);
+void			update_value_button(t_ui_element *button, float new_value,
+						t_ui_context *ctx);
 void			update_label_text(t_ui_element *label, const char *text, t_ui_context *ctx);
 void			handle_ui_click(t_ui_element *root, int32_t x, int32_t y, t_ui_context *ctx);
 
 /* UI Rendering */
+void			render_loop(void *param);
 void			render_ui_element(t_ui_element *e, t_ui_context *c);
 void			draw_button(t_ui_element *button, t_ui_context *ctx);
 void			draw_char(mlx_image_t *img, char c, t_v2f pos, uint32_t color);
@@ -237,6 +240,7 @@ char			*format_color_value(float value);
 t_light			*find_light(t_scene *scene, t_light_type type);
 void			decrement_value_button(t_ui_element *btn, void *param);
 void			increment_value_button(t_ui_element *btn, void *param);
+void			update_value_label(t_ui_vbtn *btn, t_ui_context *ctx);
 void			init_value_button_data(t_ui_vbtn *value_btn, const t_vbtn_config *cfg);
 void			add_inc_dec_buttons(t_ui_element *container, const t_vbtn_config *cfg, t_ui_vbtn *value_btn);
 void			add_value_label(t_ui_element *container, const t_vbtn_config *cfg, t_ui_vbtn *value_btn);

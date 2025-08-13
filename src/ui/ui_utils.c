@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 17:46:22 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/13 18:52:26 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,24 +77,5 @@ void	ui_mark_dirty(t_ui_context *ctx)
 	{
 		ctx->is_dirty = true;
 		ctx->needs_redraw = true;
-	}
-}
-
-void	render_button_clicked(t_ui_element *button, void *param)
-{
-	t_ui_context	*ctx;
-	t_game			*game;
-
-	(void)button;
-	if (!param)
-		return ;
-	ctx = (t_ui_context *)param;
-	game = (t_game *)ctx->game;
-	if (game)
-	{
-		game->needs_redraw = true;
-		update_camera_view(&game->scene->camera);
-		ui_mark_dirty(ctx);
-		printf("Re-render triggered!\n");
 	}
 }
