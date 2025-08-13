@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/02 18:33:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/12 17:28:26 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/13 09:30:43 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_v2f	tri_uv_texcoord(t_tri *tri, const t_v2f weight)
 	return (init_v2f(
 			w * tri->vt0.x + weight.u * tri->vt1.x + weight.v * tri->vt2.x,
 			w * tri->vt0.y + weight.u * tri->vt1.y + weight.v * tri->vt2.y)
-		);
+	);
 }
 
 t_v2f	triangle_texcoord(t_obj *obj, t_v3f point, t_result *res)

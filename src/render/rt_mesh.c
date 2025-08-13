@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 17:28:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/12 16:13:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/13 09:55:59 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,45 +38,46 @@ t_v2f	mesh_texcoord(t_obj *obj, t_v3f point, t_result *res)
 		));
 }
 
-static t_result	intersect_bvh(t_ray *ray, t_mesh *mesh, uint32_t idx, t_v2f t)
+static t_result	intersect_leaf(t_bhv_node *node, t_mesh *mesh, t_ray *ray,
+	t_v2f t)
 {
-	t_bhv_node			*node;
-	uint32_t			i;
-	t_tri				*tri;
-	t_result			curr;
-	t_result			final;
+	uint32_t	i;
+	uint32_t	count;
+	t_result	curr;
+	t_result	final;
 
 	final.t = FLT_MAX;
 	final.face_index = -1;
-	node = &mesh->bvh[idx];
-	if (!aabb_intersect(ray, &node->box))
-		return (final);
-	if (node->prim_count != 0)
+	i = node->left;
+	count = node->left + node->prim_count;
+	while (i < count)
 	{
-		i = 0;
-		while (i < node->prim_count)
+		if (tri_intersect(mesh->triangles + i, ray, t, &curr))
 		{
-			tri = mesh->triangles + node->left + i;
-			if (tri_intersect(tri, ray, t, &curr))
-			{
-				final = curr;
-				final.face_index = node->left + i;
-				t.y = curr.t;
-			}
-			++i;
+			final = curr;
+			final.face_index = i;
+			t.y = final.t;
 		}
-		return (final);
+		++i;
 	}
-	curr = intersect_bvh(ray, mesh, node->left, t);
-	if (curr.t < final.t)
-	{
-		final = curr;
-		t.y = final.t;
-	}
-	curr = intersect_bvh(ray, mesh, node->left + 1, t);
-	if (curr.t < final.t)
-		return (curr);
 	return (final);
+}
+
+static t_result	intersect_bvh(t_ray *ray, t_mesh *mesh, uint32_t idx, t_v2f t)
+{
+	t_result	left;
+	t_result	right;
+
+	if (!aabb_intersect(ray, &mesh->bvh[idx].box))
+		return ((t_result){FLT_MAX, -1, g_v2f_zero});
+	if (mesh->bvh[idx].prim_count != 0)
+		return (intersect_leaf(mesh->bvh + idx, mesh, ray, t));
+	left = intersect_bvh(ray, mesh, mesh->bvh[idx].left, t);
+	t.y = left.t;
+	right = intersect_bvh(ray, mesh, mesh->bvh[idx].left + 1, t);
+	if (left.t < right.t)
+		return (left);
+	return (right);
 }
 
 int	mesh_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_result *res)

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/03 12:06:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/03 13:14:10 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/13 09:41:20 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,37 +43,3 @@ size_t	rt_count_occ(const char *str, char c)
 	}
 	return (occ);
 }
-
-// int	main(int argc, char *argv[])
-// {
-// 	char	*token;
-// 	char	*subtoken;
-// 	char	*sp1;
-// 	char	*sp2;
-// 	char	*org;
-// 	size_t	len;
-
-// 	if (argc < 3)
-// 		return (1);
-// 	org = argv[1];
-// 	len = strlen(org);
-// 	while (1)
-// 	{
-// 		token = rt_strtok(argv[1], argv[2], &sp1);
-// 		if (token == NULL)
-// 			break ;
-// 		printf("+ %s\n", token);
-// 		while (1)
-// 		{
-// 			subtoken = rt_strtok(token, argv[3], &sp2);
-// 			if (subtoken == NULL)
-// 				break ;
-// 			printf("  - %s\n", subtoken);
-// 			token = NULL;
-// 		}
-// 		argv[1] = NULL;
-// 		printf("remaining: %s\n", sp1);
-// 	}
-// 	write(1, org, len);
-// 	return (0);
-// }

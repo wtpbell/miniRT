@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/12 17:23:32 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/13 09:52:04 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,10 +230,6 @@ void		print_error(t_error type, const char *ctx, const char *value);
 // cleanup.c
 void		free_tokens(char **tokens);
 void		cleanup_gnl(char *line, int fd);
-void		free_material(void *ptr);
-void		free_obj(void *ptr);
-void		free_mesh(void *ptr);
-void		cleanup_scene(t_scene *scene);
 
 // field.c
 t_field		init_field(const char *name, void *mem, t_f_type type, t_v2f lim);

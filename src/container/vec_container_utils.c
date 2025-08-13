@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/09 11:08:23 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/10 14:41:18 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/13 09:47:30 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ size_t	vector_size(t_vector *vec)
 	return ((size_t)vec->size);
 }
 
-void	*vector_find(t_vector *vec, void *ctx, int (*fn)(int i, void *item, void *ctx))
+void	*vector_find(t_vector *vec, void *ctx,
+	int (*fn)(int i, void *item, void *ctx))
 {
 	int	i;
 

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/12 16:58:15 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/13 09:52:22 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,11 @@ bool		valid_file_format(const char *file, const char *ext);
 t_bhv_node	*construct_bvh(t_mesh *mesh);
 void		calc_tri_centroid(t_tri *triangles, int count);
 void		tri_swap(t_tri *a, t_tri *b);
+
+/* scene_cleanup.c */
+void		free_material(void *ptr);
+void		free_obj(void *ptr);
+void		free_mesh(void *ptr);
+void		cleanup_scene(t_scene *scene);
 
 #endif
