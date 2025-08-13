@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 17:28:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/13 09:55:59 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/13 15:22:39 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ static t_result	intersect_leaf(t_bhv_node *node, t_mesh *mesh, t_ray *ray,
 	{
 		if (tri_intersect(mesh->triangles + i, ray, t, &curr))
 		{
+			t.y = curr.t;
 			final = curr;
 			final.face_index = i;
-			t.y = final.t;
 		}
 		++i;
 	}
@@ -73,7 +73,8 @@ static t_result	intersect_bvh(t_ray *ray, t_mesh *mesh, uint32_t idx, t_v2f t)
 	if (mesh->bvh[idx].prim_count != 0)
 		return (intersect_leaf(mesh->bvh + idx, mesh, ray, t));
 	left = intersect_bvh(ray, mesh, mesh->bvh[idx].left, t);
-	t.y = left.t;
+	if (left.t < t.y)
+		t.y = left.t;
 	right = intersect_bvh(ray, mesh, mesh->bvh[idx].left + 1, t);
 	if (left.t < right.t)
 		return (left);
