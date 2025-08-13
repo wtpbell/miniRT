@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/15 10:18:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/30 15:22:03 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/13 15:32:36 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	float_print(float f, int spaces, const char *prefix);
 void	cone_print(t_obj *co, int spaces);
 void	scene_print(t_scene *scene);
 void	print_camera_setup(t_cam *cam);
+void	debug_scene_setup(t_scene *scene);
 
 // Bump map debug functions
 void	debug_bump_uv(const char *stage, t_v2f uv, t_v3f uvt);

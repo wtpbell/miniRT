@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/01 08:59:47 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/01 14:11:16 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/13 16:37:18 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,9 +226,7 @@ void	perlin_display(void)
 		}
 	};
 
-	seed_rand(28439872);
 	init_perlin();
-
 	mlx = mlx_init(1600, 900, "miniRT", false);
 	display = (t_pdisplay) {
 		mlx, &data, NULL, init_v3f(0.0f, 0.0f, 16.0f), 0, -1, NULL, 

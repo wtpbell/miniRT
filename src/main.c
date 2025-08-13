@@ -6,12 +6,14 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:21:05 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/01 09:15:17 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/13 16:33:39 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "minirt.h"
+
+void	perlin_display(void);
 
 static bool	valid_file_format(const char *file)
 {

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 14:00:37 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/02 18:33:18 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/07 17:05:18 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_v3f	triangle_normal(t_obj *obj, t_v3f point)
 }
 
 static int	is_within_triangle(t_tri *tri, t_ray *ray, t_tri_var *vars,
-	float *dst)
+	t_v3f *scalar)
 {
 	t_v3f	tvec;
 	t_v3f	qvec;
@@ -37,8 +37,9 @@ static int	is_within_triangle(t_tri *tri, t_ray *ray, t_tri_var *vars,
 	v = v3f_dot(ray->direction, qvec) * vars->det;
 	if (v < 0.0f || (u + v) > 1.0f)
 		return (0);
-	tri->weight = init_v2f(u, v);
-	*dst = v3f_dot(vars->v0v2, qvec) * vars->det;
+	scalar->x = v3f_dot(vars->v0v2, qvec) * vars->det;
+	scalar->y = u;
+	scalar->z = v;
 	return (1);
 }
 
@@ -52,7 +53,7 @@ static int	is_within_triangle(t_tri *tri, t_ray *ray, t_tri_var *vars,
 	O + tD = A + u(B - A) + v(C - A)
 	O - A = -tD + u(B - A) + v(C - A)
 */
-int	triangle_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
+int	triangle_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_v3f *scalar)
 {
 	t_tri		*tri;
 	t_tri_var	var;
@@ -62,7 +63,7 @@ int	triangle_intersect(t_obj *obj, t_ray *ray, t_v2f t, float *dst)
 	var.v0v2 = v3f_sub(tri->v2, tri->v0);
 	var.pvec = v3f_cross(ray->direction, var.v0v2);
 	var.det = v3f_dot(var.v0v1, var.pvec);
-	if (fabs(var.det) > FLT_SML && is_within_triangle(tri, ray, &var, dst))
-		return (*dst > t.x && *dst < t.y);
+	if (fabs(var.det) > FLT_SML && is_within_triangle(tri, ray, &var, scalar))
+		return (scalar->x > t.x && scalar->x < t.y);
 	return (0);
 }
