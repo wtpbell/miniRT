@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/13 12:17:53 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/22 11:59:22 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/24 12:18:44 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,15 @@ static float	calculate_specular(t_lighting *lighting,
 	spec = powf(ft_maxf(0.0f, v3f_dot(
 					lighting->view_dir, refl_dir)), shininess);
 	return (spec * specular_strength);
+}
+
+float	schlick(float cosin, float ref_idx)
+{
+	float	r0;
+
+	r0 = (1 - ref_idx) / (1 + ref_idx);
+	r0 = r0 * r0;
+	return (r0 + (1 - r0) * powf(1 - cosin, 5));
 }
 
 float	calculate_diffuse(t_lighting *lighting)

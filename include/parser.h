@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/13 09:52:04 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/14 13:27:34 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,8 @@ bool		parse_material(char **tokens, t_scene *scene);
 // texture.c
 void		init_texture_fields(t_field *fields, int *field_count, t_mat *mat);
 void		init_bump_fields(t_field *fields, int *field_count, t_mat *mat);
+void		init_perlin_fields(t_field *fields, int *field_count,
+				t_perlin *p_data);
 
 /* ---------------------Objects--------------------- */
 // sphere.c
@@ -249,6 +251,7 @@ bool		load_bump_map(t_mat *mat, const char *bump_path);
 void		cleanup_texture(t_tex *tex);
 bool		load_texture(t_tex *tex, const char *path);
 void		assign_textures(t_mat *mat);
+void		override_unset_perlin_values(t_perlin *dst, const t_perlin *src);
 
 // obj
 bool		init_obj_file(t_obj_file *obj_file);

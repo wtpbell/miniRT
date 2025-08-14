@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   game.c                                             :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/11 18:12:34 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/13 15:36:57 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "MLX42/MLX42.h"
 #include "minirt.h"
 #include "rt_thread.h"
+#include "rt_math.h"
 
 #define WIDTH		1600
 #define HEIGHT		900
@@ -47,6 +48,7 @@ int	game(t_scene *scene)
 {
 	t_game	game;
 
+	init_perlin();
 	ft_bzero(&game, sizeof(t_game));
 	game.mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
 	if (!game.mlx)

@@ -12,7 +12,6 @@
 
 #include <math.h>
 #include <stdint.h>
-#include "vector.h"
 #include "rt_thread.h"
 
 static _Thread_local uint32_t g_state;
@@ -51,4 +50,9 @@ float	frandom_norm_distribution(void)
 {
 	return (sqrtf(-2.0f * logf(frandom()))
 		* cosf(2.0f * M_PI * frandom()));
+}
+
+int	irand(int min, int max)
+{
+	return (min + floorf(frandom() * (max - min)));
 }
