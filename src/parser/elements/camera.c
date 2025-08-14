@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/07 15:25:10 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/14 19:00:25 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	camera_init(t_cam *cam, t_v3f pos, t_v3f dir, float fov)
 	cam->fov = fov;
 	cam->aperture = 0.0f;
 	cam->focus_dist = 10.0f;
-	cam->initialized = true;
 }
 
 bool	parse_camera(char **tokens, t_scene *scene)

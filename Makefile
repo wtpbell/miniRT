@@ -1,4 +1,4 @@
-vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/render:src/render:src/ui
+vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/render:src/render:src/ui:src/rt_snprintf
 
 NAME		:= miniRT
 CC			:= cc
@@ -55,7 +55,6 @@ $(NAME): $(BIN_DIR) $(OBJS)
 	@echo Build complete!
 
 $(BIN_DIR)%.o: %.c
-	@mkdir -p $(@D)
 	@$(CC) $(C_FLAGS) -c $< -o $@ $(INC)
 
 $(LIBFT): $(LIBFT_DIR)

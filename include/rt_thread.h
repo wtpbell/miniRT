@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/03 17:35:16 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/08 09:44:07 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/14 18:59:33 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct s_pthread_instr
 
 /* threads.c */
 
-bool	thread_rendering(t_scene *scenem, t_sample *sample);
+bool	thread_rendering(t_scene *scene, t_sample *sample);
 
 /* benchmark.c */
 

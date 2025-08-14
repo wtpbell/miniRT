@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/07 15:26:10 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/14 19:00:36 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ struct s_camera
 	t_v3f		horizontal;
 	t_v3f		vertical;
 	t_v3f		lower_left;
-	bool		initialized;
 };
 
 struct s_render

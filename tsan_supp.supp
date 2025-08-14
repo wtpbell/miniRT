@@ -1,0 +1,6 @@
+# https://github.com/google/sanitizers/wiki/threadsanitizersuppressions
+
+race:radeonsi_dri*
+race:libdrm_amdgpu*
+race:libglfw*
+race:libGLX_mesa*

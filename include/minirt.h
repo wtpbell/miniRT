@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minirt.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 11:37:50 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/07 21:21:35 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   minirt.h                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
+/*   Updated: 2025/08/14 18:58:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include "scene.h"
 # include "color.h"
 # include "vector.h"
-# include "game.h"
 
 // Core Functions
 void	quit_on_escape(mlx_key_data_t keydata, void *param);
