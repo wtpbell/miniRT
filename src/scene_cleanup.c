@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/13 09:51:00 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/13 09:57:38 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/14 13:31:59 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,8 @@ void	free_material(void *ptr)
 
 	mat = (t_mat *)ptr;
 	free(mat->name);
-	free(mat->tex_path);
-	free(mat->bump_path);
-	if (mat->bump_map)
-		mlx_delete_texture(mat->bump_map);
 	cleanup_texture(&mat->texture);
+	cleanup_texture(&mat->bump_map);
 	free(ptr);
 }
 
