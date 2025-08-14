@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   material_init.c                                    :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/31 23:53:11 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/27 11:52:18 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/27 20:57:15 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,7 @@ static t_mat	*create_base_material(const char *name)
 	if (!mat->name)
 		return (free(mat), NULL);
 	mat->albedo = g_v3f_one;
-	mat->tex_path = NULL;
-	mat->bump_path = NULL;
-	mat->bump_map = NULL;
-	mat->bump_scale = 1.0f;
-	mat->debug_bump = false;
+	mat->bump_map.scale = 1.0f;
 	return (mat);
 }
 
