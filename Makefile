@@ -1,4 +1,4 @@
-vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/render:src/render:src/ui
+vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/render:src/render:src/ui:src/math/noise
 
 NAME		:= miniRT
 CC			:= cc
@@ -25,9 +25,9 @@ SRCS_MAIN	:= main.c vector_init.c vector_helper.c vector_operations.c\
 				color_utils.c random_utils.c rt_light.c rt_dof.c \
 				quit.c rt_triangle.c rt_material.c material_init.c light_utils.c\
 				material_utils.c obj_utils.c procedural_texturing.c rt_cone.c\
-				random_vector.c matrix_utils.c bump_map.c rt_texture.c v2f.c\
+				perlin.c random_vector.c matrix_utils.c bump_map.c rt_texture.c v2f.c\
 				vector_core.c matrix_space.c rt_material_utils.c rt_triangle_uv.c\
-				rt_cylinder_uv.c threads.c benchmark.c
+				rt_cylinder_uv.c threads.c benchmark.c noise_texturing.c lerp.c v2f_helper.c
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE)
 OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/04 10:41:17 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/13 15:34:07 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, t_v3f *s)
 	hit_info->texcoord = obj->r.get_texcoord(obj, hit_info->hit,
 			&hit_info->weight);
 	hit_info->texcoord = v2f_rotate(hit_info->texcoord,
-			obj->r.mat->texture.scale_rot.theta * DEGTORAD);
-	if (obj->r.mat && obj->r.mat->bump_map)
+			obj->r.mat->texture.scale_rot.w * DEGTORAD);
+	if (obj->r.mat->bump_map.type != TEX_SOLID)
 		hit_info->normal = perturb_normal(obj->r.mat, hit_info->texcoord,
 				hit_info->normal);
 	hit_info->hit_color = obj->r.mat->get_texcol(&hit_info->texcoord,

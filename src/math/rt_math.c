@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/13 13:40:09 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/01 18:52:41 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/24 12:18:36 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,6 @@
 int	fapprox(float n)
 {
 	return (fabsf(n) > FLT_SML);
-}
-
-float	schlick(float cosin, float ref_idx)
-{
-	float	r0;
-
-	r0 = (1 - ref_idx) / (1 + ref_idx);
-	r0 = r0 * r0;
-	return (r0 + (1 - r0) * powf(1 - cosin, 5));
 }
 
 float	modulo(float x)
@@ -41,6 +32,15 @@ float	ft_signf(float a)
 void	ft_swapf(float *a, float *b)
 {
 	float	tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+void	ft_swapi(int *a, int *b)
+{
+	int	tmp;
 
 	tmp = *a;
 	*a = *b;

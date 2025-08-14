@@ -6,10 +6,11 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/02 18:36:09 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/02 19:05:24 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/24 12:19:57 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "light.h"
 #include "ray.h"
 #include "rt_math.h"
 #include "minirt.h"

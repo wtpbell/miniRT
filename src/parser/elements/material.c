@@ -6,15 +6,41 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/02 22:35:13 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/13 22:01:32 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-#include "rt_math.h"
-#include "scene.h"
 #include "material.h"
-#include "libft.h"
+
+#define N 4
+
+static void	set_perlin_pattern(t_tex_type *type, t_perlin *dst, t_fp_perlin *fp)
+{
+	const t_tex_type	types[N] = {TEX_PINK, TEX_WOOD, TEX_MARB, TEX_TURB};
+	const t_fp_perlin	fp_perl[N] = {
+		pink_noise, wood_noise, marble_noise, turbulence_noise
+	};
+	const t_perlin		p_data[N] = {
+		(t_perlin){2.0f, 0.5f, 1.0f, 1.0f, 5, {1.0f, 1.0f}},
+		(t_perlin){1.0f, 1.0f, 0.35f, 10.0f, 1, {1.0f, 1.0f}},
+		(t_perlin){1.8f, 0.35f, 0.02f, 1.0f, 5, {100.0f, TAU / 200.0f}},
+		(t_perlin){1.8f, 0.35f, 0.02f, 1.0f, 5, {1.0f, 1.0f}}
+	};
+	int					i;
+
+	i = 0;
+	while (i < N)
+	{
+		if (types[i] == *type)
+			break ;
+		++i;
+	}
+	i %= N;
+	*type = TEX_PERLIN;
+	*fp = fp_perl[i];
+	override_unset_perlin_values(dst, p_data + i);
+}
 
 static void	set_texture_pattern(t_mat *mat)
 {
@@ -22,8 +48,21 @@ static void	set_texture_pattern(t_mat *mat)
 		mat->get_texcol = checker_pattern;
 	else if (mat->texture.type == TEX_IMAGE)
 		mat->get_texcol = image_pattern;
+	else if ((mat->texture.type & TEX_IS_PERLIN) != 0)
+	{
+		set_perlin_pattern(&mat->texture.type, &mat->texture.p_data,
+			&mat->texture.fp_perlin);
+		mat->get_texcol = noise_pattern;
+	}
 	else
 		mat->get_texcol = solid_pattern;
+	if ((mat->bump_map.type & TEX_IS_PERLIN) != 0)
+	{
+		set_perlin_pattern(&mat->bump_map.type, &mat->bump_map.p_data,
+			&mat->bump_map.fp_perlin);
+	}
+	else if (mat->bump_map.type != TEX_IMAGE)
+		mat->bump_map.type = TEX_SOLID;
 }
 
 static void	init_material_fields(t_field *fields, int *field_count, t_mat *mat)
@@ -56,13 +95,14 @@ static void	init_material_fields(t_field *fields, int *field_count, t_mat *mat)
 static bool	parse_type_material(t_mat *mat, t_mat_type type, char **tokens)
 {
 	int		count;
-	t_field	fields[20];
+	t_field	fields[30];
 
 	count = 0;
 	mat->type = type;
 	init_material_fields(fields, &count, mat);
 	init_bump_fields(fields, &count, mat);
 	init_texture_fields(fields, &count, mat);
+	init_perlin_fields(fields, &count, &mat->texture.p_data);
 	fields[0].state |= (HIDDEN * (type != MAT_LAMBERTIAN));
 	fields[1].state |= (HIDDEN * (type != MAT_LAMBERTIAN));
 	fields[2].state |= (HIDDEN * (type != MAT_LAMBERTIAN));
