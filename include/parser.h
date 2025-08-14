@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 22:20:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/04 14:51:37 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/15 00:24:18 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include "rt_math.h"
 
 # define MAX_POS			10000.0f
+# define MIN_POS			-10000.0f
 # define MAX_RADIUS			1000.0f
 # define MIN_RADIUS			0.0f
 # define MAX_HEIGHT			1000.0f
@@ -118,6 +119,14 @@ typedef struct s_element
 	t_parser		parse_fn;
 }	t_ele;
 
+typedef struct s_parse_state
+{
+	float	*f;
+	float	*fact;
+	int		*digit_count;
+	bool	has_significant_digit;
+}	t_parse_state;
+
 /* ---------------------Core--------------------- */
 // file_parser.c
 bool		parse_map(t_scene *scene, const char *file);
@@ -141,6 +150,8 @@ bool		parse_material(char **tokens, t_scene *scene);
 // texture.c
 void		init_texture_fields(t_field *fields, int *field_count, t_mat *mat);
 void		init_bump_fields(t_field *fields, int *field_count, t_mat *mat);
+void		init_perlin_fields(t_field *fields, int *field_count,
+				t_perlin *p_data);
 
 /* ---------------------Objects--------------------- */
 // sphere.c
@@ -219,5 +230,6 @@ bool		load_bump_map(t_mat *mat, const char *bump_path);
 void		cleanup_texture(t_tex *tex);
 bool		load_texture(t_tex *tex, const char *path);
 void		assign_textures(t_mat *mat);
+void		override_unset_perlin_values(t_perlin *dst, const t_perlin *src);
 
 #endif

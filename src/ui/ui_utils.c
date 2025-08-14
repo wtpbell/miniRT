@@ -1,54 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_utils.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/27 22:38:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/13 20:34:32 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_utils.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/15 00:40:48 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
-
-char	*ft_ftoa(float f, int precision)
-{
-	int		int_part;
-	float	decimal;
-	int		decimal_part;
-	char	*str;
-	int		len;
-
-	if (precision < 0)
-		precision = 0;
-	len = 1 + 10 + 1 + precision + 1;
-	str = (char *)ft_calloc(len, sizeof(char));
-	if (!str)
-		return (NULL);
-	int_part = (int)f;
-	decimal = f - int_part;
-	decimal_part = (int)(decimal * pow(10, precision) + 0.5f);
-	if (precision > 0)
-		snprintf(str, len, "%d.%0*d", int_part, precision, decimal_part);
-	else
-		snprintf(str, len, "%d", int_part);
-	return (str);
-}
+#include "rt_snprintf.h"
 
 char	*format_float_value(float value)
 {
-	static char	buf[16];
+	static char	buf[32];
 
-	snprintf(buf, sizeof(buf), "%.2f", value);
+	rt_snprintf(buf, sizeof(buf), "%f", value);
 	return (buf);
 }
 
 char	*format_color_value(float value)
 {
-	static char	buf[16];
+	static char	buf[32];
 
-	snprintf(buf, sizeof(buf), "%6.2f", value * 255.0f);
+	rt_snprintf(buf, sizeof(buf), "%f", value * 255.0f);
 	return (buf);
 }
 

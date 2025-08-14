@@ -10,10 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
-#include "minirt.h"
 #include "ui.h"
-#include <unistd.h> 
 
 static bool	valid_file_format(const char *file)
 {

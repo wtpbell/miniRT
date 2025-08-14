@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   rt_math.h                                          :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 18:51:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/28 11:25:36 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   rt_math.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 18:51:03 by jboon             #+#    #+#             */
+/*   Updated: 2025/08/14 20:21:51 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,16 @@
 float	ft_maxf(float a, float b);
 float	ft_signf(float a);
 void	ft_swapf(float *a, float *b);
+void	ft_swapi(int *a, int *b);
 int		fapprox(float n);
 float	ft_clampf(float value, float min, float max);
 float	ft_clampf01(float val);
-float	schlick(float cosin, float ref_idx);
 float	modulo(float x);
+float	lerpf(float min, float max, float t);
+float	cos_smooth(float t);
+float	perlin_smoothstep(float t);
+float	smoothstep(float t);
+void	init_perlin(void);
+float	perlin(t_v2f point);
+
 #endif

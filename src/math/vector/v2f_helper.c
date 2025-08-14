@@ -1,48 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   rt_math.c                                          :+:    :+:            */
+/*   v2f_helper.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/05/13 13:40:09 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/24 12:18:36 by jboon         ########   odam.nl         */
+/*   Created: 2025/07/30 15:27:34 by jboon         #+#    #+#                 */
+/*   Updated: 2025/07/30 15:36:19 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt_math.h"
 
-int	fapprox(float n)
+t_v2f	v2f_fract(t_v2f v)
 {
-	return (fabsf(n) > FLT_SML);
+	return (init_v2f(
+			modulo(v.x),
+			modulo(v.y)
+		));
 }
 
-float	modulo(float x)
+t_v2f	v2f_mul_v3f(t_v2f a, t_v3f b)
 {
-	return (x - floorf(x));
-}
-
-float	ft_signf(float a)
-{
-	if (a < 0)
-		return (-1.0f);
-	return (1.0f);
-}
-
-void	ft_swapf(float *a, float *b)
-{
-	float	tmp;
-
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
-}
-
-void	ft_swapi(int *a, int *b)
-{
-	int	tmp;
-
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
+	return (init_v2f(a.x * b.x, a.y * b.y));
 }

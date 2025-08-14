@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui.h                                               :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/13 20:35:12 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui.h                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/14 23:35:29 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,6 @@ typedef enum e_ui_type
 	UI_VALUE_BUTTON
 }	t_ui_type;
 
-typedef struct s_ui_images
-{
-	mlx_image_t	*button_img;
-	mlx_image_t	*header_img;
-	mlx_image_t	*panel_img;
-}	t_ui_images;
-
 typedef struct s_ui_style
 {
 	uint32_t	bg_color;
@@ -90,7 +83,6 @@ typedef struct s_ui_style
 typedef struct s_ui_label
 {
 	char		*text;
-	uint32_t	color;
 }	t_ui_label;
 
 typedef struct s_ui_element
@@ -133,18 +125,17 @@ typedef struct s_ui_context
 	t_scene				*scene;
 	mlx_image_t			*canvas;
 	int					canvas_instance;
-	t_ui_images			*images;
 	bool				is_visible;
 	bool				needs_redraw;
 	void				*game;
 	bool				is_dirty;
 }	t_ui_context;
 
-typedef struct s_ui
+struct s_ui
 {
 	t_ui_element	*root;
 	t_ui_context	*context;
-}	t_ui;
+};
 
 typedef struct s_vbtn_config
 {
@@ -208,7 +199,7 @@ t_ui_element	*create_dof_section(t_section_config *cfg);
 t_ui_element	*create_sample_section(t_section_config *cfg);
 
 /* UI Element Management */
-void			destroy_ui_element(t_ui_element *element, t_ui_context *ctx);
+void			destroy_ui_element(t_ui_element *element);
 void			attach_child(t_ui_element *parent, t_ui_element *child);
 void			update_button_value(t_ui_element *button, int32_t click_x,
 					t_ui_context *ctx);
@@ -237,7 +228,7 @@ void			update_value_label(t_ui_vbtn *btn, t_ui_context *ctx);
 void			init_value_button_data(t_ui_vbtn *value_btn,
 					const t_vbtn_config *cfg);
 void			add_inc_dec_buttons(t_ui_element *container,
-					const t_vbtn_config *cfg, t_ui_vbtn *value_btn);
+					const t_vbtn_config *cfg);
 void			add_value_label(t_ui_element *container,
 					const t_vbtn_config *cfg, t_ui_vbtn *value_btn);
 void			render_button_clicked(t_ui_element *button, void *param);

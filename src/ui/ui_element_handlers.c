@@ -12,11 +12,10 @@
 
 #include "ui.h"
 
-static void	destroy_label(t_ui_element *element, t_ui_context *ctx)
+static void	destroy_label(t_ui_element *element)
 {
 	t_ui_label	*label;
 
-	(void)ctx;
 	if (!element || !element->data)
 		return ;
 	label = (t_ui_label *)element->data;
@@ -26,31 +25,26 @@ static void	destroy_label(t_ui_element *element, t_ui_context *ctx)
 	element->data = NULL;
 }
 
-static void	destroy_button(t_ui_element *element, t_ui_context *ctx)
+static void	destroy_button(t_ui_element *element)
 {
-	t_ui_btn	*button;
+	t_ui_btn	*btn;
 
-	(void)ctx;
-	if (!element)
+	if (!element || !element->data)
 		return ;
-	button = (t_ui_btn *)element->data;
-	if (button)
+	btn = (t_ui_btn *)element->data;
+	if (btn->label)
 	{
-		if (button->label)
-		{
-			free(button->label);
-			button->label = NULL;
-		}
-		free(button);
-		element->data = NULL;
+		free(btn->label);
+		btn->label = NULL;
 	}
+	free(element->data);
+	element->data = NULL;
 }
 
-static void	destroy_value_button(t_ui_element *element, t_ui_context *ctx)
+static void	destroy_value_button(t_ui_element *element)
 {
 	t_ui_vbtn	*vbutton;
 
-	(void)ctx;
 	if (!element || !element->data)
 		return ;
 	vbutton = (t_ui_vbtn *)element->data;
@@ -60,7 +54,7 @@ static void	destroy_value_button(t_ui_element *element, t_ui_context *ctx)
 	element->data = NULL;
 }
 
-void (*const	g_destroy_handlers[])(t_ui_element *, t_ui_context *) = {
+void (*const	g_destroy_handlers[])(t_ui_element *) = {
 [UI_PANEL] = NULL,
 [UI_BUTTON] = destroy_button,
 [UI_LABEL] = destroy_label,
@@ -69,14 +63,14 @@ void (*const	g_destroy_handlers[])(t_ui_element *, t_ui_context *) = {
 [UI_VALUE_BUTTON] = destroy_value_button
 };
 
-void	destroy_ui_element(t_ui_element *element, t_ui_context *ctx)
+void	destroy_ui_element(t_ui_element *element)
 {
 	if (!element)
 		return ;
 	if (element->type >= 0 && element->type < (int)(sizeof(g_destroy_handlers)
 		/ sizeof(g_destroy_handlers[0])) &&
 		g_destroy_handlers[element->type] != NULL)
-		g_destroy_handlers[element->type](element, ctx);
+		g_destroy_handlers[element->type](element);
 	else if (element->data)
 	{
 		free(element->data);

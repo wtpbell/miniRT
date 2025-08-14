@@ -24,7 +24,7 @@ static t_ui_element	*create_value_button(t_vbtn_config *cfg)
 	if (!value_btn)
 		return (free(container), NULL);
 	init_value_button_data(value_btn, cfg);
-	add_inc_dec_buttons(container, cfg, value_btn);
+	add_inc_dec_buttons(container, cfg);
 	add_value_label(container, cfg, value_btn);
 	container->type = UI_VALUE_BUTTON;
 	container->data = value_btn;
@@ -36,9 +36,9 @@ t_ui_element	*create_labeled_control(t_vbtn_config *cfg,
 {
 	float			label_width;
 	float			control_width;
-	float			control_x;
 	t_ui_element	*container;
 	t_ui_element	*label;
+	t_ui_element	*value_btn;
 
 	container = create_panel(cfg->ctx, cfg->pos,
 			init_v2f(total_width, UI_ROW_HEIGHT));
@@ -46,13 +46,16 @@ t_ui_element	*create_labeled_control(t_vbtn_config *cfg,
 		return (NULL);
 	label_width = total_width * UI_LABEL_WIDTH_RATIO;
 	control_width = total_width - label_width - UI_PADDING;
-	control_x = label_width + UI_PADDING;
 	label = create_label(cfg->ctx, label_text, init_v2f(UI_LABEL_PADDING,
 				(UI_ROW_HEIGHT - UI_FONT_HEIGHT) / 2), UI_LABEL_COLOR);
-	if (label)
-		attach_child(container, label);
-	cfg->pos = init_v2f(control_x, 0);
+	if (!label)
+		return (destroy_ui_element(container), NULL);
+	attach_child(container, label);
+	cfg->pos = init_v2f(label_width + UI_PADDING, 0);
 	cfg->size = init_v2f(control_width, UI_ROW_HEIGHT);
-	attach_child(container, create_value_button(cfg));
+	value_btn = create_value_button(cfg);
+	if (!value_btn)
+		return (destroy_ui_element(container), NULL);
+	attach_child(container, value_btn);
 	return (container);
 }

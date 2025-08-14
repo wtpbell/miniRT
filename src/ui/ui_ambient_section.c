@@ -17,17 +17,13 @@ static void	add_ambient_color_controls(t_ui_context *ctx, t_light *ambient,
 {
 	t_vbtn_config	cfg;
 	const char		*labels[] = {"COLOR R", "COLOR G", "COLOR B"};
-	float			*values[3];
 	int				i;
 
 	i = 0;
-	values[0] = &ambient->color.x;
-	values[1] = &ambient->color.y;
-	values[2] = &ambient->color.z;
 	while (i < 3)
 	{
 		cfg.ctx = ctx;
-		cfg.value = values[i];
+		cfg.value = &ambient->color._axis[i];
 		cfg.range = init_v2f(0, 1.0f);
 		cfg.step = 10.0f / 255.0f;
 		cfg.pos = init_v2f(UI_PADDING, UI_HEADER_HEIGHT + UI_PADDING + i
@@ -63,8 +59,6 @@ t_ui_element	*create_ambient_section(t_section_config *cfg)
 	t_light			*ambient;
 	t_v2f			size;
 
-	if (!cfg || !cfg->ctx || !cfg->ctx->scene)
-		return (NULL);
 	ambient = find_light(cfg->ctx->scene, LIGHT_AMBIENT);
 	if (!ambient)
 		return (NULL);

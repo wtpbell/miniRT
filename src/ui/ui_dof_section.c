@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 17:28:06 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/09 18:39:15 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/14 22:11:53 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ t_ui_element	*create_dof_section(t_section_config *cfg)
 	t_cam			*camera;
 	t_v2f			size;
 
-	if (!cfg || !cfg->ctx || !cfg->ctx->scene)
-		return (NULL);
 	camera = &cfg->ctx->scene->camera;
 	size = init_v2f(cfg->size.x, UI_HEADER_HEIGHT);
 	section = create_panel(cfg->ctx, cfg->pos, size);

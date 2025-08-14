@@ -6,11 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 18:30:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 18:30:00 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/14 22:00:00 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
+#include "rt_snprintf.h"
 
 #define VALUE_STR_LEN 32
 
@@ -19,23 +20,25 @@ void	update_value_label(t_ui_vbtn *btn, t_ui_context *ctx)
 	const char	*value_str;
 	t_ui_label	*label_data;
 	static char	fallback_buf[VALUE_STR_LEN];
+	char		*new_text;
 
-	if (!btn || !ctx)
-		return ;
 	if (btn->formatter)
 		value_str = btn->formatter(*btn->value);
 	else
 	{
-		snprintf(fallback_buf, sizeof(fallback_buf), "%.2f", *btn->value);
+		rt_snprintf(fallback_buf, sizeof(fallback_buf), "%f", *btn->value);
 		value_str = fallback_buf;
 	}
 	label_data = (t_ui_label *)btn->value_label->data;
-	if (label_data && label_data->text)
-	{
+	if (!label_data)
+		return ;
+	new_text = ft_strdup(value_str);
+	if (!new_text)
+		return ;
+	if (label_data->text)
 		free(label_data->text);
-		label_data->text = ft_strdup(value_str);
-		ui_mark_dirty(ctx);
-	}
+	label_data->text = new_text;
+	ui_mark_dirty(ctx);
 }
 
 static bool	is_point_in_element(const t_ui_element *element,
@@ -112,8 +115,6 @@ void	toggle_ui_visibility(t_ui *ui)
 	size_t			i;
 	t_ui_context	*ctx;
 
-	if (!ui || !ui->context || !ui->context->canvas)
-		return ;
 	ctx = ui->context;
 	ctx->is_visible = !ctx->is_visible;
 	i = 0;

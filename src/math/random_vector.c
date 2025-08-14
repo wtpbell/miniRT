@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/30 19:08:47 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/30 19:09:39 by jboon         ########   odam.nl         */
+/*   Updated: 2025/07/30 15:23:10 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,18 @@ t_v3f	random_in_hemisphere(t_v3f normal)
 		return (v3f_norm(v));
 	else
 		return (v3f_scale(v3f_norm(v), -1.0f));
+}
+
+t_v3f	frand_sphere(void)
+{
+	float	theta;
+	float	phi;
+
+	theta = acosf(2.0f * frandom() - 1.0f);
+	phi = frandom() * TAU;
+	return (init_v3f(
+			cosf(phi) * sinf(theta),
+			sinf(phi) * sinf(theta),
+			cosf(theta)
+		));
 }

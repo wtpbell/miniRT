@@ -69,14 +69,14 @@ t_ui_element	*create_button(t_btn_config *cfg)
 		return (NULL);
 	btn_data = ft_calloc(1, sizeof(t_ui_btn));
 	if (!btn_data)
-		return (destroy_ui_element(button, NULL), NULL);
+		return (destroy_ui_element(button), NULL);
 	btn_data->on_click = cfg->on_click;
 	btn_data->param = cfg->param;
 	btn_data->label = ft_strdup(cfg->label_text);
 	if (!btn_data->label)
 	{
 		free(btn_data);
-		return (destroy_ui_element(button, NULL), NULL);
+		return (destroy_ui_element(button), NULL);
 	}
 	button->data = btn_data;
 	return (button);
@@ -118,11 +118,13 @@ t_ui_element	*create_header(t_ui_context *ctx, const char *title,
 	if (title)
 	{
 		title_label = create_label(ctx, title, init_v2f(10, 10), UI_TEXT_COLOR);
-		if (title_label)
+		if (!title_label)
 		{
-			title_label->pos = init_v2f(10, (size.y - UI_FONT_HEIGHT) / 2);
-			attach_child(header, title_label);
+			destroy_ui_element(header);
+			return (NULL);
 		}
+		title_label->pos = init_v2f(10, (size.y - UI_FONT_HEIGHT) / 2);
+		attach_child(header, title_label);
 	}
 	return (header);
 }

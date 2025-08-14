@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 18:24:31 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/09 19:20:31 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/14 23:03:04 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ t_ui_element	*create_sample_section(t_section_config *cfg)
 	t_ui_element	*section;
 	t_v2f			section_size;
 
-	if (!cfg || !cfg->ctx || !cfg->sample)
-		return (NULL);
 	section_size = init_v2f(cfg->size.x, (UI_ROW_HEIGHT * 2) + UI_PADDING);
 	section = create_panel(cfg->ctx, cfg->pos, section_size);
 	if (!section)

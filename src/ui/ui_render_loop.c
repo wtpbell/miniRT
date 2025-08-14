@@ -12,19 +12,6 @@
 
 #include "ui.h"
 
-static t_ui_images	*init_ui_images(void)
-{
-	t_ui_images	*images;
-
-	images = ft_calloc(1, sizeof(t_ui_images));
-	if (!images)
-		return (NULL);
-	images->button_img = NULL;
-	images->header_img = NULL;
-	images->panel_img = NULL;
-	return (images);
-}
-
 static void	init_ui_context(t_ui_context *ctx, mlx_t *mlx,
 						t_scene *scene, void *game_ptr)
 {
@@ -50,9 +37,6 @@ static t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene,
 	panel_width = UI_PANEL_WIDTH;
 	if (panel_width > mlx->width / 2)
 		panel_width = mlx->width / 2;
-	ctx->images = init_ui_images();
-	if (!ctx->images)
-		return (free(ctx), NULL);
 	ctx->canvas = mlx_new_image(mlx, panel_width, mlx->height);
 	if (!ctx->canvas)
 		return (destroy_ui_context(ctx), NULL);

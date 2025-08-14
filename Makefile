@@ -1,8 +1,8 @@
-vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/render:src/render:src/ui:src/rt_snprintf
+vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/render:src/render:src/ui:src/math/noise:src/rt_snprintf
 
 NAME		:= miniRT
 CC			:= cc
-C_FLAGS		:= -Werror -Wall -Wextra -O3
+C_FLAGS		:= -Werror -Wall -Wextra -O3 -fsanitize=address,undefined
 C_LINK		:= -ldl -lglfw -pthread -lm -flto
 
 BIN_DIR		:= bin/
@@ -25,16 +25,18 @@ SRCS_MAIN  := main.c vector_init.c vector_helper.c vector_operations.c\
 				color_utils.c random_utils.c rt_light.c rt_dof.c \
 				quit.c rt_triangle.c rt_material.c material_init.c light_utils.c\
 				material_utils.c obj_utils.c procedural_texturing.c rt_cone.c\
-				random_vector.c matrix_utils.c bump_map.c rt_texture.c v2f.c\
+				perlin.c random_vector.c matrix_utils.c bump_map.c rt_texture.c v2f.c\
 				vector_core.c matrix_space.c rt_material_utils.c rt_triangle_uv.c\
 				rt_cylinder_uv.c ui_core.c ui_layout.c ui_render.c ui_default.c\
 				ui_utils.c ui_element_handlers.c ui_render_loop.c \
 				threads.c benchmark.c ui_ambient_section.c ui_light_section.c \
 				ui_camera_section.c ui_dof_section.c ui_sample_section.c \
 				ui_cleanup.c ui_layout_utils.c ui_draw.c ui_event_button.c \
-				ui_event_click.c ui_element_basic.c ui_element_creation.c
-SRCS_DEBUG	:= print_var.c 
-SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE)
+				ui_event_click.c ui_element_basic.c ui_element_creation.c \
+				noise_texturing.c lerp.c v2f_helper.c
+SNPRINTF	:= rt_snprintf.c rt_snprintf_str.c rt_snprintf_num.c
+SRCS_DEBUG	:= print_var.c
+SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE) $(SNPRINTF)
 OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)
 
 all: $(LIBFT) $(MLX42) $(NAME)

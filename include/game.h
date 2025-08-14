@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 15:01:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 20:06:55 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/14 22:04:11 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "MLX42/MLX42.h"
 # include "scene.h"
 # include "rt_types.h"
+# include "ui.h"
 
 struct	s_sample
 {

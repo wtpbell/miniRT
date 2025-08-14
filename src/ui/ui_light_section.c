@@ -17,17 +17,13 @@ static void	add_light_pos_controls(t_ui_context *ctx, t_light *light,
 {
 	t_vbtn_config	cfg;
 	const char		*labels[] = {"POS X", "POS Y", "POS Z"};
-	float			*values[3];
 	int				i;
 
 	i = 0;
-	values[0] = &light->pos.x;
-	values[1] = &light->pos.y;
-	values[2] = &light->pos.z;
 	while (i < 3)
 	{
 		cfg.ctx = ctx;
-		cfg.value = values[i];
+		cfg.value = &light->pos._axis[i];
 		cfg.range = init_v2f(-1000.0f, 1000.0f);
 		cfg.step = 0.1f;
 		cfg.pos = init_v2f(UI_PADDING, UI_HEADER_HEIGHT + UI_PADDING + i
@@ -45,21 +41,17 @@ static void	add_light_color_controls(t_ui_context *ctx, t_light *light,
 {
 	t_vbtn_config	cfg;
 	const char		*labels[] = {"COL R", "COL G", "COL B"};
-	float			*values[3];
 	int				i;
 
-	values[0] = &light->color.x;
-	values[1] = &light->color.y;
-	values[2] = &light->color.z;
 	i = 0;
 	while (i < 3)
 	{
 		cfg.ctx = ctx;
-		cfg.value = values[i];
+		cfg.value = &light->color._axis[i];
 		cfg.range = init_v2f(0.0f, 1.0f);
 		cfg.step = 10.0f / 255.0f;
 		cfg.pos = init_v2f(UI_PADDING, UI_HEADER_HEIGHT
-				+ 3 * (UI_ROW_HEIGHT + UI_PADDING)
+				+ 3.2 * (UI_ROW_HEIGHT + UI_PADDING)
 				+ i * (UI_ROW_HEIGHT + UI_PADDING));
 		cfg.size = g_v2f_zero;
 		cfg.formatter = format_color_value;
@@ -78,7 +70,7 @@ static void	add_light_intensity_control(t_ui_context *ctx, t_light *light,
 	cfg.value = &light->intensity;
 	cfg.range = init_v2f(0.0f, 1.0f);
 	cfg.step = 0.1f;
-	cfg.pos = init_v2f(UI_PADDING, UI_HEADER_HEIGHT + UI_PADDING + 6
+	cfg.pos = init_v2f(UI_PADDING, UI_HEADER_HEIGHT + UI_PADDING + 6.1
 			* (UI_ROW_HEIGHT + UI_PADDING));
 	cfg.size = g_v2f_zero;
 	cfg.formatter = format_float_value;

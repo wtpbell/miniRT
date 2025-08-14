@@ -1,48 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   rt_math.c                                          :+:    :+:            */
+/*   lerp.c                                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/05/13 13:40:09 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/24 12:18:36 by jboon         ########   odam.nl         */
+/*   Created: 2025/07/24 12:16:21 by jboon         #+#    #+#                 */
+/*   Updated: 2025/07/24 12:17:01 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt_math.h"
 
-int	fapprox(float n)
+float	lerpf(float min, float max, float t)
 {
-	return (fabsf(n) > FLT_SML);
+	return (min * (1.0f - t) + max * t);
 }
 
-float	modulo(float x)
+float	cos_smooth(float t)
 {
-	return (x - floorf(x));
+	return ((1.0f - cosf(t * PI)) * .5f);
 }
 
-float	ft_signf(float a)
+float	perlin_smoothstep(float t)
 {
-	if (a < 0)
-		return (-1.0f);
-	return (1.0f);
+	return (t * t * t * (t * (t * 6.0f - 15.0f) + 10.0));
 }
 
-void	ft_swapf(float *a, float *b)
+float	smoothstep(float t)
 {
-	float	tmp;
-
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
-}
-
-void	ft_swapi(int *a, int *b)
-{
-	int	tmp;
-
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
+	return (t * t * (3 - 2 * t));
 }

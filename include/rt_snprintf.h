@@ -1,48 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   rt_math.c                                          :+:    :+:            */
+/*   rt_snprintf.h                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/05/13 13:40:09 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/24 12:18:36 by jboon         ########   odam.nl         */
+/*   Created: 2025/08/13 20:00:17 by jboon         #+#    #+#                 */
+/*   Updated: 2025/08/13 21:42:19 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rt_math.h"
+#ifndef RT_SNPRINTF_H
+# define RT_SNPRINTF_H
 
-int	fapprox(float n)
+# include <stddef.h>
+
+typedef struct s_str
 {
-	return (fabsf(n) > FLT_SML);
-}
+	char	*s;
+	size_t	len;
+	size_t	cap;
+}	t_str;
 
-float	modulo(float x)
-{
-	return (x - floorf(x));
-}
+void	stos(t_str *str, const char *src);
+void	ctos(t_str *str, char c);
+void	utos(t_str *str, unsigned int n, char prefix);
+void	itos(t_str *str, int n);
+void	ftos(t_str *str, double r);
+int		rt_snprintf(char *s, size_t size, const char *format, ...);
 
-float	ft_signf(float a)
-{
-	if (a < 0)
-		return (-1.0f);
-	return (1.0f);
-}
-
-void	ft_swapf(float *a, float *b)
-{
-	float	tmp;
-
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
-}
-
-void	ft_swapi(int *a, int *b)
-{
-	int	tmp;
-
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
-}
+#endif

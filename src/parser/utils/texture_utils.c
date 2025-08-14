@@ -14,8 +14,10 @@
 
 void	cleanup_texture(t_tex *tex)
 {
+	free(tex->tex_path);
 	if (tex->tex)
 		mlx_delete_texture(tex->tex);
+	tex->tex_path = NULL;
 	tex->tex = NULL;
 	tex->type = TEX_SOLID;
 	tex->scale_rot = init_v3f(1.0f, 1.0f, 0.0f);
@@ -40,11 +42,32 @@ bool	load_texture(t_tex *tex, const char *path)
 
 void	assign_textures(t_mat *mat)
 {
-	if (!str_is_empty(mat->tex_path))
+	if (!str_is_empty(mat->texture.tex_path))
 	{
-		if (!load_texture(&mat->texture, mat->tex_path))
+		if (!load_texture(&mat->texture, mat->texture.tex_path))
 			mat->texture.type = TEX_SOLID;
 	}
-	if (!str_is_empty(mat->bump_path))
-		load_bump_map(mat, mat->bump_path);
+	if (!str_is_empty(mat->bump_map.tex_path))
+	{
+		if (load_bump_map(mat, mat->bump_map.tex_path))
+			mat->bump_map.type = TEX_IMAGE;
+	}
+}
+
+void	override_unset_perlin_values(t_perlin *dst, const t_perlin *src)
+{
+	if (dst->rate == 0.0f)
+		dst->rate = src->rate;
+	if (dst->gain == 0.0f)
+		dst->gain = src->gain;
+	if (dst->freq == 0.0f)
+		dst->freq = src->freq;
+	if (dst->ampt == 0.0f)
+		dst->ampt = src->ampt;
+	if (dst->layers == 0)
+		dst->layers = src->layers;
+	if (dst->marble.distortion == 0.0f)
+		dst->marble.distortion = src->marble.distortion;
+	if (dst->marble.scale == 0.0f)
+		dst->marble.scale = src->marble.scale;
 }

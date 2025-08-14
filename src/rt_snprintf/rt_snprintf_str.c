@@ -1,48 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   rt_math.c                                          :+:    :+:            */
+/*   rt_snprintf_str.c                                  :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/05/13 13:40:09 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/24 12:18:36 by jboon         ########   odam.nl         */
+/*   Created: 2025/08/13 20:06:18 by jboon         #+#    #+#                 */
+/*   Updated: 2025/08/13 20:06:52 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rt_math.h"
+#include "libft.h"
+#include "rt_snprintf.h"
 
-int	fapprox(float n)
+void	stos(t_str *str, const char *src)
 {
-	return (fabsf(n) > FLT_SML);
+	size_t	len;
+
+	len = ft_strlen(src);
+	if (str->len + len >= str->cap)
+		len = str->cap - str->len;
+	ft_memmove(str->s + str->len, src, len);
+	str->len += len;
 }
 
-float	modulo(float x)
+void	ctos(t_str *str, char c)
 {
-	return (x - floorf(x));
-}
-
-float	ft_signf(float a)
-{
-	if (a < 0)
-		return (-1.0f);
-	return (1.0f);
-}
-
-void	ft_swapf(float *a, float *b)
-{
-	float	tmp;
-
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
-}
-
-void	ft_swapi(int *a, int *b)
-{
-	int	tmp;
-
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
+	if (str->len + 1 >= str->cap)
+		return ;
+	*(str->s + str->len) = c;
+	str->len += 1;
 }

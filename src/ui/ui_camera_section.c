@@ -17,18 +17,14 @@ static void	add_camera_pos_controls(t_ui_context *ctx, t_cam *camera,
 {
 	t_vbtn_config	cfg;
 	const char		*labels[] = {"POS X", "POS Y", "POS Z"};
-	float			*values[3];
 	int				i;
 
 	i = 0;
-	values[0] = &camera->t.pos.x;
-	values[1] = &camera->t.pos.y;
-	values[2] = &camera->t.pos.z;
 	while (i < 3)
 	{
 		cfg.ctx = ctx;
-		cfg.value = values[i];
-		cfg.range = init_v2f(-FLT_MAX, FLT_MAX);
+		cfg.value = &camera->t.pos._axis[i];
+		cfg.range = init_v2f(-1000000, 1000000);
 		cfg.step = 0.1f;
 		cfg.pos = init_v2f(UI_PADDING, UI_HEADER_HEIGHT + UI_PADDING + i
 				* (UI_ROW_HEIGHT + UI_PADDING));
@@ -45,17 +41,13 @@ static void	add_camera_dir_controls(t_ui_context *ctx, t_cam *camera,
 {
 	t_vbtn_config	cfg;
 	const char		*labels[] = {"DIR X", "DIR Y", "DIR Z"};
-	float			*values[3];
 	int				i;
 
 	i = 0;
-	values[0] = &camera->t.dir.x;
-	values[1] = &camera->t.dir.y;
-	values[2] = &camera->t.dir.z;
 	while (i < 3)
 	{
 		cfg.ctx = ctx;
-		cfg.value = values[i];
+		cfg.value = &camera->t.dir._axis[i];
 		cfg.range = init_v2f(MIN_DIR, MAX_DIR);
 		cfg.step = 0.1f;
 		cfg.pos = init_v2f(UI_PADDING, UI_HEADER_HEIGHT + UI_PADDING + 3
@@ -92,8 +84,6 @@ t_ui_element	*create_camera_section(t_section_config *cfg)
 	t_cam			*camera;
 	t_v2f			size;
 
-	if (!cfg || !cfg->ctx || !cfg->ctx->scene)
-		return (NULL);
 	camera = &cfg->ctx->scene->camera;
 	size = init_v2f(cfg->size.x,
 			UI_HEADER_HEIGHT + 7 * (UI_ROW_HEIGHT + UI_PADDING) + UI_PADDING);

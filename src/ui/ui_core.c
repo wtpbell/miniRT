@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_core.c                                          :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/27 12:53:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/13 22:12:44 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_core.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/27 12:53:50 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/14 22:11:34 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ void	render_ui(t_ui *ui)
 	uint32_t		*pixels;
 	uint32_t		i;
 
-	if (!ui || !ui->context || !ui->context->canvas)
-		return ;
 	ctx = ui->context;
 	attach_canvas_to_window(ctx);
 	if (!ctx->is_visible)

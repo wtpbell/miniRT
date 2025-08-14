@@ -7,7 +7,12 @@
 **/lib
 
 # binary files
-miniRT
+miniRT*
 *.out
 *.o
 *.a
+*.s
+*.gch
+
+# generic files
+bench*

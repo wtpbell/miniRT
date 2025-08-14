@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:18:24 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/04 15:38:00 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/14 20:22:07 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ void	print_camera_setup(t_cam *cam);
 void	debug_scene_setup(t_scene *scene);
 
 // Bump map debug functions
-void	debug_bump_uv(const char *stage, t_v2f uv,
-			float u_scale, float v_scale, float theta);
+void	debug_bump_uv(const char *stage, t_v2f uv, t_v3f uvt);
 void	debug_bump_sample(mlx_texture_t *bump_map, t_v2f uv, int sample_idx);
 void	debug_bump_normal(t_v3f old_normal, t_v3f new_normal);
 void	debug_bump_texture_info(mlx_texture_t *bump_map, float delta);

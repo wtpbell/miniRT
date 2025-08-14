@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 16:25:35 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 18:49:22 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/14 21:27:50 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	default_label(t_ui_element *label, t_v2f pos, t_v2f size)
 	label->abs_pos = g_v2f_zero;
 	label->style = (t_ui_style){
 		.bg_color = UI_TRANSPARENT,
-		.text_color = UI_TEXT_COLOR,
 		.border_color = UI_TRANSPARENT,
+		.text_color = UI_TEXT_COLOR,
 		.padding = UI_PANEL_PADDING,
 		.visible = true,
 	};

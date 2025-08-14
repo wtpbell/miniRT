@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_layout.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/25 11:39:13 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/13 20:28:20 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_layout.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/25 11:39:13 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/14 22:59:08 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,33 +49,6 @@ struct s_ui_sections	g_sections[] = {
 {2.0f, create_sample_section},
 {0.5f, create_render_button_section}
 };
-
-void	add_value_label(t_ui_element *container,
-			const t_vbtn_config *cfg, t_ui_vbtn *value_btn)
-{
-	char			*value_str;
-	float			label_width;
-	float			label_x;
-	t_ui_element	*label;
-
-	if (cfg->formatter)
-		value_str = ft_strdup(cfg->formatter(*cfg->value));
-	else
-		value_str = ft_ftoa(*cfg->value, 2);
-	if (!value_str)
-		return ;
-	label_width = ft_strlen(value_str) * UI_CHAR_WIDTH;
-	label_x = (cfg->size.x - label_width) / 2.0f;
-	label = create_label(cfg->ctx, value_str,
-			init_v2f(label_x, (cfg->size.y - UI_FONT_HEIGHT) / 2),
-			UI_TEXT_COLOR);
-	if (label)
-	{
-		value_btn->value_label = label;
-		attach_child(container, label);
-	}
-	free(value_str);
-}
 
 static float	total_height_scale(void)
 {
@@ -127,8 +100,6 @@ t_ui_element	*create_ui_sections(t_section_config *cfg)
 	t_ui_element	*panel;
 	int				count;
 
-	if (!cfg || !cfg->ctx)
-		return (NULL);
 	count = sizeof(g_sections) / sizeof(g_sections[0]);
 	scale_factor = (cfg->size.y - ((count + 1) * UI_PADDING))
 		/ total_height_scale();

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/13 19:00:24 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/14 23:56:58 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,11 @@
 #include "minirt.h"
 #include "parser.h"
 #include "rt_thread.h"
-#include "ui.h"
-#include <time.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "rt_math.h"
+#include "game.h"
 
 void	cleanup_mlx(t_game *game)
 {
-	if (!game)
-		return ;
 	if (game->ui)
 	{
 		destroy_ui(game->ui);
