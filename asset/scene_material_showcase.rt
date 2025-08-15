@@ -1,3 +1,17 @@
+# Dielectric materials (Top row) - fully transparent, only roughness changes
+m_diel_r0 type:dielectric ir:1.5 tr:1.0 d_rough:0.0 alb:255,255,255
+m_diel_r1 type:dielectric ir:1.5 tr:1.0 d_rough:0.3 alb:255,255,255
+m_diel_r2 type:dielectric ir:1.5 tr:1.0 d_rough:0.6 alb:255,255,255
+m_diel_r3 type:dielectric ir:1.5 tr:1.0 d_rough:1.0 alb:255,255,255
+
+# Dielectric materials (Bottom row) - roughness + decreasing transparency
+m_diel_rt0 type:dielectric ir:1.5 tr:1.0 d_rough:0.0 alb:255,0,0 
+m_diel_rt1 type:dielectric ir:1.5 tr:0.6 d_rough:0.0 alb:255,0,0 
+m_diel_rt2 type:dielectric ir:1.5 tr:0.3 d_rough:0.0 alb:255,0,0 
+m_diel_rt3 type:dielectric ir:1.5 tr:0.0 d_rough:0.0 alb:255,0,0 
+
+m_metal type:dielectric d_rough:0.0 alb:255,255,0
+
 # Camera: Slightly closer, straight on
 C 0,1.5,4     0,0,1  60
 
@@ -37,22 +51,6 @@ pl 0,-0.5,0 0,1,0 200,200,200
 # sp -0.8,0,0 0.8 255,255,255 m_lamb_rs1
 # sp 0.8,0,0 0.8 255,255,255 m_lamb_rs2
 # sp 2.5,0,0 0.8 255,255,255 m_lamb_rs3
-
-
-
-# Dielectric materials (Top row) - fully transparent, only roughness changes
-m_diel_r0 type:dielectric ir:1.5 tr:1.0 d_rough:0.0 alb:255,255,255
-m_diel_r1 type:dielectric ir:1.5 tr:1.0 d_rough:0.3 alb:255,255,255
-m_diel_r2 type:dielectric ir:1.5 tr:1.0 d_rough:0.6 alb:255,255,255
-m_diel_r3 type:dielectric ir:1.5 tr:1.0 d_rough:1.0 alb:255,255,255
-
-# Dielectric materials (Bottom row) - roughness + decreasing transparency
-m_diel_rt0 type:dielectric ir:1.5 tr:1.0 d_rough:0.0 alb:255,0,0 
-m_diel_rt1 type:dielectric ir:1.5 tr:0.6 d_rough:0.0 alb:255,0,0 
-m_diel_rt2 type:dielectric ir:1.5 tr:0.3 d_rough:0.0 alb:255,0,0 
-m_diel_rt3 type:dielectric ir:1.5 tr:0.0 d_rough:0.0 alb:255,0,0 
-
-m_metal type:dielectric d_rough:0.0 alb:255,255,0
 
 # Top row: full trmittance (changing roughness only)
 sp -2.5,2.5,0 1.5 255,255,255 m_diel_r0

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   rt_snprintf_num.c                                  :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/08/13 20:04:06 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/13 21:05:07 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   rt_snprintf_num.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/13 20:04:06 by jboon             #+#    #+#             */
+/*   Updated: 2025/08/14 21:58:37 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	itos(t_str *str, int n)
 
 void	ftos(t_str *str, double r)
 {
-	const double			prec = 4.0;
+	const double			prec = 2.0;
 	double					numeric;
 	union ieee754_double	*d;
 

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/03 17:35:16 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/04 10:19:39 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/14 18:59:33 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include "MLX42/MLX42.h"
 # include "scene.h"
 
-# define THRD_CNT	4
+# define THRD_CNT	15
 
 typedef struct s_pthread_instr
 {
@@ -27,11 +27,12 @@ typedef struct s_pthread_instr
 	t_scene		*scene;
 	mlx_image_t	*img;
 	pthread_t	thread;
+	t_sample	*sample;
 }	t_pthread_instr;
 
 /* threads.c */
 
-bool	thread_rendering(t_scene *scene);
+bool	thread_rendering(t_scene *scene, t_sample *sample);
 
 /* benchmark.c */
 

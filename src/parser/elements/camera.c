@@ -6,13 +6,15 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 12:05:02 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/26 16:59:28 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/15 00:33:27 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <math.h>
 #include "rt_math.h"
 #include "parser.h"
+#include "minirt.h"
+#include "vector.h"
 
 #define CAMERA_MIN_TOKENS 4
 
@@ -41,7 +43,7 @@ static bool	parse_camera_fields(t_cam *cam, char **tokens)
 	return (parse_fields((t_field *)fields, 2, tokens + CAMERA_MIN_TOKENS));
 }
 
-static void	camera_init(t_cam *cam, t_v3f pos, t_v3f dir, float fov)
+void	camera_init(t_cam *cam, t_v3f pos, t_v3f dir, float fov)
 {
 	cam->t.pos = pos;
 	dir.z = -dir.z;
@@ -65,6 +67,11 @@ bool	parse_camera(char **tokens, t_scene *scene)
 	if (!parse_v3f(&pos, tokens[1]) || !parse_dir(&dir, tokens[2])
 		|| !parse_fov(&fov, tokens[3]))
 		return (false);
+	if (pos.x > MAX_POS || pos.x < MIN_POS
+		|| pos.y > MAX_POS || pos.y < MIN_POS
+		|| pos.z > MAX_POS || pos.z < MIN_POS)
+		return (print_error(
+				ERR_RANGE, "Camera position out of bounds", tokens[1]), false);
 	ft_bzero(&scene->camera, sizeof(t_cam));
 	scene->scene_flags |= SCENE_CAMERA;
 	camera_init(&scene->camera, pos, dir, fov);
@@ -72,6 +79,6 @@ bool	parse_camera(char **tokens, t_scene *scene)
 		return (false);
 	if (scene->camera.focus_dist <= 0.0f)
 		return (print_error(
-				ERR_RANGE, "Focus distance must be > 0.0", ""), false);
+				ERR_RANGE, "Focus distance must be > 0.0", tokens[2]), false);
 	return (true);
 }
