@@ -12,6 +12,7 @@ miniRT*
 *.o
 *.a
 *.s
+*.gch
 
 # generic files
 bench*

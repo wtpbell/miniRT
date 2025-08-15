@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/15 10:51:52 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 12:10:27 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,12 @@ bool	v3f_equals(t_v3f a, t_v3f b, float epsilon);
 t_v3f	v3f_sub_v2f(t_v3f a, t_v2f b);
 t_v3f	v3f_mul_v2f(t_v3f a, t_v2f b);
 
+t_v2f	v2f_scale(t_v2f v, float f);
+t_v2f	v2f_mul(t_v2f a, t_v2f b);
+t_v2f	v2f_mul_v3f(t_v2f a, t_v3f b);
+t_v2f	v2f_add(t_v2f a, t_v2f b);
+t_v2f	v2f_fract(t_v2f v);
+float	v2f_mag(t_v2f v);
 /* v4 */
 
 t_v4f	init_v4f(float x, float y, float z, float w);
