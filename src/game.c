@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/15 11:31:53 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 16:43:04 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,14 @@
 void	cleanup_mlx(t_game *game)
 {
 	if (game->ui)
-	{
 		destroy_ui(game->ui);
-		game->ui = NULL;
-	}
+	if (game->load_screen)
+		destroy_load_screen(game->load_screen, game->mlx);
 	if (game->mlx)
-	{
 		mlx_terminate(game->mlx);
-		game->mlx = NULL;
-	}
+	game->ui = NULL;
+	game->load_screen = NULL;
+	game->mlx = NULL;
 }
 
 void	key_hook(mlx_key_data_t keydata, void *param)
@@ -78,7 +77,7 @@ static bool	cam_init(t_cam *cam, mlx_t *mlx)
 
 int	game(t_scene *scene, t_sample *sample)
 {
-	t_game	game;
+	t_game			game;
 
 	ft_bzero(&game, sizeof(t_game));
 	game.scene = scene;
@@ -94,6 +93,12 @@ int	game(t_scene *scene, t_sample *sample)
 	game.ui = create_ui(game.mlx, scene, game.sample, &game);
 	if (!game.ui)
 		return (cleanup_mlx(&game), 1);
+
+	game.load_screen = init_load_screen(game.mlx);
+	if (game.load_screen == NULL)
+		return (cleanup_mlx(&game), 1);
+	game.load_screen->background->enabled = true;
+
 	mlx_set_instance_depth(&game.img->instances[0], 0);
 	mlx_loop_hook(game.mlx, render_loop, &game);
 	mlx_key_hook(game.mlx, key_hook, &game);

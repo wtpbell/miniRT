@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_types.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/07 16:31:03 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/14 21:55:47 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_types.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/06/07 16:31:03 by jboon         #+#    #+#                 */
+/*   Updated: 2025/08/15 16:29:26 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,9 @@ typedef enum e_ui_type			t_ui_type;
 typedef struct s_ui				t_ui;
 typedef struct s_ui_context		t_ui_context;
 typedef struct s_ui_element		t_ui_element;
+
+/* load screen */
+typedef struct s_load_screen	t_load_screen;
 
 typedef int						(*t_intsct)(t_obj *obj, t_ray *ray,
 									t_v2f t, t_v3f *s);

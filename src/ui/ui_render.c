@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 15:03:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/13 20:31:44 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/15 16:27:51 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,12 @@ void	render_loop(void *param)
 	t_game			*game;
 	t_ui_context	*ctx;
 
+
 	game = (t_game *)param;
+	update_load_screen(game->load_screen, game->mlx->delta_time);
+
+	return ;
+
 	if (game->needs_redraw)
 	{
 		ft_memset(game->img->pixels, 0, game->img->width

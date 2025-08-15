@@ -33,7 +33,7 @@ SRCS_MAIN  := main.c vector_init.c vector_helper.c vector_operations.c\
 				ui_camera_section.c ui_dof_section.c ui_sample_section.c \
 				ui_cleanup.c ui_layout_utils.c ui_draw.c ui_event_button.c \
 				ui_event_click.c ui_element_basic.c ui_element_creation.c \
-				noise_texturing.c lerp.c v2f_helper.c
+				noise_texturing.c lerp.c v2f_helper.c animate.c
 SNPRINTF	:= rt_snprintf.c rt_snprintf_str.c rt_snprintf_num.c
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE) $(SNPRINTF)

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/15 11:43:28 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 17:06:43 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 # define UI_CHAR_WIDTH 8
 # define UI_CHAR_HEIGHT 15
 # define UI_FONT_HEIGHT 8
+# define UI_FONT_WIDTH 12
 # define UI_ROW_HEIGHT 30
 # define UI_LABEL_PADDING 10
 
@@ -237,7 +238,32 @@ void			default_panel(t_ui_element *panel, t_v2f pos, t_v2f size);
 void			default_label(t_ui_element *label, t_v2f pos, t_v2f size);
 
 /* Utility */
-char			*ft_ftoa(float f, int precision);
 uint32_t		blend_colors(uint32_t bg, uint32_t fg);
+
+typedef struct s_frame
+{
+	mlx_image_t	*sprite;
+}	t_frame;
+
+typedef struct s_animation
+{
+	t_v2i		pos;
+	uint32_t	idx;
+	uint32_t	frame_count;
+	float		fps;
+	float		time;
+	t_frame		*frames;
+}	t_ani;
+
+typedef struct s_load_screen
+{
+	mlx_image_t	*background;
+	t_ani		ani;
+
+}	t_load_screen;
+
+t_load_screen	*init_load_screen(mlx_t *mlx);
+void			destroy_load_screen(t_load_screen *load_screen, mlx_t *mlx);
+void			update_load_screen(t_load_screen *screen, float delta);
 
 #endif

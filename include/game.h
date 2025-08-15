@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 15:01:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/15 11:31:38 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 16:12:29 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,12 @@ struct	s_sample
 
 struct	s_game
 {
-	mlx_t		*mlx;
-	mlx_image_t	*img;
-	t_ui		*ui;
-	t_scene		*scene;
-	t_sample	*sample;
+	mlx_t			*mlx;
+	mlx_image_t		*img;
+	t_ui			*ui;
+	t_load_screen	*load_screen;
+	t_scene			*scene;
+	t_sample		*sample;
 	bool		needs_redraw;
 };
 
