@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/15 10:45:03 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 14:35:59 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,6 +189,8 @@ bool		parse_cone(char **tokens, t_scene *scene);
 
 // triangle.c
 bool		parse_triangle(char **tokens, t_scene *scene);
+t_v3f		get_mid_point(t_v3f v0, t_v3f v1, t_v3f v2);
+t_v3f		get_normal(t_v3f v0, t_v3f v1, t_v3f v2);
 
 // mesh.c
 bool		parse_mesh(char **tokens, t_scene *scene);
@@ -260,6 +262,7 @@ t_mesh		*load_obj_into_mesh(const char *obj_path, t_obj_file *obj_file);
 bool		construct_mesh(t_scene *scene);
 bool		assign_v3f(t_v3f *dst[3], t_vector *cont, int *indices, int curr);
 void		set_normal(t_tri *tri);
+void		set_uv_texcoord(t_tri *tri);
 bool		construct_mesh(t_scene *scene);
 bool		parse_face(char *token, t_vector *f);
 bool		parse_vertex(char *str, t_vector *v, const t_vert_ran *ran);

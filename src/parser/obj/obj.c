@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 15:58:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/12 17:23:12 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 14:36:05 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,21 @@ static t_mesh	*init_mesh(const char *obj_path, t_obj_file *obj_file)
 	return (mesh);
 }
 
-static bool	init_vertices(t_tri *tri, t_obj_file *obj_file, int face_index,
-	t_mat4x4 local)
+static bool	init_vertices(t_tri *tri, t_obj_file *obj_file, int face_index)
 {
-	int	*indices;
+	int			*indices;
 
 	indices = obj_file->f.items[face_index];
 	if (!assign_v3f((t_v3f *[3]){&tri->v0, &tri->v1, &tri->v2}, &obj_file->v,
 		indices, 0))
 		return (print_error(ERR_OBJ_VERT_INDEX, "obj - v", NULL), false);
 	if (*(indices + 1) == 0)
-		generate_uv_vertices(tri, local);
+		set_uv_texcoord(tri);
 	else
 		if (!assign_v3f((t_v3f *[3]){&tri->vt0, &tri->vt1, &tri->vt2},
 			&obj_file->vt, indices, 1))
 			return (print_error(ERR_OBJ_VERT_INDEX, "obj - vt", NULL), false);
+
 	if (*(indices + 2) == 0)
 		set_normal(tri);
 	else
@@ -86,7 +86,6 @@ t_mesh	*load_obj_into_mesh(const char *obj_path, t_obj_file *obj_file)
 	int			i;
 	t_tri		*tri;
 	t_mesh		*mesh;
-	t_mat4x4	local;
 
 	if (obj_file->f.size == 0)
 		return (print_error(ERR_OBJ_FACE, NULL, NULL), NULL);
@@ -94,11 +93,10 @@ t_mesh	*load_obj_into_mesh(const char *obj_path, t_obj_file *obj_file)
 	if (mesh == NULL)
 		return (perror("minirt"), NULL);
 	i = 0;
-	id_m4x4(local);
 	while (i < obj_file->f.size)
 	{
 		tri = (mesh->triangles + i);
-		if (!init_vertices(tri, obj_file, i, local))
+		if (!init_vertices(tri, obj_file, i))
 			return (free_mesh(mesh), NULL);
 		++i;
 	}

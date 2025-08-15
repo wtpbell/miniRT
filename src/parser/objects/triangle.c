@@ -6,19 +6,19 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 12:00:31 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/08 10:39:14 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 14:17:25 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "material.h"
 
-static inline t_v3f	get_mid_point(t_v3f v0, t_v3f v1, t_v3f v2)
+t_v3f	get_mid_point(t_v3f v0, t_v3f v1, t_v3f v2)
 {
 	return (v3f_scale(v3f_add(v3f_add(v0, v1), v2), 1.0f / 3.0f));
 }
 
-static inline t_v3f	get_normal(t_v3f v0, t_v3f v1, t_v3f v2)
+t_v3f	get_normal(t_v3f v0, t_v3f v1, t_v3f v2)
 {
 	return (v3f_norm(v3f_cross(v3f_sub(v1, v0), v3f_sub(v2, v0))));
 }

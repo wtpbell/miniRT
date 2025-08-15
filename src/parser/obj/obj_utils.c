@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/07 19:19:47 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/12 17:23:38 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 14:36:26 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,17 @@ void	set_normal(t_tri *tri)
 	tri->vn0 = norm;
 	tri->vn1 = norm;
 	tri->vn2 = norm;
+}
+
+void	set_uv_texcoord(t_tri *tri)
+{
+	t_mat4x4	world;
+	t_mat4x4	local;
+
+	id_m4x4(local);
+	id_m4x4(world);
+	obj_to_world(world, get_mid_point(tri->v0, tri->v1, tri->v2),
+		get_normal(tri->v0, tri->v1, tri->v2), g_v3f_up);
+	invert_m4x4(local, world);
+	generate_uv_vertices(tri, local);
 }
