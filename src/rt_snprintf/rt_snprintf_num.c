@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_snprintf_num.c                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/13 20:04:06 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/14 21:58:37 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_snprintf_num.c                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/08/13 20:04:06 by jboon         #+#    #+#                 */
+/*   Updated: 2025/08/15 18:29:29 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ void	ftos(t_str *str, double r)
 {
 	const double			prec = 2.0;
 	double					numeric;
+	double					fract;
 	union ieee754_double	*d;
 
 	d = (union ieee754_double *) & r;
@@ -98,8 +99,14 @@ void	ftos(t_str *str, double r)
 	else
 	{
 		numeric = fabs(r);
+		fract = (numeric - floor(numeric));
+		if ((1.0f - fract) < pow(10.0, -(prec + 1)))
+		{
+			numeric = round(numeric);
+			fract = 0.0;
+		}	
 		utos(str, numeric, '\0');
 		ctos(str, '.');
-		fdectos(str, round((numeric - floor(numeric)) * pow(10.0, prec)), prec);
+		fdectos(str, round(fract * pow(10.0, prec)), prec);
 	}
 }
