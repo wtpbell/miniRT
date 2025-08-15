@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   game.h                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 15:01:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/14 22:04:11 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   game.h                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 15:01:00 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/15 11:31:38 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ struct	s_game
 	t_scene		*scene;
 	t_sample	*sample;
 	bool		needs_redraw;
-	bool		should_exit;
 };
 
 int	game(t_scene *scene, t_sample *sample);
