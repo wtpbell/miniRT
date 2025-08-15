@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 15:58:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/15 14:36:05 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 17:29:28 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ static bool	init_vertices(t_tri *tri, t_obj_file *obj_file, int face_index)
 		if (!assign_v3f((t_v3f *[3]){&tri->vt0, &tri->vt1, &tri->vt2},
 			&obj_file->vt, indices, 1))
 			return (print_error(ERR_OBJ_VERT_INDEX, "obj - vt", NULL), false);
-
 	if (*(indices + 2) == 0)
 		set_normal(tri);
 	else
@@ -91,7 +90,7 @@ t_mesh	*load_obj_into_mesh(const char *obj_path, t_obj_file *obj_file)
 		return (print_error(ERR_OBJ_FACE, NULL, NULL), NULL);
 	mesh = init_mesh(obj_path, obj_file);
 	if (mesh == NULL)
-		return (perror("minirt"), NULL);
+		return (perror("load_obj_into_mesh"), NULL);
 	i = 0;
 	while (i < obj_file->f.size)
 	{
@@ -102,6 +101,6 @@ t_mesh	*load_obj_into_mesh(const char *obj_path, t_obj_file *obj_file)
 	}
 	mesh->bvh = construct_bvh(mesh);
 	if (mesh->bvh == NULL)
-		return (free_mesh(mesh), perror("minirt"), NULL);
+		return (free_mesh(mesh), perror("load_obj_into_mesh"), NULL);
 	return (mesh);
 }

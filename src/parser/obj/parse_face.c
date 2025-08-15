@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/07 18:08:20 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/08 17:09:15 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 16:17:58 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static bool	is_valid_face_syntax(const char *face)
 {
 	if (*face != '/' && rt_count_occ(face, '/') < 3)
 		return (true);
-	return (print_error(ERR_OBJ_FACE_FORMAT, "obj", NULL), false);
+	return (print_error(ERR_OBJ_FACE_FORMAT, "is_valid_face_syntax", NULL),
+		false);
 }
 
 static bool	is_valid_set(const int *first, const int *second)
@@ -51,7 +52,7 @@ static bool	parse_set(char *token, int *indices, int curr, int count)
 		curr += 1 + (*token == '/');
 	}
 	if (!is_valid_set(indices, indices + (count * 3)))
-		return (print_error(ERR_OBJ_FACE_FORMAT, "obj", NULL), false);
+		return (print_error(ERR_OBJ_FACE_FORMAT, "parse_set", NULL), false);
 	return (true);
 }
 
@@ -63,7 +64,7 @@ bool	parse_face(char *token, t_vector *f)
 
 	indices = ft_calloc(MAX_VERT_PER_SET, sizeof(int));
 	if (indices == NULL)
-		return (perror("minirt"), false);
+		return (perror("parse_face"), false);
 	count = 0;
 	while (true)
 	{
@@ -74,12 +75,12 @@ bool	parse_face(char *token, t_vector *f)
 			|| !parse_set(subtoken, indices, count * MAX_VERT_PER_FACE, count))
 			return (free(indices), false);
 		if (++count > MAX_VERT_PER_FACE)
-			return (print_error(ERR_OBJ_VTX_FACE, "obj", NULL), free(indices),
-				false);
+			return (print_error(ERR_OBJ_VTX_FACE, "parse_face", NULL),
+				free(indices), false);
 	}
 	if (!vector_add(f, indices))
-		return (perror("minirt"), free(indices), false);
+		return (perror("parse_face"), free(indices), false);
 	if (count != MAX_VERT_PER_FACE)
-		print_error(ERR_OBJ_VTX_FACE, "obj", NULL);
+		print_error(ERR_OBJ_VTX_FACE, "parse_face", NULL);
 	return (count == MAX_VERT_PER_FACE);
 }
