@@ -21,11 +21,12 @@
 	(x, -k²y, z) in local space
 	larger k, the more the normal tilts outwards
 **/
-t_v3f	cone_normal(t_obj *obj, t_v3f point)
+t_v3f	cone_normal(t_obj *obj, t_v3f point, t_result *res)
 {
 	t_v3f	obj_p;
 	float	k_sq;
 
+	(void)res;
 	obj_p = mul_v3_m4x4(point, obj->t.to_obj);
 	if (fabsf(obj_p.y - obj->cone.height) < FLT_SML)
 		return (v3f_norm(mul_dir_m4x4(g_v3f_up, obj->t.to_world)));
@@ -37,13 +38,13 @@ t_v3f	cone_normal(t_obj *obj, t_v3f point)
 			)));
 }
 
-t_v2f	cone_texcoord(t_obj *obj, t_v3f point, t_v2f *weight)
+t_v2f	cone_texcoord(t_obj *obj, t_v3f point, t_result *res)
 {
 	t_v3f	local_point;
 	float	theta;
 	float	y;
 
-	(void)weight;
+	(void)res;
 	local_point = mul_v3_m4x4(point, obj->t.to_obj);
 	theta = atan2f(local_point.z, local_point.x) / TAU;
 	y = (local_point.y / obj->cone.height);
@@ -97,7 +98,7 @@ static int	intersect_cone_body(t_obj *obj, t_ray *ray, t_v2f *t)
 	return (check_cone_body(coeff, ray, obj->cone.height, t));
 }
 
-int	cone_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_v3f *scalar)
+int	cone_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_result *res)
 {
 	t_ray	l_ray;
 
@@ -105,6 +106,6 @@ int	cone_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_v3f *scalar)
 	l_ray.direction = mul_dir_m4x4(ray->direction, obj->t.to_obj);
 	if ((intersect_cone_body(obj, &l_ray, &t) | intersect_disc(
 				obj->cone.radius, obj->cone.height, &l_ray, &t)) == 1)
-		return (scalar->x = t.y, 1);
+		return (res->t = t.y, 1);
 	return (0);
 }

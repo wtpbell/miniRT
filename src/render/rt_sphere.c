@@ -38,8 +38,9 @@ bool	solve_quadratic(t_v3f *abc, float *x0, float *x1)
 	return (true);
 }
 
-t_v3f	sphere_normal(t_obj *obj, t_v3f point)
+t_v3f	sphere_normal(t_obj *obj, t_v3f point, t_result *res)
 {
+	(void)res;
 	return (v3f_norm(v3f_sub(point, obj->t.pos)));
 }
 
@@ -57,14 +58,14 @@ t_v3f	sphere_normal(t_obj *obj, t_v3f point)
 	By convention the z-axis is consider the up axis, but in our case it would
 	be the y-axis
 */
-t_v2f	sphere_texcoord(t_obj *obj, t_v3f world_point, t_v2f *weight)
+t_v2f	sphere_texcoord(t_obj *obj, t_v3f world_point, t_result *res)
 {
 	t_v3f	local_point;
 	float	theta;
 	float	phi;
 	float	r;
 
-	(void)weight;
+	(void)res;
 	local_point = v3f_sub(world_point, obj->t.pos);
 	r = v3f_mag(local_point);
 	theta = atan2f(local_point.z, local_point.x);
@@ -74,7 +75,7 @@ t_v2f	sphere_texcoord(t_obj *obj, t_v3f world_point, t_v2f *weight)
 	return (init_v2f(theta, phi));
 }
 
-int	sphere_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_v3f *scalar)
+int	sphere_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_result *res)
 {
 	t_v3f		oc;
 	t_v3f		abc;
@@ -95,6 +96,6 @@ int	sphere_intersect(t_obj *obj, t_ray *ray, t_v2f t, t_v3f *scalar)
 			return (0);
 		t0 = t1;
 	}
-	scalar->x = t0;
+	res->t = t0;
 	return (t0 < t.y);
 }

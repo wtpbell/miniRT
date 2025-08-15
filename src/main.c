@@ -12,14 +12,15 @@
 
 #include "ui.h"
 
-static bool	valid_file_format(const char *file)
+bool	valid_file_format(const char *file, const char *ext)
 {
 	const size_t	len = ft_strlen(file);
+	const size_t	ext_len = ft_strlen(ext);
 
-	if (len < 3)
+	if (len < ext_len)
 		return (false);
-	file += len - 3;
-	return (ft_strncmp(file, ".rt", 3) == 0);
+	file += len - ext_len;
+	return (ft_strncmp(file, ext, 3) == 0);
 }
 
 static bool	valid_input(int argc, char **argv)
@@ -29,7 +30,7 @@ static bool	valid_input(int argc, char **argv)
 		print_error(ERR_NUM_ARGS, "input", NULL);
 		return (false);
 	}
-	if (!valid_file_format(argv[1]))
+	if (!valid_file_format(argv[1], ".rt"))
 	{
 		print_error(ERR_FILE_FORMAT, "format", argv[1]);
 		return (false);
@@ -42,6 +43,7 @@ static void	init_scene_and_vector(t_scene *scene)
 	ft_bzero(scene, sizeof(t_scene));
 	if (!vector_init(&scene->objects, 8) || !vector_init(&scene->lights, 8)
 		|| !vector_init(&scene->shared_materials, 8)
+		|| !vector_init(&scene->shared_mesh, 8)
 		|| !create_default_materials(&scene->shared_materials))
 	{
 		perror("init_scene_and_vector");

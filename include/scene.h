@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   scene.h                                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/14 19:00:36 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/15 12:09:27 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ enum e_object_type
 	OBJ_CYLINDER,
 	OBJ_CONE,
 	OBJ_PLANE,
-	OBJ_TRIANGLE
+	OBJ_TRIANGLE,
+	OBJ_MESH
 };
 
 enum e_light_type
@@ -49,6 +50,13 @@ typedef enum e_scene_flags
 	SCENE_POINT_LIGHT = 1 << 1,
 	SCENE_CAMERA = 1 << 3,
 }	t_scene_flags;
+
+typedef struct s_bvh_node
+{
+	t_aabb		box;
+	uint32_t	left;
+	uint32_t	prim_count;
+}	t_bhv_node;
 
 struct s_transform
 {
@@ -113,6 +121,18 @@ struct s_triangle
 	t_v3f	vt0;
 	t_v3f	vt1;
 	t_v3f	vt2;
+	t_v3f	vn0;
+	t_v3f	vn1;
+	t_v3f	vn2;
+	t_v3f	centroid;
+};
+
+struct s_mesh
+{
+	char		*obj_path;
+	t_bhv_node	*bvh;
+	int			tri_count;
+	t_tri		*triangles;
 };
 
 struct s_light
@@ -140,6 +160,7 @@ struct s_object
 		t_cy	cy;
 		t_tri	tri;
 		t_cone	cone;
+		t_mesh	mesh;
 	};
 	t_obj_type	type;
 	t_intsct	intersect;
@@ -159,6 +180,7 @@ struct s_scene
 	t_vector	objects;
 	t_vector	lights;
 	t_vector	shared_materials;
+	t_vector	shared_mesh;
 	t_cam		camera;
 	int			scene_flags;
 };
