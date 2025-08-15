@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/01 08:59:47 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/15 14:58:11 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/15 19:02:58 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 void	print_flt(t_val real, const char *name)
 {
-	printf("%s: %f\n", name, *real.f);
+	printf("%s: %.12f\n", name, *real.f);
 }
 
 void	print_int(t_val real, const char *name)
@@ -228,7 +228,7 @@ void	perlin_display(void)
 	};
 
 	init_perlin();
-	mlx = mlx_init(1600, 900, "miniRT", false);
+	mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
 	display = (t_pdisplay) {
 		mlx, &data, NULL, init_v3f(0.0f, 0.0f, 16.0f), 0, -1, NULL, 
 		{{1.0f, -1.0f}}, (t_v2i){{1, -1}}, {"pink", pink_noise}
