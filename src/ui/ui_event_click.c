@@ -19,14 +19,14 @@ void	update_value_label(t_ui_vbtn *btn, t_ui_context *ctx)
 {
 	const char	*value_str;
 	t_ui_label	*label_data;
-	static char	fallback_buf[VALUE_STR_LEN];
+	char		fallback_buf[VALUE_STR_LEN];
 	char		*new_text;
 
 	if (btn->formatter)
 		value_str = btn->formatter(*btn->value);
 	else
 	{
-		rt_snprintf(fallback_buf, sizeof(fallback_buf), "%f", *btn->value);
+		rt_snprintf(fallback_buf, VALUE_STR_LEN, "%f", *btn->value);
 		value_str = fallback_buf;
 	}
 	label_data = (t_ui_label *)btn->value_label->data;
@@ -106,7 +106,6 @@ void	render_button_clicked(t_ui_element *button, void *param)
 		game->needs_redraw = true;
 		update_camera_view(&game->scene->camera);
 		ui_mark_dirty(ctx);
-		printf("Re-render triggered!\n");
 	}
 }
 
