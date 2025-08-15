@@ -119,10 +119,7 @@ t_ui_element	*create_header(t_ui_context *ctx, const char *title,
 	{
 		title_label = create_label(ctx, title, init_v2f(10, 10), UI_TEXT_COLOR);
 		if (!title_label)
-		{
-			destroy_ui_element(header);
-			return (NULL);
-		}
+			return (destroy_ui_element(header), NULL);
 		title_label->pos = init_v2f(10, (size.y - UI_FONT_HEIGHT) / 2);
 		attach_child(header, title_label);
 	}
