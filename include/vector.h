@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/14 13:28:18 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 10:51:52 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,19 @@ extern const t_v3f	g_v3f_left;
 extern const t_v2f	g_v2f_zero;
 extern const t_v2f	g_v2f_one;
 
+/* v2 */
+
+t_v2i	init_v2i(int x, int y);
 t_v2f	init_v2f(float x, float y);
 t_v2f	v2f_rotate(t_v2f v, float angle);
+t_v2f	v2f_scale(t_v2f v, float f);
+t_v2f	v2f_mul(t_v2f a, t_v2f b);
+t_v2f	v2f_mul_v3f(t_v2f a, t_v3f b);
+t_v2f	v2f_fract(t_v2f v);
+float	v2f_mag(t_v2f v);
+
+/* v3 */
+
 t_v3f	init_v3f(float x, float y, float z);
 t_v3f	v3f_add(t_v3f a, t_v3f b);
 t_v3f	v3f_sub(t_v3f a, t_v3f b);
@@ -108,11 +119,7 @@ bool	v3f_equals(t_v3f a, t_v3f b, float epsilon);
 t_v3f	v3f_sub_v2f(t_v3f a, t_v2f b);
 t_v3f	v3f_mul_v2f(t_v3f a, t_v2f b);
 
-t_v2f	v2f_scale(t_v2f v, float f);
-t_v2f	v2f_mul(t_v2f a, t_v2f b);
-t_v2f	v2f_mul_v3f(t_v2f a, t_v3f b);
-t_v2f	v2f_fract(t_v2f v);
-float	v2f_mag(t_v2f v);
+/* v4 */
 
 t_v4f	init_v4f(float x, float y, float z, float w);
 

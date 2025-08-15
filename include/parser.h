@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/14 13:27:34 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 10:45:03 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ typedef struct s_obj_file
 
 typedef struct s_vert_ran
 {
-	t_v2f	comp; // TODO: Change comp to v2i, once perlin is merged
+	t_v2i	comp;
 	t_v2f	lim;
 	t_v4f	def;
 }	t_vert_ran;

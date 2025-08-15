@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:35:46 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/07 17:50:31 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 10:52:41 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,14 @@ const t_v2f	g_v2f_one = (t_v2f){.x = 1.0f, .y = 1.0f};
 t_v2f	init_v2f(float x, float y)
 {
 	return ((t_v2f){
+		.x = x,
+		.y = y
+	});
+}
+
+t_v2i	init_v2i(int x, int y)
+{
+	return ((t_v2i){
 		.x = x,
 		.y = y
 	});

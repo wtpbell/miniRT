@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/07 18:06:33 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/08 17:09:26 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 10:45:13 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ bool	parse_vertex(char *str, t_vector *v, const t_vert_ran *ran)
 	t_v3f	point;
 
 	count = to_v3f(&point, str, ran->lim);
-	if (count < (int)ran->comp.x || count > (int)ran->comp.y)
+	if (count < ran->comp.x || count > ran->comp.y)
 		return (print_error(ERR_OBJ_VERT_COMP, "obj", NULL), false);
 	while (count < (int)ran->comp.y)
 	{

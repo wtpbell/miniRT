@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/07 18:35:30 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/12 17:07:59 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 10:49:41 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 static bool	parse_line(char *line, t_obj_file *obj_file)
 {
 	const t_vert_ran	ran[3] = {
-		(t_vert_ran){init_v2f(3, 3), init_v2f(MIN_POS, MAX_POS),
+		(t_vert_ran){init_v2i(3, 3), init_v2f(MIN_POS, MAX_POS),
 		init_v4f(0.0f, 0.0f, 0.0f, 1.0f)},
-		(t_vert_ran){init_v2f(1, 3), init_v2f(0.0f, 1.0f),
+		(t_vert_ran){init_v2i(1, 3), init_v2f(0.0f, 1.0f),
 		init_v4f(1.0f, 1.0f, 1.0f, 1.0f)},
-		(t_vert_ran){init_v2f(3, 3), init_v2f(MIN_POS, MAX_POS),
+		(t_vert_ran){init_v2i(3, 3), init_v2f(MIN_POS, MAX_POS),
 		init_v4f(0.0f, 0.0f, 0.0f, 0.0f)}};
 	char				*token;
 	char				*saveptr;
