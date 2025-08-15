@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/14 17:28:23 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/14 18:54:58 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 14:50:52 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct s_load_screen
 
 t_frame	*init_str_frame(const char *str)
 {
-	mlx_put_string
+	// mlx_put_string
 	return (NULL);
 }
 
@@ -55,8 +55,8 @@ void	update_load_screen(t_load_screen *screen, float delta)
 	uint32_t	copy_width;
 
 	ani = screen->ani;
-	ani->time += delta;
-	next_idx = (int)floorf((ani->time / ani->fps)) % ani->frame_count;
+	ani->time += delta * ani->fps;
+	next_idx = (int)ani->time % ani->frame_count;
 	if (next_idx != ani->idx)
 	{
 		ft_bzero(screen->background, screen->background->width * screen->background->height);
