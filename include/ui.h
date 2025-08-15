@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui.h                                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/14 23:35:29 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui.h                                               :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/15 11:43:28 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@
 
 # define UI_LABEL_WIDTH_RATIO 0.3f
 # define UI_HEADER_HEIGHT 30
-# define UI_SECTION_PADDING 10
-# define UI_PANEL_PADDING 0
 # define UI_PADDING 4
 # define UI_CHAR_WIDTH 8
 # define UI_CHAR_HEIGHT 15
@@ -76,8 +74,6 @@ typedef struct s_ui_style
 	uint32_t	bg_color;
 	uint32_t	border_color;
 	uint32_t	text_color;
-	float		padding;
-	bool		visible;
 }	t_ui_style;
 
 typedef struct s_ui_label

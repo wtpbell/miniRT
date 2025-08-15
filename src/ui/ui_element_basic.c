@@ -35,8 +35,6 @@ static t_ui_element	*create_ui_element(t_ui_type type, t_v2f pos, t_v2f size)
 		.bg_color = UI_PANEL_BG_COLOR,
 		.border_color = UI_TRANSPARENT,
 		.text_color = UI_TEXT_COLOR,
-		.padding = UI_PANEL_PADDING,
-		.visible = true
 	};
 	if (type < (sizeof(g_default_stylers) / sizeof(g_default_stylers[0]))
 		&& g_default_stylers[type] != NULL)

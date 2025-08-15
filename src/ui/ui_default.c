@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_default.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/25 16:25:35 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/14 21:27:50 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_default.c                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/25 16:25:35 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/15 11:40:07 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ void	default_panel(t_ui_element *panel, t_v2f pos, t_v2f size)
 		.bg_color = UI_PANEL_BG_COLOR,
 		.text_color = UI_TEXT_COLOR,
 		.border_color = UI_BORDER_COLOR,
-		.padding = UI_PANEL_PADDING,
-		.visible = true,
 	};
 }
 
@@ -50,8 +48,6 @@ void	default_label(t_ui_element *label, t_v2f pos, t_v2f size)
 		.bg_color = UI_TRANSPARENT,
 		.border_color = UI_TRANSPARENT,
 		.text_color = UI_TEXT_COLOR,
-		.padding = UI_PANEL_PADDING,
-		.visible = true,
 	};
 }
 
@@ -72,8 +68,6 @@ void	default_header(t_ui_element *header, t_v2f pos, t_v2f size)
 		.bg_color = UI_HEADER_COLOR,
 		.text_color = UI_TEXT_COLOR,
 		.border_color = UI_BORDER_COLOR,
-		.padding = UI_SECTION_PADDING,
-		.visible = true
 	};
 }
 
@@ -93,8 +87,6 @@ void	default_button(t_ui_element *button, t_v2f pos, t_v2f size)
 		.bg_color = UI_BUTTON_COLOR,
 		.text_color = UI_TEXT_COLOR,
 		.border_color = UI_BUTTON_BORDER_COLOR,
-		.padding = 4,
-		.visible = true,
 	};
 }
 
@@ -114,7 +106,5 @@ void	default_section(t_ui_element *section, t_v2f pos, t_v2f size)
 		.bg_color = UI_SECTION_COLOR,
 		.text_color = UI_TEXT_COLOR,
 		.border_color = UI_BORDER_COLOR,
-		.padding = UI_SECTION_PADDING,
-		.visible = true,
 	};
 }
