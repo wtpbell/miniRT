@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   rt_cylinder.c                                      :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/17 11:59:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/04 18:05:35 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 12:11:58 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,26 @@ static int	check_body(t_v3f coeff, t_ray *ray, float h, t_v2f *t)
 	t_v3f	p;
 	float	t0;
 	float	t1;
+	float	roots[2];
+	int		i;
 
 	if (!solve_quadratic(&coeff, &t0, &t1))
 		return (0);
-	if (t0 > t->x && t0 < t->y)
+	roots[0] = t0;
+	roots[1] = t1;
+	i = 0;
+	while (i < 2)
 	{
-		p = v3f_add(ray->origin, v3f_scale(ray->direction, t0));
-		if (p.y >= -h * .5f && p.y <= h * .5f)
-			return (t->y = t0, 1);
+		if (roots[i] > t->x && roots[i] < t->y)
+		{
+			p = v3f_add(ray->origin, v3f_scale(ray->direction, roots[i]));
+			if (p.y >= -h * 0.5f && p.y <= h * 0.5f)
+			{
+				t->y = roots[i];
+				return (1);
+			}
+		}
+		i++;
 	}
 	return (0);
 }

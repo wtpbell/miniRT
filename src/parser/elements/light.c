@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   light.c                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/14 12:05:04 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/24 10:29:46 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   light.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/14 12:05:04 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/15 00:33:57 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,20 @@ bool	parse_ambient_light(char **tokens, t_scene *scene)
 bool	parse_point_light(char **tokens, t_scene *scene)
 {
 	t_light	*point_light;
+	t_v3f	pos;
 
 	point_light = ft_calloc(1, sizeof(t_light));
 	if (!point_light)
 		return (perror("parse_point_light"), false);
-	if (!parse_v3f(&point_light->pos, tokens[1])
-		|| !parse_light_ratio(&point_light->intensity, tokens[2])
+	if (!parse_v3f(&pos, tokens[1]))
+		return (free(point_light), false);
+	if (pos.x > MAX_POS || pos.x < MIN_POS
+		|| pos.y > MAX_POS || pos.y < MIN_POS
+		|| pos.z > MAX_POS || pos.z < MIN_POS)
+		return (free(point_light), print_error(ERR_RANGE,
+				"Point light position out of bounds", tokens[1]), false);
+	point_light->pos = pos;
+	if (!parse_light_ratio(&point_light->intensity, tokens[2])
 		|| !parse_col(&point_light->color, tokens[3]))
 		return (free(point_light), false);
 	point_light->type = LIGHT_POINT;

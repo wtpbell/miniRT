@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   parser.h                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/15 14:35:59 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 14:41:35 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # include "rt_math.h"
 
 # define MAX_POS			10000.0f
-# define MIN_POS			-MAX_POS
+# define MIN_POS			-10000.0f
 # define MAX_RADIUS			1000.0f
 # define MIN_RADIUS			0.0f
 # define MAX_HEIGHT			1000.0f
@@ -144,6 +144,14 @@ typedef struct s_vert_ran
 	t_v4f	def;
 }	t_vert_ran;
 
+typedef struct s_parse_state
+{
+	float	*f;
+	float	*fact;
+	int		*digit_count;
+	bool	has_significant_digit;
+}	t_parse_state;
+
 /* ---------------------Core--------------------- */
 // file_parser.c
 bool		parse_map(t_scene *scene, const char *file);
@@ -157,6 +165,7 @@ size_t		rt_count_occ(const char *str, char c);
 
 /* ---------------------Elements--------------------- */
 // camera.c
+void		camera_init(t_cam *cam, t_v3f pos, t_v3f dir, float fov);
 bool		parse_camera(char **tokens, t_scene *scene);
 
 // light.c
@@ -234,6 +243,7 @@ void		print_error(t_error type, const char *ctx, const char *value);
 // cleanup.c
 void		free_tokens(char **tokens);
 void		cleanup_gnl(char *line, int fd);
+void		cleanup_scene(t_scene *scene);
 
 // field.c
 t_field		init_field(const char *name, void *mem, t_f_type type, t_v2f lim);

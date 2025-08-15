@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:55:45 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/12 17:07:07 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 12:09:27 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@
 # include "material.h"
 # include "color.h"
 # include "material.h"
+
+# define WIDTH 1600
+# define HEIGHT 900
 
 enum e_object_type
 {

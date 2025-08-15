@@ -6,3 +6,6 @@ leak:operator new
 leak:__interceptor_calloc
 leak:__interceptor_malloc
 leak:libz3
+leak:libicuuc
+leak:__interceptor_realloc
+leak:__interceptor_aligned_alloc
