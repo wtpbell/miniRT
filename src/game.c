@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/15 11:31:53 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 15:51:51 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ int	game(t_scene *scene, t_sample *sample)
 {
 	t_game	game;
 
+	init_perlin();
 	ft_bzero(&game, sizeof(t_game));
 	game.scene = scene;
 	game.mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
