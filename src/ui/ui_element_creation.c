@@ -55,7 +55,7 @@ t_ui_element	*create_labeled_control(t_vbtn_config *cfg,
 	cfg->size = init_v2f(control_width, UI_ROW_HEIGHT);
 	value_btn = create_value_button(cfg);
 	if (!value_btn)
-		return (destroy_ui_element(container), NULL);
+		return (destroy_ui_element(label), destroy_ui_element(container), NULL);
 	attach_child(container, value_btn);
 	return (container);
 }
