@@ -3,20 +3,15 @@
 /*                                                        ::::::::            */
 /*   v2f.c                                              :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/30 20:06:59 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/01 09:19:29 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 14:23:34 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vector.h"
 #include "rt_math.h"
-
-t_v2f	v2f_add(t_v2f a, t_v2f b)
-{
-	return (init_v2f(a.x + b.x, a.y + b.y));
-}
 
 t_v2f	v2f_scale(t_v2f v, float f)
 {
@@ -44,4 +39,9 @@ t_v2f	v2f_rotate(t_v2f v, float angle)
 	return (init_v2f(v.x * cosf(angle) - v.y * sinf(angle),
 			v.y * cosf(angle) + v.x * sinf(angle))
 	);
+}
+
+t_v2f	v2f_add(t_v2f a, t_v2f b)
+{
+	return (init_v2f(a.x + b.x, a.y + b.y));
 }

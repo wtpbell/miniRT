@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   rt_debug.h                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/15 10:18:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/13 15:32:36 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 14:20:02 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

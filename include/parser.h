@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   parser.h                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/13 15:32:10 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 14:19:52 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include "rt_math.h"
 
 # define MAX_POS			10000.0f
+# define MIN_POS			-10000.0f
 # define MAX_RADIUS			1000.0f
 # define MIN_RADIUS			0.0f
 # define MAX_HEIGHT			1000.0f
@@ -118,6 +119,14 @@ typedef struct s_element
 	t_parser		parse_fn;
 }	t_ele;
 
+typedef struct s_parse_state
+{
+	float	*f;
+	float	*fact;
+	int		*digit_count;
+	bool	has_significant_digit;
+}	t_parse_state;
+
 /* ---------------------Core--------------------- */
 // file_parser.c
 bool		parse_map(t_scene *scene, const char *file);
@@ -127,6 +136,7 @@ t_parser	element_parser(char **tokens, t_scene *scene, const char *line);
 
 /* ---------------------Elements--------------------- */
 // camera.c
+void		camera_init(t_cam *cam, t_v3f pos, t_v3f dir, float fov);
 bool		parse_camera(char **tokens, t_scene *scene);
 
 // light.c

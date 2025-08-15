@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   color.h                                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:16:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/18 17:54:50 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/08 16:27:02 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,13 @@
 
 # include "vector.h"
 # include <stdint.h>
+
+# define C_RED		0xFF0000FF
+# define C_GREEN	0x00FF00FF
+# define C_BLUE		0x0000FFFF
+# define C_WHITE	0xFFFFFFFF
+# define C_BLACK	0x000000FF
+# define C_TRANS	UI_TRANSPARENT
 
 typedef uint32_t	t_col32;
 

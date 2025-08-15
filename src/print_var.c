@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   print_var.c                                        :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 09:34:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/30 15:21:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 14:21:40 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

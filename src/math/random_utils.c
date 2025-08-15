@@ -14,7 +14,7 @@
 #include <stdint.h>
 #include "rt_thread.h"
 
-static _Thread_local uint32_t g_state;
+static _Thread_local uint32_t	g_state;
 
 void	seed_rand(uint32_t seed)
 {

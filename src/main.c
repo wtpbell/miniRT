@@ -1,19 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/08 18:21:05 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/13 16:33:39 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/08 18:21:05 by jboon             #+#    #+#             */
+/*   Updated: 2025/07/23 21:20:00 by bewong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
-#include "minirt.h"
-
-void	perlin_display(void);
+#include "ui.h"
+#include "perlin_display.h"
 
 static bool	valid_file_format(const char *file)
 {
@@ -53,9 +51,16 @@ static void	init_scene_and_vector(t_scene *scene)
 	}
 }
 
+static void	init_sample(t_sample *sample)
+{
+	sample->max_depth = 1.0f;
+	sample->sample_pxl = 2.0f;
+}
+
 int	main(int argc, char **argv)
 {
-	t_scene	scene;
+	t_scene		scene;
+	t_sample	*sample;
 
 	if (1)
 	{
@@ -71,7 +76,12 @@ int	main(int argc, char **argv)
 		return (print_error(ERR_PARSE_FAIL, "map", argv[1]), EXIT_FAILURE);
 	else if (!validate_scene(&scene))
 		return (cleanup_scene(&scene), EXIT_FAILURE);
-	game(&scene);
+	sample = ft_calloc(1, sizeof(t_sample));
+	if (!sample)
+		return (cleanup_scene(&scene), EXIT_FAILURE);
+	init_sample(sample);
+	game(&scene, sample);
 	cleanup_scene(&scene);
+	free(sample);
 	return (EXIT_SUCCESS);
 }

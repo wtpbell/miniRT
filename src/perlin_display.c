@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/01 08:59:47 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/13 16:37:18 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 14:58:11 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "random.h"
 #include "rt_math.h"
 #include "minirt.h"
+#include "game.h"
 
 void	print_flt(t_val real, const char *name)
 {
@@ -181,33 +182,33 @@ void	pick_pattern(t_pdisplay *display, mlx_key_data_t keydata)
 void	print_perlin(t_perlin *data)
 {
 	printf("p_rate:%.3f p_gain:%.3f p_freq:%.3f p_ampt:%.3f\
- p_layers:%i p_dist:%.3f p_scale:%.3f\n",
+	p_layers:%i p_dist:%.3f p_scale:%.3f\n",
 		data->rate, data->gain, data->freq,
 		data->ampt, data->layers,
 		data->marble.distortion, data->marble.scale
 	);
 }
 
-void	key_hook(mlx_key_data_t keydata, void *param)
-{
-	t_pdisplay	*display;
+// void	key_hook(mlx_key_data_t keydata, void *param)
+// {
+// 	t_pdisplay	*display;
 
-	display = (t_pdisplay *)param;
-	if (keydata.action != MLX_PRESS)
-		return ;
+// 	display = (t_pdisplay *)param;
+// 	if (keydata.action != MLX_PRESS)
+// 		return ;
 
-	if (is_key_press(keydata, MLX_KEY_ESCAPE))
-		return (mlx_close_window(display->mlx));
-	if (is_key_press(keydata, MLX_KEY_SPACE))
-		return (print_perlin(display->p_data));
+// 	if (is_key_press(keydata, MLX_KEY_ESCAPE))
+// 		return (mlx_close_window(display->mlx));
+// 	if (is_key_press(keydata, MLX_KEY_SPACE))
+// 		return (print_perlin(display->p_data));
 
-	navigate(display, keydata);
-	pick_pattern(display, keydata);
-	modify(display, keydata);
-	// display text in window
-	draw_perlin(display->img, display->p_data, display->offset,
-				display->pattern.fp_perlin);
-}
+// 	navigate(display, keydata);
+// 	pick_pattern(display, keydata);
+// 	modify(display, keydata);
+// 	// display text in window
+// 	draw_perlin(display->img, display->p_data, display->offset,
+// 				display->pattern.fp_perlin);
+// }
 
 void	perlin_display(void)
 {

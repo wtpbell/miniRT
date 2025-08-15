@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/01 11:39:26 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/01 13:51:04 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 14:58:21 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,19 @@ typedef struct s_perlin_display
 }	t_pdisplay;
 
 void	perlin_display(void);
-
+void	print_perlin(t_perlin *data);
+void	pick_pattern(t_pdisplay *display, mlx_key_data_t keydata);
+void	modify(t_pdisplay *display, mlx_key_data_t keydata);
+void	navigate(t_pdisplay *display, mlx_key_data_t keydata);
+void	call_print(t_val_mod *fn);
+void	call_delta(t_val_mod *fn);
+void	draw_perlin(mlx_image_t *img, t_perlin *data, t_v3f offset, t_fp_perlin fp_perlin);
+bool	init_ui(t_pdisplay	*display, t_perlin	*data);
+void	half_flt(t_val real, t_val ctx);
+void	double_flt(t_val real, t_val ctx);
+void	delta_int(t_val real, t_val delta);
+void	delta_flt(t_val real, t_val delta);
+void	print_int(t_val real, const char *name);
+void	print_flt(t_val real, const char *name);
+bool	is_key_press(mlx_key_data_t keydata, keys_t key);
 #endif

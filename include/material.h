@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   material.h                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/13 15:31:59 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 14:19:36 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

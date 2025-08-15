@@ -6,25 +6,22 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/14 13:57:26 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/14 18:58:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 # define MINIRT_H
 
+# include <stdbool.h>
+# include <stdint.h>
+# include <stddef.h>
 # include "MLX42/MLX42.h"
 # include "scene.h"
 # include "color.h"
 # include "vector.h"
 
-typedef struct s_game
-{
-	mlx_t	*mlx;
-	/* TODO: Add more members here for access during a MLX hook */
-}	t_game;
-
-int		game(t_scene *scene);
+// Core Functions
 void	quit_on_escape(mlx_key_data_t keydata, void *param);
 void	init_object_matrices(t_obj *obj);
 void	init_obj_transform(t_obj *obj, t_v3f pos, t_v3f dir, t_v3f up);
@@ -47,5 +44,4 @@ t_v3f	cone_normal(t_obj *obj, t_v3f point);
 t_ray	get_ray_with_dof(t_cam *cam, float u, float v);
 void	update_camera_view(t_cam *cam);
 void	generate_uv_vertices(t_tri *tri, t_mat4x4 local);
-
 #endif

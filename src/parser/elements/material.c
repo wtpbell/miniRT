@@ -6,15 +6,12 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/31 22:58:43 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 14:33:03 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-#include "rt_math.h"
-#include "scene.h"
 #include "material.h"
-#include "libft.h"
 
 #define N 4
 

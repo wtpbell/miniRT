@@ -3,27 +3,27 @@
 /*                                                        ::::::::            */
 /*   render.c                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/13 15:34:07 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 14:21:02 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdint.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "MLX42/MLX42.h"
 #include "light.h"
 #include "material.h"
+#include "minirt.h"
 #include "random.h"
 #include "ray.h"
 #include "rt_math.h"
 #include "scene.h"
+#include "ui.h"
 #include "rt_thread.h"
-
-#define MAX_DEPTH			8
-#define SAMPLES_PER_PIXEL	24
 
 t_obj	*find_intersection(t_ray *ray, t_scene *scene, t_v3f *t)
 {
@@ -98,17 +98,17 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	return (color);
 }
 
-static t_v3f	sample_pixel(t_scene *scene, float x, float y)
+static t_v3f	sample_pixel(t_scene *scene, t_sample *sample, float x, float y)
 {
-	t_v3f	color;
-	t_ray	ray;
-	t_v2f	uv;
-	t_v2f	jitter;
-	int		i;
+	t_v3f			color;
+	t_ray			ray;
+	t_v2f			uv;
+	t_v2f			jitter;
+	uint32_t		i;
 
 	color = g_v3f_zero;
 	i = 0;
-	while (i < SAMPLES_PER_PIXEL)
+	while (i < sample->sample_pxl)
 	{
 		seed_rand(get_rngstate(x, y, i));
 		jitter.x = frandom_norm_distribution() - 0.5f;
@@ -118,10 +118,10 @@ static t_v3f	sample_pixel(t_scene *scene, float x, float y)
 		uv.v = 1.0f - (y + 0.5f + jitter.y)
 			/ (float)(scene->camera.img_plane->height - 1);
 		ray = get_ray_with_dof(&scene->camera, uv.u, uv.v);
-		color = v3f_add(color, trace(&ray, scene, MAX_DEPTH));
+		color = v3f_add(color, trace(&ray, scene, sample->max_depth));
 		++i;
 	}
-	return (v3f_scale(color, 1.0f / (float)SAMPLES_PER_PIXEL));
+	return (v3f_scale(color, 1.0f / sample->sample_pxl));
 }
 
 void	*render(void *ctx)
@@ -140,7 +140,8 @@ void	*render(void *ctx)
 		x = 0;
 		while (x < instr->img->width)
 		{
-			color = sample_pixel(instr->scene, (float)x, (float)y);
+			color = sample_pixel(instr->scene, instr->sample,
+					(float)x, (float)y);
 			color = v3f_apply_gamma(color, GAMMA);
 			mlx_put_pixel(instr->img, x, y, v3f_to_col32(color));
 			++x;

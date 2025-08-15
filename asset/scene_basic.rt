@@ -1,9 +1,8 @@
-C	0,0,0	0,0,-1	60
-L	0,10,0			0.2	255,255,255
-A					0.1	255,255,255
+C	0,0,1	0,0,-1	60.0
+L	0,1000,0			0.2	255,255,255
+A					0.10	255,255,255
 
-m_crack		type:normal		shi:50.0	spc:1.0	pat:image	tex:textures/crack.png	bump:textures/crack_bump.png	bump_scale:100.0	sv:0.1	su:0.1
-m_cracksp	type:lambertian	shi:50.0	spc:1.0	pat:image	tex:textures/crack.png	bump:textures/crack_bump.png	bump_scale:20.0		sv:1	su:1
+sp	0,0,10	5	0,255,0			
+pl	0,0,20	0,0,1.0	255,255,255
 
-sp	0,0,10	3		0,255,0			m_cracksp
-pl	0,0,20	0,0,1	255,255,255		m_crack
+
