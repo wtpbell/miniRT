@@ -66,6 +66,8 @@ t_ui	*create_ui(mlx_t *mlx, t_scene *scene, t_sample *sample, void *game_ptr)
 	t_ui_element	*ui_sections;
 	t_v2f			size;
 
+	if (!mlx || !game_ptr)
+		return (NULL);
 	ui = (t_ui *)ft_calloc(1, sizeof(t_ui));
 	if (!ui)
 		return (NULL);
@@ -76,10 +78,15 @@ t_ui	*create_ui(mlx_t *mlx, t_scene *scene, t_sample *sample, void *game_ptr)
 	ui->root = create_panel(ui->context, g_v2f_zero, size);
 	if (!ui->root)
 		return (destroy_ui(ui), NULL);
-	ui_sections = create_ui_section(ui, sample, size);
-	if (!ui_sections)
-		return (destroy_ui(ui), NULL);
-	attach_child(ui->root, ui_sections);
-	ui->context->needs_redraw = true;
+
+	// Only create UI sections if we have a scene
+	if (scene != NULL)
+	{
+		ui_sections = create_ui_section(ui, sample, size);
+		if (!ui_sections)
+			return (destroy_ui(ui), NULL);
+		attach_child(ui->root, ui_sections);
+	}
+
 	return (ui);
 }

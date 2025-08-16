@@ -62,12 +62,11 @@ int	main(int argc, char **argv)
 	t_scene		scene;
 	t_sample	*sample;
 
-	if (1)
+	if (argc == 1)
 	{
 		perlin_display();
 		return (EXIT_SUCCESS);
 	}
-
 	ft_bzero(&scene, sizeof(t_scene));
 	if (!valid_input(argc, argv))
 		return (EXIT_FAILURE);

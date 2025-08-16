@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   game.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/15 14:54:02 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   game.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/16 11:50:39 by jboon             #+#    #+#             */
+/*   Updated: 2025/08/16 21:39:41 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,8 @@ void	cleanup_mlx(t_game *game)
 void	key_hook(mlx_key_data_t keydata, void *param)
 {
 	t_game		*game;
-	t_pdisplay	*display;
 
 	game = (t_game *)param;
-	display = (t_pdisplay *)param;
 	if (keydata.key == MLX_KEY_H && keydata.action == MLX_PRESS)
 	{
 		if (game->ui)
@@ -46,14 +44,6 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 	}
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 		mlx_close_window(game->mlx);
-	if (is_key_press(keydata, MLX_KEY_SPACE))
-		return (print_perlin(display->p_data));
-	navigate(display, keydata);
-	pick_pattern(display, keydata);
-	modify(display, keydata);
-	// display text in window
-	draw_perlin(display->img, display->p_data, display->offset,
-				display->pattern.fp_perlin);
 }
 
 void	mouse_hook(mouse_key_t button, action_t action,

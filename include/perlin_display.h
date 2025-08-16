@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   perlin_display.h                                   :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/08/01 11:39:26 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/15 14:58:21 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   perlin_display.h                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/01 11:39:26 by jboon             #+#    #+#             */
+/*   Updated: 2025/08/16 21:01:50 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@
 # include "MLX42/MLX42.h"
 # include "rt_math.h"
 # include "material.h"
+# include "ui.h"
+
+typedef struct s_param
+{
+	float		*value;
+	t_v2f		range;
+	t_ui_label	*label;
+}t_param;
 
 typedef union u_val
 {
@@ -38,6 +46,8 @@ typedef struct s_perlin_node
 	t_fp_perlin	fp_perlin;
 }	t_perlin_node;
 
+
+
 typedef struct s_perlin_display
 {
 	mlx_t			*mlx;
@@ -50,6 +60,11 @@ typedef struct s_perlin_display
 	t_v2f			fdelta;
 	t_v2i			idelta;
 	t_perlin_node	pattern;
+	t_ui			*ui;
+	t_ui_element	*ui_panel;
+	t_ui_element	*header;
+	t_param			params[10];
+	int				param_count;
 }	t_pdisplay;
 
 void	perlin_display(void);
