@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_core.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 12:53:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/14 22:11:34 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_core.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 12:53:50 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/17 14:25:20 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ static void	attach_canvas_to_window(t_ui_context *ctx)
 	mlx_image_t	*canvas;
 
 	canvas = ctx->canvas;
+	// TODO: canvas has already been set to window, but also the condition will never be true
 	if (canvas->count == 0 && mlx_image_to_window(ctx->mlx, canvas, 0, 0) >= 0)
 	{
+		printf("hi!\n");
 		canvas->instances[0].z = 1000;
 		canvas->instances[0].enabled = true;
 	}

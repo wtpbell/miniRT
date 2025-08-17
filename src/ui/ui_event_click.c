@@ -100,10 +100,10 @@ void	render_button_clicked(t_ui_element *button, void *param)
 	if (!param)
 		return ;
 	ctx = (t_ui_context *)param;
-	game = (t_game *)ctx->game;
-	if (game)
+	if (ctx->game)
 	{
-		game->needs_redraw = true;
+		game = (t_game *)ctx->game;
+		game->state = GS_RENDER;
 		update_camera_view(&game->scene->camera);
 		ui_mark_dirty(ctx);
 	}

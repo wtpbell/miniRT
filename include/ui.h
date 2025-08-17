@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   ui.h                                               :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/15 17:06:43 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/17 13:15:44 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,10 +240,11 @@ void			default_label(t_ui_element *label, t_v2f pos, t_v2f size);
 /* Utility */
 uint32_t		blend_colors(uint32_t bg, uint32_t fg);
 
-typedef struct s_frame
+typedef struct s_sprite
 {
-	mlx_image_t	*sprite;
-}	t_frame;
+	mlx_image_t	*img;
+	t_v2f		anchor;
+}	t_sprite;
 
 typedef struct s_animation
 {
@@ -252,18 +253,33 @@ typedef struct s_animation
 	uint32_t	frame_count;
 	float		fps;
 	float		time;
-	t_frame		*frames;
+	t_sprite	*frames;
 }	t_ani;
+
+typedef struct s_progress_bar
+{
+	t_v2i		pos;
+	t_sprite	text;
+	t_sprite	bg;
+	uint32_t	bg_color;
+	uint32_t	bar_color;
+	t_v2i		size;
+}	t_progress_bar;
 
 typedef struct s_load_screen
 {
-	mlx_image_t	*background;
-	t_ani		ani;
-
+	t_sprite		bg;
+	t_ani			ani;
+	t_progress_bar	pb;
+	t_v2i			ren_prog;
 }	t_load_screen;
 
 t_load_screen	*init_load_screen(mlx_t *mlx);
 void			destroy_load_screen(t_load_screen *load_screen, mlx_t *mlx);
-void			update_load_screen(t_load_screen *screen, float delta);
+void			update_load_screen(t_load_screen *screen, float delta, float progress);
+
+void			draw_frame(mlx_image_t *dst, mlx_image_t *src, t_v2i draw_pos);
+mlx_image_t		*init_str_frame(mlx_t* mlx, const char *str);
+t_v2i			get_sprite_position(t_sprite *parent, t_sprite *child, t_v2i pos);
 
 #endif

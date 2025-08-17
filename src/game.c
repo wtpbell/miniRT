@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   game.c                                             :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/15 16:43:04 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/17 17:04:12 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,13 @@
 #include "rt_math.h"
 #include "game.h"
 
-void	cleanup_mlx(t_game *game)
+static inline bool	is_key_down(mlx_key_data_t keydata, keys_t key)
+{
+	return (keydata.key == key
+		&& (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT));
+}
+
+static void	cleanup_mlx(t_game *game)
 {
 	if (game->ui)
 		destroy_ui(game->ui);
@@ -25,26 +31,27 @@ void	cleanup_mlx(t_game *game)
 		destroy_load_screen(game->load_screen, game->mlx);
 	if (game->mlx)
 		mlx_terminate(game->mlx);
+	if (game->thread_data)
+		cleanup_thread_data(game->thread_data);
 	game->ui = NULL;
 	game->load_screen = NULL;
 	game->mlx = NULL;
+	game->thread_data = NULL;
 }
 
-void	key_hook(mlx_key_data_t keydata, void *param)
+static void	key_hook(mlx_key_data_t keydata, void *param)
 {
 	t_game	*game;
 
 	game = (t_game *)param;
-	if (keydata.key == MLX_KEY_H && keydata.action == MLX_PRESS)
-	{
-		if (game->ui)
+	if (is_key_down(keydata, MLX_KEY_H) && game->ui)
 			toggle_ui_visibility(game->ui);
-	}
-	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
-		mlx_close_window(game->mlx);
+	// TODO: quit.c is not being used
+	if (is_key_down(keydata, MLX_KEY_ESCAPE))
+		game->state = GS_QUIT;
 }
 
-void	mouse_hook(mouse_key_t button, action_t action,
+static void	mouse_hook(mouse_key_t button, action_t action,
 	__attribute__((unused)) modifier_key_t mods, void *param)
 {
 	t_game	*game;
@@ -75,21 +82,38 @@ static bool	cam_init(t_cam *cam, mlx_t *mlx)
 	return (true);
 }
 
+static void	set_game_state(t_game *game, t_game_state state)
+{
+	game->state = state;
+	game->img->enabled = false;
+	game->load_screen->bg.img->enabled = false;
+	game->ui->context->canvas->enabled = false;
+}
+
 int	game(t_scene *scene, t_sample *sample)
 {
 	t_game			game;
 
 	ft_bzero(&game, sizeof(t_game));
+	// game.state = GS_RENDER; // TODO: Setting state should set certain settings
+
+	// GS_RENDER
+	// set render image to disabled
+	// set ui image to disabled
+	// set load image to disabled
+	// set start state to GS_RENDER
+
 	game.scene = scene;
+	game.sample = sample;
+
 	game.mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
 	if (!game.mlx)
 		return (cleanup_mlx(&game), 1);
+
 	if (!cam_init(&scene->camera, game.mlx))
 		return (cleanup_mlx(&game), 1);
 	game.img = scene->camera.img_plane;
-	game.scene = scene;
-	game.needs_redraw = true;
-	game.sample = sample;
+
 	game.ui = create_ui(game.mlx, scene, game.sample, &game);
 	if (!game.ui)
 		return (cleanup_mlx(&game), 1);
@@ -97,14 +121,22 @@ int	game(t_scene *scene, t_sample *sample)
 	game.load_screen = init_load_screen(game.mlx);
 	if (game.load_screen == NULL)
 		return (cleanup_mlx(&game), 1);
-	game.load_screen->background->enabled = true;
+	game.load_screen->bg.img->enabled = true;
+
+	game.thread_data = init_thread_data(THRD_CNT, &game);
+	if (game.thread_data == NULL)
+		return (cleanup_mlx(&game), 1);
 
 	mlx_set_instance_depth(&game.img->instances[0], 0);
+	mlx_set_instance_depth(&game.load_screen->bg.img->instances[0], 1);
+
+	set_game_state(&game, GS_RENDER);
+
 	mlx_loop_hook(game.mlx, render_loop, &game);
 	mlx_key_hook(game.mlx, key_hook, &game);
 	mlx_mouse_hook(game.mlx, mouse_hook, &game);
-	game.needs_redraw = true;
 	mlx_loop(game.mlx);
+	printf("Clean up\n");
 	cleanup_mlx(&game);
 	return (EXIT_SUCCESS);
 }
