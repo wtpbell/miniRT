@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 08:59:47 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/17 13:10:40 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/17 13:26:42 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,31 +300,30 @@ static void	init_params(t_pdisplay *display)
 void add_parameter_controls(t_ui *ui, t_ui_element *parent, t_pdisplay *display)
 {
 	t_ui_element	*control;
-	t_v2f			pos;
-	uint32_t		color;
+	t_v2f			label_pos;
+	t_v2f			value_pos;
 	char			value_str[32];
 	int				i;
 
-	color = UI_TEXT_COLOR;
-	pos = init_v2f(10, UI_HEADER_HEIGHT + UI_LABEL_PADDING);
 	display->param_count = sizeof(g_params) / sizeof(g_params[0]);
 	i = 0;
 	while (i < display->param_count)
 	{
-		control = create_label(ui->context, g_params[i].name, pos, color);
+		label_pos = init_v2f(UI_LABEL_PADDING * 4,
+							UI_HEADER_HEIGHT + UI_LABEL_PADDING + (i * UI_ROW_HEIGHT));
+		value_pos = init_v2f(UI_LABEL_WIDTH + (8 * UI_LABEL_PADDING),
+							UI_HEADER_HEIGHT + UI_LABEL_PADDING + (i * UI_ROW_HEIGHT));
+		control = create_label(ui->context, g_params[i].name, label_pos, UI_TEXT_COLOR);
 		attach_child(parent, control);
-		pos.x += 200;
 		if (i == display->param_count - 1)
 			rt_snprintf(value_str, sizeof(value_str), "%d", *(int *)g_params[i].value);
 		else
 			rt_snprintf(value_str, sizeof(value_str), "%f", *g_params[i].value);
-		control = create_label(ui->context, value_str, pos, color);
+		control = create_label(ui->context, value_str, value_pos, UI_TEXT_COLOR);
 		attach_child(parent, control);
 		display->params[i].value = g_params[i].value;
 		display->params[i].range = g_params[i].range;
 		display->params[i].label = (t_ui_label *)control->data;
-		pos.y += UI_ROW_HEIGHT;
-		pos.x -= 200;
 		++i;
 	}
 }

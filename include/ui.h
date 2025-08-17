@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui.h                                               :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/15 11:43:28 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui.h                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/17 13:22:14 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define UI_FONT_HEIGHT 8
 # define UI_ROW_HEIGHT 30
 # define UI_LABEL_PADDING 10
+# define UI_LABEL_WIDTH 150
 
 /* Base UI Colors */
 # define UI_PANEL_BG_COLOR			0x1A1A1A55
