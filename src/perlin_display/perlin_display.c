@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 08:59:47 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/16 23:17:55 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/17 13:10:40 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 #include "game.h"
 #include "ui.h"
 #include "rt_snprintf.h"
+
+struct s_params g_params[10]; 
 
 void	print_flt(t_val real, const char *name)
 {
@@ -54,47 +56,45 @@ void	half_flt(t_val real, t_val ctx)
 	*real.f *= 0.5f;
 }
 
+static void	*ft_memdup(const void *src, size_t n)
+{
+	void	*dest;
+
+	dest = malloc(n);
+	if (!dest)
+		return (NULL);
+	return (ft_memcpy(dest, src, n));
+}
+
 bool	init_ui(t_pdisplay	*display, t_perlin	*data)
 {
-	int				i;
-	const t_val_mod	m[] = {
-		(t_val_mod){"delta-x", {&display->fdelta.x}, {NULL}, double_flt, print_flt},
-		(t_val_mod){"delta-x", {&display->fdelta.x}, {NULL}, half_flt, print_flt},
-		(t_val_mod){"delta-y", {&display->fdelta.y}, {NULL}, double_flt, print_flt},
-		(t_val_mod){"delta-y", {&display->fdelta.y}, {NULL}, half_flt, print_flt},
-		(t_val_mod){"uni_scale", {&display->offset.z}, {&display->fdelta.x}, delta_flt, print_flt},
-		(t_val_mod){"uni_scale", {&display->offset.z}, {&display->fdelta.y}, delta_flt, print_flt},
-		(t_val_mod){"offset-x", {&display->offset.x}, {&display->fdelta.x}, delta_flt, print_flt},
-		(t_val_mod){"offset-x", {&display->offset.x}, {&display->fdelta.y}, delta_flt, print_flt},
-		(t_val_mod){"offset-y", {&display->offset.y}, {&display->fdelta.x}, delta_flt, print_flt},
-		(t_val_mod){"offset-y", {&display->offset.y}, {&display->fdelta.y}, delta_flt, print_flt},
-		(t_val_mod){"rate", {&data->rate}, {&display->fdelta.x}, delta_flt, print_flt},
-		(t_val_mod){"rate", {&data->rate}, {&display->fdelta.y}, delta_flt, print_flt},
-		(t_val_mod){"gain", {&data->gain}, {&display->fdelta.x}, delta_flt, print_flt},
-		(t_val_mod){"gain", {&data->gain}, {&display->fdelta.y}, delta_flt, print_flt},
-		(t_val_mod){"freq", {&data->freq}, {&display->fdelta.x}, delta_flt, print_flt},
-		(t_val_mod){"freq", {&data->freq}, {&display->fdelta.y}, delta_flt, print_flt},
-		(t_val_mod){"ampt", {&data->ampt}, {&display->fdelta.x}, delta_flt, print_flt},
-		(t_val_mod){"ampt", {&data->ampt}, {&display->fdelta.y}, delta_flt, print_flt},
-		(t_val_mod){"layers", {.i = &data->layers}, {.i = &display->idelta.x}, delta_int, print_int},
-		(t_val_mod){"layers", {.i = &data->layers}, {.i = &display->idelta.y}, delta_int, print_int},
-		(t_val_mod){"dist", {&data->marble.distortion}, {&display->fdelta.x}, delta_flt, print_flt},
-		(t_val_mod){"dist", {&data->marble.distortion}, {&display->fdelta.y}, delta_flt, print_flt},
-		(t_val_mod){"scale", {&data->marble.scale}, {&display->fdelta.x}, delta_flt, print_flt},
-		(t_val_mod){"scale", {&data->marble.scale}, {&display->fdelta.y}, delta_flt, print_flt},
+	const t_val_mod m[] = {
+		{"delta-x", {.f = &display->fdelta.x}, {.f = NULL}, double_flt},
+		{"delta-x", {.f = &display->fdelta.x}, {.f = NULL}, half_flt},
+		{"uni_scale", {.f = &display->offset.z}, {.f = NULL}, double_flt},
+		{"uni_scale", {.f = &display->offset.z}, {.f = NULL}, half_flt},
+		{"offset-x", {.f = &display->offset.x}, {.f = NULL}, double_flt},
+		{"offset-x", {.f = &display->offset.x}, {.f = NULL}, half_flt},
+		{"offset-y", {.f = &display->offset.y}, {.f = NULL}, double_flt},
+		{"offset-y", {.f = &display->offset.y}, {.f = NULL}, half_flt},
+		{"rate", {.f = &data->rate}, {.f = NULL}, double_flt},
+		{"rate", {.f = &data->rate}, {.f = NULL}, half_flt},
+		{"gain", {.f = &data->gain}, {.f = NULL}, double_flt},
+		{"gain", {.f = &data->gain}, {.f = NULL}, half_flt},
+		{"freq", {.f = &data->freq}, {.f = NULL}, double_flt},
+		{"freq", {.f = &data->freq}, {.f = NULL}, half_flt},
+		{"ampt", {.f = &data->ampt}, {.f = NULL}, double_flt},
+		{"ampt", {.f = &data->ampt}, {.f = NULL}, half_flt},
+		{"layers", {.i = &data->layers}, {.i = &display->idelta.x}, delta_int},
+		{"layers", {.i = &data->layers}, {.i = &display->idelta.y}, delta_int},
+		{"dist", {.f = &data->marble.distortion}, {.f = NULL}, double_flt},
+		{"dist", {.f = &data->marble.distortion}, {.f = NULL}, half_flt},
+		{"scale", {.f = &data->marble.scale}, {.f = NULL}, double_flt},
+		{"scale", {.f = &data->marble.scale}, {.f = NULL}, half_flt}
 	};
-	
-	display->size = (sizeof(m) / sizeof(t_val_mod));
-	display->values = ft_calloc(display->size, sizeof(t_val_mod));
-	if (display->values == NULL)
-		return (false);
-	i = 0;
-	while (i < display->size)
-	{
-		display->values[i] = m[i];
-		++i;
-	}
-	return (true);
+	display->size = sizeof(m) / sizeof(t_val_mod);
+	display->values = ft_memdup(m, sizeof(m));
+	return (display->values != NULL);
 }
 
 void	draw_perlin(mlx_image_t *img, t_perlin *data, t_v3f offset, t_fp_perlin fp_perlin)
@@ -117,16 +117,6 @@ void	draw_perlin(mlx_image_t *img, t_perlin *data, t_v3f offset, t_fp_perlin fp_
 bool	is_key_press(mlx_key_data_t keydata, keys_t key)
 {
 	return (keydata.key == key && keydata.action == MLX_PRESS);
-}
-
-void	call_delta(t_val_mod *fn)
-{
-	fn->action(fn->value, fn->ctx);
-}
-
-void	call_print(t_val_mod *fn)
-{
-	fn->print(fn->value, fn->name);
 }
 
 t_ui_element *find_child_by_type(t_ui_element *parent, t_ui_type type)
@@ -177,7 +167,10 @@ void	modify(t_pdisplay *display, mlx_key_data_t keydata)
 	if (display->curr == 9)
 	{
 		value_i = (int *)display->params[display->curr].value;
-		*value_i += (step > 0) ? 1 : -1;
+		if (step > 0)
+			*value_i += 1;
+		else
+			*value_i -= 1;
 		*value_i = fmax(1, fmin(10, *value_i));
 		rt_snprintf(str, sizeof(str), "%d", *value_i);
 	}
@@ -187,7 +180,7 @@ void	modify(t_pdisplay *display, mlx_key_data_t keydata)
 		*value_f += step;
 		range = display->params[display->curr].range;
 		*value_f = fmaxf(range.x, fminf(range.y, *value_f));
-		rt_snprintf(str, sizeof(str), "%.2f", *value_f);
+		rt_snprintf(str, sizeof(str), "%f", *value_f);
 	}
 	if (display->params[display->curr].label)
 	{
@@ -287,6 +280,23 @@ void set_pattern(t_ui_element *btn, void *param)
 	}
 }
 
+static void	init_params(t_pdisplay *display)
+{
+	const struct s_params	params[PARAMS_COUNT] = {
+	{"UNI SCALE", &display->offset.z, init_v2f(0.1f, 100.0f)},
+	{"OFFSET X", &display->offset.x, init_v2f(-100.0f, 100.0f)},
+	{"OFFSET Y", &display->offset.y, init_v2f(-100.0f, 100.0f)},
+	{"RATE", &display->p_data->rate, init_v2f(0.1f, 10.0f)},
+	{"GAIN", &display->p_data->gain, init_v2f(0.1f, 10.0f)},
+	{"FREQ", &display->p_data->freq, init_v2f(0.1f, 10.0f)},
+	{"AMPT", &display->p_data->ampt, init_v2f(0.1f, 10.0f)},
+	{"DISTORTION", &display->p_data->marble.distortion, init_v2f(0.1f, 10.0f)},
+	{"SCALE", &display->p_data->marble.scale, init_v2f(0.1f, 10.0f)},
+	{"LAYERS", (float *)&display->p_data->layers, init_v2f(1, 10)}
+	};
+	ft_memcpy(g_params, params, sizeof(params));
+}
+
 void add_parameter_controls(t_ui *ui, t_ui_element *parent, t_pdisplay *display)
 {
 	t_ui_element	*control;
@@ -294,40 +304,24 @@ void add_parameter_controls(t_ui *ui, t_ui_element *parent, t_pdisplay *display)
 	uint32_t		color;
 	char			value_str[32];
 	int				i;
-	const struct {
-		const char *name;
-		float *value;
-		t_v2f range;
-	} params[] = {
-		{"UNI SCALE", &display->offset.z, init_v2f(0.1f, 100.0f)},
-		{"OFFSET X", &display->offset.x, init_v2f(-100.0f, 100.0f)},
-		{"OFFSET Y", &display->offset.y, init_v2f(-100.0f, 100.0f)},
-		{"RATE", &display->p_data->rate, init_v2f(0.1f, 10.0f)},
-		{"GAIN", &display->p_data->gain, init_v2f(0.1f, 10.0f)},
-		{"FREQ", &display->p_data->freq, init_v2f(0.1f, 10.0f)},
-		{"AMPT", &display->p_data->ampt, init_v2f(0.1f, 10.0f)},
-		{"DISTORTION", &display->p_data->marble.distortion, init_v2f(0.1f, 10.0f)},
-		{"SCALE", &display->p_data->marble.scale, init_v2f(0.1f, 10.0f)},
-		{"LAYERS", (float *)&display->p_data->layers, init_v2f(1, 10)}
-	};
 
 	color = UI_TEXT_COLOR;
 	pos = init_v2f(10, UI_HEADER_HEIGHT + UI_LABEL_PADDING);
-	display->param_count = sizeof(params) / sizeof(params[0]);
+	display->param_count = sizeof(g_params) / sizeof(g_params[0]);
 	i = 0;
 	while (i < display->param_count)
 	{
-		control = create_label(ui->context, params[i].name, pos, color);
+		control = create_label(ui->context, g_params[i].name, pos, color);
 		attach_child(parent, control);
 		pos.x += 200;
 		if (i == display->param_count - 1)
-			rt_snprintf(value_str, sizeof(value_str), "%d", *(int *)params[i].value);
+			rt_snprintf(value_str, sizeof(value_str), "%d", *(int *)g_params[i].value);
 		else
-			rt_snprintf(value_str, sizeof(value_str), "%f", *params[i].value);
+			rt_snprintf(value_str, sizeof(value_str), "%f", *g_params[i].value);
 		control = create_label(ui->context, value_str, pos, color);
 		attach_child(parent, control);
-		display->params[i].value = params[i].value;
-		display->params[i].range = params[i].range;
+		display->params[i].value = g_params[i].value;
+		display->params[i].range = g_params[i].range;
 		display->params[i].label = (t_ui_label *)control->data;
 		pos.y += UI_ROW_HEIGHT;
 		pos.x -= 200;
@@ -344,20 +338,20 @@ void setup_perlin_ui(t_ui *ui, t_pdisplay *display)
 	char				header_text[128];
 	const t_perlin_node	nodes[4] = {
 		{"PINK", pink_noise}, 
-		{"TURB", turbulence_noise}, 
+		{"TURB", turbulence_noise},
 		{"WOOD", wood_noise},
 		{"MARBLE", marble_noise}
 	};
 
-	pos = init_v2f(10, 10);
-	size = init_v2f(UI_PANEL_WIDTH, 500);
+	pos = g_v2f_zero;
+	size = init_v2f(UI_PANEL_WIDTH, UI_ROW_HEIGHT * (PARAMS_COUNT + 1));
 	display->pattern = nodes[0];
 	draw_perlin(display->img, display->p_data, display->offset, nodes[0].fp_perlin);
 	panel = create_panel(ui->context, pos, size);
 	attach_child(ui->root, panel);
 	rt_snprintf(header_text, sizeof(header_text), "PERLIN NOISE: %s", nodes[0].name);
-	section = create_header(ui->context, header_text, 
-		init_v2f(0, 0), init_v2f(size.x, UI_HEADER_HEIGHT));
+	section = create_header(ui->context, header_text,
+		g_v2f_zero, init_v2f(size.x, UI_HEADER_HEIGHT));
 	attach_child(panel, section);
 	display->header = section;
 	display->ui_panel = panel;
@@ -367,21 +361,13 @@ void setup_perlin_ui(t_ui *ui, t_pdisplay *display)
 
 static void perlin_key_hook(mlx_key_data_t keydata, void *param)
 {
-	t_pdisplay *display;
+	t_pdisplay	*display;
 
 	display = (t_pdisplay *)param;
 	if (keydata.action != MLX_PRESS)
 		return ;
 	if (is_key_press(keydata, MLX_KEY_ESCAPE))
 		return (mlx_close_window(display->mlx));
-	if (is_key_press(keydata, MLX_KEY_SPACE))
-		return (print_perlin(display->p_data));
-	if (display->ui && is_key_press(keydata, MLX_KEY_TAB))
-	{
-		display->ui->context->is_visible = !display->ui->context->is_visible;
-		ui_mark_dirty(display->ui->context);
-		return ;
-	}
 	navigate(display, keydata);
 	pick_pattern(display, keydata);
 	modify(display, keydata);
@@ -397,6 +383,21 @@ static void perlin_render_loop(void *param)
 			 ui->context->canvas->width * ui->context->canvas->height * sizeof(uint32_t));
 	render_ui_element(ui->root, ui->context);
 	ui->context->needs_redraw = false;
+}
+
+static void  init_display(mlx_t *mlx, t_pdisplay *display, t_perlin *data)
+{
+	display->mlx = mlx;
+	display->p_data = data;
+	display->img = mlx_new_image(mlx, 512, 512);
+	display->offset = init_v3f(0.0f, 0.0f, 16.0f);
+	display->curr = 0;
+	display->size = -1;
+	display->values = NULL;
+	display->fdelta = init_v2f(1.0f, -1.0f);
+	display->idelta = (t_v2i){{1, -1}};
+	display->pattern = (t_perlin_node){"pink", pink_noise};
+	display->ui = NULL;
 }
 
 void	perlin_display(void)
@@ -419,24 +420,9 @@ void	perlin_display(void)
 	init_perlin();
 	mlx = mlx_init(WIDTH, HEIGHT, "Perlin Noise Display", false);
 	if (!mlx)
-	{
-		perror("perlin_display:mlx");
 		return ;
-	}
-	display = (t_pdisplay) {
-		.mlx = mlx,
-		.p_data = &data,
-		.img = mlx_new_image(mlx, 512, 512),
-		.offset = init_v3f(0.0f, 0.0f, 16.0f),
-		.curr = 0,
-		.size = -1,
-		.values = NULL,
-		.fdelta = init_v2f(1.0f, -1.0f),
-		.idelta = (t_v2i){{1, -1}},
-		.pattern = (t_perlin_node){"pink", pink_noise},
-		.ui = NULL
-	};
-
+	init_display(mlx, &display, &data);
+	init_params(&display);
 	if (!display.img)
 	{
 		perror("perlin_display:display.img");
@@ -447,7 +433,7 @@ void	perlin_display(void)
 	if (!display.ui)
 		perror("perlin_display");
 	else
-		setup_perlin_ui(display.ui, &display);
+	setup_perlin_ui(display.ui, &display);
 	draw_perlin(display.img, &data, display.offset, display.pattern.fp_perlin);
 	mlx_image_to_window(mlx, display.img,
 		(WIDTH - display.img->width) / 2,

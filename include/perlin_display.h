@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 11:39:26 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/16 21:01:50 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/17 13:06:29 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,14 @@
 # include "material.h"
 # include "ui.h"
 
+#define PARAMS_COUNT 10
+
 typedef struct s_param
 {
-	float		*value;
-	t_v2f		range;
-	t_ui_label	*label;
+	float			*value;
+	t_v2f			range;
+	t_ui_label		*label;
+	t_ui_element	*row;
 }t_param;
 
 typedef union u_val
@@ -37,7 +40,6 @@ typedef struct s_value_modifier
 	t_val		value;
 	t_val		ctx;
 	void		(*action)(t_val value, t_val ctx);
-	void		(*print)(t_val value, const char *name);
 }	t_val_mod;
 
 typedef struct s_perlin_node
@@ -45,8 +47,6 @@ typedef struct s_perlin_node
 	const char	*name;
 	t_fp_perlin	fp_perlin;
 }	t_perlin_node;
-
-
 
 typedef struct s_perlin_display
 {
@@ -66,6 +66,15 @@ typedef struct s_perlin_display
 	t_param			params[10];
 	int				param_count;
 }	t_pdisplay;
+
+struct s_params
+{
+	const char	*name;
+	float		*value;
+	t_v2f		range;
+};
+
+extern struct s_params g_params[];
 
 void	perlin_display(void);
 void	print_perlin(t_perlin *data);
