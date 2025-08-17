@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 11:39:26 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/17 14:21:47 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/17 16:17:09 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@
 # include "rt_math.h"
 # include "material.h"
 # include "ui.h"
+# include "rt_snprintf.h"
 
-#define PARAMS_COUNT 12
+# define PARAMS_COUNT 12
 
 typedef struct s_param
 {
@@ -26,7 +27,7 @@ typedef struct s_param
 	t_v2f			range;
 	t_ui_label		*label;
 	t_ui_element	*row;
-}t_param;
+}	t_param;
 
 typedef union u_val
 {
@@ -47,6 +48,8 @@ typedef struct s_perlin_node
 	const char	*name;
 	t_fp_perlin	fp_perlin;
 }	t_perlin_node;
+
+extern const t_perlin_node	g_nodes[4];
 
 typedef struct s_perlin_display
 {
@@ -74,22 +77,35 @@ struct s_params
 	t_v2f		range;
 };
 
-extern struct s_params g_params[];
+extern struct s_params		g_params[PARAMS_COUNT];
 
-void	perlin_display(void);
-void	print_perlin(t_perlin *data);
-void	pick_pattern(t_pdisplay *display, mlx_key_data_t keydata);
-void	modify(t_pdisplay *display, mlx_key_data_t keydata);
-void	navigate(t_pdisplay *display, mlx_key_data_t keydata);
-void	call_print(t_val_mod *fn);
-void	call_delta(t_val_mod *fn);
-void	draw_perlin(mlx_image_t *img, t_perlin *data, t_v3f offset, t_fp_perlin fp_perlin);
-bool	init_ui(t_pdisplay	*display, t_perlin	*data);
-void	half_flt(t_val real, t_val ctx);
-void	double_flt(t_val real, t_val ctx);
-void	delta_int(t_val real, t_val delta);
-void	delta_flt(t_val real, t_val delta);
-void	print_int(t_val real, const char *name);
-void	print_flt(t_val real, const char *name);
-bool	is_key_press(mlx_key_data_t keydata, keys_t key);
+void			perlin_display(void);
+void			print_perlin(t_perlin *data);
+void			modify(t_pdisplay *display, mlx_key_data_t keydata);
+void			call_print(t_val_mod *fn);
+void			call_delta(t_val_mod *fn);
+void			draw_perlin(mlx_image_t *img, t_perlin *data,
+					t_v3f offset, t_fp_perlin fp_perlin);
+bool			init_ui(t_pdisplay	*display, t_perlin	*data);
+bool			is_key_press(mlx_key_data_t keydata, keys_t key);
+
+/* Perlin initiation */
+void			init_params(t_pdisplay *display);
+void			init_display(mlx_t *mlx, t_pdisplay *display, t_perlin *data);
+void			init_perlin_data(t_perlin *data);
+
+/* Math functions */
+void			delta_flt(t_val real, t_val delta);
+void			delta_int(t_val real, t_val delta);
+void			double_flt(t_val real, t_val ctx);
+void			half_flt(t_val real, t_val ctx);
+
+/* Parameter control */
+void			add_parameter_controls(t_ui *ui, t_ui_element *parent,
+					t_pdisplay *display);
+
+/* Perlin util */
+void			*ft_memdup(const void *src, size_t n);
+t_ui_element	*find_child_by_type(t_ui_element *parent, t_ui_type type);
+void			perlin_key_hook(mlx_key_data_t keydata, void *param);
 #endif

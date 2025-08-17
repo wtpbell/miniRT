@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/17 14:26:28 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/17 16:12:09 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@
 # define UI_COLOR_SAMPLE_SECTION	0x2F6BA4FF
 
 /* Active Parameter Colors */
-# define UI_ACTIVE_COLOR			0x2D2D2DCC
-# define UI_ACTIVE_BORDER_COLOR		0x00FF00FF
+# define UI_ACTIVE			0x2D2D2DCC
+# define UI_ACTIVE_BORDER		0x00FF00FF
 
 extern const uint8_t		g_font[256][8];
 
