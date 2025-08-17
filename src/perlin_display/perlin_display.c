@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 08:59:47 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/17 16:08:47 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/17 16:36:04 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,12 @@ static void	setup_ui_and_first_frame(mlx_t *mlx, t_pdisplay *d, t_perlin *p)
 {
 	d->ui = create_ui(mlx, NULL, NULL, d);
 	if (!d->ui)
-		perror("perlin_display");
+	{
+		perror("perlin_display: UI creation failed");
+		free(d->values);
+		mlx_terminate(mlx);
+		return ;
+	}
 	else
 		setup_perlin_ui(d->ui, d);
 	draw_perlin(d->img, p, d->offset, d->pattern.fp_perlin);
