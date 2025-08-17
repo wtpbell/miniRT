@@ -62,6 +62,4 @@ void	modify(t_pdisplay *display, mlx_key_data_t keydata)
 			return ;
 		ui_mark_dirty(display->ui->context);
 	}
-	draw_perlin(display->img, display->p_data,
-		display->offset, display->pattern.fp_perlin);
 }

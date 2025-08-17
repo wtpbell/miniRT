@@ -95,7 +95,6 @@ static void	pick_pattern(t_pdisplay *d, mlx_key_data_t keydata)
 		if (is_key_press(keydata, keys[i]))
 		{
 			d->pattern = g_nodes[i];
-			draw_perlin(d->img, d->p_data, d->offset, g_nodes[i].fp_perlin);
 			update_perlin_header(d);
 			break ;
 		}
@@ -105,16 +104,25 @@ static void	pick_pattern(t_pdisplay *d, mlx_key_data_t keydata)
 
 void	perlin_key_hook(mlx_key_data_t keydata, void *param)
 {
-	t_pdisplay	*display;
+	t_pdisplay		*display;
+	int				prev_curr;
+	t_perlin_node	prev_pattern;
 
 	display = (t_pdisplay *)param;
 	if (keydata.action != MLX_PRESS)
 		return ;
 	if (is_key_press(keydata, MLX_KEY_ESCAPE))
 		return (mlx_close_window(display->mlx));
+	prev_curr = display->curr;
+	prev_pattern = display->pattern;
 	navigate(display, keydata);
 	pick_pattern(display, keydata);
 	modify(display, keydata);
-	draw_perlin(display->img, display->p_data, display->offset,
-		display->pattern.fp_perlin);
+	if (prev_curr != display->curr
+		|| ft_strncmp(prev_pattern.name, display->pattern.name, 16) != 0
+		|| keydata.key == MLX_KEY_UP || keydata.key == MLX_KEY_DOWN)
+	{
+		draw_perlin(display->img, display->p_data, display->offset,
+			display->pattern.fp_perlin);
+	}
 }
