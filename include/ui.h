@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/17 13:22:14 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/17 14:26:28 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 # define UI_FONT_HEIGHT 8
 # define UI_ROW_HEIGHT 30
 # define UI_LABEL_PADDING 10
-# define UI_LABEL_WIDTH 150
+# define UI_LABEL_WIDTH 200
 
 /* Base UI Colors */
 # define UI_PANEL_BG_COLOR			0x1A1A1A55
@@ -57,6 +57,10 @@
 # define UI_COLOR_AMBIENT_SECTION	0xEDC835FF
 # define UI_COLOR_DOF_SECTION		0x00396DFF
 # define UI_COLOR_SAMPLE_SECTION	0x2F6BA4FF
+
+/* Active Parameter Colors */
+# define UI_ACTIVE_COLOR			0x2D2D2DCC
+# define UI_ACTIVE_BORDER_COLOR		0x00FF00FF
 
 extern const uint8_t		g_font[256][8];
 

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 08:59:47 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/17 13:26:42 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/17 14:33:07 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #include "ui.h"
 #include "rt_snprintf.h"
 
-struct s_params g_params[10]; 
+struct s_params g_params[PARAMS_COUNT];
 
 void	print_flt(t_val real, const char *name)
 {
@@ -135,15 +135,35 @@ t_ui_element *find_child_by_type(t_ui_element *parent, t_ui_type type)
 	return (NULL);
 }
 
-void navigate(t_pdisplay *display, mlx_key_data_t keydata)
+void	navigate(t_pdisplay *display, mlx_key_data_t keydata)
 {
+	int	prev_index;
 	int	max_params;
 
+	prev_index = display->curr;
 	max_params = display->param_count - 1;
 	if (keydata.key == MLX_KEY_RIGHT)
 		display->curr = (display->curr + 1) % display->param_count;
 	else if (keydata.key == MLX_KEY_LEFT)
 		display->curr = (display->curr - 1 + display->param_count) % display->param_count;
+	if (prev_index != display->curr)
+	{
+		if (prev_index >= 0 && prev_index < display->param_count
+			&& display->params[prev_index].row)
+		{
+			display->params[prev_index].row->style.bg_color = UI_PANEL_BG_COLOR;
+			display->params[prev_index].row->style.border_color = UI_TRANSPARENT;
+		}
+		if (display->curr >= 0 && display->curr < display->param_count
+			&& display->params[display->curr].row)
+		{
+			display->params[display->curr].row->style.bg_color = UI_ACTIVE_COLOR;
+			display->params[display->curr].row->style.border_color = UI_ACTIVE_BORDER_COLOR;
+		}
+		
+		ui_mark_dirty(display->ui->context);
+	}
+	
 	printf("Current parameter: %d / %d\n", display->curr, max_params);
 }
 
@@ -246,43 +266,12 @@ void	print_perlin(t_perlin *data)
 	);
 }
 
-void set_pattern(t_ui_element *btn, void *param)
-{
-	t_perlin_node	*node;
-	t_pdisplay		*display;
-	t_ui_element	*panel;
-	t_ui_element	*header;
-	t_ui_element	*label;
-	char			header_text[128];
-
-	(void)param;
-	node = ((t_ui_btn *)btn->data)->param;
-	display = ((t_ui_btn *)btn->parent->parent->data)->param;
-	display->pattern = *node;
-	draw_perlin(display->img, display->p_data, display->offset, node->fp_perlin);
-	if (display->ui && display->ui_panel)
-	{
-		panel = display->ui_panel;
-		header = find_child_by_type(panel, UI_HEADER);
-		if (header)
-		{
-			label = find_child_by_type(header, UI_LABEL);
-			if (label)
-			{
-				rt_snprintf(header_text, sizeof(header_text),
-						  "PERLIN NOISE: %s", node->name);
-				if (((t_ui_label *)label->data)->text)
-					free(((t_ui_label *)label->data)->text);
-				((t_ui_label *)label->data)->text = ft_strdup(header_text);
-				ui_mark_dirty(display->ui->context);
-			}
-		}
-	}
-}
-
 static void	init_params(t_pdisplay *display)
 {
+	
 	const struct s_params	params[PARAMS_COUNT] = {
+	{"DELTA X", &display->fdelta.x, init_v2f(-100.0f, 100.0f)},
+	{"DELTA Y", &display->fdelta.y, init_v2f(-100.0f, 100.0f)},
 	{"UNI SCALE", &display->offset.z, init_v2f(0.1f, 100.0f)},
 	{"OFFSET X", &display->offset.x, init_v2f(-100.0f, 100.0f)},
 	{"OFFSET Y", &display->offset.y, init_v2f(-100.0f, 100.0f)},
@@ -290,16 +279,17 @@ static void	init_params(t_pdisplay *display)
 	{"GAIN", &display->p_data->gain, init_v2f(0.1f, 10.0f)},
 	{"FREQ", &display->p_data->freq, init_v2f(0.1f, 10.0f)},
 	{"AMPT", &display->p_data->ampt, init_v2f(0.1f, 10.0f)},
+	{"LAYERS", (float *)&display->p_data->layers, init_v2f(1, 10)},
 	{"DISTORTION", &display->p_data->marble.distortion, init_v2f(0.1f, 10.0f)},
-	{"SCALE", &display->p_data->marble.scale, init_v2f(0.1f, 10.0f)},
-	{"LAYERS", (float *)&display->p_data->layers, init_v2f(1, 10)}
+	{"SCALE", &display->p_data->marble.scale, init_v2f(0.1f, 10.0f)}
 	};
 	ft_memcpy(g_params, params, sizeof(params));
 }
 
-void add_parameter_controls(t_ui *ui, t_ui_element *parent, t_pdisplay *display)
+static void	add_parameter_controls(t_ui *ui, t_ui_element *parent, t_pdisplay *display)
 {
 	t_ui_element	*control;
+	t_ui_element	*row;
 	t_v2f			label_pos;
 	t_v2f			value_pos;
 	char			value_str[32];
@@ -309,44 +299,57 @@ void add_parameter_controls(t_ui *ui, t_ui_element *parent, t_pdisplay *display)
 	i = 0;
 	while (i < display->param_count)
 	{
-		label_pos = init_v2f(UI_LABEL_PADDING * 4,
-							UI_HEADER_HEIGHT + UI_LABEL_PADDING + (i * UI_ROW_HEIGHT));
-		value_pos = init_v2f(UI_LABEL_WIDTH + (8 * UI_LABEL_PADDING),
-							UI_HEADER_HEIGHT + UI_LABEL_PADDING + (i * UI_ROW_HEIGHT));
+		row = create_panel(ui->context, 
+			init_v2f(0, UI_HEADER_HEIGHT + (i * UI_ROW_HEIGHT)),
+			init_v2f(UI_PANEL_WIDTH, UI_ROW_HEIGHT));
+		if (i == 0)
+		{
+			row->style.bg_color = UI_ACTIVE_COLOR;
+			row->style.border_color = UI_ACTIVE_BORDER_COLOR;
+		}
+		else
+		{
+			row->style.bg_color = UI_PANEL_BG_COLOR;
+			row->style.border_color = UI_TRANSPARENT;
+		}
+		attach_child(parent, row);
+		label_pos = init_v2f(UI_LABEL_PADDING * 4, (UI_ROW_HEIGHT - UI_FONT_HEIGHT) / 2);
+		value_pos = init_v2f(UI_LABEL_WIDTH + UI_LABEL_PADDING, (UI_ROW_HEIGHT - UI_FONT_HEIGHT) / 2);
 		control = create_label(ui->context, g_params[i].name, label_pos, UI_TEXT_COLOR);
-		attach_child(parent, control);
-		if (i == display->param_count - 1)
+		attach_child(row, control);
+		if (i == 9)
 			rt_snprintf(value_str, sizeof(value_str), "%d", *(int *)g_params[i].value);
+		else if (i == 0 || i == 1)
+			rt_snprintf(value_str, sizeof(value_str), "%f", *g_params[i].value);
 		else
 			rt_snprintf(value_str, sizeof(value_str), "%f", *g_params[i].value);
 		control = create_label(ui->context, value_str, value_pos, UI_TEXT_COLOR);
-		attach_child(parent, control);
+		attach_child(row, control);
 		display->params[i].value = g_params[i].value;
 		display->params[i].range = g_params[i].range;
 		display->params[i].label = (t_ui_label *)control->data;
+		display->params[i].row = row;
 		++i;
 	}
 }
 
 void setup_perlin_ui(t_ui *ui, t_pdisplay *display)
 {
-	t_ui_element		*panel;
-	t_ui_element		*section;
-	t_v2f				pos;
-	t_v2f				size;
-	char				header_text[128];
 	const t_perlin_node	nodes[4] = {
 		{"PINK", pink_noise}, 
 		{"TURB", turbulence_noise},
 		{"WOOD", wood_noise},
 		{"MARBLE", marble_noise}
 	};
+	t_ui_element		*panel;
+	t_ui_element		*section;
+	t_v2f				size;
+	char				header_text[128];
 
-	pos = g_v2f_zero;
 	size = init_v2f(UI_PANEL_WIDTH, UI_ROW_HEIGHT * (PARAMS_COUNT + 1));
 	display->pattern = nodes[0];
 	draw_perlin(display->img, display->p_data, display->offset, nodes[0].fp_perlin);
-	panel = create_panel(ui->context, pos, size);
+	panel = create_panel(ui->context, g_v2f_zero, size);
 	attach_child(ui->root, panel);
 	rt_snprintf(header_text, sizeof(header_text), "PERLIN NOISE: %s", nodes[0].name);
 	section = create_header(ui->context, header_text,

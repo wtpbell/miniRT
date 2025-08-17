@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 11:39:26 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/17 13:06:29 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/17 14:21:47 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "material.h"
 # include "ui.h"
 
-#define PARAMS_COUNT 10
+#define PARAMS_COUNT 12
 
 typedef struct s_param
 {
@@ -63,7 +63,7 @@ typedef struct s_perlin_display
 	t_ui			*ui;
 	t_ui_element	*ui_panel;
 	t_ui_element	*header;
-	t_param			params[10];
+	t_param			params[PARAMS_COUNT];
 	int				param_count;
 }	t_pdisplay;
 
