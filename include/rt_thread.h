@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/03 17:35:16 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/17 17:04:07 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/17 21:18:11 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ struct s_thread_data
 struct s_pthread_instr
 {
 	int				i;
+	t_thrd_state	state;
 	uint32_t		start_y;
 	uint32_t		end_y;
 	mlx_image_t		*img;
@@ -53,6 +54,9 @@ struct s_pthread_instr
 bool			thread_rendering(t_thread_data *data);
 void			join_threads(t_pthread_instr *instr, int count);
 void			cancel_threads(t_pthread_instr *instr, int count);
+
+/* thread_data.c */
+
 t_thread_data	*init_thread_data(int thread_count, t_game *game);
 void			cleanup_thread_data(t_thread_data *thread_data);
 

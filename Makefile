@@ -1,4 +1,4 @@
-vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/render:src/render:src/ui:src/math/noise:src/rt_snprintf
+vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/render:src/render:src/ui:src/math/noise:src/rt_snprintf:src/threads
 
 NAME		:= miniRT
 CC			:= cc
@@ -23,7 +23,7 @@ SRCS_MAIN  := main.c vector_init.c vector_helper.c vector_operations.c\
 				vec_container.c vec_container_utils.c color.c render.c\
 				rt_math.c range.c matrix.c game.c rt_sphere.c rt_plane.c rt_cylinder.c\
 				color_utils.c random_utils.c rt_light.c rt_dof.c \
-				quit.c rt_triangle.c rt_material.c material_init.c light_utils.c\
+				rt_triangle.c rt_material.c material_init.c light_utils.c\
 				material_utils.c obj_utils.c procedural_texturing.c rt_cone.c\
 				perlin.c random_vector.c matrix_utils.c bump_map.c rt_texture.c v2f.c\
 				vector_core.c matrix_space.c rt_material_utils.c rt_triangle_uv.c\
@@ -33,7 +33,8 @@ SRCS_MAIN  := main.c vector_init.c vector_helper.c vector_operations.c\
 				ui_camera_section.c ui_dof_section.c ui_sample_section.c \
 				ui_cleanup.c ui_layout_utils.c ui_draw.c ui_event_button.c \
 				ui_event_click.c ui_element_basic.c ui_element_creation.c \
-				noise_texturing.c lerp.c v2f_helper.c draw_frame.c loading_screen.c
+				noise_texturing.c lerp.c v2f_helper.c draw_frame.c loading_screen.c\
+				thread_data.c ui_progress_bar.c game_hooks.c 
 SNPRINTF	:= rt_snprintf.c rt_snprintf_str.c rt_snprintf_num.c
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE) $(SNPRINTF)

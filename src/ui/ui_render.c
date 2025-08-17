@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 15:03:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/17 17:05:53 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/17 23:15:21 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ uint32_t	blend_colors(uint32_t bg, uint32_t fg)
 	uint8_t	g;
 	uint8_t	b;
 
+	// move this function to ui_utils
 	// I thought alpha is stored at 0xFF not 0xFF000000
 	alpha = ((fg >> 24) & 0xFF) / 255.0f;
 	inv_alpha = 1.0f - alpha;
@@ -36,6 +37,7 @@ void	render_ui_element(t_ui_element *e, t_ui_context *c)
 {
 	t_ui_element	*child;
 
+	// move this function to ui_core
 	if (!e->visible)
 		return ;
 	e->abs_pos = e->pos;
@@ -56,72 +58,67 @@ void	render_ui_element(t_ui_element *e, t_ui_context *c)
 		child = child->next_sibling;
 }
 
+static void	handle_idle_state(t_game *game)
+{
+	t_ui_context	*ctx;
+
+	if (game->ui && game->ui->context)
+	{
+		ctx = game->ui->context;
+		if (ctx->is_visible && ctx->canvas)
+			render_ui(game->ui);
+	}
+}
+
+static void	handle_render_state(t_game *game)
+{
+	game->load_screen->ren_prog = (t_v2i){.x = 0, .y = game->img->height};
+	ft_memset(game->img->pixels, 0, game->img->width
+		* game->img->height * sizeof(uint32_t));
+	start_time();
+	if (thread_rendering(game->thread_data))
+		set_game_state(game, GS_LOAD);
+	else
+	{
+		write(2, "Failed to create threads! Try again.\n", 38);
+		set_game_state(game, GS_IDLE);
+	}
+}
+
+static void	handle_load_state(t_game *game)
+{
+	float	progress;
+
+	pthread_mutex_lock(game->thread_data->progress_lock);
+	progress = (float)game->load_screen->ren_prog.x
+		/ (float)game->load_screen->ren_prog.y;
+	pthread_mutex_unlock(game->thread_data->progress_lock);
+	update_load_screen(game->load_screen, game->mlx->delta_time, progress);
+	if (progress < 1.0f)
+		return ;
+	join_threads(game->thread_data->threads, game->thread_data->thread_count);
+	end_time();
+	set_game_state(game, GS_IDLE);
+	printf("\n");
+}
+
 void	render_loop(void *param)
 {
-	// TODO: file render_loop.c does not contain the function render_loop
-	t_game			*game;
-	t_ui_context	*ctx;
-	float			progress;
+	t_game	*game;
 
+	// TODO: file render_loop.c does not contain the function render_loop
 	game = (t_game *)param;
 	if (game->state == GS_IDLE)
-	{
-		if (game->ui && game->ui->context)
-		{
-			ctx = game->ui->context;
-			if (ctx->is_visible && ctx->canvas)
-				render_ui(game->ui);
-		}
-	}
+		handle_idle_state(game);
 	else if (game->state == GS_RENDER)
-	{
-		game->load_screen->ren_prog = (t_v2i){.x = 0, .y = game->img->height};
-		ft_memset(game->img->pixels, 0, game->img->width
-			* game->img->height * sizeof(uint32_t));
-		
-		start_time();
-		if (thread_rendering(game->thread_data))
-		{
-			game->state = GS_LOAD;
-			game->img->enabled = false;
-			game->ui->context->canvas->enabled = false;
-			game->load_screen->bg.img->enabled = true;
-		}
-		else
-		{
-			write(2, "Failed to create threads! Try again.\n", 38);
-			game->state = GS_IDLE;
-		}
-	}
+		handle_render_state(game);
 	else if (game->state == GS_LOAD)
-	{
-		pthread_mutex_lock(game->thread_data->progress_lock);
-		progress = (float)game->load_screen->ren_prog.x / (float)game->load_screen->ren_prog.y;
-		pthread_mutex_unlock(game->thread_data->progress_lock);
-
-		printf("\x1b[1F\x1b[2K");
-		printf("RENDERING: %.2f%%\n", progress * 100.0f);
-
-		update_load_screen(game->load_screen, game->mlx->delta_time, progress);
-
-		if (progress >= 1.0f)
-		{
-			join_threads(game->thread_data->threads, game->thread_data->thread_count);
-			
-			game->state = GS_IDLE;
-			game->img->enabled = true;
-			game->ui->context->canvas->enabled = true;
-			game->load_screen->bg.img->enabled = false;
-			end_time();
-			printf("\n");
-		}
-	}
+		handle_load_state(game);
 	else if (game->state == GS_QUIT)
 	{
 		printf("Exiting...\n");
-		// TODO: Should not cancel if threads have already been joined (happens when rendering is complete)
-		cancel_threads(game->thread_data->threads, game->thread_data->thread_count);
-		printf("Closing window\n");
+		cancel_threads(game->thread_data->threads,
+			game->thread_data->thread_count);
 		mlx_close_window(game->mlx);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/17 13:09:17 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/17 23:06:52 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ void	*render(void *ctx)
 		while (x < instr->img->width)
 		{
 			color = sample_pixel(instr->shared_data->scene,
-				instr->shared_data->sample, (float)x, (float)y);
+					instr->shared_data->sample, (float)x, (float)y);
 			color = v3f_apply_gamma(color, GAMMA);
 			mlx_put_pixel(instr->img, x, y, v3f_to_col32(color));
 			++x;

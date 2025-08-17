@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/17 13:15:44 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/17 23:28:07 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,40 @@ struct s_ui_sections
 	t_ui_element	*(*create_func)(t_section_config*);
 };
 
+typedef struct s_sprite
+{
+	mlx_image_t	*img;
+	t_v2f		anchor;
+}	t_sprite;
+
+typedef struct s_animation
+{
+	t_v2i		pos;
+	uint32_t	idx;
+	uint32_t	frame_count;
+	float		fps;
+	float		time;
+	t_sprite	*frames;
+}	t_ani;
+
+typedef struct s_progress_bar
+{
+	t_v2i		pos;
+	t_sprite	text;
+	t_sprite	bg;
+	uint32_t	bg_color;
+	uint32_t	bar_color;
+	t_v2i		size;
+}	t_progress_bar;
+
+typedef struct s_load_screen
+{
+	t_sprite		bg;
+	t_ani			ani;
+	t_progress_bar	pb;
+	t_v2i			ren_prog;
+}	t_load_screen;
+
 extern struct s_ui_sections	g_sections[];
 
 /* UI Context Management */
@@ -240,46 +274,21 @@ void			default_label(t_ui_element *label, t_v2f pos, t_v2f size);
 /* Utility */
 uint32_t		blend_colors(uint32_t bg, uint32_t fg);
 
-typedef struct s_sprite
-{
-	mlx_image_t	*img;
-	t_v2f		anchor;
-}	t_sprite;
-
-typedef struct s_animation
-{
-	t_v2i		pos;
-	uint32_t	idx;
-	uint32_t	frame_count;
-	float		fps;
-	float		time;
-	t_sprite	*frames;
-}	t_ani;
-
-typedef struct s_progress_bar
-{
-	t_v2i		pos;
-	t_sprite	text;
-	t_sprite	bg;
-	uint32_t	bg_color;
-	uint32_t	bar_color;
-	t_v2i		size;
-}	t_progress_bar;
-
-typedef struct s_load_screen
-{
-	t_sprite		bg;
-	t_ani			ani;
-	t_progress_bar	pb;
-	t_v2i			ren_prog;
-}	t_load_screen;
-
+/* Load Screen */
 t_load_screen	*init_load_screen(mlx_t *mlx);
 void			destroy_load_screen(t_load_screen *load_screen, mlx_t *mlx);
-void			update_load_screen(t_load_screen *screen, float delta, float progress);
+void			update_load_screen(t_load_screen *screen, float delta,
+					float progress);
 
+/* Sprite Drawing and Animation */
+void			update_animation(t_ani *ani, t_sprite *bg, float delta);
 void			draw_frame(mlx_image_t *dst, mlx_image_t *src, t_v2i draw_pos);
-mlx_image_t		*init_str_frame(mlx_t* mlx, const char *str);
-t_v2i			get_sprite_position(t_sprite *parent, t_sprite *child, t_v2i pos);
+mlx_image_t		*init_str_frame(mlx_t *mlx, const char *str);
+t_v2i			get_sprite_position(t_sprite *parent, t_sprite *child,
+					t_v2i pos);
+/* Progress Bar */
+bool			init_progress_bar(t_progress_bar *pb, t_v2i pos, t_v2i size,
+					mlx_t *mlx);
+void			update_progress_bar(t_progress_bar *pb, t_sprite *bg, float t);
 
 #endif
