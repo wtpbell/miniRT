@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 22:38:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/18 16:17:41 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/18 16:45:38 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,18 +56,16 @@ void	ui_mark_dirty(t_ui_context *ctx)
 
 uint32_t	blend_colors(uint32_t bg, uint32_t fg)
 {
-	float	alpha;
-	float	inv_alpha;
-	uint8_t	r;
-	uint8_t	g;
-	uint8_t	b;
+	float		alpha;
+	float		inv_alpha;
+	uint32_t	r;
+	uint32_t	g;
+	uint32_t	b;
 
 	alpha = (fg & 0xFF) / 255.0f;
 	inv_alpha = 1.0f - alpha;
-	r = (uint8_t)(((bg >> 24) & 0xFF) * inv_alpha
-			+ ((fg >> 24) & 0xFF) * alpha);
-	g = (uint8_t)(((bg >> 16) & 0xFF) * inv_alpha
-			+ ((fg >> 16) & 0xFF) * alpha);
-	b = (uint8_t)(((bg >> 8) & 0xFF) * inv_alpha + ((fg >> 8) & 0xFF) * alpha);
-	return ((uint32_t)((r << 24) | (g << 16) | (b << 8) | 0xFF));
+	r = ((bg >> 24) & 0xFF) * inv_alpha + ((fg >> 24) & 0xFF) * alpha;
+	g = ((bg >> 16) & 0xFF) * inv_alpha + ((fg >> 16) & 0xFF) * alpha;
+	b = ((bg >> 8) & 0xFF) * inv_alpha + ((fg >> 8) & 0xFF) * alpha;
+	return ((r << 24) | (g << 16) | (b << 8) | 0xFF);
 }

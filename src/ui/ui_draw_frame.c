@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/14 17:28:23 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/18 16:31:31 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/18 17:39:17 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,12 @@ void	draw_frame(mlx_image_t *dst, mlx_image_t *src, t_v2i draw_pos)
 		{
 			smp.x = src->width - ((draw_pos.x + src->width) - start.x);
 			smp_pixel = get_pixel(src, smp.y * src->width + smp.x);
-
-			mlx_put_pixel(dst, start.x, start.y, *get_pixel(src, smp.y * src->width + smp.x));
-
-			// mlx_put_pixel(dst, start.x, start.y, blend_colors(
-			// 	*get_pixel(dst, start.y * dst->width + start.x),
-			// 	*get_pixel(src, smp.y * src->width + smp.x)));
+			if (get_a(*smp_pixel) > 0)
+			{
+				mlx_put_pixel(dst, start.x, start.y, blend_colors(
+					*get_pixel(dst, start.y * dst->width + start.x),
+					*get_pixel(src, smp.y * src->width + smp.x)));
+			}
 			++start.x;
 		}
 		start.x -= (smp.x + 1);
