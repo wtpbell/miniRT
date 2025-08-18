@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/17 23:28:07 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/18 11:08:33 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,6 @@ void			handle_ui_click(t_ui_element *root, int32_t x, int32_t y,
 
 /* UI Rendering */
 void			render_loop(void *param);
-void			render_ui_element(t_ui_element *e, t_ui_context *c);
 void			draw_button(t_ui_element *button, t_ui_context *ctx);
 void			draw_text(mlx_image_t *img, const char *str,
 					t_v2f pos, uint32_t color);

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 12:53:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/17 14:25:20 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/18 11:09:59 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,28 @@ static void	set_canvas_visibility(mlx_image_t *canvas, bool visible)
 		canvas->instances[i++].enabled = visible;
 }
 
-static void	attach_canvas_to_window(t_ui_context *ctx)
+static void	render_ui_element(t_ui_element *e, t_ui_context *c)
 {
-	mlx_image_t	*canvas;
+	t_ui_element	*child;
 
-	canvas = ctx->canvas;
-	// TODO: canvas has already been set to window, but also the condition will never be true
-	if (canvas->count == 0 && mlx_image_to_window(ctx->mlx, canvas, 0, 0) >= 0)
+	if (!e->visible)
+		return ;
+	e->abs_pos = e->pos;
+	if (e->parent)
+		e->abs_pos = v2f_add(e->parent->abs_pos, e->pos);
+	if (e->type == UI_PANEL || e->type == UI_HEADER)
 	{
-		printf("hi!\n");
-		canvas->instances[0].z = 1000;
-		canvas->instances[0].enabled = true;
+		draw_rect(c->canvas, e->abs_pos, e->size, e->style.bg_color);
+		draw_rect_border(c->canvas, e->abs_pos, e->size, e->style.border_color);
 	}
+	else if (e->type == UI_BUTTON)
+		draw_button(e, c);
+	else if (e->type == UI_LABEL)
+		draw_text(c->canvas, ((t_ui_label *)e->data)->text, e->abs_pos,
+			e->style.text_color);
+	child = e->first_child;
+	while (child && (render_ui_element(child, c), 1))
+		child = child->next_sibling;
 }
 
 void	render_ui(t_ui *ui)
@@ -42,7 +52,6 @@ void	render_ui(t_ui *ui)
 	uint32_t		i;
 
 	ctx = ui->context;
-	attach_canvas_to_window(ctx);
 	if (!ctx->is_visible)
 	{
 		set_canvas_visibility(ctx->canvas, false);
