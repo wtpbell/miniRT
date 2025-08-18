@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/17 21:24:42 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/17 23:24:37 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/18 14:38:13 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ bool	init_progress_bar(t_progress_bar *pb, t_v2i pos, t_v2i size, mlx_t *mlx)
 	pb->bg.img = mlx_new_image(mlx, size.x, size.y);
 	if (pb->bg.img == NULL)
 		return (mlx_delete_image(mlx, pb->text.img), false);
-	pb->bg_color = C_BLUE;
-	pb->bar_color = C_RED;
+	pb->bg_color = C_BLACK;
+	pb->bar_color = C_BLUE;
 	return (true);
 }
 

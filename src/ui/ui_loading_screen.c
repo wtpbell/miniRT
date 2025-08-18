@@ -1,19 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   loading_screen.c                                   :+:    :+:            */
+/*   ui_loading_screen.c                                :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/16 16:02:33 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/17 23:24:24 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/18 14:38:40 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
+#include "MLX42/MLX42_Int.h"
 
 #define FRAME_COUNT 6
 #define FPS			6.0f
+
+/* Based on mlx_put_string but does not add image to window */
+mlx_image_t	*init_str_frame(mlx_t *mlx, const char *str)
+{
+	mlx_image_t		*strimage;
+	const size_t	len = strlen(str);
+
+	if (len > MLX_MAX_STRING)
+		return ((void *)mlx_error(MLX_STRTOOBIG));
+	strimage = mlx_new_image(mlx, len * UI_CHAR_WIDTH, UI_FONT_HEIGHT);
+	if (strimage == NULL)
+		return (NULL);
+	draw_text(strimage, str, init_v2f(0, 0), C_WHITE);
+	return (strimage);
+}
 
 static bool	init_animation(t_ani *animation, mlx_t *mlx, t_v2i pos,
 	t_v2f anchor)
