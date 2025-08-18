@@ -27,14 +27,14 @@ SRCS_MAIN  := main.c vector_init.c vector_helper.c vector_operations.c\
 				material_utils.c obj_utils.c procedural_texturing.c rt_cone.c\
 				perlin.c random_vector.c matrix_utils.c bump_map.c rt_texture.c v2f.c\
 				vector_core.c matrix_space.c rt_material_utils.c rt_triangle_uv.c\
-				rt_cylinder_uv.c ui_core.c ui_layout.c ui_render.c ui_default.c\
+				rt_cylinder_uv.c ui_core.c ui_layout.c ui_create.c ui_default.c\
 				ui_utils.c ui_element_handlers.c ui_render_loop.c \
 				threads.c benchmark.c ui_ambient_section.c ui_light_section.c \
 				ui_camera_section.c ui_dof_section.c ui_sample_section.c \
 				ui_cleanup.c ui_layout_utils.c ui_draw.c ui_event_button.c \
 				ui_event_click.c ui_element_basic.c ui_element_creation.c \
 				noise_texturing.c lerp.c v2f_helper.c draw_frame.c loading_screen.c\
-				thread_data.c ui_progress_bar.c game_hooks.c 
+				thread_data.c ui_progress_bar.c game_hooks.c
 SNPRINTF	:= rt_snprintf.c rt_snprintf_str.c rt_snprintf_num.c
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE) $(SNPRINTF)

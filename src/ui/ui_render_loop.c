@@ -1,85 +1,79 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_init.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/13 19:05:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/13 19:05:00 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_render.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 15:03:00 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/18 11:05:21 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
+#include "rt_thread.h"
 
-static void	init_ui_context(t_ui_context *ctx, mlx_t *mlx,
-						t_scene *scene, void *game_ptr)
-{
-	if (!ctx)
-		return ;
-	ctx->mlx = mlx;
-	ctx->scene = scene;
-	ctx->game = game_ptr;
-	ctx->is_visible = true;
-	ctx->needs_redraw = true;
-}
-
-static t_ui_context	*create_ui_context(mlx_t *mlx, t_scene *scene,
-		void *game_ptr)
+static void	handle_idle_state(t_game *game)
 {
 	t_ui_context	*ctx;
-	int				panel_width;
 
-	ctx = (t_ui_context *)ft_calloc(1, sizeof(t_ui_context));
-	if (!ctx)
-		return (NULL);
-	init_ui_context(ctx, mlx, scene, game_ptr);
-	panel_width = UI_PANEL_WIDTH;
-	if (panel_width > mlx->width / 2)
-		panel_width = mlx->width / 2;
-	ctx->canvas = mlx_new_image(mlx, panel_width, mlx->height);
-	if (!ctx->canvas)
-		return (destroy_ui_context(ctx), NULL);
-	if (panel_width > (int)mlx->width)
-		panel_width = mlx->width;
-	if (mlx_image_to_window(mlx, ctx->canvas, 0, 0) < 0)
-		return (destroy_ui_context(ctx), NULL);
-	return (ctx);
+	if (game->ui && game->ui->context)
+	{
+		ctx = game->ui->context;
+		if (ctx->is_visible && ctx->canvas)
+			render_ui(game->ui);
+	}
 }
 
-static t_ui_element	*create_ui_section(t_ui *ui, t_sample *sample, t_v2f size)
+static void	handle_render_state(t_game *game)
 {
-	t_section_config	cfg;
-
-	cfg = (t_section_config){
-		.ctx = ui->context,
-		.sample = sample,
-		.pos = g_v2f_zero,
-		.size = size
-	};
-	return (create_ui_sections(&cfg));
+	game->load_screen->ren_prog = (t_v2i){.x = 0, .y = game->img->height};
+	ft_memset(game->img->pixels, 0, game->img->width
+		* game->img->height * sizeof(uint32_t));
+	start_time();
+	if (thread_rendering(game->thread_data))
+		set_game_state(game, GS_LOAD);
+	else
+	{
+		write(2, "Failed to create threads! Try again.\n", 38);
+		set_game_state(game, GS_IDLE);
+	}
 }
 
-t_ui	*create_ui(mlx_t *mlx, t_scene *scene, t_sample *sample, void *game_ptr)
+static void	handle_load_state(t_game *game)
 {
-	t_ui			*ui;
-	t_ui_element	*ui_sections;
-	t_v2f			size;
+	float	progress;
 
-	ui = (t_ui *)ft_calloc(1, sizeof(t_ui));
-	if (!ui)
-		return (NULL);
-	ui->context = create_ui_context(mlx, scene, game_ptr);
-	if (!ui->context)
-		return (free(ui), NULL);
-	size = init_v2f(UI_PANEL_WIDTH, HEIGHT);
-	ui->root = create_panel(ui->context, g_v2f_zero, size);
-	if (!ui->root)
-		return (destroy_ui(ui), NULL);
-	ui_sections = create_ui_section(ui, sample, size);
-	if (!ui_sections)
-		return (destroy_ui(ui), NULL);
-	attach_child(ui->root, ui_sections);
-	ui->context->needs_redraw = true;
-	return (ui);
+	pthread_mutex_lock(game->thread_data->progress_lock);
+	progress = (float)game->load_screen->ren_prog.x
+		/ (float)game->load_screen->ren_prog.y;
+	pthread_mutex_unlock(game->thread_data->progress_lock);
+	update_load_screen(game->load_screen, game->mlx->delta_time, progress);
+	if (progress < 1.0f)
+		return ;
+	join_threads(game->thread_data->threads, game->thread_data->thread_count);
+	end_time();
+	set_game_state(game, GS_IDLE);
+	printf("\n");
+}
+
+void	render_loop(void *param)
+{
+	t_game	*game;
+
+	// TODO: file render_loop.c does not contain the function render_loop
+	game = (t_game *)param;
+	if (game->state == GS_IDLE)
+		handle_idle_state(game);
+	else if (game->state == GS_RENDER)
+		handle_render_state(game);
+	else if (game->state == GS_LOAD)
+		handle_load_state(game);
+	else if (game->state == GS_QUIT)
+	{
+		printf("Exiting...\n");
+		cancel_threads(game->thread_data->threads,
+			game->thread_data->thread_count);
+		mlx_close_window(game->mlx);
+	}
 }
