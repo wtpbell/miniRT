@@ -37,7 +37,7 @@ SRCS_MAIN  := main.c vector_init.c vector_helper.c vector_operations.c\
 				ui_event_click.c ui_element_basic.c ui_element_creation.c \
 				noise_texturing.c lerp.c v2f_helper.c rt_mesh.c rt_strtok.c\
 				aabb.c bvh.c bvh_utils.c scene_cleanup.c ui_draw_frame.c ui_loading_screen.c\
-				thread_data.c ui_progress_bar.c game_hooks.c
+				thread_data.c ui_progress_bar.c game_hooks.c ui_update_animation.c
 SNPRINTF	:= rt_snprintf.c rt_snprintf_str.c rt_snprintf_num.c
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE) $(SNPRINTF)

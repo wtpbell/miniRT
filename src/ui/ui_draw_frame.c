@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/14 17:28:23 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/18 14:53:34 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/18 16:31:31 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ static t_v2i	clamp_draw_frame(t_v2i draw_pos, t_v2i offset, t_v2i max)
 	});
 }
 
+static inline uint32_t	*get_pixel(mlx_image_t *img, int offset)
+{
+	return (((uint32_t *)img->pixels) + offset);
+}
+
 t_v2i	get_sprite_position(t_sprite *parent, t_sprite *child, t_v2i pos)
 {
 	return ((t_v2i){
@@ -42,34 +47,36 @@ t_v2i	get_sprite_position(t_sprite *parent, t_sprite *child, t_v2i pos)
 	});
 }
 
-
-
 // TODO: Allow for scaling/sampling (optional)
-// TODO: Push the start and end values within the dst window
 void	draw_frame(mlx_image_t *dst, mlx_image_t *src, t_v2i draw_pos)
 {
 	t_v2i		start;
 	t_v2i		end;
-	t_v2i		sample;
-	uint32_t	*pixel;
-	uint32_t	*sample_pixel;
+	t_v2i		smp;
+	uint32_t	*smp_pixel;
 
 	if (is_outside_draw_bounds(dst, src, draw_pos))
 		return ;
-	start = clamp_draw_frame(draw_pos, init_v2i(0, 0), init_v2i(dst->width, dst->height));
-	end = clamp_draw_frame(draw_pos, init_v2i(src->width, src->height), init_v2i(dst->width, dst->height));
+	start = clamp_draw_frame(draw_pos, init_v2i(0, 0),
+		init_v2i(dst->width, dst->height));
+	end = clamp_draw_frame(draw_pos, init_v2i(src->width, src->height),
+		init_v2i(dst->width, dst->height));
 	while (start.y < end.y)
 	{
-		sample.y = src->height - ((draw_pos.y + src->height) - start.y);
+		smp.y = src->height - ((draw_pos.y + src->height) - start.y);
 		while (start.x < end.x)
 		{
-			sample.x = src->width - ((draw_pos.x + src->width) - start.x);
-			pixel = ((uint32_t *)dst->pixels) + (start.y * dst->width + start.x);
-			sample_pixel = ((uint32_t *)src->pixels) + (sample.y * src->width + sample.x);
-			mlx_put_pixel(dst, start.x, start.y, blend_colors(*pixel, *sample_pixel));
+			smp.x = src->width - ((draw_pos.x + src->width) - start.x);
+			smp_pixel = get_pixel(src, smp.y * src->width + smp.x);
+
+			mlx_put_pixel(dst, start.x, start.y, *get_pixel(src, smp.y * src->width + smp.x));
+
+			// mlx_put_pixel(dst, start.x, start.y, blend_colors(
+			// 	*get_pixel(dst, start.y * dst->width + start.x),
+			// 	*get_pixel(src, smp.y * src->width + smp.x)));
 			++start.x;
 		}
-		start.x -= (sample.x + 1);
+		start.x -= (smp.x + 1);
 		++start.y;
 	}
 }
