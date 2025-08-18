@@ -158,7 +158,10 @@ void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
 			pixel = (uint32_t *)canvas->pixels
 				+ (int)_pos.y * canvas->width + (int)_pos.x;
 			if (alpha >= 1.0f)
-				*pixel = color;
+			{
+				// *pixel = color;
+				mlx_put_pixel(canvas, _pos.x, _pos.y, color);
+			}
 			else
 				mlx_put_pixel(canvas, _pos.x, _pos.y,
 					blend_colors(*pixel, color));

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/16 16:02:33 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/18 17:36:09 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/18 23:35:04 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static bool	init_animation(t_ani *animation, mlx_t *mlx, t_v2i pos,
 		if (frames[i].img == NULL)
 			return (false);
 		frames[i].anchor = anchor;
+		frames[i].scale = init_v2f(5.0f, 5.0f);
 		++i;
 	}
 	return (true);
@@ -85,13 +86,14 @@ t_load_screen	*init_load_screen(mlx_t *mlx)
 	load_screen = ft_calloc(1, sizeof(t_load_screen));
 	if (load_screen == NULL)
 		return (NULL);
+	load_screen->bg.scale = g_v2f_one;
 	load_screen->bg.anchor = init_v2f(0.5f, 0.5f);
 	load_screen->bg.img = mlx_new_image(mlx, mlx->width, mlx->height);
 	if (load_screen->bg.img == NULL
 		|| mlx_image_to_window(mlx, load_screen->bg.img, 0, 0) == -1)
 		return (destroy_load_screen(load_screen, mlx), NULL);
 	if (!init_animation(&load_screen->ani, mlx,
-			(t_v2i){{0, -64}}, init_v2f(0.5f, 0.5f)))
+			(t_v2i){{0, 0}}, init_v2f(0.5f, 0.5f)))
 		return (destroy_load_screen(load_screen, mlx), NULL);
 	if (!init_progress_bar(&load_screen->pb,
 			(t_v2i){{0, 0}}, (t_v2i){{512, 32}}, mlx))
@@ -110,7 +112,7 @@ void	update_load_screen(t_load_screen *screen, float delta, float progress)
 	ft_bzero(screen->bg.img->pixels,
 		screen->bg.img->height * screen->bg.img->width * sizeof(uint32_t));
 	update_animation(&screen->ani, &screen->bg, delta);
-	update_progress_bar(&screen->pb, &screen->bg, progress);
+	// update_progress_bar(&screen->pb, &screen->bg, progress);
 	printf("\x1b[1F\x1b[2K");
 	printf("RENDERING: %.2f%%\n", progress * 100.0f);
 }

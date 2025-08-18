@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/18 11:08:33 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/18 23:03:41 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,7 @@ typedef struct s_sprite
 {
 	mlx_image_t	*img;
 	t_v2f		anchor;
+	t_v2f		scale;
 }	t_sprite;
 
 typedef struct s_animation
@@ -281,10 +282,12 @@ void			update_load_screen(t_load_screen *screen, float delta,
 
 /* Sprite Drawing and Animation */
 void			update_animation(t_ani *ani, t_sprite *bg, float delta);
-void			draw_frame(mlx_image_t *dst, mlx_image_t *src, t_v2i draw_pos);
+// void			draw_frame(mlx_image_t *dst, mlx_image_t *src, t_v2i draw_pos);
+void			draw_frame(t_sprite *dst, t_sprite *src, t_v2i draw_pos);
 mlx_image_t		*init_str_frame(mlx_t *mlx, const char *str);
 t_v2i			get_sprite_position(t_sprite *parent, t_sprite *child,
 					t_v2i pos);
+
 /* Progress Bar */
 bool			init_progress_bar(t_progress_bar *pb, t_v2i pos, t_v2i size,
 					mlx_t *mlx);
