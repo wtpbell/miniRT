@@ -36,32 +36,28 @@ void	draw_perlin(mlx_image_t *img, t_perlin *data,
 	}
 }
 
-static void	navigate(t_pdisplay *display, mlx_key_data_t keydata)
+static void	navigate(t_pdisplay *d, mlx_key_data_t keydata)
 {
 	int	prev_i;
 
-	prev_i = display->curr;
-	if (keydata.key == MLX_KEY_RIGHT)
-		display->curr = (display->curr + 1) % display->param_count;
-	else if (keydata.key == MLX_KEY_LEFT)
-		display->curr = (display->curr - 1 + display->param_count)
-			% display->param_count;
-	if (prev_i != display->curr)
+	prev_i = d->curr;
+	if (keydata.key == MLX_KEY_DOWN)
+		d->curr = (d->curr + 1) % d->param_count;
+	else if (keydata.key == MLX_KEY_UP)
+		d->curr = (d->curr - 1 + d->param_count) % d->param_count;
+	if (prev_i != d->curr)
 	{
-		if (prev_i >= 0 && prev_i < display->param_count
-			&& display->params[prev_i].row)
+		if (prev_i >= 0 && prev_i < d->param_count && d->params[prev_i].row)
 		{
-			display->params[prev_i].row->style.bg_color = UI_PANEL_BG_COLOR;
-			display->params[prev_i].row->style.border_color = UI_TRANSPARENT;
+			d->params[prev_i].row->style.bg_color = UI_PANEL_BG_COLOR;
+			d->params[prev_i].row->style.border_color = UI_TRANSPARENT;
 		}
-		if (display->curr >= 0 && display->curr < display->param_count
-			&& display->params[display->curr].row)
+		if (d->curr >= 0 && d->curr < d->param_count && d->params[d->curr].row)
 		{
-			display->params[display->curr].row->style.bg_color = UI_ACTIVE;
-			display->params[display->curr].row->style.border_color
-				= UI_ACTIVE_BORDER;
+			d->params[d->curr].row->style.bg_color = UI_ACTIVE;
+			d->params[d->curr].row->style.border_color = UI_ACTIVE_BORDER;
 		}
-		ui_mark_dirty(display->ui->context);
+		ui_mark_dirty(d->ui->context);
 	}
 }
 
@@ -113,6 +109,8 @@ void	perlin_key_hook(mlx_key_data_t keydata, void *param)
 		return ;
 	if (is_key_press(keydata, MLX_KEY_ESCAPE))
 		return (mlx_close_window(display->mlx));
+	if (is_key_press(keydata, MLX_KEY_SPACE))
+		return (print_perlin(display->p_data));
 	prev_curr = display->curr;
 	prev_pattern = display->pattern;
 	navigate(display, keydata);
@@ -120,7 +118,8 @@ void	perlin_key_hook(mlx_key_data_t keydata, void *param)
 	modify(display, keydata);
 	if (prev_curr != display->curr
 		|| ft_strncmp(prev_pattern.name, display->pattern.name, 16) != 0
-		|| keydata.key == MLX_KEY_UP || keydata.key == MLX_KEY_DOWN)
+		|| keydata.key == MLX_KEY_UP || keydata.key == MLX_KEY_DOWN
+		|| keydata.key == MLX_KEY_RIGHT || keydata.key == MLX_KEY_LEFT)
 	{
 		draw_perlin(display->img, display->p_data, display->offset,
 			display->pattern.fp_perlin);

@@ -12,6 +12,16 @@
 
 #include "perlin_display.h"
 
+void	print_perlin(t_perlin *data)
+{
+	printf("p_rate:%.3f p_gain:%.3f p_freq:%.3f p_ampt:%.3f\
+	p_layers:%i p_dist:%.3f p_scale:%.3f\n",
+		data->rate, data->gain, data->freq,
+		data->ampt, data->layers,
+		data->marble.distortion, data->marble.scale
+		);
+}
+
 void	*ft_memdup(const void *src, size_t n)
 {
 	void	*dest;

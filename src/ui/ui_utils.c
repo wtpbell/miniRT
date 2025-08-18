@@ -6,11 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 22:38:00 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/15 00:40:48 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/18 23:23:58 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
+#include "perlin_display.h"
 #include "rt_snprintf.h"
 
 char	*format_float_value(float value)
@@ -52,4 +53,10 @@ void	ui_mark_dirty(t_ui_context *ctx)
 		ctx->is_dirty = true;
 		ctx->needs_redraw = true;
 	}
+}
+
+void	call_delta(t_val_mod *fn)
+{
+	if (fn && fn->action)
+		fn->action(fn->value, fn->ctx);
 }

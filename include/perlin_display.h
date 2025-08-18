@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 11:39:26 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/17 16:17:09 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/18 22:40:11 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,4 +108,5 @@ void			add_parameter_controls(t_ui *ui, t_ui_element *parent,
 void			*ft_memdup(const void *src, size_t n);
 t_ui_element	*find_child_by_type(t_ui_element *parent, t_ui_type type);
 void			perlin_key_hook(mlx_key_data_t keydata, void *param);
+void			print_perlin(t_perlin *data);
 #endif

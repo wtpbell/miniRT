@@ -44,9 +44,9 @@ void	modify(t_pdisplay *display, mlx_key_data_t keydata)
 	char	str[32];
 
 	step = 0.0f;
-	if (keydata.key == MLX_KEY_UP)
+	if (keydata.key == MLX_KEY_RIGHT)
 		step = 0.1f;
-	else if (keydata.key == MLX_KEY_DOWN)
+	else if (keydata.key == MLX_KEY_LEFT)
 		step = -0.1f;
 	else
 		return ;
