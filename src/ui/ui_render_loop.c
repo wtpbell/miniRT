@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ui_render.c                                        :+:    :+:            */
+/*   ui_render_loop.c                                   :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 15:03:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/18 11:05:21 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/18 18:03:40 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	handle_render_state(t_game *game)
 		set_game_state(game, GS_LOAD);
 	else
 	{
-		write(2, "Failed to create threads! Try again.\n", 38);
+		write(STDERR_FILENO, "Failed to create threads! Try again.\n", 38);
 		set_game_state(game, GS_IDLE);
 	}
 }
@@ -61,7 +61,6 @@ void	render_loop(void *param)
 {
 	t_game	*game;
 
-	// TODO: file render_loop.c does not contain the function render_loop
 	game = (t_game *)param;
 	if (game->state == GS_IDLE)
 		handle_idle_state(game);

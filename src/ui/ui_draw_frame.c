@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/14 17:28:23 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/18 17:39:17 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/18 18:03:09 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 #include "rt_math.h"
 #include "ui.h"
 
-static bool	is_outside_draw_bounds(mlx_image_t *dst, mlx_image_t *src, t_v2i draw_pos)
+static bool	is_outside_draw_bounds(mlx_image_t *dst, mlx_image_t *src,
+	t_v2i draw_pos)
 {
 	return (draw_pos.x >= (int)dst->width
 		|| draw_pos.y >= (int)dst->height
@@ -37,43 +38,38 @@ static inline uint32_t	*get_pixel(mlx_image_t *img, int offset)
 	return (((uint32_t *)img->pixels) + offset);
 }
 
-t_v2i	get_sprite_position(t_sprite *parent, t_sprite *child, t_v2i pos)
+static inline void	set_pixel(mlx_image_t *dst, mlx_image_t *src, t_v2i pos,
+	t_v2i smp)
 {
-	return ((t_v2i){
-		.x = (parent->img->width * parent->anchor.x)
-		- (child->img->width * child->anchor.x) + pos.x,
-		.y = (parent->img->height * parent->anchor.y)
-		- (child->img->height * child->anchor.y) + pos.y
-	});
+	uint32_t	*smp_pxl;
+
+	smp_pxl = get_pixel(src, smp.y * src->width + smp.x);
+	if (get_a(*smp_pxl) == 0)
+		return ;
+	mlx_put_pixel(dst, pos.x, pos.y,
+		blend_colors(*get_pixel(dst, pos.y * dst->width + pos.x), *smp_pxl));
 }
 
 // TODO: Allow for scaling/sampling (optional)
 void	draw_frame(mlx_image_t *dst, mlx_image_t *src, t_v2i draw_pos)
 {
-	t_v2i		start;
-	t_v2i		end;
-	t_v2i		smp;
-	uint32_t	*smp_pixel;
+	t_v2i	start;
+	t_v2i	end;
+	t_v2i	smp;
 
 	if (is_outside_draw_bounds(dst, src, draw_pos))
 		return ;
 	start = clamp_draw_frame(draw_pos, init_v2i(0, 0),
-		init_v2i(dst->width, dst->height));
+			init_v2i(dst->width, dst->height));
 	end = clamp_draw_frame(draw_pos, init_v2i(src->width, src->height),
-		init_v2i(dst->width, dst->height));
+			init_v2i(dst->width, dst->height));
 	while (start.y < end.y)
 	{
 		smp.y = src->height - ((draw_pos.y + src->height) - start.y);
 		while (start.x < end.x)
 		{
 			smp.x = src->width - ((draw_pos.x + src->width) - start.x);
-			smp_pixel = get_pixel(src, smp.y * src->width + smp.x);
-			if (get_a(*smp_pixel) > 0)
-			{
-				mlx_put_pixel(dst, start.x, start.y, blend_colors(
-					*get_pixel(dst, start.y * dst->width + start.x),
-					*get_pixel(src, smp.y * src->width + smp.x)));
-			}
+			set_pixel(dst, src, start, smp);
 			++start.x;
 		}
 		start.x -= (smp.x + 1);

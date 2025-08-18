@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/11 18:00:10 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/27 11:47:03 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/18 18:01:15 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 #include <stdio.h>
 #include "rt_thread.h"
 
-static float g_starttime;
+static float	g_starttime;
 
-void start_time(void)
+void	start_time(void)
 {
 	g_starttime = (float)clock() / CLOCKS_PER_SEC;
 }
 
-void end_time(void)
+void	end_time(void)
 {
 	float	endtime;
 
