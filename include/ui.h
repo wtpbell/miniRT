@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/18 15:13:54 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/18 18:03:14 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@
 /* Base UI Colors */
 # define UI_PANEL_BG_COLOR			0x00000055
 # define UI_SECTION_COLOR			0x2d2d2dcc
-# define UI_BUTTON_COLOR			0x8eeb15d2
+# define UI_BUTTON_COLOR			0xebab15d2
 # define UI_BUTTON_BORDER_COLOR		0xFFFFFFFF
 # define UI_TEXT_COLOR				0xFFFFFFFF
 # define UI_HEADER_COLOR			0x1A1A1AFF
