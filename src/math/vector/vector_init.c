@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:35:46 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/01 18:59:12 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 10:52:41 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,29 @@ t_v2f	init_v2f(float x, float y)
 	});
 }
 
+t_v2i	init_v2i(int x, int y)
+{
+	return ((t_v2i){
+		.x = x,
+		.y = y
+	});
+}
+
 t_v3f	init_v3f(float x, float y, float z)
 {
 	return ((t_v3f){
 		.x = x,
 		.y = y,
 		.z = z
+	});
+}
+
+t_v4f	init_v4f(float x, float y, float z, float w)
+{
+	return ((t_v4f){
+		.x = x,
+		.y = y,
+		.z = z,
+		.w = w
 	});
 }

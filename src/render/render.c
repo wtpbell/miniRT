@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/17 23:06:52 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/18 15:04:32 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,23 @@
 #include "ui.h"
 #include "rt_thread.h"
 
-t_obj	*find_intersection(t_ray *ray, t_scene *scene, t_v3f *t)
+t_obj	*find_intersection(t_ray *ray, t_scene *scene, t_result *res)
 {
-	int		i;
-	t_v3f	scalar;
-	t_obj	*obj;
-	t_obj	*hit;
+	int			i;
+	t_result	curr;
+	t_obj		*obj;
+	t_obj		*hit;
 
 	i = 0;
 	hit = NULL;
-	t->x = FLT_MAX;
-	scalar = g_v3f_zero;
+	res->t = FLT_MAX;
+	ft_bzero(&curr, sizeof(ft_bzero));
 	while (i < scene->objects.size)
 	{
 		obj = (t_obj *)scene->objects.items[i];
-		if (obj->intersect(obj, ray, init_v2f(BIAS, t->x), &scalar))
+		if (obj->intersect(obj, ray, init_v2f(BIAS, res->t), &curr))
 		{
-			*t = scalar;
+			*res = curr;
 			hit = obj;
 		}
 		++i;
@@ -49,19 +49,19 @@ t_obj	*find_intersection(t_ray *ray, t_scene *scene, t_v3f *t)
 	return (hit);
 }
 
-static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray, t_v3f *s)
+static void	init_hit_info(t_ray_hit *hit_info, t_obj *obj, t_ray *ray,
+	t_result *res)
 {
 	hit_info->ray = ray;
-	hit_info->hit = v3f_add(ray->origin, v3f_scale(ray->direction, s->x));
-	hit_info->normal = obj->calc_norm(obj, hit_info->hit);
-	hit_info->distance = s->x;
+	hit_info->hit = v3f_add(ray->origin, v3f_scale(ray->direction, res->t));
+	hit_info->normal = obj->calc_norm(obj, hit_info->hit, res);
+	hit_info->distance = res->t;
 	hit_info->front_face = v3f_dot(ray->direction, hit_info->normal) < 0;
 	hit_info->obj = obj;
-	hit_info->weight = init_v2f(s->y, s->z);
+	hit_info->weight = res->tri_weight;
 	if (!hit_info->front_face)
 		hit_info->normal = v3f_scale(hit_info->normal, -1.0f);
-	hit_info->texcoord = obj->r.get_texcoord(obj, hit_info->hit,
-			&hit_info->weight);
+	hit_info->texcoord = obj->r.get_texcoord(obj, hit_info->hit, res);
 	hit_info->texcoord = v2f_rotate(hit_info->texcoord,
 			obj->r.mat->texture.scale_rot.w * DEGTORAD);
 	if (obj->r.mat->bump_map.type != TEX_SOLID)
@@ -76,15 +76,15 @@ t_v3f	trace(t_ray *ray, t_scene *scene, uint32_t depth)
 	t_obj		*hit;
 	t_ray_hit	hit_info;
 	t_v3f		color;
-	t_v3f		t;
+	t_result	res;
 
 	if (depth <= 0)
 		return (g_v3f_zero);
-	t = g_v3f_zero;
-	hit = find_intersection(ray, scene, &t);
+	ft_bzero(&res, sizeof(res));
+	hit = find_intersection(ray, scene, &res);
 	if (hit == NULL)
 		return (g_v3f_zero);
-	init_hit_info(&hit_info, hit, ray, &t);
+	init_hit_info(&hit_info, hit, ray, &res);
 	if (hit->r.mat->type == MAT_LAMBERTIAN)
 		color = handle_lambertian(scene, &hit_info);
 	else if (hit->r.mat->type == MAT_DIELECTRIC)
