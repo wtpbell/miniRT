@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/14 17:28:23 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/18 23:08:51 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/18 23:42:30 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,6 @@ static inline void	set_pixel(mlx_image_t *dst, mlx_image_t *src, t_v2i pos,
 	mlx_put_pixel(dst, pos.x, pos.y,
 		blend_colors(*get_pixel(dst, pos.y * dst->width + pos.x), smp_pxl));
 }
-
-struct s_frame
-{
-	t_v2i	start;
-	t_v2i	end;
-	t_v2i	full_src_size;
-	t_v2i	full_dst_size;
-};
 
 void	draw_frame(t_sprite *dst, t_sprite *src, t_v2i draw_pos)
 {
