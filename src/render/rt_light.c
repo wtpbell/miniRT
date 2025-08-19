@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/31 19:11:17 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/07 17:23:45 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/04 18:17:34 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,15 @@ static t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 	t_ray		ray;
 	t_lighting	lt;
 	float		inten;
-	t_v3f		shadow_dist;
+	t_result	shadow_dist;
 	t_v3f		color;
 
 	init_lighting(&lt, hit, light, scene->camera.t.pos);
 	inten = lt.inten / (1.0f + 0.02f * lt.dist + 0.0002f * lt.dist * lt.dist);
 	ray.origin = hit->hit;
 	ray.direction = v3f_sub(light->pos, hit->hit);
-	shadow_dist.x = lt.dist;
-	if (find_intersection(&ray, scene, &shadow_dist) && shadow_dist.x < 1.0f)
+	shadow_dist.t = lt.dist;
+	if (find_intersection(&ray, scene, &shadow_dist) && shadow_dist.t < 1.0f)
 		return (g_v3f_zero);
 	lt.diffuse = calculate_diffuse(&lt);
 	lt.specular = get_specular(&lt, hit);

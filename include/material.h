@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 13:47:23 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/15 14:19:36 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/19 10:18:20 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,11 +118,12 @@ t_v3f	blend_color(t_scene *sc, t_ray_hit *h, uint32_t depth, float ior);
 t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth);
 t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info);
 t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth);
-t_v2f	cone_texcoord(t_obj *obj, t_v3f point, t_v2f *weight);
-t_v2f	plane_texcoord(t_obj *obj, t_v3f point, t_v2f *weight);
-t_v2f	sphere_texcoord(t_obj *obj, t_v3f point, t_v2f *weight);
-t_v2f	triangle_texcoord(t_obj *obj, t_v3f point, t_v2f *weight);
-t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point, t_v2f *weight);
+t_v2f	cone_texcoord(t_obj *obj, t_v3f point, t_result *res);
+t_v2f	plane_texcoord(t_obj *obj, t_v3f point, t_result *res);
+t_v2f	sphere_texcoord(t_obj *obj, t_v3f point, t_result *res);
+t_v2f	triangle_texcoord(t_obj *obj, t_v3f point, t_result *res);
+t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point, t_result *res);
+t_v2f	mesh_texcoord(t_obj *obj, t_v3f point, t_result *res);
 t_v3f	checker_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
 t_v3f	solid_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
 t_v3f	image_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
@@ -131,6 +132,7 @@ t_v3f	perturb_normal(const t_mat *mat, const t_v2f texcoord,
 t_v3f	sample_texture(const mlx_texture_t *tex, const t_v2f uv,
 			const t_v3f mod);
 t_v3f	display_normal(t_ray_hit *hit_info);
+t_v2f	tri_uv_texcoord(t_tri *tri, const t_v2f weight);
 t_v3f	noise_pattern(const t_v2f *texcoord, const t_tex *tex, t_v3f col_a);
 
 float	pink_noise(t_v2f point, const t_perlin *pink);

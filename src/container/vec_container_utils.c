@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   vec_container_utils.c                              :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/09 11:08:23 by jboon         #+#    #+#                 */
-/*   Updated: 2025/05/16 18:55:28 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/13 09:47:30 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,19 @@ size_t	vector_size(t_vector *vec)
 	if (!vec)
 		return (0);
 	return ((size_t)vec->size);
+}
+
+void	*vector_find(t_vector *vec, void *ctx,
+	int (*fn)(int i, void *item, void *ctx))
+{
+	int	i;
+
+	i = 0;
+	while (i < vec->size)
+	{
+		if (fn(i, vec->items[i], ctx) == 0)
+			return (*(vec->items + i));
+		++i;
+	}
+	return (NULL);
 }

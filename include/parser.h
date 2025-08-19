@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/15 14:19:52 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/19 10:18:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,9 @@
 # define MIN_LIGHT_RATIO	0.0f
 # define MAX_DIR			1.0f
 # define MIN_DIR			-1.0f
+# define WHITESPACE			" \f\r\t\v\n"
+# define MAX_VERT_PER_SET	9
+# define MAX_VERT_PER_FACE	3
 
 # define RED 			"\033[31m"
 # define GREEN 			"\033[32m"
@@ -78,6 +81,12 @@ typedef enum e_error
 	ERR_UNKNOWN_FIELD,
 	ERR_REQ_FIELD,
 	ERR_LOAD_TEXTURE,
+	ERR_OBJ_VTX_FACE,
+	ERR_OBJ_FACE_FORMAT,
+	ERR_OBJ_VERT_INDEX,
+	ERR_OBJ_VERT_COMP,
+	ERR_OBJ_FAIL,
+	ERR_OBJ_FACE,
 	ERR_COUNT
 }	t_error;
 
@@ -119,6 +128,22 @@ typedef struct s_element
 	t_parser		parse_fn;
 }	t_ele;
 
+// Numbering of vertices start at 1 (right-hand coordinate system)
+typedef struct s_obj_file
+{
+	t_vector	v;	// Vertices (x, y, z, [w])
+	t_vector	vt;	// Vertex texture coordinates (u, [v, w])
+	t_vector	vn;	// Vertex normals (i, j, k)
+	t_vector	f;	// Faces (v1[/vt1/vn1] v2[/vt2/vn2] v3[/vt3/vn3] ...)
+}	t_obj_file;
+
+typedef struct s_vert_ran
+{
+	t_v2i	comp;
+	t_v2f	lim;
+	t_v4f	def;
+}	t_vert_ran;
+
 typedef struct s_parse_state
 {
 	float	*f;
@@ -133,6 +158,10 @@ bool		parse_map(t_scene *scene, const char *file);
 
 // element_parser.c
 t_parser	element_parser(char **tokens, t_scene *scene, const char *line);
+
+// rt_strtok.c
+char		*rt_strtok(char *str, const char *delim, char **saveptr);
+size_t		rt_count_occ(const char *str, char c);
 
 /* ---------------------Elements--------------------- */
 // camera.c
@@ -169,6 +198,11 @@ bool		parse_cone(char **tokens, t_scene *scene);
 
 // triangle.c
 bool		parse_triangle(char **tokens, t_scene *scene);
+t_v3f		get_mid_point(t_v3f v0, t_v3f v1, t_v3f v2);
+t_v3f		get_normal(t_v3f v0, t_v3f v1, t_v3f v2);
+
+// mesh.c
+bool		parse_mesh(char **tokens, t_scene *scene);
 
 /* ---------------------Utils--------------------- */
 // string_utils.c
@@ -209,7 +243,6 @@ void		print_error(t_error type, const char *ctx, const char *value);
 // cleanup.c
 void		free_tokens(char **tokens);
 void		cleanup_gnl(char *line, int fd);
-void		free_material(void *ptr);
 void		cleanup_scene(t_scene *scene);
 
 // field.c
@@ -231,5 +264,17 @@ void		cleanup_texture(t_tex *tex);
 bool		load_texture(t_tex *tex, const char *path);
 void		assign_textures(t_mat *mat);
 void		override_unset_perlin_values(t_perlin *dst, const t_perlin *src);
+
+// obj
+bool		init_obj_file(t_obj_file *obj_file);
+void		free_obj_file(t_obj_file *obj_file);
+t_mesh		*load_obj_into_mesh(const char *obj_path, t_obj_file *obj_file);
+bool		construct_mesh(t_scene *scene);
+bool		assign_v3f(t_v3f *dst[3], t_vector *cont, int *indices, int curr);
+void		set_normal(t_tri *tri);
+void		set_uv_texcoord(t_tri *tri);
+bool		construct_mesh(t_scene *scene);
+bool		parse_face(char *token, t_vector *f);
+bool		parse_vertex(char *str, t_vector *v, const t_vert_ran *ran);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   rt_types.h                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/07 16:31:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/15 14:20:36 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/19 10:18:48 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,17 @@ typedef enum e_ui_type			t_ui_type;
 typedef struct s_ui				t_ui;
 typedef struct s_ui_context		t_ui_context;
 typedef struct s_ui_element		t_ui_element;
+typedef struct s_mesh			t_mesh;
+typedef struct s_result			t_result;
 
 typedef int						(*t_intsct)(t_obj *obj, t_ray *ray,
-									t_v2f t, t_v3f *s);
-typedef t_v3f					(*t_cnorm)(t_obj *obj, t_v3f point);
+									t_v2f t, t_result *res);
+typedef t_v3f					(*t_cnorm)(t_obj *obj, t_v3f point,
+									t_result *res);
 typedef t_v3f					(*t_apply_light)(t_scene *scene,
 										t_ray_hit *hit_info, t_light *light);
 typedef t_v2f					(*t_texcoord)(t_obj *obj, t_v3f point,
-									t_v2f *weight);
+									t_result *res);
 typedef t_v3f					(*t_texcol)(const t_v2f *texcoord,
 											const t_tex *tex, t_v3f prim_col);
 typedef float					(*t_fp_perlin)(t_v2f uv, const t_perlin *data);

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/06/27 15:39:33 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/08 10:39:14 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ bool	parse_sphere(char **tokens, t_scene *scene)
 	obj = ft_calloc(1, sizeof(t_obj));
 	if (!obj)
 		return (false);
-	init_obj_transform(obj, pos, g_v3f_forward, g_v3f_up);
-	init_obj_renderer(obj, color, sphere_texcoord);
+	init_object_transform(obj, pos, g_v3f_forward, g_v3f_up);
+	init_object_renderer(obj, color, sphere_texcoord);
 	sphere_init(obj, diameter);
 	if (!assign_material(obj, &scene->shared_materials, tokens[4]))
 		return (free(obj), false);

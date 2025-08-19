@@ -1,34 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   cleanup.c                                          :+:    :+:            */
+/*   bvh_utils.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/05/11 16:44:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/14 13:30:02 by jboon         ########   odam.nl         */
+/*   Created: 2025/08/12 16:49:36 by jboon         #+#    #+#                 */
+/*   Updated: 2025/08/12 17:00:01 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
-#include "material.h"
+#include "scene.h"
 
-void	free_tokens(char **tokens)
+void	tri_swap(t_tri *a, t_tri *b)
 {
-	size_t	i;
+	t_tri	tmp;
 
-	i = 0;
-	while (tokens[i])
-	{
-		free(tokens[i]);
-		i++;
-	}
-	free(tokens);
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
 }
 
-void	cleanup_gnl(char *line, int fd)
+void	calc_tri_centroid(t_tri *triangles, int count)
 {
-	free(line);
-	close(fd);
-	get_next_line(-1);
+	int		i;
+	t_tri	*tri;
+
+	i = 0;
+	while (i < count)
+	{
+		tri = triangles + i;
+		tri->centroid = v3f_scale(
+				v3f_add(v3f_add(tri->v0, tri->v1), tri->v2), 1.0f / 3.0f);
+		++i;
+	}
 }
