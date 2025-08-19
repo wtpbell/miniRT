@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 19:16:29 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/08 16:27:02 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/19 12:28:07 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # define C_WHITE	0xFFFFFFFF
 # define C_BLACK	0x000000FF
 # define C_TRANS	UI_TRANSPARENT
+
 
 typedef uint32_t	t_col32;
 

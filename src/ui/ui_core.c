@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_core.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 12:53:50 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/14 22:11:34 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_core.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/27 12:53:50 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/19 18:43:28 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	attach_canvas_to_window(t_ui_context *ctx)
 void	render_ui(t_ui *ui)
 {
 	t_ui_context	*ctx;
-	uint32_t		*pixels;
+	uint32_t			*pixels;
 	uint32_t		i;
 
 	ctx = ui->context;
@@ -51,6 +51,7 @@ void	render_ui(t_ui *ui)
 		return ;
 	pixels = (uint32_t *)ctx->canvas->pixels;
 	i = 0;
+
 	while (i < ctx->canvas->width * ctx->canvas->height)
 		pixels[i++] = UI_PANEL_BG_COLOR;
 	if (ui->root)

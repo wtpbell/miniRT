@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 15:03:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/18 14:36:31 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/19 19:19:14 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ uint32_t	blend_colors(uint32_t bg, uint32_t fg)
 	b = ((bg >> 8) & 0xFF) * inv_alpha + ((fg >> 8) & 0xFF) * alpha;
 	return ((r << 24) | (g << 16) | (b << 8) | 0xFF);
 }
+
 
 void	render_ui_element(t_ui_element *e, t_ui_context *c)
 {
