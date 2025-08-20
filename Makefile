@@ -38,7 +38,7 @@ SRCS_MAIN  := main.c vector_init.c vector_helper.c vector_operations.c\
 				noise_texturing.c lerp.c v2f_helper.c perlin_display.c perlin_math.c \
 				perlin_param_control.c perlin_param_update.c perlin_init.c perlin_utils.c \
 				perlin_key_hook.c rt_mesh.c rt_strtok.c aabb.c bvh.c bvh_utils.c scene_cleanup.c \
-				perlin_modifier.c perlin_cleanup.c
+				perlin_modifier.c
 SNPRINTF	:= rt_snprintf.c rt_snprintf_str.c rt_snprintf_num.c 
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE) $(SNPRINTF)

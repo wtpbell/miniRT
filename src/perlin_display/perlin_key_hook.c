@@ -96,27 +96,21 @@ void	perlin_key_hook(mlx_key_data_t keydata, void *param)
 {
 	t_pdisplay		*display;
 	int				prev_curr;
-	t_perlin_node	prev_pattern;
 
 	display = (t_pdisplay *)param;
-	if (keydata.action != MLX_PRESS)
+	if (keydata.action != MLX_PRESS && keydata.action != MLX_REPEAT)
 		return ;
 	if (is_key_press(keydata, MLX_KEY_ESCAPE))
 		return (mlx_close_window(display->mlx));
 	if (is_key_press(keydata, MLX_KEY_SPACE))
 		return (print_perlin(display->p_data));
 	prev_curr = display->curr;
-	prev_pattern = display->pattern;
 	navigate(display, keydata);
 	pick_pattern(display, keydata);
 	if (keydata.key == MLX_KEY_LEFT || keydata.key == MLX_KEY_RIGHT)
 		modify(display, keydata);
 	if (prev_curr != display->curr
-		|| ft_strncmp(prev_pattern.name, display->pattern.name, 16) != 0
 		|| keydata.key == MLX_KEY_UP || keydata.key == MLX_KEY_DOWN
-		|| keydata.key == MLX_KEY_RIGHT || keydata.key == MLX_KEY_LEFT)
-	{
-		draw_perlin(display->img, display->p_data, display->offset,
-			display->pattern.fp_perlin);
-	}
+		|| keydata.key == MLX_KEY_LEFT || keydata.key == MLX_KEY_RIGHT)
+		ui_mark_dirty(display->ui->context);
 }

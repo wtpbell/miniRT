@@ -22,14 +22,14 @@ void	print_perlin(t_perlin *data)
 		);
 }
 
-void	*ft_memdup(const void *src, size_t n)
+void	cleanup_display(t_pdisplay *display)
 {
-	void	*dest;
-
-	dest = malloc(n);
-	if (!dest)
-		return (NULL);
-	return (ft_memcpy(dest, src, n));
+	if (display->ui)
+		destroy_ui(display->ui);
+	if (display->values)
+		free(display->values);
+	if (display->mlx)
+		mlx_terminate(display->mlx);
 }
 
 t_ui_element	*find_child_by_type(t_ui_element *parent, t_ui_type type)
@@ -50,7 +50,8 @@ t_ui_element	*find_child_by_type(t_ui_element *parent, t_ui_type type)
 
 bool	is_key_press(mlx_key_data_t keydata, keys_t key)
 {
-	return (keydata.key == key && keydata.action == MLX_PRESS);
+	return (keydata.key == key && (keydata.action == MLX_PRESS
+			|| keydata.action == MLX_REPEAT));
 }
 
 void	call_delta(t_val_mod *mod)
