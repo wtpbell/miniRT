@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 11:39:26 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/20 15:18:25 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/20 18:03:50 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,8 @@ struct s_params
 };
 
 extern struct s_params		g_params[PARAMS_COUNT];
-typedef void (*t_modifier)(t_val_mod *mods, t_pdisplay *display, t_perlin *data);
-
+typedef void				(*t_modifier)(t_val_mod *mods,
+								t_pdisplay *display, t_perlin *data);
 
 void			perlin_display(void);
 void			print_perlin(t_perlin *data);

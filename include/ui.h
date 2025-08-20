@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/20 17:57:15 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/20 18:04:30 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,21 +41,21 @@
 
 /* Base UI Colors */
 # define UI_PANEL_BG_COLOR			0x1A1F2CFF
-# define UI_SECTION_COLOR			0x2d2d2dcc
-# define UI_BUTTON_COLOR			0xebab15d2
+# define UI_SECTION_COLOR			0x2D2D2DCC
+# define UI_BUTTON_COLOR			0xEBAB15D2
 # define UI_BUTTON_BORDER_COLOR		0xFFFFFFFF
 # define UI_TEXT_COLOR				0xFFFFFFFF
 # define UI_HEADER_COLOR			0x1A1A1AFF
 # define UI_BORDER_COLOR			0x4A4A4AFF
 # define UI_TRANSPARENT				0xFFFFFF00
-# define UI_LABEL_COLOR				0xffffffcf
-# define UI_RENDER_BUTTON_COLOR		0x60ea9aff
+# define UI_LABEL_COLOR				0xFFFFFFCF
+# define UI_RENDER_BUTTON_COLOR		0x60EA9AFF
 
 /* Section Colors */
-# define UI_COLOR_CAMERA_SECTION	0xd12525ff
-# define UI_COLOR_LIGHT_SECTION		0xa303cfff
-# define UI_COLOR_AMBIENT_SECTION	0x2f08caff
-# define UI_COLOR_DOF_SECTION		0x046d00ff
+# define UI_COLOR_CAMERA_SECTION	0xD12525FF
+# define UI_COLOR_LIGHT_SECTION		0xA303CFFF
+# define UI_COLOR_AMBIENT_SECTION	0x2F08CFFF
+# define UI_COLOR_DOF_SECTION		0x046D00FF
 # define UI_COLOR_SAMPLE_SECTION	0x2F6BA4FF
 
 /* Active Parameter Colors */
@@ -173,7 +173,7 @@ struct s_ui_sections
 	t_ui_element	*(*create_func)(t_section_config*);
 };
 
-extern struct s_ui_sections	g_sections[];
+extern struct s_ui_sections			g_sections[];
 
 /* UI Context Management */
 void			destroy_ui_context(t_ui_context *ctx);
@@ -245,5 +245,6 @@ void			default_label(t_ui_element *label, t_v2f pos, t_v2f size);
 /* Utility */
 uint32_t		blend_colors(uint32_t bg, uint32_t fg);
 float			step_power_of_two(float value, float direction, t_v2f range);
-float			step_linear(float value, float direction, float step, t_v2f range);
+float			step_linear(float value, float direction,
+					float step, t_v2f range);
 #endif

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/24 09:15:29 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/31 16:20:47 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/20 10:05:48 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "rt_math.h"
 #include "scene.h"
 #include "color.h"
+#include "ray.h"
 
 #define DFLT_BUMP_SCALE 0.1f
 
@@ -102,4 +103,24 @@ t_v3f	perturb_normal(const t_mat *mat, const t_v2f texcoord,
 		ctx.scale = DFLT_BUMP_SCALE;
 	calc_tangent_basis(normal, &ctx.t, &ctx.b);
 	return (apply_bump(&ctx, texcoord, mat->texture.scale_rot));
+}
+
+/**
+ * Ignore all lighting/shading and purely display the resulting surface normal
+ * as a grayscaled color
+ */
+t_v3f	display_normal(t_ray_hit *hit_info)
+{
+	const float	contrast = 2.0f;
+	const t_v3f	lumi = init_v3f(.21f, .72f, .07f);
+	t_v3f		n;
+	float		grey;
+
+	n = v3f_scale(v3f_add(hit_info->normal, g_v3f_one), 0.5f);
+	n.x = (n.x - 0.5f) * contrast + 0.5f;
+	n.y = (n.y - 0.5f) * contrast + 0.5f;
+	n.z = (n.z - 0.5f) * contrast + 0.5f;
+	n = v3f_clampf01(n);
+	grey = v3f_dot(n, lumi);
+	return (init_v3f(grey, grey, grey));
 }

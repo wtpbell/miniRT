@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "MLX42/MLX42_Int.h"
 #include "color.h"
 #include "vector.h"
 #include "rt_math.h"
@@ -64,22 +65,13 @@ t_v3f	v3f_apply_gamma(t_v3f color, float gamma)
 		}});
 }
 
-/**
- * Ignore all lighting/shading and purely display the resulting surface normal
- * as a grayscaled color
- */
-t_v3f	display_normal(t_ray_hit *hit_info)
+uint32_t	rt_get_pixel(mlx_image_t *img, uint32_t x, uint32_t y)
 {
-	const float	contrast = 2.0f;
-	const t_v3f	lumi = init_v3f(.21f, .72f, .07f);
-	t_v3f		n;
-	float		grey;
+	uint8_t	*pixel;
 
-	n = v3f_scale(v3f_add(hit_info->normal, g_v3f_one), 0.5f);
-	n.x = (n.x - 0.5f) * contrast + 0.5f;
-	n.y = (n.y - 0.5f) * contrast + 0.5f;
-	n.z = (n.z - 0.5f) * contrast + 0.5f;
-	n = v3f_clampf01(n);
-	grey = v3f_dot(n, lumi);
-	return (init_v3f(grey, grey, grey));
+	pixel = img->pixels + (y * img->width + x) * BPP;
+	return (((uint32_t)pixel[0] << 24)
+		| ((uint32_t)pixel[1] << 16)
+		| ((uint32_t)pixel[2] << 8)
+		| (uint32_t)pixel[3]);
 }

@@ -76,10 +76,7 @@ static void	draw_char(mlx_image_t *canvas, char c, t_v2f pos, uint32_t color)
 				if (pos.x + d.x >= 0 && pos.y + d.y >= 0
 					&& pos.x + d.x < (int)canvas->width
 					&& pos.y + d.y < (int)canvas->height)
-				{
-					((uint32_t *)canvas->pixels)[((int)pos.y + (int)d.y)
-						* canvas->width + (int)pos.x + (int)d.x] = color;
-				}
+					mlx_put_pixel(canvas, pos.x + d.x, pos.y + d.y, color);
 			}
 		}
 	}
@@ -113,7 +110,6 @@ void	draw_rect_border(mlx_image_t *canvas, t_v2f pos,
 {
 	t_v2f		p;
 	t_v2f		end;
-	uint32_t	*pix;
 
 	end.x = pos.x + size.x;
 	end.y = pos.y + size.y;
@@ -127,11 +123,7 @@ void	draw_rect_border(mlx_image_t *canvas, t_v2f pos,
 					|| p.y == pos.y || p.y == end.y - 1)
 				&& p.x >= 0 && p.y >= 0 && p.x < canvas->width
 				&& p.y < canvas->height)
-			{
-				pix = (uint32_t *)canvas->pixels + (int)p.y
-					* canvas->width + (int)p.x;
-				*pix = color;
-			}
+				mlx_put_pixel(canvas, p.x, p.y, color);
 		}
 	}
 }
@@ -150,29 +142,26 @@ uint32_t	reverse_color(uint32_t color)
 
 void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
 {
-	uint32_t	*pixel;
 	t_v2f		_pos;
 	t_v2f		start;
 	t_v2f		end;
-	float		alpha;
+	uint32_t	alpha;
 
-	alpha = (color & 0xFF) / 255.0f;
+	alpha = (color & 0xFF);
 	start = init_v2f(fmax(0, pos.x), fmax(0, pos.y));
 	end = init_v2f(fmin(canvas->width - 1, pos.x + size.x - 1),
 			fmin(canvas->height - 1, pos.y + size.y - 1));
-	_pos.x = start.x -1;
+	_pos.x = start.x - 1;
 	while (++_pos.x <= end.x)
 	{
 		_pos.y = start.y - 1;
 		while (++_pos.y <= end.y)
 		{
-			pixel = (uint32_t *)canvas->pixels
-				+ (int)_pos.y * canvas->width + (int)_pos.x;
-			if (alpha >= 1.0f)
+			if (alpha == 255)
 				mlx_put_pixel(canvas, _pos.x, _pos.y, color);
 			else
 				mlx_put_pixel(canvas, _pos.x, _pos.y,
-					blend_colors(reverse_color(*pixel), color));
+					blend_colors(rt_get_pixel(canvas, _pos.x, _pos.y), color));
 		}
 	}
 }
