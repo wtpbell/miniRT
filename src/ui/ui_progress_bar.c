@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/17 21:24:42 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/18 23:04:20 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/20 21:08:48 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,12 @@ bool	init_progress_bar(t_progress_bar *pb, t_v2i pos, t_v2i size, mlx_t *mlx)
 {
 	pb->pos = pos;
 	pb->size = size;
-	pb->text.scale = g_v2f_one;
+	pb->text.scale = init_v2f(2.0f, 2.0f);
 	pb->text.anchor = init_v2f(0.5f, 0.5f);
 	pb->text.img = init_str_frame(mlx, "100.00%");
 	if (pb->text.img == NULL)
 		return (false);
+	init_sprite_full_size(&pb->text);
 	pb->bg.scale = g_v2f_one;
 	pb->bg.anchor = init_v2f(0.5f, 0.5f);
 	pb->bg.img = mlx_new_image(mlx, size.x, size.y);
@@ -29,6 +30,7 @@ bool	init_progress_bar(t_progress_bar *pb, t_v2i pos, t_v2i size, mlx_t *mlx)
 		return (mlx_delete_image(mlx, pb->text.img), false);
 	pb->bg_color = C_BLACK;
 	pb->bar_color = C_RED;
+	init_sprite_full_size(&pb->bg);
 	return (true);
 }
 
