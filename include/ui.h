@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/20 15:10:55 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/20 17:57:15 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,6 +222,7 @@ void			ui_mark_dirty(t_ui_context *ctx);
 /* UI Helpers */
 char			*format_float_value(float value);
 char			*format_color_value(float value);
+char			*format_power_of_two(float value);
 t_light			*find_light(t_scene *scene, t_light_type type);
 void			decrement_value_button(t_ui_element *btn, void *param);
 void			increment_value_button(t_ui_element *btn, void *param);
@@ -242,7 +243,7 @@ void			default_panel(t_ui_element *panel, t_v2f pos, t_v2f size);
 void			default_label(t_ui_element *label, t_v2f pos, t_v2f size);
 
 /* Utility */
-char			*ft_ftoa(float f, int precision);
 uint32_t		blend_colors(uint32_t bg, uint32_t fg);
-
+float			step_power_of_two(float value, float direction, t_v2f range);
+float			step_linear(float value, float direction, float step, t_v2f range);
 #endif
