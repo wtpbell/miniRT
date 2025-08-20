@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui.h                                               :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/19 18:23:55 by bewong        ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui.h                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/20 15:10:55 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@
 # define UI_LABEL_WIDTH 200
 
 /* Base UI Colors */
-# define UI_PANEL_BG_COLOR			0xe4f805dd
+# define UI_PANEL_BG_COLOR			0x1A1F2CFF
 # define UI_SECTION_COLOR			0x2d2d2dcc
 # define UI_BUTTON_COLOR			0xebab15d2
 # define UI_BUTTON_BORDER_COLOR		0xFFFFFFFF
@@ -60,7 +60,7 @@
 
 /* Active Parameter Colors */
 # define UI_ACTIVE					0x2D2D2DCC
-# define UI_ACTIVE_BORDER			0x00FF00FF
+# define UI_ACTIVE_BORDER			0x3C3C3CFF
 
 extern const uint8_t				g_font[256][8];
 

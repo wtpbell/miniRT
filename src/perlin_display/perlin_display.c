@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 08:59:47 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/17 16:36:04 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/20 14:54:47 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,5 @@ void	perlin_display(void)
 	if (display.ui)
 		mlx_loop_hook(mlx, perlin_render_loop, display.ui);
 	mlx_loop(mlx);
-	if (display.ui)
-		destroy_ui(display.ui);
-	free(display.values);
-	mlx_terminate(mlx);
+	cleanup_display(&display);
 }

@@ -48,15 +48,9 @@ static void	navigate(t_pdisplay *d, mlx_key_data_t keydata)
 	if (prev_i != d->curr)
 	{
 		if (prev_i >= 0 && prev_i < d->param_count && d->params[prev_i].row)
-		{
-			d->params[prev_i].row->style.bg_color = UI_PANEL_BG_COLOR;
-			d->params[prev_i].row->style.border_color = UI_TRANSPARENT;
-		}
+			row_style(d->params[prev_i].row, false);
 		if (d->curr >= 0 && d->curr < d->param_count && d->params[d->curr].row)
-		{
-			d->params[d->curr].row->style.bg_color = UI_ACTIVE;
-			d->params[d->curr].row->style.border_color = UI_ACTIVE_BORDER;
-		}
+			row_style(d->params[d->curr].row, true);
 		ui_mark_dirty(d->ui->context);
 	}
 }
@@ -115,7 +109,8 @@ void	perlin_key_hook(mlx_key_data_t keydata, void *param)
 	prev_pattern = display->pattern;
 	navigate(display, keydata);
 	pick_pattern(display, keydata);
-	modify(display, keydata);
+	if (keydata.key == MLX_KEY_LEFT || keydata.key == MLX_KEY_RIGHT)
+		modify(display, keydata);
 	if (prev_curr != display->curr
 		|| ft_strncmp(prev_pattern.name, display->pattern.name, 16) != 0
 		|| keydata.key == MLX_KEY_UP || keydata.key == MLX_KEY_DOWN

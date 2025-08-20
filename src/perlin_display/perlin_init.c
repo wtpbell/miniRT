@@ -12,39 +12,19 @@
 
 #include "perlin_display.h"
 
-static const t_val_mod	g_valmods[] = {
-{"delta-x", {.f = &((t_pdisplay *)0)->fdelta.x}, {.f = NULL}, double_flt},
-{"delta-x", {.f = &((t_pdisplay *)0)->fdelta.x}, {.f = NULL}, half_flt},
-{"uni_scale", {.f = &((t_pdisplay *)0)->offset.z}, {.f = NULL}, double_flt},
-{"uni_scale", {.f = &((t_pdisplay *)0)->offset.z}, {.f = NULL}, half_flt},
-{"offset-x", {.f = &((t_pdisplay *)0)->offset.x}, {.f = NULL}, double_flt},
-{"offset-x", {.f = &((t_pdisplay *)0)->offset.x}, {.f = NULL}, half_flt},
-{"offset-y", {.f = &((t_pdisplay *)0)->offset.y}, {.f = NULL}, double_flt},
-{"offset-y", {.f = &((t_pdisplay *)0)->offset.y}, {.f = NULL}, half_flt},
-{"rate", {.f = &((t_perlin *)0)->rate}, {.f = NULL}, double_flt},
-{"rate", {.f = &((t_perlin *)0)->rate}, {.f = NULL}, half_flt},
-{"gain", {.f = &((t_perlin *)0)->gain}, {.f = NULL}, double_flt},
-{"gain", {.f = &((t_perlin *)0)->gain}, {.f = NULL}, half_flt},
-{"freq", {.f = &((t_perlin *)0)->freq}, {.f = NULL}, double_flt},
-{"freq", {.f = &((t_perlin *)0)->freq}, {.f = NULL}, half_flt},
-{"ampt", {.f = &((t_perlin *)0)->ampt}, {.f = NULL}, double_flt},
-{"ampt", {.f = &((t_perlin *)0)->ampt}, {.f = NULL}, half_flt},
-{"layers", {.i = &((t_perlin *)0)->layers},
-{.i = &((t_pdisplay *)0)->idelta.x}, delta_int},
-{"layers", {.i = &((t_perlin *)0)->layers},
-{.i = &((t_pdisplay *)0)->idelta.y}, delta_int},
-{"dist", {.f = &((t_perlin *)0)->marble.distortion}, {.f = NULL}, double_flt},
-{"dist", {.f = &((t_perlin *)0)->marble.distortion}, {.f = NULL}, half_flt},
-{"scale", {.f = &((t_perlin *)0)->marble.scale}, {.f = NULL}, double_flt},
-{"scale", {.f = &((t_perlin *)0)->marble.scale}, {.f = NULL}, half_flt}
-};
-
 bool	init_ui(t_pdisplay *display, t_perlin *data)
 {
-	display->size = sizeof(g_valmods) / sizeof(t_val_mod);
-	display->values = ft_memdup(g_valmods, sizeof(g_valmods));
-	(void)data;
-	return (display->values != NULL);
+	display->size = 24;
+	display->values = init_modifiers(display, data);
+	if (!display->values)
+		return (false);
+	display->ui = malloc(sizeof(t_ui));
+	if (!display->ui)
+	{
+		free(display->values);
+		return (false);
+	}
+	return (true);
 }
 
 void	init_params(t_pdisplay *display)
@@ -80,6 +60,12 @@ void	init_display(mlx_t *mlx, t_pdisplay *display, t_perlin *data)
 	display->idelta = (t_v2i){{1, -1}};
 	display->pattern = (t_perlin_node){"pink", pink_noise};
 	display->ui = NULL;
+	if (!init_ui(display, data))
+	{
+		free(display->values);
+		return ;
+	}
+	mlx_key_hook(mlx, key_hook, display);
 }
 
 void	init_perlin_data(t_perlin *data)

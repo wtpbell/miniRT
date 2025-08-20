@@ -53,7 +53,7 @@ bool	is_key_press(mlx_key_data_t keydata, keys_t key)
 	return (keydata.key == key && keydata.action == MLX_PRESS);
 }
 
-void	call_delta(t_val_mod *fn)
+void	call_delta(t_val_mod *mod)
 {
-	fn->action(fn->value, fn->ctx);
+	mod->action(mod->value, mod->ctx);
 }

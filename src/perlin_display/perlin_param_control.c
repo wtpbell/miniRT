@@ -22,17 +22,17 @@ static void	format_param_value(char *dst, size_t size, int i)
 		rt_snprintf(dst, size, "%f", *g_params[i].value);
 }
 
-static void	row_style(t_ui_element *row, int i)
+void	row_style(t_ui_element *row, bool is_active)
 {
-	if (i == 0)
-	{
-		row->style.bg_color = UI_ACTIVE;
-		row->style.border_color = UI_ACTIVE_BORDER;
-	}
-	else
+	if (is_active)
 	{
 		row->style.bg_color = UI_PANEL_BG_COLOR;
 		row->style.border_color = UI_TRANSPARENT;
+	}
+	else
+	{
+		row->style.bg_color = UI_ACTIVE;
+		row->style.border_color = UI_ACTIVE_BORDER;
 	}
 }
 
@@ -46,7 +46,7 @@ static void	create_param_row(t_ui *ui, t_ui_element *parent,
 	row = create_panel(ui->context,
 			init_v2f(0, UI_HEADER_HEIGHT + (i * UI_ROW_HEIGHT)),
 			init_v2f(UI_PANEL_WIDTH, UI_ROW_HEIGHT));
-	row_style(row, i);
+	row_style(row, i == display->curr);
 	attach_child(parent, row);
 	label = create_label(ui->context, g_params[i].name,
 			init_v2f(UI_LABEL_PADDING * 4,

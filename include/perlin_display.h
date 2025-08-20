@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 11:39:26 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/18 22:40:11 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/20 15:18:25 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ struct s_params
 };
 
 extern struct s_params		g_params[PARAMS_COUNT];
+typedef void (*t_modifier)(t_val_mod *mods, t_pdisplay *display, t_perlin *data);
+
 
 void			perlin_display(void);
 void			print_perlin(t_perlin *data);
@@ -103,10 +105,17 @@ void			half_flt(t_val real, t_val ctx);
 /* Parameter control */
 void			add_parameter_controls(t_ui *ui, t_ui_element *parent,
 					t_pdisplay *display);
+void			row_style(t_ui_element *row, bool is_active);
 
 /* Perlin util */
 void			*ft_memdup(const void *src, size_t n);
 t_ui_element	*find_child_by_type(t_ui_element *parent, t_ui_type type);
 void			perlin_key_hook(mlx_key_data_t keydata, void *param);
 void			print_perlin(t_perlin *data);
+
+/* Modifier */
+t_val_mod		*init_modifiers(t_pdisplay *display, t_perlin *data);
+
+/* Free */
+void			cleanup_display(t_pdisplay *display);
 #endif
