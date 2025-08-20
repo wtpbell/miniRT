@@ -90,7 +90,7 @@ t_ui_element	*create_light_section(t_section_config *cfg)
 	if (!light)
 		return (NULL);
 	size = init_v2f(cfg->size.x,
-			UI_HEADER_HEIGHT + 7 * (UI_ROW_HEIGHT + UI_PADDING) + UI_PADDING);
+			UI_HEADER_HEIGHT + 7.1 * (UI_ROW_HEIGHT + UI_PADDING) + UI_PADDING);
 	section = create_panel(cfg->ctx, cfg->pos, size);
 	if (!section)
 		return (NULL);

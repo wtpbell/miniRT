@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/18 23:03:41 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/20 20:39:22 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,22 +40,22 @@
 # define UI_LABEL_PADDING 10
 
 /* Base UI Colors */
-# define UI_PANEL_BG_COLOR			0x1A1A1A55
+# define UI_PANEL_BG_COLOR			0x1A1F2CFF
 # define UI_SECTION_COLOR			0x2D2D2DCC
-# define UI_BUTTON_COLOR			0xFF3A70D2
+# define UI_BUTTON_COLOR			0xEBAB15D2
 # define UI_BUTTON_BORDER_COLOR		0xFFFFFFFF
 # define UI_TEXT_COLOR				0xFFFFFFFF
 # define UI_HEADER_COLOR			0x1A1A1AFF
 # define UI_BORDER_COLOR			0x4A4A4AFF
-# define UI_TRANSPARENT				0x00000000
-# define UI_LABEL_COLOR				0xFFFFFFFF
-# define UI_RENDER_BUTTON_COLOR		0x2ECC71FF
+# define UI_TRANSPARENT				0xFFFFFF00
+# define UI_LABEL_COLOR				0xFFFFFFCF
+# define UI_RENDER_BUTTON_COLOR		0x60EA9AFF
 
 /* Section Colors */
-# define UI_COLOR_CAMERA_SECTION	0xD14D25FF
-# define UI_COLOR_LIGHT_SECTION		0xF79903FF
-# define UI_COLOR_AMBIENT_SECTION	0xEDC835FF
-# define UI_COLOR_DOF_SECTION		0x00396DFF
+# define UI_COLOR_CAMERA_SECTION	0xD12525FF
+# define UI_COLOR_LIGHT_SECTION		0xA303CFFF
+# define UI_COLOR_AMBIENT_SECTION	0x2F08CFFF
+# define UI_COLOR_DOF_SECTION		0x046D00FF
 # define UI_COLOR_SAMPLE_SECTION	0x2F6BA4FF
 
 extern const uint8_t		g_font[256][8];

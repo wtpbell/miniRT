@@ -113,6 +113,7 @@ t_ui_element	*create_header(t_ui_context *ctx, const char *title,
 	header = create_panel(ctx, pos, size);
 	if (!header)
 		return (NULL);
+	header->style.bg_color = UI_TRANSPARENT;
 	if (title)
 	{
 		title_label = create_label(ctx, title, init_v2f(10, 10), UI_TEXT_COLOR);
