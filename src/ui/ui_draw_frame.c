@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/14 17:28:23 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/20 21:34:53 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/20 21:43:01 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	put_pixel_frame(t_sprite *dst, t_sprite *src, t_v2i pos_dst,
 	uint32_t	color;
 
 	color = rt_get_pixel(src->img, pos_src.x / src->scale.x,
-		pos_src.y / src->scale.y);
+			pos_src.y / src->scale.y);
 	if ((color & 0xFF) == 0)
 		return ;
 	mlx_put_pixel(dst->img, pos_dst.x, pos_dst.y,
@@ -49,7 +49,7 @@ static void	put_pixel_frame(t_sprite *dst, t_sprite *src, t_v2i pos_dst,
 void	draw_frame(t_sprite *dst, t_sprite *src, t_v2i pos)
 {
 	const t_v2i	max = init_v2i(pos.x + src->full_size.x,
-		pos.y + src->full_size.y);
+			pos.y + src->full_size.y);
 	t_v2i		start;
 	t_v2i		end;
 	t_v2i		smp;

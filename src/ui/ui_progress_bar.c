@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/17 21:24:42 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/20 21:08:48 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/20 21:44:34 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	update_progress_bar(t_progress_bar *pb, t_sprite *screen, float t)
 	ft_bzero(pb->text.img->pixels,
 		pb->text.img->width * pb->text.img->height * sizeof(uint32_t));
 	draw_text(pb->text.img, buf, g_v2f_zero, C_WHITE);
-	
 	draw_frame(screen, &pb->bg, get_sprite_position(screen, &pb->bg, pb->pos));
-	draw_frame(screen, &pb->text, get_sprite_position(screen, &pb->text, pb->pos));
+	draw_frame(screen, &pb->text,
+		get_sprite_position(screen, &pb->text, pb->pos));
 }
