@@ -36,7 +36,7 @@ void	row_style(t_ui_element *row, bool is_active)
 	}
 }
 
-static void	create_param_row(t_ui *ui, t_ui_element *parent,
+static bool	create_param_row(t_ui *ui, t_ui_element *parent,
 			t_pdisplay *display, int i)
 {
 	t_ui_element	*row;
@@ -46,24 +46,31 @@ static void	create_param_row(t_ui *ui, t_ui_element *parent,
 	row = create_panel(ui->context,
 			init_v2f(0, UI_HEADER_HEIGHT + (i * UI_ROW_HEIGHT)),
 			init_v2f(UI_PANEL_WIDTH, UI_ROW_HEIGHT));
+	if (!row)
+		return (false);
 	row_style(row, i == display->curr);
 	attach_child(parent, row);
 	label = create_label(ui->context, g_params[i].name,
 			init_v2f(UI_LABEL_PADDING * 4,
 				(UI_ROW_HEIGHT - UI_FONT_HEIGHT) / 2), UI_TEXT_COLOR);
+	if (!label)
+		return (false);
 	attach_child(row, label);
 	format_param_value(value_str, sizeof(value_str), i);
 	label = create_label(ui->context, value_str,
 			init_v2f(UI_LABEL_WIDTH + UI_LABEL_PADDING,
 				(UI_ROW_HEIGHT - UI_FONT_HEIGHT) / 2), UI_TEXT_COLOR);
+	if (!label)
+		return (false);
 	attach_child(row, label);
 	display->params[i].value = g_params[i].value;
 	display->params[i].range = g_params[i].range;
 	display->params[i].label = (t_ui_label *)label->data;
 	display->params[i].row = row;
+	return (true);
 }
 
-void	add_parameter_controls(t_ui *ui, t_ui_element *parent,
+bool	add_parameter_controls(t_ui *ui, t_ui_element *parent,
 		t_pdisplay *display)
 {
 	int	i;
@@ -72,7 +79,9 @@ void	add_parameter_controls(t_ui *ui, t_ui_element *parent,
 	i = 0;
 	while (i < display->param_count)
 	{
-		create_param_row(ui, parent, display, i);
+		if (!create_param_row(ui, parent, display, i))
+			return (false);
 		i++;
 	}
+	return (true);
 }

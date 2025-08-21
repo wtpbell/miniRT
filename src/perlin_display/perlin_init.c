@@ -12,20 +12,13 @@
 
 #include "perlin_display.h"
 
-bool	init_ui(t_pdisplay *display, t_perlin *data)
-{
-	display->size = 24;
-	display->values = init_modifiers(display, data);
-	if (!display->values)
-		return (false);
-	display->ui = malloc(sizeof(t_ui));
-	if (!display->ui)
-	{
-		free(display->values);
-		return (false);
-	}
-	return (true);
-}
+struct s_params			g_params[PARAMS_COUNT] = {0};
+const t_perlin_node		g_nodes[4] = {
+{"PINK", pink_noise},
+{"TURB", turbulence_noise},
+{"WOOD", wood_noise},
+{"MARBLE", marble_noise}
+};
 
 void	init_params(t_pdisplay *display)
 {
@@ -47,25 +40,61 @@ void	init_params(t_pdisplay *display)
 	ft_memcpy(g_params, params, sizeof(params));
 }
 
-void	init_display(mlx_t *mlx, t_pdisplay *display, t_perlin *data)
+bool	setup_perlin_ui(t_ui *ui, t_pdisplay *display)
 {
+	t_ui_element	*panel;
+	t_ui_element	*section;
+	t_v2f			size;
+	char			header_text[128];
+
+	size = init_v2f(UI_PANEL_WIDTH, UI_ROW_HEIGHT * (PARAMS_COUNT + 1));
+	display->pattern = g_nodes[0];
+	panel = create_panel(ui->context, g_v2f_zero, size);
+	if (!panel)
+		return (false);
+	attach_child(ui->root, panel);
+	rt_snprintf(header_text, sizeof(header_text),
+		"PERLIN NOISE: %s", g_nodes[0].name);
+	section = create_header(ui->context, header_text,
+			g_v2f_zero, init_v2f(size.x, UI_HEADER_HEIGHT));
+	if (!section)
+		return (false);
+	attach_child(panel, section);
+	display->header = section;
+	display->ui_panel = panel;
+	if (!add_parameter_controls(ui, panel, display))
+		return (false);
+	ui_mark_dirty(ui->context);
+	return (true);
+}
+
+bool	init_display(mlx_t *mlx, t_pdisplay *display, t_perlin *data)
+{
+	ft_memset(display, 0, sizeof(t_pdisplay));
 	display->mlx = mlx;
 	display->p_data = data;
 	display->img = mlx_new_image(mlx, 512, 512);
+	if (!display->img)
+		return (false);
 	display->offset = init_v3f(0.0f, 0.0f, 16.0f);
 	display->curr = 0;
-	display->size = -1;
-	display->values = NULL;
 	display->fdelta = init_v2f(1.0f, -1.0f);
 	display->idelta = (t_v2i){{1, -1}};
 	display->pattern = (t_perlin_node){"pink", pink_noise};
-	display->ui = NULL;
-	if (!init_ui(display, data))
-	{
-		free(display->values);
-		return ;
-	}
-	mlx_key_hook(mlx, key_hook, display);
+	display->size = 24;
+	display->values = init_modifiers(display, data);
+	if (!display->values)
+		return (false);
+	init_params(display);
+	display->ui = create_ui(mlx, NULL, NULL, display);
+	if (!display->ui || !setup_perlin_ui(display->ui, display))
+		return (false);
+	if (mlx_image_to_window(mlx, display->img,
+			(WIDTH - display->img->width) / 2,
+			(HEIGHT - display->img->height) / 2) != 0)
+		return (false);
+	ui_mark_dirty(display->ui->context);
+	return (true);
 }
 
 void	init_perlin_data(t_perlin *data)

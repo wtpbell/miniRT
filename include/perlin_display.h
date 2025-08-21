@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   perlin_display.h                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/01 11:39:26 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/20 18:03:50 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   perlin_display.h                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/08/01 11:39:26 by jboon         #+#    #+#                 */
+/*   Updated: 2025/08/21 14:48:57 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,16 +84,14 @@ typedef void				(*t_modifier)(t_val_mod *mods,
 void			perlin_display(void);
 void			print_perlin(t_perlin *data);
 void			modify(t_pdisplay *display, mlx_key_data_t keydata);
-void			call_print(t_val_mod *fn);
 void			call_delta(t_val_mod *fn);
 void			draw_perlin(mlx_image_t *img, t_perlin *data,
 					t_v3f offset, t_fp_perlin fp_perlin);
-bool			init_ui(t_pdisplay	*display, t_perlin	*data);
 bool			is_key_press(mlx_key_data_t keydata, keys_t key);
 
 /* Perlin initiation */
 void			init_params(t_pdisplay *display);
-void			init_display(mlx_t *mlx, t_pdisplay *display, t_perlin *data);
+bool			init_display(mlx_t *mlx, t_pdisplay *display, t_perlin *data);
 void			init_perlin_data(t_perlin *data);
 
 /* Math functions */
@@ -103,12 +101,11 @@ void			double_flt(t_val real, t_val ctx);
 void			half_flt(t_val real, t_val ctx);
 
 /* Parameter control */
-void			add_parameter_controls(t_ui *ui, t_ui_element *parent,
+bool			add_parameter_controls(t_ui *ui, t_ui_element *parent,
 					t_pdisplay *display);
 void			row_style(t_ui_element *row, bool is_active);
 
 /* Perlin util */
-void			*ft_memdup(const void *src, size_t n);
 t_ui_element	*find_child_by_type(t_ui_element *parent, t_ui_type type);
 void			perlin_key_hook(mlx_key_data_t keydata, void *param);
 void			print_perlin(t_perlin *data);
