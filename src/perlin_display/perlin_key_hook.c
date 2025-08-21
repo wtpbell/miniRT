@@ -28,8 +28,8 @@ void	draw_perlin(mlx_image_t *img, t_perlin *data,
 		while (x < img->width)
 		{
 			point.x = (x / (float)(img->width - 1) * offset.z) + offset.x;
-			val = fp_perlin(point, data);
-			mlx_put_pixel(img, x, y, v3f_to_col32(init_v3f(val, val, val)));
+			val = ft_clampf01(fp_perlin(point, data)) * 255.0f;
+			mlx_put_pixel(img, x, y, init_col32(val, val, val, 255));
 			x++;
 		}
 		y++;

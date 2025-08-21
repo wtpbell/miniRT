@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/01 08:59:47 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/21 15:07:01 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/21 19:03:09 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,8 @@ static void	perlin_render_loop(void *param)
 	display = (t_pdisplay *)ui->context->game;
 	if (ui->context->needs_redraw)
 	{
-		ft_memset(display->img->pixels, 0,
-			display->img->width * display->img->height * sizeof(uint32_t));
 		draw_perlin(display->img, display->p_data,
 			display->offset, display->pattern.fp_perlin);
-		ft_memset(ui->context->canvas->pixels, 0,
-			ui->context->canvas->width * ui->context->canvas->height
-			* sizeof(uint32_t));
 		render_ui_element(ui->root, ui->context);
 		ui->context->needs_redraw = false;
 	}
