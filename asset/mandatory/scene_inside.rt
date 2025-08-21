@@ -1,0 +1,14 @@
+# Test 1: Camera definitely inside - very close to cylinder center
+C	0,0,9	0,0,1	90
+
+# Light inside the cylinder  
+L	0,0,9	1.0	255,255,255
+A	0.2	255,255,255
+
+# Remove plane temporarily to test
+# pl	0.0,-8.0,0.0	0.0,1.0,0.0	200,200,200
+
+# Cylinder - center at z=9, height=20, radius=2.5
+# Camera at z=9 is exactly at center
+cy	0,0,9	0,0,1	5.0	20.0	0,0,255
+
