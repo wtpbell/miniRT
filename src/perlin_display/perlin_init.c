@@ -12,7 +12,6 @@
 
 #include "perlin_display.h"
 
-struct s_params			g_params[PARAMS_COUNT] = {0};
 const t_perlin_node		g_nodes[4] = {
 {"PINK", pink_noise},
 {"TURB", turbulence_noise},
@@ -22,22 +21,25 @@ const t_perlin_node		g_nodes[4] = {
 
 void	init_params(t_pdisplay *display)
 {
-	const struct s_params	params[PARAMS_COUNT] = {
-	{"DELTA X", &display->fdelta.x, init_v2f(-100.0f, 100.0f)},
-	{"DELTA Y", &display->fdelta.y, init_v2f(-100.0f, 100.0f)},
-	{"UNI SCALE", &display->offset.z, init_v2f(0.1f, 100.0f)},
-	{"OFFSET X", &display->offset.x, init_v2f(-100.0f, 100.0f)},
-	{"OFFSET Y", &display->offset.y, init_v2f(-100.0f, 100.0f)},
-	{"RATE", &display->p_data->rate, init_v2f(0.1f, 10.0f)},
-	{"GAIN", &display->p_data->gain, init_v2f(0.1f, 10.0f)},
-	{"FREQ", &display->p_data->freq, init_v2f(0.1f, 10.0f)},
-	{"AMPT", &display->p_data->ampt, init_v2f(0.1f, 10.0f)},
-	{"LAYERS", (float *)&display->p_data->layers, init_v2f(1, 10)},
-	{"DISTORTION", &display->p_data->marble.distortion, init_v2f(0.1f, 10.0f)},
-	{"SCALE", &display->p_data->marble.scale, init_v2f(0.1f, 10.0f)}
+	const t_param	params[PARAMS_COUNT] = {
+	{"DELTA X", {.f = &display->fdelta.x}, init_v2f(-P_POW, P_POW), NULL, NULL},
+	{"DELTA Y", {.f = &display->fdelta.y}, init_v2f(-P_POW, P_POW), NULL, NULL},
+	{"UNI SCALE", {.f = &display->offset.z}, init_v2f(P_IPOW, P_POW), NULL, NULL},
+	{"OFFSET X", {.f = &display->offset.x}, init_v2f(-P_POW, P_POW), NULL, NULL},
+	{"OFFSET Y", {.f = &display->offset.y}, init_v2f(-P_POW, P_POW), NULL, NULL},
+	{"RATE", {.f = &display->p_data->rate}, init_v2f(P_IPOW, P_POW), NULL, NULL},
+	{"GAIN", {.f = &display->p_data->gain}, init_v2f(P_IPOW, P_POW), NULL, NULL},
+	{"FREQ", {.f = &display->p_data->freq}, init_v2f(P_IPOW, P_POW), NULL, NULL},
+	{"AMPT", {.f = &display->p_data->ampt}, init_v2f(P_IPOW, P_POW), NULL, NULL},
+	{"LAYERS", {.i = &display->p_data->layers}, init_v2f(1.0f, 5.0f), NULL, NULL},
+	{"DISTORTION", {.f = &display->p_data->marble.distortion},
+		init_v2f(P_IPOW, P_POW), NULL, NULL},
+	{"SCALE", {.f = &display->p_data->marble.scale}, init_v2f(P_IPOW, P_POW), NULL, NULL}
 	};
 
-	ft_memcpy(g_params, params, sizeof(params));
+	ft_memcpy(display->params, params, sizeof(params));
+	display->param_count = PARAMS_COUNT;
+	display->curr = 0;
 }
 
 bool	setup_perlin_ui(t_ui *ui, t_pdisplay *display)

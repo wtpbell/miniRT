@@ -50,6 +50,7 @@ void	perlin_display(void)
 	t_pdisplay	display;
 	t_perlin	data;
 
+	ft_bzero(&display, sizeof(t_pdisplay));
 	init_perlin_data(&data);
 	if (!init_window_and_display(&mlx, &display, &data))
 		return ;

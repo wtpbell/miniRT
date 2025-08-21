@@ -17,25 +17,25 @@ static void	init_delta_scale_offset_modifiers(t_val_mod *mods,
 {
 	(void)data;
 	mods[0] = (t_val_mod){"delta-x", {.f = &display->fdelta.x},
-	{.f = NULL}, double_flt};
+	{.f = NULL}, init_v2f(0.1f, 1.0f), double_flt};
 	mods[1] = (t_val_mod){"delta-x", {.f = &display->fdelta.x},
-	{.f = NULL}, half_flt};
+	{.f = NULL}, init_v2f(0.1f, 1.0f), half_flt};
 	mods[2] = (t_val_mod){"delta-y", {.f = &display->fdelta.y},
-	{.f = NULL}, double_flt};
+	{.f = NULL}, init_v2f(-1.0f, -0.1f), double_flt};
 	mods[3] = (t_val_mod){"delta-y", {.f = &display->fdelta.y},
-	{.f = NULL}, half_flt};
+	{.f = NULL}, init_v2f(-1.0f, -0.1f), half_flt};
 	mods[4] = (t_val_mod){"uni_scale", {.f = &display->offset.z},
-	{.f = &display->fdelta.x}, delta_flt};
+	{.f = &display->fdelta.x}, init_v2f(P_IPOW, P_POW), delta_flt};
 	mods[5] = (t_val_mod){"uni_scale", {.f = &display->offset.z},
-	{.f = &display->fdelta.y}, delta_flt};
+	{.f = &display->fdelta.y}, init_v2f(P_IPOW, P_POW), delta_flt};
 	mods[6] = (t_val_mod){"offset-x", {.f = &display->offset.x},
-	{.f = &display->fdelta.x}, delta_flt};
+	{.f = &display->fdelta.x}, init_v2f(-P_POW, P_POW), delta_flt};
 	mods[7] = (t_val_mod){"offset-x", {.f = &display->offset.x},
-	{.f = &display->fdelta.y}, delta_flt};
+	{.f = &display->fdelta.y}, init_v2f(-P_POW, P_POW), delta_flt};
 	mods[8] = (t_val_mod){"offset-y", {.f = &display->offset.y},
-	{.f = &display->fdelta.x}, delta_flt};
+	{.f = &display->fdelta.x}, init_v2f(-P_POW, P_POW), delta_flt};
 	mods[9] = (t_val_mod){"offset-y", {.f = &display->offset.y},
-	{.f = &display->fdelta.y}, delta_flt};
+	{.f = &display->fdelta.y}, init_v2f(-P_POW, P_POW), delta_flt};
 }
 
 static void	init_rate_gain_modifiers(t_val_mod *mods,
@@ -43,13 +43,13 @@ static void	init_rate_gain_modifiers(t_val_mod *mods,
 {
 	(void)display;
 	mods[0] = (t_val_mod){"rate", {.f = &data->rate},
-	{.f = &display->fdelta.x}, delta_flt};
+	{.f = &display->fdelta.x}, init_v2f(P_IPOW, P_POW), delta_flt};
 	mods[1] = (t_val_mod){"rate", {.f = &data->rate},
-	{.f = &display->fdelta.y}, delta_flt};
+	{.f = &display->fdelta.y}, init_v2f(P_IPOW, P_POW), delta_flt};
 	mods[2] = (t_val_mod){"gain", {.f = &data->gain},
-	{.f = &display->fdelta.x}, delta_flt};
+	{.f = &display->fdelta.x}, init_v2f(P_IPOW, P_POW), delta_flt};
 	mods[3] = (t_val_mod){"gain", {.f = &data->gain},
-	{.f = &display->fdelta.y}, delta_flt};
+	{.f = &display->fdelta.y}, init_v2f(P_IPOW, P_POW), delta_flt};
 }
 
 static void	init_freq_ampt_modifiers(t_val_mod *mods,
@@ -57,32 +57,30 @@ static void	init_freq_ampt_modifiers(t_val_mod *mods,
 {
 	(void)display;
 	mods[0] = (t_val_mod){"freq", {.f = &data->freq},
-	{.f = &display->fdelta.x}, delta_flt};
+	{.f = &display->fdelta.x}, init_v2f(P_IPOW, P_POW), delta_flt};
 	mods[1] = (t_val_mod){"freq", {.f = &data->freq},
-	{.f = &display->fdelta.y}, delta_flt};
+	{.f = &display->fdelta.y}, init_v2f(P_IPOW, P_POW), delta_flt};
 	mods[2] = (t_val_mod){"ampt", {.f = &data->ampt},
-	{.f = &display->fdelta.x}, delta_flt};
+	{.f = &display->fdelta.x}, init_v2f(P_IPOW, P_POW), delta_flt};
 	mods[3] = (t_val_mod){"ampt", {.f = &data->ampt},
-	{.f = &display->fdelta.y}, delta_flt};
+	{.f = &display->fdelta.y}, init_v2f(P_IPOW, P_POW), delta_flt};
 }
 
 static void	init_layers_marble_modifiers(t_val_mod *mods,
 	t_pdisplay *display, t_perlin *data)
 {
 	mods[0] = (t_val_mod){"layers", {.i = &data->layers},
-	{.i = &display->idelta.x}, delta_int};
+	{.i = &display->idelta.x}, init_v2f(1.0f, 5.0f), delta_int};
 	mods[1] = (t_val_mod){"layers", {.i = &data->layers},
-	{.i = &display->idelta.y}, delta_int};
-	if (data->layers < 1)
-		data->layers = 1;
+	{.i = &display->idelta.y}, init_v2f(1.0f, 5.0f), delta_int};
 	mods[2] = (t_val_mod){"dist", {.f = &data->marble.distortion},
-	{.f = &display->fdelta.x}, delta_flt};
+	{.f = &display->fdelta.x}, init_v2f(P_IPOW, P_POW), delta_flt};
 	mods[3] = (t_val_mod){"dist", {.f = &data->marble.distortion},
-	{.f = &display->fdelta.y}, delta_flt};
+	{.f = &display->fdelta.y}, init_v2f(P_IPOW, P_POW), delta_flt};
 	mods[4] = (t_val_mod){"scale", {.f = &data->marble.scale},
-	{.f = &display->fdelta.x}, delta_flt};
+	{.f = &display->fdelta.x}, init_v2f(P_IPOW, P_POW), delta_flt};
 	mods[5] = (t_val_mod){"scale", {.f = &data->marble.scale},
-	{.f = &display->fdelta.y}, delta_flt};
+	{.f = &display->fdelta.y}, init_v2f(P_IPOW, P_POW), delta_flt};
 }
 
 static const t_modifier	g_modifier_initializers[] = {

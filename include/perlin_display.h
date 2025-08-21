@@ -18,16 +18,11 @@
 # include "material.h"
 # include "ui.h"
 # include "rt_snprintf.h"
+# include "vector.h"
 
 # define PARAMS_COUNT 12
-
-typedef struct s_param
-{
-	float			*value;
-	t_v2f			range;
-	t_ui_label		*label;
-	t_ui_element	*row;
-}	t_param;
+# define P_POW 32.0f
+# define P_IPOW 0.015625f
 
 typedef union u_val
 {
@@ -35,11 +30,21 @@ typedef union u_val
 	int		*i;
 }	t_val;
 
+typedef struct s_param
+{
+	const char		*name;
+	t_val			value;
+	t_v2f			range;
+	t_ui_label		*label;
+	t_ui_element	*row;
+}	t_param;
+
 typedef struct s_value_modifier
 {
 	const char	*name;
 	t_val		value;
 	t_val		ctx;
+	t_v2f		range;
 	void		(*action)(t_val value, t_val ctx);
 }	t_val_mod;
 
@@ -70,14 +75,6 @@ typedef struct s_perlin_display
 	int				param_count;
 }	t_pdisplay;
 
-struct s_params
-{
-	const char	*name;
-	float		*value;
-	t_v2f		range;
-};
-
-extern struct s_params		g_params[PARAMS_COUNT];
 typedef void				(*t_modifier)(t_val_mod *mods,
 								t_pdisplay *display, t_perlin *data);
 

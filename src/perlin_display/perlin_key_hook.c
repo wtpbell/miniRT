@@ -40,6 +40,8 @@ static void	navigate(t_pdisplay *d, mlx_key_data_t keydata)
 {
 	int	prev_i;
 
+	if (d->curr < 0 || d->curr >= d->param_count)
+		d->curr = 0;
 	prev_i = d->curr;
 	if (is_key_press(keydata, MLX_KEY_DOWN))
 		d->curr = (d->curr + 1) % d->param_count;

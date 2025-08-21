@@ -14,12 +14,12 @@
 #include "ui.h"
 #include "rt_snprintf.h"
 
-static void	format_param_value(char *dst, size_t size, int i)
+static void	format_param_value(char *dst, size_t size, int i, t_pdisplay *d)
 {
 	if (i == 9)
-		rt_snprintf(dst, size, "%d", *(int *)g_params[i].value);
+		rt_snprintf(dst, size, "%d", *(int *)d->params[i].value.i);
 	else
-		rt_snprintf(dst, size, "%f", *g_params[i].value);
+		rt_snprintf(dst, size, "%f", *d->params[i].value.f);
 }
 
 void	row_style(t_ui_element *row, bool is_active)
@@ -36,6 +36,19 @@ void	row_style(t_ui_element *row, bool is_active)
 	}
 }
 
+static t_ui_element	*create_row_panel(t_ui *ui, int i, int is_selected)
+{
+	t_ui_element	*row;
+
+	row = create_panel(ui->context,
+			init_v2f(0, UI_HEADER_HEIGHT + (i * UI_ROW_HEIGHT)),
+			init_v2f(UI_PANEL_WIDTH, UI_ROW_HEIGHT));
+	if (!row)
+		return (false);
+	row_style(row, is_selected);
+	return (row);
+}
+
 static bool	create_param_row(t_ui *ui, t_ui_element *parent,
 			t_pdisplay *display, int i)
 {
@@ -43,28 +56,21 @@ static bool	create_param_row(t_ui *ui, t_ui_element *parent,
 	t_ui_element	*label;
 	char			value_str[32];
 
-	row = create_panel(ui->context,
-			init_v2f(0, UI_HEADER_HEIGHT + (i * UI_ROW_HEIGHT)),
-			init_v2f(UI_PANEL_WIDTH, UI_ROW_HEIGHT));
-	if (!row)
-		return (false);
-	row_style(row, i == display->curr);
+	row = create_row_panel(ui, i, i == display->curr);
 	attach_child(parent, row);
-	label = create_label(ui->context, g_params[i].name,
+	label = create_label(ui->context, display->params[i].name,
 			init_v2f(UI_LABEL_PADDING * 4,
 				(UI_ROW_HEIGHT - UI_FONT_HEIGHT) / 2), UI_TEXT_COLOR);
 	if (!label)
 		return (false);
 	attach_child(row, label);
-	format_param_value(value_str, sizeof(value_str), i);
+	format_param_value(value_str, sizeof(value_str), i, display);
 	label = create_label(ui->context, value_str,
 			init_v2f(UI_LABEL_WIDTH + UI_LABEL_PADDING,
 				(UI_ROW_HEIGHT - UI_FONT_HEIGHT) / 2), UI_TEXT_COLOR);
 	if (!label)
 		return (false);
 	attach_child(row, label);
-	display->params[i].value = g_params[i].value;
-	display->params[i].range = g_params[i].range;
 	display->params[i].label = (t_ui_label *)label->data;
 	display->params[i].row = row;
 	return (true);
@@ -75,7 +81,7 @@ bool	add_parameter_controls(t_ui *ui, t_ui_element *parent,
 {
 	int	i;
 
-	display->param_count = sizeof(g_params) / sizeof(g_params[0]);
+	display->param_count = sizeof(display->params) / sizeof(display->params[0]);
 	i = 0;
 	while (i < display->param_count)
 	{

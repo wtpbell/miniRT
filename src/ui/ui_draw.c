@@ -128,18 +128,6 @@ void	draw_rect_border(mlx_image_t *canvas, t_v2f pos,
 	}
 }
 
-uint32_t	reverse_color(uint32_t color)
-{
-	uint32_t	c;
-
-	c = 0;
-	c |= (color >> 24) & 0x000000FF;
-	c |= (color << 24) & 0xFF000000;
-	c |= (color >> 8) & 0x0000FF00;
-	c |= (color << 8) & 0x00FF0000;
-	return (c);
-}
-
 void	draw_rect(mlx_image_t *canvas, t_v2f pos, t_v2f size, uint32_t color)
 {
 	t_v2f		_pos;

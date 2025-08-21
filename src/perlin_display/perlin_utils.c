@@ -59,4 +59,20 @@ bool	is_key_press(mlx_key_data_t keydata, keys_t key)
 void	call_delta(t_val_mod *mod)
 {
 	mod->action(mod->value, mod->ctx);
+	if (mod->value.f)
+	{
+		if (isnan(*mod->value.f) || isinf(*mod->value.f))
+			*mod->value.f = mod->range.x;
+		if (*mod->value.f < mod->range.x)
+			*mod->value.f = mod->range.x;
+		if (*mod->value.f > mod->range.y)
+			*mod->value.f = mod->range.y;
+	}
+	else if (mod->value.i)
+	{
+		if (*mod->value.i < (int)mod->range.x)
+			*mod->value.i = (int)mod->range.x;
+		if (*mod->value.i > (int)mod->range.y)
+			*mod->value.i = (int)mod->range.y;
+	}
 }

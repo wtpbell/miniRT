@@ -30,6 +30,8 @@ static void	update_ui_display(t_pdisplay *display, int i)
 		return ;
 	free(display->params[i].label->text);
 	display->params[i].label->text = ft_strdup(str);
+	if (!display->params[i].label->text)
+		return ;
 	if (display->ui && display->ui->context)
 		ui_mark_dirty(display->ui->context);
 }
