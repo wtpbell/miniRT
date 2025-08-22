@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/20 21:07:36 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/22 12:27:58 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@
 # define UI_CHAR_WIDTH 8
 # define UI_CHAR_HEIGHT 15
 # define UI_FONT_HEIGHT 8
-# define UI_FONT_WIDTH 12
 # define UI_ROW_HEIGHT 30
 # define UI_LABEL_PADDING 10
 
