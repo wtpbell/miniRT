@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 12:53:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/22 15:13:41 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/22 15:26:25 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	set_canvas_visibility(mlx_image_t *canvas, bool visible)
 		canvas->instances[i++].enabled = visible;
 }
 
-static void	render_ui_element(t_ui_element *e, t_ui_context *c)
+void	render_ui_element(t_ui_element *e, t_ui_context *c)
 {
 	t_ui_element	*child;
 

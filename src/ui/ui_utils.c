@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 22:38:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/22 15:23:11 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/22 15:33:09 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,20 +67,4 @@ void	ui_mark_dirty(t_ui_context *ctx)
 		ctx->is_dirty = true;
 		ctx->needs_redraw = true;
 	}
-}
-
-uint32_t	blend_colors(uint32_t bg, uint32_t fg)
-{
-	float		alpha;
-	float		inv_alpha;
-	uint32_t	r;
-	uint32_t	g;
-	uint32_t	b;
-
-	alpha = (fg & 0xFF) / 255.0f;
-	inv_alpha = 1.0f - alpha;
-	r = ((bg >> 24) & 0xFF) * inv_alpha + ((fg >> 24) & 0xFF) * alpha;
-	g = ((bg >> 16) & 0xFF) * inv_alpha + ((fg >> 16) & 0xFF) * alpha;
-	b = ((bg >> 8) & 0xFF) * inv_alpha + ((fg >> 8) & 0xFF) * alpha;
-	return ((r << 24) | (g << 16) | (b << 8) | 0xFF);
 }

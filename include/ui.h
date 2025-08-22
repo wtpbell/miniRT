@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/22 15:04:12 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/22 15:26:50 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,42 +209,6 @@ typedef struct s_load_screen
 	t_v2i			ren_prog;
 }	t_load_screen;
 
-typedef struct s_sprite
-{
-	mlx_image_t	*img;
-	t_v2f		anchor;
-	t_v2f		scale;
-	t_v2i		full_size;
-}	t_sprite;
-
-typedef struct s_animation
-{
-	t_v2i		pos;
-	uint32_t	idx;
-	uint32_t	frame_count;
-	float		fps;
-	float		time;
-	t_sprite	*frames;
-}	t_ani;
-
-typedef struct s_progress_bar
-{
-	t_v2i		pos;
-	t_sprite	text;
-	t_sprite	bg;
-	uint32_t	bg_color;
-	uint32_t	bar_color;
-	t_v2i		size;
-}	t_progress_bar;
-
-typedef struct s_load_screen
-{
-	t_sprite		bg;
-	t_ani			ani;
-	t_progress_bar	pb;
-	t_v2i			ren_prog;
-}	t_load_screen;
-
 extern struct s_ui_sections	g_sections[];
 
 /* UI Context Management */
@@ -253,6 +217,7 @@ t_ui			*create_ui(mlx_t *mlx, t_scene *scene,
 					t_sample *sample, void *game_ptr);
 void			destroy_ui(t_ui *ui);
 void			render_ui(t_ui *ui);
+void			render_ui_element(t_ui_element *e, t_ui_context *c);
 void			toggle_ui_visibility(t_ui *ui);
 
 /* UI Element Creation */
