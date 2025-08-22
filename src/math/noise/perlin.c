@@ -61,8 +61,8 @@ float	perlin(t_v2f point)
 	t_v3f	cors[4];
 	t_v3f	pnts[4];
 
-	p_i[0].x = ((int)floorf(point.x)) & g_mask;
-	p_i[0].y = ((int)floorf(point.y)) & g_mask;
+	p_i[0].x = ((long)floorf(point.x)) & g_mask;
+	p_i[0].y = ((long)floorf(point.y)) & g_mask;
 	p_i[1].x = (p_i[0].x + 1) & g_mask;
 	p_i[1].y = (p_i[0].y + 1) & g_mask;
 	p_t = v2f_fract(point);

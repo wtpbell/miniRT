@@ -12,24 +12,52 @@
 
 #include "perlin_display.h"
 
-void	delta_flt(t_val real, t_val delta)
+void	delta_flt(t_val real, t_val delta, t_v2f range)
 {
-	*real.f += *delta.f;
+	float	value;
+
+	value = *real.f + *delta.f;
+	if (value < range.x)
+		value = range.x;
+	else if (value > range.y)
+		value = range.y;
+	*real.f = value;
 }
 
-void	delta_int(t_val real, t_val delta)
+void	delta_int(t_val real, t_val delta, t_v2f range)
 {
-	*real.i += *delta.i;
+	int	value;
+
+	value = *real.i + *delta.i;
+	if (value < (int)range.x)
+		value = (int)range.x;
+	else if (value > (int)range.y)
+		value = (int)range.y;
+	*real.i = value;
 }
 
-void	double_flt(t_val real, t_val ctx)
+void	double_flt(t_val real, t_val ctx, t_v2f range)
 {
+	float	value;
+
 	(void)ctx;
-	*real.f *= 2.0f;
+	value = *real.f * 2.0f;
+	if (value < range.x)
+		value = range.x;
+	else if (value > range.y)
+		value = range.y;
+	*real.f = value;
 }
 
-void	half_flt(t_val real, t_val ctx)
+void	half_flt(t_val real, t_val ctx, t_v2f range)
 {
+	float	value;
+
 	(void)ctx;
-	*real.f *= 0.5f;
+	value = *real.f * 0.5f;
+	if (value < range.x)
+		value = range.x;
+	else if (value > range.y)
+		value = range.y;
+	*real.f = value;
 }

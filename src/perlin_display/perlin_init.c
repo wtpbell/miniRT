@@ -19,27 +19,28 @@ const t_perlin_node		g_nodes[4] = {
 {"MARBLE", marble_noise}
 };
 
-void	init_params(t_pdisplay *display)
+void	init_params(t_pdisplay *d)
 {
 	const t_param	params[PARAMS_COUNT] = {
-	{"DELTA X", {.f = &display->fdelta.x}, init_v2f(-P_POW, P_POW), NULL, NULL},
-	{"DELTA Y", {.f = &display->fdelta.y}, init_v2f(-P_POW, P_POW), NULL, NULL},
-	{"UNI SCALE", {.f = &display->offset.z}, init_v2f(P_IPOW, P_POW), NULL, NULL},
-	{"OFFSET X", {.f = &display->offset.x}, init_v2f(-P_POW, P_POW), NULL, NULL},
-	{"OFFSET Y", {.f = &display->offset.y}, init_v2f(-P_POW, P_POW), NULL, NULL},
-	{"RATE", {.f = &display->p_data->rate}, init_v2f(P_IPOW, P_POW), NULL, NULL},
-	{"GAIN", {.f = &display->p_data->gain}, init_v2f(P_IPOW, P_POW), NULL, NULL},
-	{"FREQ", {.f = &display->p_data->freq}, init_v2f(P_IPOW, P_POW), NULL, NULL},
-	{"AMPT", {.f = &display->p_data->ampt}, init_v2f(P_IPOW, P_POW), NULL, NULL},
-	{"LAYERS", {.i = &display->p_data->layers}, init_v2f(1.0f, 5.0f), NULL, NULL},
-	{"DISTORTION", {.f = &display->p_data->marble.distortion},
+	{"DELTA X", {.f = &d->fdelta.x}, init_v2f(-P_POW, P_POW), NULL, NULL},
+	{"DELTA Y", {.f = &d->fdelta.y}, init_v2f(-P_POW, P_POW), NULL, NULL},
+	{"UNI SCALE", {.f = &d->offset.z}, init_v2f(P_IPOW, P_POW), NULL, NULL},
+	{"OFFSET X", {.f = &d->offset.x}, init_v2f(-P_POW, P_POW), NULL, NULL},
+	{"OFFSET Y", {.f = &d->offset.y}, init_v2f(-P_POW, P_POW), NULL, NULL},
+	{"RATE", {.f = &d->p_data->rate}, init_v2f(P_IPOW, P_POW), NULL, NULL},
+	{"GAIN", {.f = &d->p_data->gain}, init_v2f(P_IPOW, P_POW), NULL, NULL},
+	{"FREQ", {.f = &d->p_data->freq}, init_v2f(P_IPOW, P_POW), NULL, NULL},
+	{"AMPT", {.f = &d->p_data->ampt}, init_v2f(P_IPOW, P_POW), NULL, NULL},
+	{"LAYERS", {.i = &d->p_data->layers}, init_v2f(1.0f, 5.0f), NULL, NULL},
+	{"DISTORTION", {.f = &d->p_data->marble.distortion},
 		init_v2f(P_IPOW, P_POW), NULL, NULL},
-	{"SCALE", {.f = &display->p_data->marble.scale}, init_v2f(P_IPOW, P_POW), NULL, NULL}
+	{"SCALE", {.f = &d->p_data->marble.scale},
+		init_v2f(P_IPOW, P_POW), NULL, NULL}
 	};
 
-	ft_memcpy(display->params, params, sizeof(params));
-	display->param_count = PARAMS_COUNT;
-	display->curr = 0;
+	ft_memcpy(d->params, params, sizeof(params));
+	d->param_count = PARAMS_COUNT;
+	d->curr = 0;
 }
 
 bool	setup_perlin_ui(t_ui *ui, t_pdisplay *display)

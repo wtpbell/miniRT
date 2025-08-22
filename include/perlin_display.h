@@ -45,7 +45,7 @@ typedef struct s_value_modifier
 	t_val		value;
 	t_val		ctx;
 	t_v2f		range;
-	void		(*action)(t_val value, t_val ctx);
+	void		(*action)(t_val value, t_val ctx, t_v2f range);
 }	t_val_mod;
 
 typedef struct s_perlin_node
@@ -92,10 +92,10 @@ bool			init_display(mlx_t *mlx, t_pdisplay *display, t_perlin *data);
 void			init_perlin_data(t_perlin *data);
 
 /* Math functions */
-void			delta_flt(t_val real, t_val delta);
-void			delta_int(t_val real, t_val delta);
-void			double_flt(t_val real, t_val ctx);
-void			half_flt(t_val real, t_val ctx);
+void			delta_flt(t_val real, t_val delta, t_v2f range);
+void			delta_int(t_val real, t_val delta, t_v2f range);
+void			double_flt(t_val real, t_val ctx, t_v2f range);
+void			half_flt(t_val real, t_val ctx, t_v2f range);
 
 /* Parameter control */
 bool			add_parameter_controls(t_ui *ui, t_ui_element *parent,
