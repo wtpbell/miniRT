@@ -1,0 +1,57 @@
+# A [ratio (float 0.0–1.0)] [color (R,G,B in 0–255)]
+# C [position (x,y,z float)] [direction (x,y,z float)] [FOV (float 0–180)]
+# L [position (x,y,z float)] [brightness ratio (float 0.0–1.0)] [color (R,G,B in 0–255)]
+# sp [position (x,y,z float)] [diameter (float)] [color (R,G,B in 0–255)] [material]
+# pl [position (x,y,z float)] [normal (x,y,z float)] [color (R,G,B in 0–255)] [material]
+# cy [position (x,y,z float)] [axis (x,y,z float)] [diameter (float)] [height (float)] [color (R,G,B in 0–255)] [material]
+# tri [v0 (x,y,z float)] [v1 (x,y,z float)] [v2 (x,y,z float)] [color (R,G,B in 0–255)] [material]
+# m_<name> type:<lambertian|metal|dielectric> [fuz:<float>] [shi:<float>] [spc:<float>] [ir:<float>] [tr:<float>] [alb:<color (R,G,B in 0-255)>]
+
+# Material definitions with default values where appropriate
+m_red		type:lambertian	spc:0.5	shi:1.0	alb:255,0,0
+m_glass		type:dielectric	ir:1.5	tr:0.9	alb:200,200,200
+m_yellow	type:lambertian	shi:0.1	spc:0.5	alb:255,255,0
+m_mirror	type:metal		mt_rough:0.0	
+m_crazy		type:dielectric	ir:1.7	tr:0.5
+m_green		type:lambertian	spc:0.3	shi:16.0	alb:0,255,0
+m_blue		type:metal		mt_rough:0.1	
+
+# Camera, Ambient light, and Lights
+C	0,2,5	0,0,1	90
+A	0.30	255,255,255
+L	-3,5,2	0.70	255,255,255
+# L	3,5,3	0.50	255,255,200
+
+# Planes (floor, ceiling, walls)
+pl	0,-1,0	0,1,0	0,255,0	m_green
+pl	0,10,0	0,-1,0	150,150,255
+pl	-5,0,0	1,0,0	200,150,150
+pl	5,0,0	-1,0,0	150,200,150
+pl	0,0,10	0,0,-1	255,255,255	m_mirror
+pl	0,0,-10	0,0,1	200,200,255	m_mirror
+
+# Spheres (with objects inside)
+# Main glass sphere with objects inside
+sp	0,1,0	3.0	255,255,255	m_glass
+
+# Objects inside the glass sphere
+sp	0,1,0	1.5	255,0,0	m_red
+sp	1,1.5,0.5	0.5	0,0,255	m_blue
+sp	-0.8,0.8,-0.5	0.4	255,0,0	m_yellow
+
+# Additional objects in the scene
+sp	3,1,2	0.8	242,99,187	m_crazy
+sp	-2,1,2	0.6	100,255,100
+sp	0,3,1	0.5	255,250,0	m_yellow
+
+# Cylinders with objects inside
+# Main cylinder with objects inside
+# cy	-1,1.5,0	0,1,0	2.0	3.0	255,200,0
+
+# Objects inside the cylinder
+sp	-1,1.5,0	0.6	255,0,0	m_red
+sp	-1,2.5,0	0.5	0,0,255	m_blue
+
+# Additional cylinders
+cy	3,0,0	0,1,0	1.0	2.0	255,50,50	m_glass
+cy	0,0,0	0,1,0	1.0	2.0	50,50,200	m_blue

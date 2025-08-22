@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   ui_render.c                                        :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 15:03:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/13 20:31:44 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/20 10:13:20 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,18 @@
 
 uint32_t	blend_colors(uint32_t bg, uint32_t fg)
 {
-	float	alpha;
-	float	inv_alpha;
-	uint8_t	r;
-	uint8_t	g;
-	uint8_t	b;
+	float		alpha;
+	float		inv_alpha;
+	uint32_t	r;
+	uint32_t	g;
+	uint32_t	b;
 
-	alpha = ((fg >> 24) & 0xFF) / 255.0f;
+	alpha = (fg & 0xFF) / 255.0f;
 	inv_alpha = 1.0f - alpha;
-	r = (uint8_t)(((bg >> 16) & 0xFF) * inv_alpha
-			+ ((fg >> 16) & 0xFF) * alpha);
-	g = (uint8_t)(((bg >> 8) & 0xFF) * inv_alpha
-			+ ((fg >> 8) & 0xFF) * alpha);
-	b = (uint8_t)((bg & 0xFF) * inv_alpha + (fg & 0xFF) * alpha);
-	return ((0xFFu << 24) | (r << 16) | (g << 8) | b);
+	r = ((bg >> 24) & 0xFF) * inv_alpha + ((fg >> 24) & 0xFF) * alpha;
+	g = ((bg >> 16) & 0xFF) * inv_alpha + ((fg >> 16) & 0xFF) * alpha;
+	b = ((bg >> 8) & 0xFF) * inv_alpha + ((fg >> 8) & 0xFF) * alpha;
+	return ((r << 24) | (g << 16) | (b << 8) | 0xFFu);
 }
 
 void	render_ui_element(t_ui_element *e, t_ui_context *c)

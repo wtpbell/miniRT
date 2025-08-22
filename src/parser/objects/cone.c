@@ -46,8 +46,8 @@ bool	parse_cone(char **tokens, t_scene *scene)
 	obj = ft_calloc(1, sizeof(t_obj));
 	if (!obj)
 		return (false);
-	init_obj_transform(obj, pos, dir, g_v3f_up);
-	init_obj_renderer(obj, color, cone_texcoord);
+	init_object_transform(obj, pos, dir, g_v3f_up);
+	init_object_renderer(obj, color, cone_texcoord);
 	cone_init(obj, dm);
 	if (!assign_material(obj, &scene->shared_materials, tokens[6]))
 		return (free(obj), false);

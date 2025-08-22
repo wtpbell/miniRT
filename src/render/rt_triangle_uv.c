@@ -6,12 +6,13 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/02 18:33:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/07 17:16:53 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/13 09:30:43 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt_math.h"
 #include "scene.h"
+#include "ray.h"
 
 static void	set_minmax(t_tri *tri, t_v2f *min, t_v2f *max)
 {
@@ -46,20 +47,18 @@ void	generate_uv_vertices(t_tri *tri, t_mat4x4 local)
 	tri->vt2.y = (1.0f - tri->vt2.y) * aspect;
 }
 
-t_v2f	triangle_texcoord(t_obj *obj, t_v3f point, t_v2f *weight)
+t_v2f	tri_uv_texcoord(t_tri *tri, const t_v2f weight)
 {
-	float	w;
-	float	u;
-	float	v;
-	t_tri	*tri;
+	const float	w = 1.0f - weight.u - weight.v;
 
-	(void)point;
-	tri = &obj->tri;
-	u = weight->u;
-	v = weight->v;
-	w = 1.0f - u - v;
 	return (init_v2f(
-			w * tri->vt0.x + u * tri->vt1.x + v * tri->vt2.x,
-			w * tri->vt0.y + u * tri->vt1.y + v * tri->vt2.y)
+			w * tri->vt0.x + weight.u * tri->vt1.x + weight.v * tri->vt2.x,
+			w * tri->vt0.y + weight.u * tri->vt1.y + weight.v * tri->vt2.y)
 	);
+}
+
+t_v2f	triangle_texcoord(t_obj *obj, t_v3f point, t_result *res)
+{
+	(void)point;
+	return (tri_uv_texcoord(&obj->tri, res->tri_weight));
 }

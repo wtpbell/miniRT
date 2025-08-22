@@ -57,5 +57,6 @@ t_ui_element	*create_labeled_control(t_vbtn_config *cfg,
 	if (!value_btn)
 		return (destroy_ui_element(label), destroy_ui_element(container), NULL);
 	attach_child(container, value_btn);
+	container->style.bg_color = UI_TRANSPARENT;
 	return (container);
 }

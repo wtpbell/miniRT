@@ -6,13 +6,12 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:44:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/27 23:34:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/14 13:30:02 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "material.h"
-#include "debug/rt_debug.h"
 
 void	free_tokens(char **tokens)
 {
@@ -29,28 +28,7 @@ void	free_tokens(char **tokens)
 
 void	cleanup_gnl(char *line, int fd)
 {
-	if (line)
-		free(line);
+	free(line);
 	close(fd);
 	get_next_line(-1);
-}
-
-void	free_material(void *ptr)
-{
-	t_mat	*mat;
-
-	mat = (t_mat *)ptr;
-	free(mat->name);
-	free(mat->bump_map.tex_path);
-	if (mat->bump_map.tex)
-		mlx_delete_texture(mat->bump_map.tex);
-	cleanup_texture(&mat->texture);
-	free(ptr);
-}
-
-void	cleanup_scene(t_scene *scene)
-{
-	vector_free(&scene->objects, free);
-	vector_free(&scene->lights, free);
-	vector_free(&scene->shared_materials, free_material);
 }

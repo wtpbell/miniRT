@@ -6,19 +6,19 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/29 12:00:31 by jboon         #+#    #+#                 */
-/*   Updated: 2025/06/27 15:39:36 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 14:17:25 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "material.h"
 
-static inline t_v3f	get_mid_point(t_v3f v0, t_v3f v1, t_v3f v2)
+t_v3f	get_mid_point(t_v3f v0, t_v3f v1, t_v3f v2)
 {
 	return (v3f_scale(v3f_add(v3f_add(v0, v1), v2), 1.0f / 3.0f));
 }
 
-static inline t_v3f	get_normal(t_v3f v0, t_v3f v1, t_v3f v2)
+t_v3f	get_normal(t_v3f v0, t_v3f v1, t_v3f v2)
 {
 	return (v3f_norm(v3f_cross(v3f_sub(v1, v0), v3f_sub(v2, v0))));
 }
@@ -44,10 +44,10 @@ bool	parse_triangle(char **tokens, t_scene *scene)
 	obj = ft_calloc(1, sizeof(t_obj));
 	if (obj == NULL)
 		return (false);
-	init_obj_transform(obj, get_mid_point(tri.v0, tri.v1, tri.v2),
+	init_object_transform(obj, get_mid_point(tri.v0, tri.v1, tri.v2),
 		get_normal(tri.v0, tri.v1, tri.v2),
 		g_v3f_up);
-	init_obj_renderer(obj, color, triangle_texcoord);
+	init_object_renderer(obj, color, triangle_texcoord);
 	triangle_init(obj, &tri);
 	if (!assign_material(obj, &scene->shared_materials, tokens[5]))
 		return (free(obj), false);
