@@ -1,0 +1,27 @@
+# Camera position, direction, FOV, aperture, focus_distance
+# Camera at (0,0,20) looking towards positive Z (0,0,1)
+# Red sphere at (1,0,3.0) is 17 units away from camera
+# Note: Camera direction will be inverted in Z internally
+C 0,0,20 0,0,1 80 ap:0.2 fc:17
+
+# Ambient light intensity and color
+A  0.2  255,255,255
+
+# Point light position, intensity, color
+L  0.0,8.0,22.0  0.5  255,255,255
+
+# Floor plane (for reference)
+pl  0.0,-1.0,0.0  0.0,1.0,0.0  0,255,200
+
+# Sphere 1: Green sphere (very close to camera, should be very blurred)
+sp  -3,0,17.0  1.5  255,0,0 m_dielectric
+sp  -1,0,17.0  1.5  100,255,100 m_metal
+sp  0,0,15.0  1.5  100,255,100
+
+# Sphere 2: Red sphere (far away, should be in focus)
+m_default 	type:lambertian spc:1.0 shi:25.0
+m_yellow	type:lambertian	shi:32.0	spc:0.5	alb:255,255,0
+
+sp  1,0,3.0  2.0  255,0,0 
+sp  2,0,-10.0  2.0  255,100,100
+# sp  4,0,-10.0  2.0  255,100,100
