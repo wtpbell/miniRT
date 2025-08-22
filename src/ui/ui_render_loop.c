@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 15:03:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/18 18:03:40 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/22 11:18:47 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	handle_render_state(t_game *game)
 		set_game_state(game, GS_LOAD);
 	else
 	{
-		write(STDERR_FILENO, "Failed to create threads! Try again.\n", 38);
+		ft_putendl_fd("Failed to create threads! Try again.\n", STDERR_FILENO);
 		set_game_state(game, GS_IDLE);
 	}
 }

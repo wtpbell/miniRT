@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/18 15:02:18 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/22 11:18:08 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ int	game(t_scene *scene, t_sample *sample)
 	init_perlin();
 	if (!game_init(&game, scene, sample))
 		return (EXIT_FAILURE);
+	ft_putchar_fd('\n', STDOUT_FILENO);
 	mlx_loop_hook(game.mlx, render_loop, &game);
 	mlx_key_hook(game.mlx, key_hook, &game);
 	mlx_mouse_hook(game.mlx, mouse_hook, &game);

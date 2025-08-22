@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/16 16:02:33 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/20 21:47:36 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/22 10:48:51 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static bool	init_animation(t_ani *animation, mlx_t *mlx, t_v2i pos,
 		if (frames[i].img == NULL)
 			return (false);
 		frames[i].anchor = anchor;
-		frames[i].scale = init_v2f(5.0f, 5.0f);
+		frames[i].scale = init_v2f(4.0f, 4.0f);
 		init_sprite_full_size(frames + i);
 		++i;
 	}
@@ -94,10 +94,10 @@ t_load_screen	*init_load_screen(mlx_t *mlx)
 		|| mlx_image_to_window(mlx, load_screen->bg.img, 0, 0) == -1)
 		return (destroy_load_screen(load_screen, mlx), NULL);
 	if (!init_animation(&load_screen->ani, mlx,
-			(t_v2i){{12, -12}}, init_v2f(0.5f, 0.5f)))
+			(t_v2i){{12, -18}}, init_v2f(0.5f, 0.5f)))
 		return (destroy_load_screen(load_screen, mlx), NULL);
 	if (!init_progress_bar(&load_screen->pb,
-			(t_v2i){{0, 0}}, (t_v2i){{512, 32}}, mlx))
+			(t_v2i){{0, 0}}, (t_v2i){{768, 48}}, mlx))
 		return (destroy_load_screen(load_screen, mlx), NULL);
 	init_sprite_full_size(&load_screen->bg);
 	return (load_screen);
