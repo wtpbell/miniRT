@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ui_render.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/07/27 15:03:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/20 10:13:20 by jboon         ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   ui_render.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/27 15:03:00 by bewong            #+#    #+#             */
+/*   Updated: 2025/08/20 18:02:20 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ uint32_t	blend_colors(uint32_t bg, uint32_t fg)
 	r = ((bg >> 24) & 0xFF) * inv_alpha + ((fg >> 24) & 0xFF) * alpha;
 	g = ((bg >> 16) & 0xFF) * inv_alpha + ((fg >> 16) & 0xFF) * alpha;
 	b = ((bg >> 8) & 0xFF) * inv_alpha + ((fg >> 8) & 0xFF) * alpha;
-	return ((r << 24) | (g << 16) | (b << 8) | 0xFFu);
+	return ((r << 24) | (g << 16) | (b << 8) | 0xFF);
 }
 
 void	render_ui_element(t_ui_element *e, t_ui_context *c)

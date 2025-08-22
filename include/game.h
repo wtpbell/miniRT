@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 15:01:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/15 11:31:38 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/15 14:58:32 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,6 @@ struct	s_game
 	bool		needs_redraw;
 };
 
-int	game(t_scene *scene, t_sample *sample);
-
+int		game(t_scene *scene, t_sample *sample);
+void	key_hook(mlx_key_data_t keydata, void *param);
 #endif

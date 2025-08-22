@@ -6,11 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 22:38:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/15 17:52:11 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/22 19:30:28 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
+#include "perlin_display.h"
 #include "rt_snprintf.h"
 
 char	*format_float_value(float value)
@@ -18,6 +19,20 @@ char	*format_float_value(float value)
 	static char	buf[32];
 
 	rt_snprintf(buf, sizeof(buf), "%f", value);
+	return (buf);
+}
+
+char	*format_power_of_two(float value)
+{
+	static char	buf[32];
+	float		p;
+	float		snapped;
+
+	if (value <= 0.0f)
+		value = fmin(1.0f, 128.0f);
+	p = roundf(log2f(value));
+	snapped = fmaxf(1.0f, fminf(powf(2.0f, p), 128.0f));
+	rt_snprintf(buf, sizeof(buf), "%f", snapped);
 	return (buf);
 }
 

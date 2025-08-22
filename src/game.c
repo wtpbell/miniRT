@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/15 15:51:51 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/19 10:19:13 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "rt_thread.h"
 #include "rt_math.h"
 #include "game.h"
+#include "perlin_display.h"
 
 void	cleanup_mlx(t_game *game)
 {
@@ -33,7 +34,7 @@ void	cleanup_mlx(t_game *game)
 
 void	key_hook(mlx_key_data_t keydata, void *param)
 {
-	t_game	*game;
+	t_game		*game;
 
 	game = (t_game *)param;
 	if (keydata.key == MLX_KEY_H && keydata.action == MLX_PRESS)
