@@ -86,6 +86,6 @@ void	join_threads(t_pthread_instr *instr, int count)
 bool	thread_rendering(t_thread_data *data)
 {
 	if (!create_threads(data, data->thread_count))
-		return (perror("minirt"), false);
+		return (perror("threading_rendering"), false);
 	return (true);
 }
