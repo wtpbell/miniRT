@@ -6,11 +6,12 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/16 10:29:24 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/31 19:30:54 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/22 11:20:11 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "perlin_display.h"
 
 static bool	str_to_texture_type(int *val, const void *enum_name)
 {
@@ -76,8 +77,8 @@ void	init_bump_fields(t_field *fields, int *field_count, t_mat *mat)
 
 void	init_perlin_fields(t_field *fields, int *field_count, t_perlin *p_data)
 {
-	const t_v2f		lim = init_v2f(-1024, 1024);
-	const t_v2f		l_lim = init_v2f(1, 8);
+	const t_v2f		lim = init_v2f(P_IPOW, P_POW);
+	const t_v2f		l_lim = init_v2f(1, 5);
 	const t_field	field_defs[] = {
 	{"p_rate", &p_data->rate, FIELD_FLT, lim, FILLED, {0}},
 	{"p_gain", &p_data->gain, FIELD_FLT, lim, FILLED, {0}},

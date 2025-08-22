@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:45:51 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/20 15:24:57 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/20 18:04:30 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define UI_FONT_HEIGHT 8
 # define UI_ROW_HEIGHT 30
 # define UI_LABEL_PADDING 10
+# define UI_LABEL_WIDTH 200
 
 /* Base UI Colors */
 # define UI_PANEL_BG_COLOR			0x1A1F2CFF
@@ -57,7 +58,11 @@
 # define UI_COLOR_DOF_SECTION		0x046D00FF
 # define UI_COLOR_SAMPLE_SECTION	0x2F6BA4FF
 
-extern const uint8_t		g_font[256][8];
+/* Active Parameter Colors */
+# define UI_ACTIVE					0x2D2D2DCC
+# define UI_ACTIVE_BORDER			0x3C3C3CFF
+
+extern const uint8_t				g_font[256][8];
 
 typedef enum e_ui_type
 {
@@ -168,7 +173,7 @@ struct s_ui_sections
 	t_ui_element	*(*create_func)(t_section_config*);
 };
 
-extern struct s_ui_sections	g_sections[];
+extern struct s_ui_sections			g_sections[];
 
 /* UI Context Management */
 void			destroy_ui_context(t_ui_context *ctx);
@@ -217,6 +222,7 @@ void			ui_mark_dirty(t_ui_context *ctx);
 /* UI Helpers */
 char			*format_float_value(float value);
 char			*format_color_value(float value);
+char			*format_power_of_two(float value);
 t_light			*find_light(t_scene *scene, t_light_type type);
 void			decrement_value_button(t_ui_element *btn, void *param);
 void			increment_value_button(t_ui_element *btn, void *param);
@@ -237,7 +243,8 @@ void			default_panel(t_ui_element *panel, t_v2f pos, t_v2f size);
 void			default_label(t_ui_element *label, t_v2f pos, t_v2f size);
 
 /* Utility */
-char			*ft_ftoa(float f, int precision);
 uint32_t		blend_colors(uint32_t bg, uint32_t fg);
-
+float			step_power_of_two(float value, float direction, t_v2f range);
+float			step_linear(float value, float direction,
+					float step, t_v2f range);
 #endif

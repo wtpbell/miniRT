@@ -1,8 +1,8 @@
-vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/render:src/render:src/ui:src/math/noise:src/rt_snprintf:src/parser/obj:src/bvh
+vpath %.c src:src/parser/core:src/parser/objects:src/parser/elements:src/parser/utils:src/math:src/math/vector:src/container:src/math:src/math/vector:src/render:src/render:src/ui:src/math/noise:src/rt_snprintf:src/perlin_display:src/parser/obj:src/bvh
 
 NAME		:= miniRT
 CC			:= cc
-C_FLAGS		:= -Werror -Wall -Wextra -O3
+C_FLAGS		:= -Werror -Wall -Wextra -O3 -fsanitize=address,undefined
 C_LINK		:= -ldl -lglfw -pthread -lm -flto
 
 BIN_DIR		:= bin/
@@ -35,9 +35,11 @@ SRCS_MAIN  := main.c vector_init.c vector_helper.c vector_operations.c\
 				ui_camera_section.c ui_dof_section.c ui_sample_section.c \
 				ui_cleanup.c ui_layout_utils.c ui_draw.c ui_event_button.c \
 				ui_event_click.c ui_element_basic.c ui_element_creation.c \
-				noise_texturing.c lerp.c v2f_helper.c rt_mesh.c rt_strtok.c\
-				aabb.c bvh.c bvh_utils.c scene_cleanup.c
-SNPRINTF	:= rt_snprintf.c rt_snprintf_str.c rt_snprintf_num.c
+				noise_texturing.c lerp.c v2f_helper.c perlin_display.c perlin_math.c \
+				perlin_param_control.c perlin_param_update.c perlin_init.c perlin_utils.c \
+				perlin_key_hook.c rt_mesh.c rt_strtok.c aabb.c bvh.c bvh_utils.c scene_cleanup.c \
+				perlin_modifier.c ui_math.c
+SNPRINTF	:= rt_snprintf.c rt_snprintf_str.c rt_snprintf_num.c 
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE) $(SNPRINTF)
 OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)

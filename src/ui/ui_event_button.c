@@ -51,64 +51,70 @@ static void	update_value(t_ui_vbtn *v, float new_val,
 void	update_button_value(t_ui_element *b, int32_t x, t_ui_context *c)
 {
 	t_v2f			pos;
-	t_ui_vbtn		*v;
 	t_ui_element	*p;
+	t_ui_vbtn		*v;
+	float			new_value;
+	float			direction;
 
 	pos = b->pos;
 	p = b->parent;
+	v = (t_ui_vbtn *)b->data;
+	direction = 1.0f;
+	if (!v->value)
+		return ;
 	while (p)
 	{
 		pos.x += p->pos.x;
 		pos.y += p->pos.y;
 		p = p->parent;
 	}
-	v = (t_ui_vbtn *)b->data;
-	if (!v->value)
-		return ;
 	if (x - pos.x < b->size.x / 2.0f)
-		update_value(v, *v->value - v->step, b, c);
+		direction = -1.0f;
+	if (v->formatter == format_power_of_two)
+		new_value = step_power_of_two(*v->value, direction, v->range);
 	else
-		update_value(v, *v->value + v->step, b, c);
+		new_value = step_linear(*v->value, direction, v->step, v->range);
+	update_value(v, new_value, b, c);
 }
 
 void	increment_value_button(t_ui_element *btn, void *param)
 {
 	t_ui_context	*ctx;
-	t_ui_vbtn		*btn_data;
+	t_ui_vbtn		*v;
+	float			new_value;
 
-	if (!btn || btn->type != UI_VALUE_BUTTON || !param)
-		return ;
 	ctx = (t_ui_context *)param;
-	btn_data = (t_ui_vbtn *)btn->data;
-	if (btn_data && btn_data->value)
-	{
-		*btn_data->value += btn_data->step;
-		if (*btn_data->value > btn_data->range.y)
-			*btn_data->value = btn_data->range.y;
-		update_value_label(btn_data, ctx);
-		if (btn_data->on_click)
-			btn_data->on_click(btn, btn_data->param);
-		ui_mark_dirty(ctx);
-	}
+	v = (t_ui_vbtn *)btn->data;
+	if (!v || !v->value)
+		return ;
+	if (v->formatter == format_power_of_two)
+		new_value = step_power_of_two(*v->value, +1.0f, v->range);
+	else
+		new_value = step_linear(*v->value, +1.0f, v->step, v->range);
+	*v->value = new_value;
+	update_value_label(v, ctx);
+	if (v->on_click)
+		v->on_click(btn, v->param);
+	ui_mark_dirty(ctx);
 }
 
 void	decrement_value_button(t_ui_element *btn, void *param)
 {
 	t_ui_context	*ctx;
-	t_ui_vbtn		*btn_data;
+	t_ui_vbtn		*v;
+	float			new_value;
 
-	if (!btn || btn->type != UI_VALUE_BUTTON || !param)
-		return ;
 	ctx = (t_ui_context *)param;
-	btn_data = (t_ui_vbtn *)btn->data;
-	if (btn_data && btn_data->value)
-	{
-		*btn_data->value -= btn_data->step;
-		if (*btn_data->value < btn_data->range.x)
-			*btn_data->value = btn_data->range.x;
-		update_value_label(btn_data, ctx);
-		if (btn_data->on_click)
-			btn_data->on_click(btn, btn_data->param);
-		ui_mark_dirty(ctx);
-	}
+	v = (t_ui_vbtn *)btn->data;
+	if (!v || !v->value)
+		return ;
+	if (v->formatter == format_power_of_two)
+		new_value = step_power_of_two(*v->value, -1.0f, v->range);
+	else
+		new_value = step_linear(*v->value, -1.0f, v->step, v->range);
+	*v->value = new_value;
+	update_value_label(v, ctx);
+	if (v->on_click)
+		v->on_click(btn, v->param);
+	ui_mark_dirty(ctx);
 }
