@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/13 20:00:17 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/13 21:42:19 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/22 11:55:20 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct s_str
 	size_t	cap;
 }	t_str;
 
+size_t	int_count(unsigned int n);
 void	stos(t_str *str, const char *src);
 void	ctos(t_str *str, char c);
 void	utos(t_str *str, unsigned int n, char prefix);
