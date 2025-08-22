@@ -52,7 +52,7 @@ bool	ft_stof(const char *s, float *f)
 			fact = -1.0f;
 		s++;
 	}
-	if (!*s || !parse_number(s, f, &fact))
+	if (!*s || !parse_number(s, f, &fact) || fabsf(fact) < 0.00001f)
 		return (false);
 	*f *= fact;
 	if (isinf(*f) || isnan(*f))
