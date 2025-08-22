@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ui.h"
+#include "perlin_display.h"
 
 bool	valid_file_format(const char *file, const char *ext)
 {
@@ -63,6 +64,8 @@ int	main(int argc, char **argv)
 	t_scene		scene;
 	t_sample	*sample;
 
+	if (argc == 1)
+		return (perlin_display(), EXIT_SUCCESS);
 	ft_bzero(&scene, sizeof(t_scene));
 	if (!valid_input(argc, argv))
 		return (EXIT_FAILURE);

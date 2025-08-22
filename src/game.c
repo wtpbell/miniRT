@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/22 11:18:08 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/22 15:13:13 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "rt_thread.h"
 #include "rt_math.h"
 #include "game.h"
+#include "perlin_display.h"
 
 static void	cleanup_mlx(t_game *game)
 {

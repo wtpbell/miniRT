@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   ui_core.c                                          :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 12:53:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/18 11:09:59 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/22 15:13:41 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

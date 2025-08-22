@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 18:24:31 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/14 23:03:04 by bewong           ###   ########.fr       */
+/*   Updated: 2025/08/20 17:55:09 by bewong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ static void	add_sample_control(t_ui_context *ctx, t_sample *sample,
 	cfg.ctx = ctx;
 	cfg.value = &sample->sample_pxl;
 	cfg.range = init_v2f(1.0f, 128.0f);
-	cfg.step = 12.0f;
+	cfg.step = *cfg.value;
 	cfg.pos = init_v2f(UI_PADDING, 0);
 	cfg.size = g_v2f_zero;
-	cfg.formatter = format_float_value;
+	cfg.formatter = format_power_of_two;
 	attach_child(section, create_labeled_control(&cfg, "SAMPLE",
 			size.x - (UI_PADDING * 2)));
 }
