@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/29 16:47:20 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/13 15:35:24 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/22 12:22:18 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ float	perlin(t_v2f point)
 	t_v3f	cors[4];
 	t_v3f	pnts[4];
 
-	p_i[0].x = ((long)floorf(point.x)) & g_mask;
-	p_i[0].y = ((long)floorf(point.y)) & g_mask;
+	p_i[0].x = ((long)floorf(point.x)) & (long)g_mask;
+	p_i[0].y = ((long)floorf(point.y)) & (long)g_mask;
 	p_i[1].x = (p_i[0].x + 1) & g_mask;
 	p_i[1].y = (p_i[0].y + 1) & g_mask;
 	p_t = v2f_fract(point);
