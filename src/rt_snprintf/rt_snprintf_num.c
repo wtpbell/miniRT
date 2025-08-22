@@ -1,20 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rt_snprintf_num.c                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/13 20:04:06 by jboon             #+#    #+#             */
-/*   Updated: 2025/08/14 21:58:37 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   rt_snprintf_num.c                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/08/13 20:04:06 by jboon         #+#    #+#                 */
+/*   Updated: 2025/08/22 11:55:01 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <math.h>
-#include <ieee754.h>
 #include "rt_snprintf.h"
 
-static size_t	int_count(unsigned int n)
+size_t	int_count(unsigned int n)
 {
 	size_t	count;
 
@@ -25,21 +23,6 @@ static size_t	int_count(unsigned int n)
 		++count;
 	}
 	return (count);
-}
-
-static void	fdectos(t_str *str, int decimal, int prec)
-{
-	size_t	count;
-	int		pad;
-
-	count = int_count(decimal);
-	pad = prec - count;
-	while (pad > 0)
-	{
-		ctos(str, '0');
-		--pad;
-	}
-	utos(str, decimal, '\0');
 }
 
 void	utos(t_str *str, unsigned int n, char prefix)
@@ -75,31 +58,4 @@ void	itos(t_str *str, int n)
 		utos(str, ~n + 1u, '-');
 	else
 		utos(str, n, '\0');
-}
-
-void	ftos(t_str *str, double r)
-{
-	const double			prec = 2.0;
-	double					numeric;
-	union ieee754_double	*d;
-
-	d = (union ieee754_double *) & r;
-	if (d->ieee.negative == 1)
-		ctos(str, '-');
-	if (isinf(r))
-		stos(str, "inf");
-	else if (isnan(r))
-		stos(str, "nan");
-	else if (r == 0.0f)
-	{
-		stos(str, "0.");
-		fdectos(str, 0, prec);
-	}
-	else
-	{
-		numeric = fabs(r);
-		utos(str, numeric, '\0');
-		ctos(str, '.');
-		fdectos(str, round((numeric - floor(numeric)) * pow(10.0, prec)), prec);
-	}
 }
