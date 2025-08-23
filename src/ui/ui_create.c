@@ -83,6 +83,5 @@ t_ui	*create_ui(mlx_t *mlx, t_scene *scene, t_sample *sample, void *game_ptr)
 			return (destroy_ui(ui), NULL);
 		attach_child(ui->root, ui_sections);
 	}
-	ui->context->needs_redraw = true;
 	return (ui);
 }

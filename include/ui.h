@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/23 13:45:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/22 15:26:50 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/23 15:49:35 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@
 /* Active Parameter Colors */
 # define UI_ACTIVE					0x2D2D2DCC
 # define UI_ACTIVE_BORDER			0x3C3C3CFF
-
-extern const uint8_t				g_font[256][8];
 
 typedef enum e_ui_type
 {
@@ -209,9 +207,10 @@ typedef struct s_load_screen
 	t_v2i			ren_prog;
 }	t_load_screen;
 
-extern struct s_ui_sections	g_sections[];
+extern const uint8_t	g_font[256][8];
 
 /* UI Context Management */
+
 void			destroy_ui_context(t_ui_context *ctx);
 t_ui			*create_ui(mlx_t *mlx, t_scene *scene,
 					t_sample *sample, void *game_ptr);
@@ -221,6 +220,7 @@ void			render_ui_element(t_ui_element *e, t_ui_context *c);
 void			toggle_ui_visibility(t_ui *ui);
 
 /* UI Element Creation */
+
 t_ui_element	*create_header(t_ui_context *ctx, const char *title,
 					t_v2f pos, t_v2f size);
 t_ui_element	*create_label(t_ui_context *ctx, const char *text,
@@ -237,6 +237,7 @@ t_ui_element	*create_dof_section(t_section_config *cfg);
 t_ui_element	*create_sample_section(t_section_config *cfg);
 
 /* UI Element Management */
+
 void			destroy_ui_element(t_ui_element *element);
 void			attach_child(t_ui_element *parent, t_ui_element *child);
 void			update_button_value(t_ui_element *button, int32_t click_x,
@@ -245,6 +246,7 @@ void			handle_ui_click(t_ui_element *root, int32_t x, int32_t y,
 					t_ui_context *ctx);
 
 /* UI Rendering */
+
 void			render_loop(void *param);
 void			draw_button(t_ui_element *button, t_ui_context *ctx);
 void			draw_text(mlx_image_t *img, const char *str,
@@ -256,6 +258,7 @@ void			draw_rect_border(mlx_image_t *img, t_v2f pos, t_v2f size,
 void			ui_mark_dirty(t_ui_context *ctx);
 
 /* UI Helpers */
+
 char			*format_float_value(float value);
 char			*format_color_value(float value);
 char			*format_power_of_two(float value);
@@ -272,6 +275,7 @@ void			add_value_label(t_ui_element *container,
 void			render_button_clicked(t_ui_element *button, void *param);
 
 /* Default Styling */
+
 void			default_button(t_ui_element *button, t_v2f pos, t_v2f size);
 void			default_section(t_ui_element *section, t_v2f pos, t_v2f size);
 void			default_header(t_ui_element *header, t_v2f pos, t_v2f size);
@@ -279,19 +283,22 @@ void			default_panel(t_ui_element *panel, t_v2f pos, t_v2f size);
 void			default_label(t_ui_element *label, t_v2f pos, t_v2f size);
 
 /* Utility */
+
 uint32_t		blend_colors(uint32_t bg, uint32_t fg);
 float			step_power_of_two(float value, float direction, t_v2f range);
 float			step_linear(float value, float direction,
 					float step, t_v2f range);
+
 /* Load Screen */
+
 t_load_screen	*init_load_screen(mlx_t *mlx);
 void			destroy_load_screen(t_load_screen *load_screen, mlx_t *mlx);
 void			update_load_screen(t_load_screen *screen, float delta,
 					float progress);
 
 /* Sprite Drawing and Animation */
+
 void			update_animation(t_ani *ani, t_sprite *bg, float delta);
-// void			draw_frame(mlx_image_t *dst, mlx_image_t *src, t_v2i draw_pos);
 void			draw_frame(t_sprite *dst, t_sprite *src, t_v2i draw_pos);
 mlx_image_t		*init_str_frame(mlx_t *mlx, const char *str);
 t_v2i			get_sprite_position(t_sprite *parent, t_sprite *child,
@@ -299,6 +306,7 @@ t_v2i			get_sprite_position(t_sprite *parent, t_sprite *child,
 void			init_sprite_full_size(t_sprite *sprite);
 
 /* Progress Bar */
+
 bool			init_progress_bar(t_progress_bar *pb, t_v2i pos, t_v2i size,
 					mlx_t *mlx);
 void			update_progress_bar(t_progress_bar *pb, t_sprite *bg, float t);
