@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/22 11:46:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/22 12:10:28 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/22 19:36:48 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	handle_real(t_str *str, double numeric, const double prec)
 
 void	ftos(t_str *str, double r)
 {
-	const double			prec = 8.0;
+	const double			prec = 2.0;
 	union ieee754_double	*d;
 
 	d = (union ieee754_double *) & r;
