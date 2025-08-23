@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_layout.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/25 11:39:13 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/14 22:59:08 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_layout.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/07/25 11:39:13 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/23 15:49:21 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static t_ui_element	*create_render_button_section(t_section_config *cfg)
 	return (panel);
 }
 
-struct s_ui_sections	g_sections[] = {
+static const struct s_ui_sections	g_sections[] = {
 {9.2f, create_camera_section},
 {9.2f, create_light_section},
 {5.8f, create_ambient_section},

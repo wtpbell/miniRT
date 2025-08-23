@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 18:40:12 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/19 10:18:57 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/22 15:10:46 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ t_v2f	v2f_mul(t_v2f a, t_v2f b);
 t_v2f	v2f_mul_v3f(t_v2f a, t_v3f b);
 t_v2f	v2f_fract(t_v2f v);
 float	v2f_mag(t_v2f v);
+t_v2f	v2f_sub(t_v2f a, t_v2f b);
 
 /* v3 */
 
@@ -125,6 +126,7 @@ t_v2f	v2f_mul_v3f(t_v2f a, t_v3f b);
 t_v2f	v2f_add(t_v2f a, t_v2f b);
 t_v2f	v2f_fract(t_v2f v);
 float	v2f_mag(t_v2f v);
+
 /* v4 */
 
 t_v4f	init_v4f(float x, float y, float z, float w);

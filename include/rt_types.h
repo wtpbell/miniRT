@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/07 16:31:03 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/19 10:18:48 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/22 15:00:14 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ Use the proper header files if you need access to any of these type definitions.
 typedef struct s_lighting		t_lighting;
 
 /* materials */
+
 typedef enum e_material_type	t_mat_type;
 typedef struct s_material		t_mat;
 typedef struct s_texture		t_tex;
@@ -32,6 +33,7 @@ typedef struct s_bump_context	t_bump_ctx;
 typedef struct s_perlin			t_perlin;
 
 /* scene */
+
 typedef enum e_object_type		t_obj_type;
 typedef enum e_light_type		t_light_type;
 typedef enum e_scene_flags		t_scene_flags;
@@ -53,12 +55,22 @@ typedef struct s_game			t_game;
 typedef struct s_sample			t_sample;
 
 /* ui */
+
 typedef enum e_ui_type			t_ui_type;
 typedef struct s_ui				t_ui;
 typedef struct s_ui_context		t_ui_context;
 typedef struct s_ui_element		t_ui_element;
 typedef struct s_mesh			t_mesh;
 typedef struct s_result			t_result;
+
+/* load screen */
+
+typedef struct s_load_screen	t_load_screen;
+
+/* threads */
+
+typedef struct s_thread_data	t_thread_data;
+typedef struct s_pthread_instr	t_pthread_instr;
 
 typedef int						(*t_intsct)(t_obj *obj, t_ray *ray,
 									t_v2f t, t_result *res);

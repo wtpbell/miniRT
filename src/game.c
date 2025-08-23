@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   game.c                                             :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/19 10:19:13 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/22 15:13:13 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,50 +18,20 @@
 #include "game.h"
 #include "perlin_display.h"
 
-void	cleanup_mlx(t_game *game)
+static void	cleanup_mlx(t_game *game)
 {
 	if (game->ui)
-	{
 		destroy_ui(game->ui);
-		game->ui = NULL;
-	}
+	if (game->load_screen)
+		destroy_load_screen(game->load_screen, game->mlx);
 	if (game->mlx)
-	{
 		mlx_terminate(game->mlx);
-		game->mlx = NULL;
-	}
-}
-
-void	key_hook(mlx_key_data_t keydata, void *param)
-{
-	t_game		*game;
-
-	game = (t_game *)param;
-	if (keydata.key == MLX_KEY_H && keydata.action == MLX_PRESS)
-	{
-		if (game->ui)
-			toggle_ui_visibility(game->ui);
-	}
-	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
-		mlx_close_window(game->mlx);
-}
-
-void	mouse_hook(mouse_key_t button, action_t action,
-	__attribute__((unused)) modifier_key_t mods, void *param)
-{
-	t_game	*game;
-	int32_t	x;
-	int32_t	y;
-
-	game = (t_game *)param;
-	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS)
-	{
-		if (game->ui && game->ui->context && game->ui->context->is_visible)
-		{
-			mlx_get_mouse_pos(game->mlx, &x, &y);
-			handle_ui_click(game->ui->root, x, y, game->ui->context);
-		}
-	}
+	if (game->thread_data)
+		cleanup_thread_data(game->thread_data);
+	game->ui = NULL;
+	game->load_screen = NULL;
+	game->mlx = NULL;
+	game->thread_data = NULL;
 }
 
 static bool	cam_init(t_cam *cam, mlx_t *mlx)
@@ -77,31 +47,69 @@ static bool	cam_init(t_cam *cam, mlx_t *mlx)
 	return (true);
 }
 
+void	set_game_state(t_game *game, t_game_state state)
+{
+	bool *const	*ptr;
+	bool *const	img_states[4] = {&game->img->enabled,
+		&game->load_screen->bg.img->enabled,
+		&game->ui->context->canvas->enabled, NULL
+	};
+	const bool	toggle_state[3][3] = {
+	[GS_IDLE] = {true, false, true},
+	[GS_RENDER] = {true, false, false},
+	[GS_LOAD] = {false, true, false}
+	};
+
+	game->state = state;
+	ptr = img_states;
+	while (*ptr)
+	{
+		**ptr = toggle_state[state][ptr - img_states];
+		++ptr;
+	}
+}
+
+static bool	game_init(t_game *game, t_scene *scene, t_sample *sample)
+{
+	ft_bzero(game, sizeof(t_game));
+	game->scene = scene;
+	game->sample = sample;
+	game->mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
+	if (!game->mlx)
+		return (cleanup_mlx(game), false);
+	if (!cam_init(&scene->camera, game->mlx))
+		return (cleanup_mlx(game), false);
+	game->img = scene->camera.img_plane;
+	game->ui = create_ui(game->mlx, scene, game->sample, game);
+	if (!game->ui)
+		return (cleanup_mlx(game), false);
+	game->load_screen = init_load_screen(game->mlx);
+	if (game->load_screen == NULL)
+		return (cleanup_mlx(game), false);
+	game->load_screen->bg.img->enabled = true;
+	game->thread_data = init_thread_data(THRD_CNT, game);
+	if (game->thread_data == NULL)
+		return (cleanup_mlx(game), false);
+	mlx_set_instance_depth(&game->img->instances[0], 0);
+	mlx_set_instance_depth(&game->ui->context->canvas->instances[0], 1);
+	mlx_set_instance_depth(&game->load_screen->bg.img->instances[0], 2);
+	set_game_state(game, GS_RENDER);
+	return (true);
+}
+
 int	game(t_scene *scene, t_sample *sample)
 {
 	t_game	game;
 
 	init_perlin();
-	ft_bzero(&game, sizeof(t_game));
-	game.scene = scene;
-	game.mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
-	if (!game.mlx)
-		return (cleanup_mlx(&game), 1);
-	if (!cam_init(&scene->camera, game.mlx))
-		return (cleanup_mlx(&game), 1);
-	game.img = scene->camera.img_plane;
-	game.scene = scene;
-	game.needs_redraw = true;
-	game.sample = sample;
-	game.ui = create_ui(game.mlx, scene, game.sample, &game);
-	if (!game.ui)
-		return (cleanup_mlx(&game), 1);
-	mlx_set_instance_depth(&game.img->instances[0], 0);
+	if (!game_init(&game, scene, sample))
+		return (EXIT_FAILURE);
+	ft_putchar_fd('\n', STDOUT_FILENO);
 	mlx_loop_hook(game.mlx, render_loop, &game);
 	mlx_key_hook(game.mlx, key_hook, &game);
 	mlx_mouse_hook(game.mlx, mouse_hook, &game);
-	game.needs_redraw = true;
 	mlx_loop(game.mlx);
+	cancel_threads(game.thread_data->threads, game.thread_data->thread_count);
 	cleanup_mlx(&game);
 	return (EXIT_SUCCESS);
 }

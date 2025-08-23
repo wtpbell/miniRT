@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   render.c                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/10 17:15:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/19 10:19:30 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/22 15:13:26 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,21 +133,22 @@ void	*render(void *ctx)
 
 	instr = (t_pthread_instr *)ctx;
 	y = instr->start_y;
-	if (pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL) != 0)
-		return (perror("minirt"), NULL);
 	while (y < instr->end_y)
 	{
 		x = 0;
 		while (x < instr->img->width)
 		{
-			color = sample_pixel(instr->scene, instr->sample,
-					(float)x, (float)y);
-			color = v3f_apply_gamma(color, GAMMA);
+			color = sample_pixel(instr->shared_data->scene,
+					instr->shared_data->sample, (float)x, (float)y);
 			color = v3f_apply_gamma(color, GAMMA);
 			mlx_put_pixel(instr->img, x, y, v3f_to_col32(color));
 			++x;
 		}
 		++y;
+		pthread_mutex_lock(instr->shared_data->progress_lock);
+		++(*instr->shared_data->progress_count);
+		pthread_mutex_unlock(instr->shared_data->progress_lock);
+		pthread_testcancel();
 	}
 	return (NULL);
 }
