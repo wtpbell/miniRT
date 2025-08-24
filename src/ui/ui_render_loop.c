@@ -35,10 +35,7 @@ static void	handle_render_state(t_game *game)
 	if (thread_rendering(game->thread_data))
 		set_game_state(game, GS_LOAD);
 	else
-	{
-		ft_putendl_fd("Failed to create threads! Try again.\n", STDERR_FILENO);
-		set_game_state(game, GS_IDLE);
-	}
+		game->state = GS_ERR;
 }
 
 static void	handle_load_state(t_game *game)
