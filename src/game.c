@@ -6,17 +6,15 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/16 11:50:39 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/23 16:35:25 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/24 13:42:48 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "MLX42/MLX42.h"
-#include "minirt.h"
-#include "parser.h"
 #include "rt_thread.h"
 #include "rt_math.h"
 #include "game.h"
-#include "perlin_display.h"
+#include "rt_error.h"
 
 static void	cleanup_mlx(t_game *game)
 {
@@ -47,28 +45,6 @@ static bool	cam_init(t_cam *cam, mlx_t *mlx)
 	return (true);
 }
 
-void	set_game_state(t_game *game, t_game_state state)
-{
-	bool *const	*ptr;
-	bool *const	img_states[4] = {&game->img->enabled,
-		&game->load_screen->bg.img->enabled,
-		&game->ui->context->canvas->enabled, NULL
-	};
-	const bool	toggle_state[3][3] = {
-	[GS_IDLE] = {true, false, true},
-	[GS_RENDER] = {true, false, false},
-	[GS_LOAD] = {false, true, false}
-	};
-
-	game->state = state;
-	ptr = img_states;
-	while (*ptr)
-	{
-		**ptr = toggle_state[state][ptr - img_states];
-		++ptr;
-	}
-}
-
 static bool	game_init(t_game *game, t_scene *scene, t_sample *sample)
 {
 	ft_bzero(game, sizeof(t_game));
@@ -97,20 +73,43 @@ static bool	game_init(t_game *game, t_scene *scene, t_sample *sample)
 	return (true);
 }
 
+void	set_game_state(t_game *game, t_game_state state)
+{
+	bool *const	*ptr;
+	bool *const	img_states[4] = {&game->img->enabled,
+		&game->load_screen->bg.img->enabled,
+		&game->ui->context->canvas->enabled, NULL
+	};
+	const bool	toggle_state[3][3] = {
+	[GS_IDLE] = {true, false, true},
+	[GS_RENDER] = {true, false, false},
+	[GS_LOAD] = {false, true, false}
+	};
+
+	game->state = state;
+	ptr = img_states;
+	while (*ptr)
+	{
+		**ptr = toggle_state[state][ptr - img_states];
+		++ptr;
+	}
+}
+
 int	game(t_scene *scene, t_sample *sample)
 {
 	t_game	game;
 
 	init_perlin();
 	if (!game_init(&game, scene, sample))
-		return (0);
+		return (rt_exit());
 	ft_putchar_fd('\n', STDOUT_FILENO);
 	mlx_key_hook(game.mlx, key_hook, &game);
 	mlx_mouse_hook(game.mlx, mouse_hook, &game);
 	if (!mlx_loop_hook(game.mlx, render_loop, &game))
 		return (cleanup_mlx(&game), 0);
 	mlx_loop(game.mlx);
+	ft_putendl_fd("NONONONO", STDERR_FILENO);
 	cancel_threads(game.thread_data->threads, game.thread_data->thread_count);
 	cleanup_mlx(&game);
-	return (mlx_errno == MLX_SUCCESS);
+	return (rt_exit());
 }

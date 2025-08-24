@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/03 17:35:16 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/17 21:18:11 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/24 13:42:03 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 
 typedef enum e_thread_state
 {
+	THRD_IDLE,
 	THRD_WORKING,
 	THRD_COMPLETE,
 	THRD_CANCELED

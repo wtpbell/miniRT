@@ -6,12 +6,14 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/23 17:32:13 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/23 17:38:01 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/24 13:31:45 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RT_ERROR_H
 # define RT_ERROR_H
+
+# include <errno.h>
 
 # define RED	"\033[31m"
 # define GREEN	"\033[32m"
@@ -55,6 +57,7 @@ typedef enum e_error
 	ERR_COUNT
 }	t_error;
 
+int		rt_exit(void);
 void	sys_error(const char *ctx);
 void	rt_mlx_error(const char *ctx);
 void	rt_error(t_error type, const char *ctx, const char *value);
