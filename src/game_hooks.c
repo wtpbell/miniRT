@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/17 22:37:13 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/24 15:21:42 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/24 15:58:23 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,4 @@ void	mouse_hook(mouse_key_t button, action_t action,
 			}
 		}
 	}
-	
 }

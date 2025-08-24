@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/07 18:35:30 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/23 17:29:12 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/24 16:05:49 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ bool	construct_mesh(t_scene *scene)
 	t_mesh	*shared;
 	int		i;
 
-	i = 0;
-	while (i < scene->objects.size)
+	i = -1;
+	while (++i < scene->objects.size)
 	{
 		obj = (t_obj *)scene->objects.items[i];
 		if (obj->type == OBJ_MESH)
@@ -100,11 +100,11 @@ bool	construct_mesh(t_scene *scene)
 				if (shared == NULL)
 					return (free_mesh(shared), false);
 				if (!vector_add(&scene->shared_mesh, shared))
-					return (free_mesh(shared), sys_error("construct_mesh"), false);
+					return (free_mesh(shared),
+						sys_error("construct_mesh"), false);
 			}
 			assign_mesh(&obj->mesh, shared);
 		}
-		++i;
 	}
 	return (true);
 }
