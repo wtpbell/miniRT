@@ -107,7 +107,7 @@ int	game(t_scene *scene, t_sample *sample)
 	ft_putchar_fd('\n', STDOUT_FILENO);
 	mlx_key_hook(game.mlx, key_hook, &game);
 	mlx_mouse_hook(game.mlx, mouse_hook, &game);
-	if (mlx_loop_hook(game.mlx, render_loop, &game))
+	if (!mlx_loop_hook(game.mlx, render_loop, &game))
 		return (cleanup_mlx(&game), 0);
 	mlx_loop(game.mlx);
 	cancel_threads(game.thread_data->threads, game.thread_data->thread_count);

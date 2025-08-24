@@ -6,10 +6,11 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/23 17:29:12 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/24 11:35:44 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <errno.h>
 #include "parser.h"
 
 static bool	parse_line(t_scene *scene, char *line)
@@ -40,6 +41,7 @@ static bool	parse_file_lines(t_scene *scene, int fd)
 {
 	char	*line;
 
+	errno = 0;
 	while (true)
 	{
 		line = get_next_line(fd);
@@ -49,9 +51,12 @@ static bool	parse_file_lines(t_scene *scene, int fd)
 			return (cleanup_gnl(line, fd), false);
 		free(line);
 	}
-	return (cleanup_gnl(line, fd), true);
+	if (errno != 0)
+		sys_error("parse_file_lines");
+	return (cleanup_gnl(line, fd), errno == 0);
 }
 
+/* fd is being closed by parse_file_lines */
 bool	parse_map(t_scene *scene, const char *file)
 {
 	int		fd;
@@ -65,7 +70,6 @@ bool	parse_map(t_scene *scene, const char *file)
 		return (false);
 	}
 	result = parse_file_lines(scene, fd);
-	close(fd);
 	if (result && construct_mesh(scene))
 		return (true);
 	cleanup_scene(scene);

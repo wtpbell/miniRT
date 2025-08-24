@@ -6,11 +6,24 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/01 08:59:47 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/23 17:29:12 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/24 12:20:53 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "perlin_display.h"
+#include "rt_error.h"
+#include "errno.h"
+
+static int	exit_perlin_display(void)
+{
+	if (errno == 0 && mlx_errno == MLX_SUCCESS)
+		return (EXIT_SUCCESS);
+	if (mlx_errno != MLX_SUCCESS)
+		rt_mlx_error("MLX - perlin display");
+	else if (errno != 0)
+		sys_error("SYS - perlin display");
+	return (EXIT_FAILURE);
+}
 
 static void	perlin_render_loop(void *param)
 {
@@ -35,11 +48,11 @@ static bool	init_window_and_display(mlx_t **mlx, t_pdisplay *d, t_perlin *p)
 	if (!*mlx)
 		return (false);
 	if (!init_display(*mlx, d, p))
-		return (sys_error("init_window_and_display"), cleanup_display(d), false);
+		return (cleanup_display(d), false);
 	return (true);
 }
 
-void	perlin_display(void)
+int	perlin_display(void)
 {
 	mlx_t		*mlx;
 	t_pdisplay	display;
@@ -48,9 +61,10 @@ void	perlin_display(void)
 	ft_bzero(&display, sizeof(t_pdisplay));
 	init_perlin_data(&data);
 	if (!init_window_and_display(&mlx, &display, &data))
-		return ;
+		return (exit_perlin_display());
 	mlx_key_hook(mlx, perlin_key_hook, &display);
-	mlx_loop_hook(mlx, perlin_render_loop, display.ui);
-	mlx_loop(mlx);
+	if (mlx_loop_hook(mlx, perlin_render_loop, display.ui))
+		mlx_loop(mlx);
 	cleanup_display(&display);
+	return (exit_perlin_display());
 }
