@@ -1,16 +1,25 @@
-# front
-C	1.2,0,5	0,0,1	40
-# top
-# C	0,10,0	0,-1,0	30
-# side
-# C	10,0,0	-1,0,0	30
+# Camera
+C    0,0,5    0,0,1    100
 
-L	-0.5,3,0			0.2	255,255,255
-A					0.1	255,255,255
+# Lighting
+L 3,5,3    0.5    255,255,255
+A              0.1    255,255,255
 
-m_mirror	type:dielectric	ir:1.7	tr:1.0	mt_rough:0.0
+# Materials
+m_mirror    type:dielectric    ir:1.7    tr:1.0
+m_floor     type:lambertian    col:180,180,180
+m_wall      type:lambertian    col:200,200,220
 
-obj	-0.2,-0.2,3	1,1,1	0,255,0		asset/models/dragon.obj m_mirror
+# Dragon model
+obj    -0.2,-0.2,4    1,1,1    0,255,255    asset/models/dragon.obj m_mirror
 
-pl	0,0,-20	0,0,-1	255,255,255
-pl	0,0,20	0,0,1	255,255,255
+# Floor
+pl    0,-2,0    0,1,0    255,255,255    m_floor
+
+# Walls
+pl    0,0,-7    0,0,1    255,255,255    m_wall
+pl    -10,0,0    1,0,0    255,255,255    m_wall
+pl    10,0,0    -1,0,0    255,255,255    m_wall
+pl    0,10,0    0,-1,0    255,255,255    m_wall
+
+sp    0,2,1    2    255,255,0
