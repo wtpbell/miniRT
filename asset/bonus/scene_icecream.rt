@@ -2,22 +2,16 @@ C	0.0,3,5.0	0,0.2,1				100
 A						0.0		255,255,255
 L	0,5,5				1.0			255,255,255
 
-m_lemon type:lambertian spc:1.0 shi:100.0 l_rough:0.2 pat:image tex:textures/lemon.png bump:textures/lemon_bump.png bump_scale: 20.0 
 m_icecream  type:lambertian spc:1.0 shi:100.0 l_rough:0.2 pat:image tex:textures/icecream.png
-m_egg		 type:lambertian spc:1.0 shi:100.0 l_rough:0.2	pat:image tex:textures/egg.png col:0,0,0 bump:textures/egg_bump.png bump_scale: 50.0
-m_watermelon		 type:lambertian spc:1.0 shi:100.0 l_rough:0.20	 pat:image tex:textures/watermelon.png col:0,0,0 bump:textures/watermelon_bump.png bump_scale: 20.0
+m_watermelon		 type:lambertian spc:1.0 shi:100.0 l_rough:0.20	 pat:image tex:textures/watermelon.png col:0,0,0 bump:textures/watermelon.png bump_scale: 20.0
 m_waffle		 type:lambertian spc:1.0 shi:100.0 l_rough:0.20	 pat:image tex:textures/waffle.png col:0,0,0 bump:textures/waffle_bump.png bump_scale: 20.0
 
 
-sp	-4,4,1	2						255,255,255 m_lemon
 sp	4,4,1	2						255,255,255 m_icecream
-sp	1,4,1	2						255,255,255 m_egg
 sp	-1,4,1	2						255,255,255 m_watermelon
 
 
-co		-4,1,1	0,1,0	2.0	3.0	0,255,255 m_waffle
 co		4,1,1	0,1,0	2.0	3.0	0,255,255 m_waffle
-co		1,1,1	0,1,0	2.0	3.0	0,255,255 m_waffle
 co		-1,1,1	0,1,0	2.0	3.0	0,255,255 m_waffle
 
 

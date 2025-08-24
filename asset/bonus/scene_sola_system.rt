@@ -10,25 +10,15 @@ spl	0,0,0	0,-0.2,-1	1.0	45	90	255,255,200
 # Format: m_name type:type_name [params]
 # Texture pattern types: solid, checker, image
 
-# Basic materials
-m_grass type:lambertian pat:image tex:textures/grassblock.png su:1.0 sv:1.0
-
 # Materials with bump maps
 # Using the existing normal.png which is a proper normal map (bluish/purple)
-m_earth type:metal mt_rough:0.2 spc:1.5 shi:150.0 pat:image tex:textures/earth.png bump:textures/normal.png bump_scale: 25.0
-m_normals type:lambertian spc:1.0 shi:100.0 pat:image su:0.05 sv:0.05 tex:textures/wave.png bump:textures/wave_normal.png bump_scale: 25.0
-m_dots type:metal mt_rough:0.0 pat:image tex:textures/uv2.png bump:textures/normal.png bump_scale: 20.0
-
-
-# Materials with bump maps
-m_checker	type:lambertian	spc:1.0	shi:50.0	pat:image tex:textures/uv2.png su:2.0 sv:2.0
-# m_purple type:dielectric ir:1.56 tr:.99 tex: textures/purple_brick.png su:2.0 sv:2.0
+m_earth type:metal mt_rough:0.2 spc:1.5 shi:150.0 pat:image tex:textures/earth.png bump:textures/earth_bump.png bump_scale: 25.0
 
 # Floor with bump map
-pl  0.0,-1.0,0.0  0.0,1.0,0.0  100,100,100 m_normals
+pl  0.0,-1.0,0.0  0.0,1.0,0.0  100,100,100
 
 # Back wall with bump map
-pl	0,0,-8	0,0,1				150,150,150 m_normals
+pl	0,0,-8	0,0,1				150,150,150
 
 # Mercury (smallest planet, closest to sun)
 m_mercury type:metal mt_rough:0.8 spc:0.8 shi:80.0 pat:image tex:textures/2k_mercury.png
@@ -39,12 +29,12 @@ m_venus type:lambertian spc:0.5 shi:100.0 pat:image tex:textures/2k_venus_surfac
 sp	9,0,0	0.9		255,255,255 m_venus
 
 # Earth (our home planet)
-m_earth type:metal mt_rough:0.2 spc:1.5 shi:150.0 pat:image tex:textures/2k_earth_daymap.png bump:textures/earth_bump2.png bump_scale: 50.0
+m_earth type:lambertian shi:150.0 pat:image tex:textures/earth.png bump:textures/earth_bump.png bump_scale: 50.0
 sp	12,0,0	1.0		255,255,255 m_earth
 
 # Mars (the red planet)
 m_mars type:lambertian spc:0.3 shi:50.0 pat:image tex:textures/2k_mars.png
-sp	15,0,0	0.6		255,255,255 m_mars
+sp	15,0,0	0.6		255,255,255 m_mar
 
 # Jupiter (largest planet, gas giant with great red spot)
 m_jupiter type:lambertian spc:0.7 shi:120.0 pat:image tex:textures/2k_jupiter.png
