@@ -28,29 +28,31 @@ static bool	valid_input(int argc, char **argv)
 {
 	if (argc != 2)
 	{
-		print_error(ERR_NUM_ARGS, "input", NULL);
+		rt_error(ERR_NUM_ARGS, "input", NULL);
 		return (false);
 	}
 	if (!valid_file_format(argv[1], ".rt"))
 	{
-		print_error(ERR_FILE_FORMAT, "format", argv[1]);
+		rt_error(ERR_FILE_FORMAT, "format", argv[1]);
 		return (false);
 	}
 	return (true);
 }
 
-static void	init_scene_and_vector(t_scene *scene)
+static bool	init_scene_and_vector(t_scene *scene)
 {
 	ft_bzero(scene, sizeof(t_scene));
-	if (!vector_init(&scene->objects, 8) || !vector_init(&scene->lights, 8)
+	if (!vector_init(&scene->objects, 8)
+		|| !vector_init(&scene->lights, 8)
 		|| !vector_init(&scene->shared_materials, 8)
 		|| !vector_init(&scene->shared_mesh, 8)
 		|| !create_default_materials(&scene->shared_materials))
 	{
-		perror("init_scene_and_vector");
+		sys_error("init_scene_and_vector");
 		cleanup_scene(scene);
-		return ;
+		return (false);
 	}
+	return (true);
 }
 
 static void	init_sample(t_sample *sample)
@@ -65,21 +67,22 @@ int	main(int argc, char **argv)
 	t_sample	*sample;
 
 	if (argc == 1)
-		return (perlin_display(), EXIT_SUCCESS);
+		return (perlin_display());
 	ft_bzero(&scene, sizeof(t_scene));
 	if (!valid_input(argc, argv))
 		return (EXIT_FAILURE);
-	init_scene_and_vector(&scene);
+	if (!init_scene_and_vector(&scene))
+		return (EXIT_FAILURE);
 	if (!parse_map(&scene, argv[1]))
-		return (print_error(ERR_PARSE_FAIL, "map", argv[1]), EXIT_FAILURE);
+		return (rt_error(ERR_PARSE_FAIL, "map", argv[1]), EXIT_FAILURE);
 	else if (!validate_scene(&scene))
 		return (cleanup_scene(&scene), EXIT_FAILURE);
 	sample = ft_calloc(1, sizeof(t_sample));
 	if (!sample)
-		return (cleanup_scene(&scene), EXIT_FAILURE);
+		return (sys_error("main"), cleanup_scene(&scene), EXIT_FAILURE);
 	init_sample(sample);
-	game(&scene, sample);
+	exit_status = game(&scene, sample);
 	cleanup_scene(&scene);
 	free(sample);
-	return (EXIT_SUCCESS);
+	return (exit_status);
 }
