@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   light.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 12:05:04 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/15 00:33:57 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   light.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/14 12:05:04 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/23 17:29:12 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ bool	parse_ambient_light(char **tokens, t_scene *scene)
 
 	ambient_light = ft_calloc(1, sizeof(t_light));
 	if (!ambient_light)
-		return (perror("parse_ambient_light"), false);
+		return (sys_error("parse_ambient_light"), false);
 	if (!parse_light_ratio(&ambient_light->intensity, tokens[1])
 		|| !parse_col(&ambient_light->color, tokens[2]))
 		return (free(ambient_light), false);
@@ -45,13 +45,13 @@ bool	parse_point_light(char **tokens, t_scene *scene)
 
 	point_light = ft_calloc(1, sizeof(t_light));
 	if (!point_light)
-		return (perror("parse_point_light"), false);
+		return (sys_error("parse_point_light"), false);
 	if (!parse_v3f(&pos, tokens[1]))
 		return (free(point_light), false);
 	if (pos.x > MAX_POS || pos.x < MIN_POS
 		|| pos.y > MAX_POS || pos.y < MIN_POS
 		|| pos.z > MAX_POS || pos.z < MIN_POS)
-		return (free(point_light), print_error(ERR_RANGE,
+		return (free(point_light), rt_error(ERR_RANGE,
 				"Point light position out of bounds", tokens[1]), false);
 	point_light->pos = pos;
 	if (!parse_light_ratio(&point_light->intensity, tokens[2])
@@ -71,7 +71,7 @@ bool	parse_spot_light(char **tokens, t_scene *scene)
 
 	spot_light = ft_calloc(1, sizeof(t_light));
 	if (!spot_light)
-		return (perror("parse_spot_light"), false);
+		return (sys_error("parse_spot_light"), false);
 	if (!parse_v3f(&spot_light->pos, tokens[1])
 		|| !parse_dir(&spot_light->spot.dir, tokens[2])
 		|| !parse_light_ratio(&spot_light->intensity, tokens[3])

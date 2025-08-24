@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/15 16:24:31 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/23 17:29:12 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static bool	parse_line(t_scene *scene, char *line)
 		return (false);
 	tokens = ft_split(line, ' ');
 	if (!tokens)
-		return (perror("parse_line"), false);
+		return (sys_error("parse_line"), false);
 	parse_element = element_parser(tokens, scene, line);
 	if (!parse_element)
 		return (free_tokens(tokens), false);
@@ -60,7 +60,7 @@ bool	parse_map(t_scene *scene, const char *file)
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 	{
-		perror("parse_map");
+		sys_error("parse_map");
 		cleanup_scene(scene);
 		return (false);
 	}

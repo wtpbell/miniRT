@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   perlin_display.c                                   :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/01 08:59:47 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/21 19:03:09 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/23 17:29:12 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static bool	init_window_and_display(mlx_t **mlx, t_pdisplay *d, t_perlin *p)
 	if (!*mlx)
 		return (false);
 	if (!init_display(*mlx, d, p))
-		return (perror("init_window_and_display"), cleanup_display(d), false);
+		return (sys_error("init_window_and_display"), cleanup_display(d), false);
 	return (true);
 }
 

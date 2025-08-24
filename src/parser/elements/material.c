@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/15 14:33:03 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/23 17:26:29 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,15 +124,15 @@ bool	parse_material(char **tokens, t_scene *scene)
 
 	str_type = NULL;
 	if (!is_valid_material_name(tokens[0]))
-		return (print_error(ERR_INV_MAT_NAME, "material", tokens[0]), false);
+		return (rt_error(ERR_INV_MAT_NAME, "material", tokens[0]), false);
 	if (tokens[1] == NULL || !is_field(tokens[1], "type", &str_type))
-		return (print_error(ERR_REQ_FIELD, "material", "type:<value>"), false);
+		return (rt_error(ERR_REQ_FIELD, "material", "type:<value>"), false);
 	mat_type = get_mat_type(str_type);
 	if (mat_type == MAT_UNKNOWN)
-		return (print_error(ERR_UNKNOWN_MAT, "material", tokens[1]), false);
+		return (rt_error(ERR_UNKNOWN_MAT, "material", tokens[1]), false);
 	mat = find_or_create_material(&scene->shared_materials, tokens[0]);
 	if (mat == NULL)
-		return (print_error(ERR_MEM, "material", NULL), false);
+		return (rt_error(ERR_MEM, "material", NULL), false);
 	if (!parse_type_material(mat, mat_type, tokens + 2))
 		return (false);
 	assign_textures(mat);

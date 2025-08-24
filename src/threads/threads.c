@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/11 17:52:35 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/17 23:00:58 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/23 17:29:12 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,6 @@ void	join_threads(t_pthread_instr *instr, int count)
 bool	thread_rendering(t_thread_data *data)
 {
 	if (!create_threads(data, data->thread_count))
-		return (perror("threading_rendering"), false);
+		return (sys_error("threading_rendering"), false);
 	return (true);
 }

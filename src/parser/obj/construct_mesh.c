@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/07 18:35:30 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/15 16:27:11 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/23 17:29:12 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static t_mesh	*parse_obj_file(const char *obj_path)
 
 	fd = open(obj_path, O_RDONLY);
 	if (fd < 0 || !init_obj_file(&obj_file))
-		return (perror("parse_obj_file"), cleanup_gnl(NULL, fd), NULL);
+		return (sys_error("parse_obj_file"), cleanup_gnl(NULL, fd), NULL);
 	errno = 0;
 	while (true)
 	{
@@ -62,7 +62,7 @@ static t_mesh	*parse_obj_file(const char *obj_path)
 	}
 	cleanup_gnl(NULL, fd);
 	if (errno != 0)
-		return (perror("parse_obj_file"), free_obj_file(&obj_file), NULL);
+		return (sys_error("parse_obj_file"), free_obj_file(&obj_file), NULL);
 	mesh = load_obj_into_mesh(obj_path, &obj_file);
 	return (free_obj_file(&obj_file), mesh);
 }
@@ -100,7 +100,7 @@ bool	construct_mesh(t_scene *scene)
 				if (shared == NULL)
 					return (free_mesh(shared), false);
 				if (!vector_add(&scene->shared_mesh, shared))
-					return (free_mesh(shared), perror("construct_mesh"), false);
+					return (free_mesh(shared), sys_error("construct_mesh"), false);
 			}
 			assign_mesh(&obj->mesh, shared);
 		}

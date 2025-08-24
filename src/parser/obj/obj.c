@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 15:58:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/15 17:29:28 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/23 17:29:12 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,20 +59,20 @@ static bool	init_vertices(t_tri *tri, t_obj_file *obj_file, int face_index)
 	indices = obj_file->f.items[face_index];
 	if (!assign_v3f((t_v3f *[3]){&tri->v0, &tri->v1, &tri->v2}, &obj_file->v,
 		indices, 0))
-		return (print_error(ERR_OBJ_VERT_INDEX, "obj - v", NULL), false);
+		return (rt_error(ERR_OBJ_VERT_INDEX, "obj - v", NULL), false);
 	if (*(indices + 1) == 0)
 		set_uv_texcoord(tri);
 	else
 		if (!assign_v3f((t_v3f *[3]){&tri->vt0, &tri->vt1, &tri->vt2},
 			&obj_file->vt, indices, 1))
-			return (print_error(ERR_OBJ_VERT_INDEX, "obj - vt", NULL), false);
+			return (rt_error(ERR_OBJ_VERT_INDEX, "obj - vt", NULL), false);
 	if (*(indices + 2) == 0)
 		set_normal(tri);
 	else
 	{
 		if (!assign_v3f((t_v3f *[3]){&tri->vn0, &tri->vn1, &tri->vn2},
 			&obj_file->vn, indices, 2))
-			return (print_error(ERR_OBJ_VERT_INDEX, "obj - vn", NULL), false);
+			return (rt_error(ERR_OBJ_VERT_INDEX, "obj - vn", NULL), false);
 		tri->vn0 = v3f_norm(tri->vn0);
 		tri->vn1 = v3f_norm(tri->vn1);
 		tri->vn2 = v3f_norm(tri->vn2);
@@ -87,10 +87,10 @@ t_mesh	*load_obj_into_mesh(const char *obj_path, t_obj_file *obj_file)
 	t_mesh		*mesh;
 
 	if (obj_file->f.size == 0)
-		return (print_error(ERR_OBJ_FACE, NULL, NULL), NULL);
+		return (rt_error(ERR_OBJ_FACE, NULL, NULL), NULL);
 	mesh = init_mesh(obj_path, obj_file);
 	if (mesh == NULL)
-		return (perror("load_obj_into_mesh"), NULL);
+		return (sys_error("load_obj_into_mesh"), NULL);
 	i = 0;
 	while (i < obj_file->f.size)
 	{
@@ -101,6 +101,6 @@ t_mesh	*load_obj_into_mesh(const char *obj_path, t_obj_file *obj_file)
 	}
 	mesh->bvh = construct_bvh(mesh);
 	if (mesh->bvh == NULL)
-		return (free_mesh(mesh), perror("load_obj_into_mesh"), NULL);
+		return (free_mesh(mesh), sys_error("load_obj_into_mesh"), NULL);
 	return (mesh);
 }

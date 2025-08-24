@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/06 19:17:23 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/27 21:36:42 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/23 17:26:29 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ bool	load_bump_map(t_mat *mat, const char *bump_path)
 	mlx_texture_t	*bump_map;
 
 	if (str_is_empty(bump_path))
-		return (print_error(ERR_INV_MAT_NAME, "material", bump_path), false);
+		return (rt_error(ERR_INV_MAT_NAME, "material", bump_path), false);
 	bump_map = mlx_load_png(bump_path);
 	if (!bump_map)
 		return (false);
@@ -63,10 +63,10 @@ bool	assign_material(t_obj *obj, t_vector *materials, const char *m_name)
 	if (str_is_empty(m_name))
 		m_name = "m_default";
 	if (!is_valid_material_name(m_name))
-		return (print_error(ERR_INV_MAT_NAME, "material", m_name), false);
+		return (rt_error(ERR_INV_MAT_NAME, "material", m_name), false);
 	mat = find_or_create_material(materials, m_name);
 	if (!mat)
-		return (print_error(ERR_MEM, "material", NULL), false);
+		return (rt_error(ERR_MEM, "material", NULL), false);
 	obj->r.mat = mat;
 	return (true);
 }

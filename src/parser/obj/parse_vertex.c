@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/07 18:06:33 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/15 16:45:58 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/23 17:29:12 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ static bool	copy_v3f_to(const t_v3f point, t_vector *v)
 
 	copy = malloc(sizeof(t_v3f));
 	if (copy == NULL)
-		return (perror("copy_v3f_to"), false);
+		return (sys_error("copy_v3f_to"), false);
 	*copy = point;
 	if (vector_add(v, copy))
 		return (true);
-	return (perror("copy_v3f_to"), free(copy), false);
+	return (sys_error("copy_v3f_to"), free(copy), false);
 }
 
 bool	parse_vertex(char *str, t_vector *v, const t_vert_ran *ran)
@@ -52,7 +52,7 @@ bool	parse_vertex(char *str, t_vector *v, const t_vert_ran *ran)
 
 	count = to_v3f(&point, str, ran->lim);
 	if (count < ran->comp.x || count > ran->comp.y)
-		return (print_error(ERR_OBJ_VERT_COMP, "parse_vertex", NULL), false);
+		return (rt_error(ERR_OBJ_VERT_COMP, "parse_vertex", NULL), false);
 	while (count < (int)ran->comp.y)
 	{
 		point._axis[count] = ran->def._axis[count];
