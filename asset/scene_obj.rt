@@ -1,5 +1,5 @@
 # front
-C	0,0,10	0,0,1	60
+C	0,0,5	0,0,1	20
 # top
 # C	0,10,0	0,-1,0	30
 # side
@@ -13,7 +13,7 @@ m_crazy		type:dielectric	ir:1.7	tr:1.0 pat:checker	su:8	sv:12	rot:45	col:0,0,0
 m_checker	type:metal	ir:1.7	tr:1.0 pat:marble	su:512	sv:512	rot:0	col:0,0,0 bump_pat:marble
 
 # obj pos<x,y,z> col<r,g,b> path<string> [m_material]
-obj	0,0,0	1,1,1	255,0,0		asset/models/cat_converted.obj
+obj	0,0,0	1,1,1	255,255,255		asset/models/cat.obj
 # obj	-2,0,-5	-1,0,1	0,255,0		asset/models/cube.obj m_mirror
 # obj	2,0,-5	1,0,1	0,0,255		asset/models/cube.obj m_crazy
 

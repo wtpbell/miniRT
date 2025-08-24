@@ -117,8 +117,8 @@ def convert_custom_to_rt(input_file, output_file):
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Set input and output file paths
-input_file = os.path.join(script_dir, "cat.obj")
-output_file = os.path.join(script_dir, "cat_converted.obj")
+input_file = os.path.join(script_dir, "giraffe.obj")
+output_file = os.path.join(script_dir, "giraffe_converted.obj")
 
 # Convert the file
 convert_custom_to_rt(input_file, output_file)
