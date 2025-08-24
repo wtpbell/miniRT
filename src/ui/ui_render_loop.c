@@ -12,6 +12,7 @@
 
 #include "ui.h"
 #include "rt_thread.h"
+#include "errno.h"
 
 static void	handle_idle_state(t_game *game)
 {
@@ -62,6 +63,12 @@ void	render_loop(void *param)
 	t_game	*game;
 
 	game = (t_game *)param;
+	if (errno != 0)
+	{
+		sys_error("render_loop");
+		mlx_close_window(game->mlx);
+		return ;
+	}
 	if (game->state == GS_IDLE)
 		handle_idle_state(game);
 	else if (game->state == GS_RENDER)
