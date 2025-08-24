@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 15:01:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/22 14:59:23 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/24 14:53:03 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ typedef enum e_game_state
 	GS_IDLE = 0,
 	GS_RENDER = 1,
 	GS_LOAD = 2,
-	GS_QUIT
+	GS_QUIT = 3,
+	GS_ERR
 }	t_game_state;
 
 struct s_sample
@@ -47,6 +48,7 @@ struct s_game
 
 int		game(t_scene *scene, t_sample *sample);
 void	set_game_state(t_game *game, t_game_state state);
+void	game_close_hook(void *param);
 void	key_hook(mlx_key_data_t keydata, void *param);
 void	mouse_hook(mouse_key_t button, action_t action,
 			__attribute__((unused)) modifier_key_t mods, void *param);

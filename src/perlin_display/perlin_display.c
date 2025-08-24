@@ -6,12 +6,21 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/01 08:59:47 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/24 13:32:27 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/24 15:11:11 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "perlin_display.h"
 #include "rt_error.h"
+
+static void	perlin_close_window(void *param)
+{
+	t_pdisplay	*display;
+
+	display = (t_pdisplay *)param;
+	if (display->exit_state != PD_ERR)
+		display->exit_state = PD_QUIT;
+}
 
 static void	perlin_render_loop(void *param)
 {
@@ -50,9 +59,12 @@ int	perlin_display(void)
 	init_perlin_data(&data);
 	if (!init_window_and_display(&mlx, &display, &data))
 		return (rt_exit());
+	mlx_close_hook(mlx, perlin_close_window, &display);
 	mlx_key_hook(mlx, perlin_key_hook, &display);
 	if (mlx_loop_hook(mlx, perlin_render_loop, display.ui))
 		mlx_loop(mlx);
 	cleanup_display(&display);
+	if (display.exit_state == PD_QUIT)
+		errno = 0;
 	return (rt_exit());
 }

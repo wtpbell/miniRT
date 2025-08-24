@@ -39,7 +39,8 @@ SRCS_MAIN  := main.c vector_init.c vector_helper.c vector_operations.c\
 				perlin_param_control.c perlin_param_update.c perlin_init.c perlin_utils.c \
 				perlin_key_hook.c rt_mesh.c rt_strtok.c aabb.c bvh.c bvh_utils.c scene_cleanup.c \
 				perlin_modifier.c ui_math.c ui_draw_frame.c ui_loading_screen.c\
-				thread_data.c ui_progress_bar.c game_hooks.c ui_update_animation.c
+				thread_data.c ui_progress_bar.c game_hooks.c ui_update_animation.c\
+				rt_exit.c
 SNPRINTF	:= rt_snprintf.c rt_snprintf_str.c rt_snprintf_num.c rt_snprintf_real.c
 SRCS_DEBUG	:= print_var.c
 SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE) $(SNPRINTF)

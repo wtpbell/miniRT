@@ -12,7 +12,7 @@
 
 #include "ui.h"
 #include "rt_thread.h"
-#include "errno.h"
+#include "rt_error.h"
 
 static void	handle_idle_state(t_game *game)
 {
@@ -55,7 +55,7 @@ static void	handle_load_state(t_game *game)
 	join_threads(game->thread_data->threads, game->thread_data->thread_count);
 	end_time();
 	set_game_state(game, GS_IDLE);
-	printf("\n");
+	ft_putchar_fd('\n', STDOUT_FILENO);
 }
 
 void	render_loop(void *param)
@@ -63,12 +63,6 @@ void	render_loop(void *param)
 	t_game	*game;
 
 	game = (t_game *)param;
-	if (errno != 0)
-	{
-		sys_error("render_loop");
-		mlx_close_window(game->mlx);
-		return ;
-	}
 	if (game->state == GS_IDLE)
 		handle_idle_state(game);
 	else if (game->state == GS_RENDER)
@@ -82,4 +76,6 @@ void	render_loop(void *param)
 			game->thread_data->thread_count);
 		mlx_close_window(game->mlx);
 	}
+	else if (game->state == GS_ERR)
+		mlx_close_window(game->mlx);
 }
