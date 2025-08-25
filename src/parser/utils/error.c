@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/23 17:38:35 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/25 16:17:35 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static const char *const	g_err_msg[ERR_COUNT] = {
 [ERR_MEM] = "Memory allocation failed",
 [ERR_FILE_READ] = "Error reading file",
 [ERR_UNKNOWN_TOKEN] = "Unknown token type",
-[ERR_FILE_NONEXIST] = "File does not exist",
+[ERR_FILE_NONEXIST] = "File does not exist or insufficient permissions",
 [ERR_STOI] = "Invalid integer value",
 [ERR_STOF] = "Invalid float value",
 [ERR_SPHERE_ARGS] = "Invalid sphere arguments",

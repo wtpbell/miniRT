@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/07 18:35:30 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/24 16:05:49 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/25 16:05:33 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ static t_mesh	*parse_obj_file(const char *obj_path)
 
 	fd = open(obj_path, O_RDONLY);
 	if (fd < 0 || !init_obj_file(&obj_file))
-		return (sys_error("parse_obj_file"), cleanup_gnl(NULL, fd), NULL);
+		return (rt_error(ERR_FILE_NONEXIST, "parse_obj_file", obj_path),
+			cleanup_gnl(NULL, fd), NULL);
 	errno = 0;
 	while (true)
 	{
