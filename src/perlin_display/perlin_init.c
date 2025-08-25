@@ -94,7 +94,7 @@ bool	init_display(mlx_t *mlx, t_pdisplay *display, t_perlin *data)
 		return (false);
 	if (mlx_image_to_window(mlx, display->img,
 			(WIDTH - display->img->width) / 2,
-			(HEIGHT - display->img->height) / 2) != 0)
+			(HEIGHT - display->img->height) / 2) == -1)
 		return (false);
 	ui_mark_dirty(display->ui->context);
 	return (true);

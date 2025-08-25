@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   camera.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 12:05:02 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/15 00:33:27 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   camera.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/23 17:26:29 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static bool	parse_fov(float *fov, const char *str)
 		return (false);
 	if (*fov < MIN_FOV || *fov > MAX_FOV)
 	{
-		print_error(ERR_RANGE, "FOV range 0-180", str);
+		rt_error(ERR_RANGE, "FOV range 0-180", str);
 		return (false);
 	}
 	return (true);
@@ -70,7 +70,7 @@ bool	parse_camera(char **tokens, t_scene *scene)
 	if (pos.x > MAX_POS || pos.x < MIN_POS
 		|| pos.y > MAX_POS || pos.y < MIN_POS
 		|| pos.z > MAX_POS || pos.z < MIN_POS)
-		return (print_error(
+		return (rt_error(
 				ERR_RANGE, "Camera position out of bounds", tokens[1]), false);
 	ft_bzero(&scene->camera, sizeof(t_cam));
 	scene->scene_flags |= SCENE_CAMERA;
@@ -78,7 +78,7 @@ bool	parse_camera(char **tokens, t_scene *scene)
 	if (!parse_camera_fields(&scene->camera, tokens))
 		return (false);
 	if (scene->camera.focus_dist <= 0.0f)
-		return (print_error(
+		return (rt_error(
 				ERR_RANGE, "Focus distance must be > 0.0", tokens[2]), false);
 	return (true);
 }

@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   parser.h                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/19 10:18:37 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/23 17:35:03 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include "vector.h"
 # include "get_next_line.h"
 # include "rt_math.h"
+# include "rt_error.h"
 
 # define MAX_POS			10000.0f
 # define MIN_POS			-10000.0f
@@ -45,50 +46,8 @@
 # define MAX_VERT_PER_SET	9
 # define MAX_VERT_PER_FACE	3
 
-# define RED 			"\033[31m"
-# define GREEN 			"\033[32m"
-# define YELLOW 		"\033[33m"
-# define BLUE 			"\033[34m"
-# define RESET 			"\033[0m"
-
 typedef bool			(*t_parser)(char **tokens, t_scene *scene);
 typedef bool			(*t_conv_to_enum)(int *val, const void *raw);
-
-typedef enum e_error
-{
-	ERR_NONE,
-	ERR_NUM_ARGS,
-	ERR_FILE_FORMAT,
-	ERR_RANGE,
-	ERR_MEM,
-	ERR_FILE_READ,
-	ERR_UNKNOWN_TOKEN,
-	ERR_FILE_NONEXIST,
-	ERR_STOI,
-	ERR_STOF,
-	ERR_SPHERE_ARGS,
-	ERR_TOKEN_COUNT,
-	ERR_DUPLICATE,
-	ERR_INVALID_VALUE,
-	ERR_V3F,
-	ERR_POSITIVE_VALUE,
-	ERR_PARSE_FAIL,
-	ERR_INF,
-	ERR_MISSING_COMPONENT,
-	ERR_FORMAT,
-	ERR_INV_MAT_NAME,
-	ERR_UNKNOWN_MAT,
-	ERR_UNKNOWN_FIELD,
-	ERR_REQ_FIELD,
-	ERR_LOAD_TEXTURE,
-	ERR_OBJ_VTX_FACE,
-	ERR_OBJ_FACE_FORMAT,
-	ERR_OBJ_VERT_INDEX,
-	ERR_OBJ_VERT_COMP,
-	ERR_OBJ_FAIL,
-	ERR_OBJ_FACE,
-	ERR_COUNT
-}	t_error;
 
 typedef enum e_field_type
 {
@@ -236,9 +195,6 @@ bool		parse_float(float *out, const char *str,
 				t_v2f range, const char *token);
 bool		parse_int(int *out, const char *str,
 				t_v2f range, const char *token);
-
-// error.c
-void		print_error(t_error type, const char *ctx, const char *value);
 
 // cleanup.c
 void		free_tokens(char **tokens);

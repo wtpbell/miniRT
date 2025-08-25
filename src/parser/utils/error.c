@@ -3,14 +3,17 @@
 /*                                                        ::::::::            */
 /*   error.c                                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/15 16:26:12 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/25 16:17:35 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include <string.h>
+#include "errno.h"
+
 #define STDERR STDERR_FILENO
 
 static const char *const	g_err_msg[ERR_COUNT] = {
@@ -21,7 +24,7 @@ static const char *const	g_err_msg[ERR_COUNT] = {
 [ERR_MEM] = "Memory allocation failed",
 [ERR_FILE_READ] = "Error reading file",
 [ERR_UNKNOWN_TOKEN] = "Unknown token type",
-[ERR_FILE_NONEXIST] = "File does not exist",
+[ERR_FILE_NONEXIST] = "File does not exist or insufficient permissions",
 [ERR_STOI] = "Invalid integer value",
 [ERR_STOF] = "Invalid float value",
 [ERR_SPHERE_ARGS] = "Invalid sphere arguments",
@@ -53,7 +56,7 @@ static const char	*get_err_msg(t_error type)
 	return ("Unknown error");
 }
 
-void	print_error(t_error type, const char *ctx, const char *value)
+static void	print_err(const char *ctx, const char *msg, const char *value)
 {
 	ft_putstr_fd(RED, STDERR);
 	ft_putstr_fd("Error: ", STDERR);
@@ -67,7 +70,8 @@ void	print_error(t_error type, const char *ctx, const char *value)
 		ft_putstr_fd(RESET, STDERR);
 	}
 	ft_putstr_fd(RED, STDERR);
-	ft_putstr_fd((char *)get_err_msg(type), STDERR);
+	if (msg)
+		ft_putstr_fd((char *)msg, STDERR);
 	if (value)
 	{
 		ft_putstr_fd(": ", STDERR);
@@ -75,4 +79,19 @@ void	print_error(t_error type, const char *ctx, const char *value)
 	}
 	ft_putstr_fd("\n", STDERR);
 	ft_putstr_fd(RESET, STDERR);
+}
+
+void	sys_error(const char *ctx)
+{
+	print_err(ctx, strerror(errno), NULL);
+}
+
+void	rt_mlx_error(const char *ctx)
+{
+	print_err(ctx, mlx_strerror(mlx_errno), NULL);
+}
+
+void	rt_error(t_error type, const char *ctx, const char *value)
+{
+	print_err(ctx, get_err_msg(type), value);
 }

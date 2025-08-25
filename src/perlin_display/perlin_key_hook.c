@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <errno.h>
 #include "perlin_display.h"
 
 void	draw_perlin(mlx_image_t *img, t_perlin *data,
@@ -103,9 +104,10 @@ void	perlin_key_hook(mlx_key_data_t keydata, void *param)
 	if (keydata.action != MLX_PRESS && keydata.action != MLX_REPEAT)
 		return ;
 	if (is_key_press(keydata, MLX_KEY_ESCAPE))
-		return (mlx_close_window(display->mlx));
+		return (display->exit_state = PD_QUIT, mlx_close_window(display->mlx));
 	if (is_key_press(keydata, MLX_KEY_SPACE))
 		return (print_perlin(display->p_data));
+	errno = 0;
 	prev_curr = display->curr;
 	navigate(display, keydata);
 	pick_pattern(display, keydata);
@@ -115,4 +117,9 @@ void	perlin_key_hook(mlx_key_data_t keydata, void *param)
 		|| keydata.key == MLX_KEY_UP || keydata.key == MLX_KEY_DOWN
 		|| keydata.key == MLX_KEY_LEFT || keydata.key == MLX_KEY_RIGHT)
 		ui_mark_dirty(display->ui->context);
+	if (errno != 0)
+	{
+		display->exit_state = PD_ERR;
+		return (sys_error("perlin_key_hook"), mlx_close_window(display->mlx));
+	}
 }

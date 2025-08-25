@@ -89,7 +89,7 @@ void	draw_text(mlx_image_t *canvas, const char *str,
 	size_t	i;
 
 	i = 0;
-	if (pos.y < 0 || pos.y + 8 > (int)canvas->height)
+	if (!str || pos.y < 0 || pos.y + 8 > (int)canvas->height)
 		return ;
 	while (str[i])
 	{

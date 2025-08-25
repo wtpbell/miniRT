@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   vector_utils.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 16:24:01 by bewong            #+#    #+#             */
-/*   Updated: 2025/06/01 17:03:24 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   vector_utils.c                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/11 16:24:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/23 17:26:29 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ bool	parse_floats(const char **tokens, float *out,
 	{
 		if (!ft_stof(tokens[i], &out[i]))
 		{
-			print_error(ERR_STOF, ctx, tokens[i]);
+			rt_error(ERR_STOF, ctx, tokens[i]);
 			return (false);
 		}
 		i++;
@@ -40,7 +40,7 @@ bool	parse_ints(const char **tokens, int *out,
 	{
 		if (!ft_stoi(tokens[i], &out[i]))
 		{
-			print_error(ERR_STOI, ctx, tokens[i]);
+			rt_error(ERR_STOI, ctx, tokens[i]);
 			return (false);
 		}
 		i++;
@@ -77,7 +77,7 @@ bool	parse_col(t_v3f *color, const char *str)
 	{
 		if (rgb[i] < MIN_COLOR || rgb[i] > MAX_COLOR)
 		{
-			print_error(ERR_RANGE, "color 0-255", tokens[i]);
+			rt_error(ERR_RANGE, "color 0-255", tokens[i]);
 			return (free_tokens(tokens), false);
 		}
 		i++;
@@ -106,7 +106,7 @@ bool	parse_dir(t_v3f *dir, const char *str)
 	{
 		if (values[i] < MIN_DIR || values[i] > MAX_DIR)
 		{
-			print_error(ERR_RANGE, "orientation -1,1", tokens[i]);
+			rt_error(ERR_RANGE, "orientation -1,1", tokens[i]);
 			return (free_tokens(tokens), false);
 		}
 		i++;

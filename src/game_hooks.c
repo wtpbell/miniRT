@@ -6,11 +6,12 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/17 22:37:13 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/17 22:50:31 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/24 15:58:23 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "game.h"
+#include "rt_error.h"
 
 static inline bool	is_key_down(mlx_key_data_t keydata, keys_t key)
 {
@@ -22,6 +23,15 @@ static inline bool	is_mouse_press(mouse_key_t mouse_input,
 	mouse_key_t mouse_key, action_t mouse_action)
 {
 	return (mouse_input == mouse_key && mouse_action == MLX_PRESS);
+}
+
+void	game_close_hook(void *param)
+{
+	t_game	*game;
+
+	game = (t_game *)param;
+	if (game->state != GS_ERR)
+		game->state = GS_QUIT;
 }
 
 void	key_hook(mlx_key_data_t keydata, void *param)
@@ -49,7 +59,14 @@ void	mouse_hook(mouse_key_t button, action_t action,
 		if (game->ui && game->ui->context && game->ui->context->is_visible)
 		{
 			mlx_get_mouse_pos(game->mlx, &x, &y);
+			errno = 0;
 			handle_ui_click(game->ui->root, x, y, game->ui->context);
+			if (errno != 0)
+			{
+				game->state = GS_ERR;
+				sys_error("handle_ui_click");
+				return ;
+			}
 		}
 	}
 }

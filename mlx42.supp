@@ -44,5 +44,19 @@
 	<MLX42>
 	Memcheck:Leak
 	...
+	fun:_dl_open*
+}
+
+{
+	<MLX42>
+	Memcheck:Addr8
+	...
 	fun:_dl_open
+}
+
+{
+	<MLX42>
+	Memcheck:Addr8
+	...
+	fun:dl_open_worker
 }

@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   perlin_display.h                                   :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/01 11:39:26 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/21 14:48:57 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/24 14:43:42 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,13 @@
 # define PARAMS_COUNT 12
 # define P_POW 32.0f
 # define P_IPOW 0.015625f
+
+typedef enum s_pd_exit
+{
+	PD_OPEN,
+	PD_QUIT,
+	PD_ERR
+}	t_pd_exit;
 
 typedef union u_val
 {
@@ -73,12 +80,13 @@ typedef struct s_perlin_display
 	t_ui_element	*header;
 	t_param			params[PARAMS_COUNT];
 	int				param_count;
+	t_pd_exit		exit_state;
 }	t_pdisplay;
 
 typedef void				(*t_modifier)(t_val_mod *mods,
 								t_pdisplay *display, t_perlin *data);
 
-void			perlin_display(void);
+int				perlin_display(void);
 void			print_perlin(t_perlin *data);
 void			modify(t_pdisplay *display, mlx_key_data_t keydata);
 void			call_delta(t_val_mod *fn);

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/06 19:14:48 by jboon         #+#    #+#                 */
-/*   Updated: 2025/07/28 10:02:39 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/23 17:26:29 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ bool	parse_enum(int *val, const char *str, const char *token,
 {
 	if (to_enum(val, str))
 		return (true);
-	print_error(ERR_INVALID_VALUE, token, str);
+	rt_error(ERR_INVALID_VALUE, token, str);
 	return (false);
 }
 
@@ -65,7 +65,7 @@ bool	parse_fields(t_field *fields, int count, char **tokens)
 	{
 		field = get_field(fields, count, *tokens, &value);
 		if (field == NULL)
-			return (print_error(ERR_UNKNOWN_FIELD, "field", *tokens), false);
+			return (rt_error(ERR_UNKNOWN_FIELD, "field", *tokens), false);
 		if ((field->state & HIDDEN) != HIDDEN)
 		{
 			if ((field->type == FIELD_FLT

@@ -3,14 +3,24 @@
 /*                                                        ::::::::            */
 /*   perlin_display.c                                   :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/01 08:59:47 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/21 19:03:09 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/24 15:11:11 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "perlin_display.h"
+#include "rt_error.h"
+
+static void	perlin_close_window(void *param)
+{
+	t_pdisplay	*display;
+
+	display = (t_pdisplay *)param;
+	if (display->exit_state != PD_ERR)
+		display->exit_state = PD_QUIT;
+}
 
 static void	perlin_render_loop(void *param)
 {
@@ -35,11 +45,11 @@ static bool	init_window_and_display(mlx_t **mlx, t_pdisplay *d, t_perlin *p)
 	if (!*mlx)
 		return (false);
 	if (!init_display(*mlx, d, p))
-		return (perror("init_window_and_display"), cleanup_display(d), false);
+		return (cleanup_display(d), false);
 	return (true);
 }
 
-void	perlin_display(void)
+int	perlin_display(void)
 {
 	mlx_t		*mlx;
 	t_pdisplay	display;
@@ -48,9 +58,13 @@ void	perlin_display(void)
 	ft_bzero(&display, sizeof(t_pdisplay));
 	init_perlin_data(&data);
 	if (!init_window_and_display(&mlx, &display, &data))
-		return ;
+		return (rt_exit());
+	mlx_close_hook(mlx, perlin_close_window, &display);
 	mlx_key_hook(mlx, perlin_key_hook, &display);
-	mlx_loop_hook(mlx, perlin_render_loop, display.ui);
-	mlx_loop(mlx);
+	if (mlx_loop_hook(mlx, perlin_render_loop, display.ui))
+		mlx_loop(mlx);
 	cleanup_display(&display);
+	if (display.exit_state == PD_QUIT)
+		errno = 0;
+	return (rt_exit());
 }

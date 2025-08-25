@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/06 20:28:00 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/23 17:26:29 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,13 @@ t_parser	element_parser(char **tokens, t_scene *scene, const char *line)
 		if (is_specifier(i, ele, *tokens))
 		{
 			if (is_duplicate(scene->scene_flags, ele->sc_flag))
-				return (print_error(ERR_DUPLICATE, ele->spec, line), NULL);
+				return (rt_error(ERR_DUPLICATE, ele->spec, line), NULL);
 			if (is_invalid_count(ele->min_cnt, ele->max_cnt,
 					(int)token_count(tokens)))
-				return (print_error(ERR_TOKEN_COUNT, "token", line), NULL);
+				return (rt_error(ERR_TOKEN_COUNT, "token", line), NULL);
 			return (ele->parse_fn);
 		}
 		++i;
 	}
-	return (print_error(ERR_UNKNOWN_TOKEN, "token", *tokens), NULL);
+	return (rt_error(ERR_UNKNOWN_TOKEN, "token", *tokens), NULL);
 }

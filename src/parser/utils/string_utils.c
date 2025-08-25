@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 16:23:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/07/01 18:53:15 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/23 17:26:29 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ bool	validate_commas(const char *str)
 		if (str[i] == ',')
 		{
 			if (prev_comma)
-				return (print_error(ERR_FORMAT, "repeated comma", str), false);
+				return (rt_error(ERR_FORMAT, "repeated comma", str), false);
 			prev_comma = true;
 		}
 		else if (!ft_strchr(" \f\n\r\t\v", str[i]))

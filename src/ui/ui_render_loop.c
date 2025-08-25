@@ -12,6 +12,7 @@
 
 #include "ui.h"
 #include "rt_thread.h"
+#include "rt_error.h"
 
 static void	handle_idle_state(t_game *game)
 {
@@ -34,10 +35,7 @@ static void	handle_render_state(t_game *game)
 	if (thread_rendering(game->thread_data))
 		set_game_state(game, GS_LOAD);
 	else
-	{
-		ft_putendl_fd("Failed to create threads! Try again.\n", STDERR_FILENO);
-		set_game_state(game, GS_IDLE);
-	}
+		game->state = GS_ERR;
 }
 
 static void	handle_load_state(t_game *game)
@@ -54,7 +52,7 @@ static void	handle_load_state(t_game *game)
 	join_threads(game->thread_data->threads, game->thread_data->thread_count);
 	end_time();
 	set_game_state(game, GS_IDLE);
-	printf("\n");
+	ft_putchar_fd('\n', STDOUT_FILENO);
 }
 
 void	render_loop(void *param)
@@ -75,4 +73,6 @@ void	render_loop(void *param)
 			game->thread_data->thread_count);
 		mlx_close_window(game->mlx);
 	}
+	else if (game->state == GS_ERR)
+		mlx_close_window(game->mlx);
 }

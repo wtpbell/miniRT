@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/07 18:35:30 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/15 16:27:11 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/25 16:05:33 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ static t_mesh	*parse_obj_file(const char *obj_path)
 
 	fd = open(obj_path, O_RDONLY);
 	if (fd < 0 || !init_obj_file(&obj_file))
-		return (perror("parse_obj_file"), cleanup_gnl(NULL, fd), NULL);
+		return (rt_error(ERR_FILE_NONEXIST, "parse_obj_file", obj_path),
+			cleanup_gnl(NULL, fd), NULL);
 	errno = 0;
 	while (true)
 	{
@@ -62,7 +63,7 @@ static t_mesh	*parse_obj_file(const char *obj_path)
 	}
 	cleanup_gnl(NULL, fd);
 	if (errno != 0)
-		return (perror("parse_obj_file"), free_obj_file(&obj_file), NULL);
+		return (sys_error("parse_obj_file"), free_obj_file(&obj_file), NULL);
 	mesh = load_obj_into_mesh(obj_path, &obj_file);
 	return (free_obj_file(&obj_file), mesh);
 }
@@ -86,8 +87,8 @@ bool	construct_mesh(t_scene *scene)
 	t_mesh	*shared;
 	int		i;
 
-	i = 0;
-	while (i < scene->objects.size)
+	i = -1;
+	while (++i < scene->objects.size)
 	{
 		obj = (t_obj *)scene->objects.items[i];
 		if (obj->type == OBJ_MESH)
@@ -100,11 +101,11 @@ bool	construct_mesh(t_scene *scene)
 				if (shared == NULL)
 					return (free_mesh(shared), false);
 				if (!vector_add(&scene->shared_mesh, shared))
-					return (free_mesh(shared), perror("construct_mesh"), false);
+					return (free_mesh(shared),
+						sys_error("construct_mesh"), false);
 			}
 			assign_mesh(&obj->mesh, shared);
 		}
-		++i;
 	}
 	return (true);
 }

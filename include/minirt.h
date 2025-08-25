@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/11 11:37:50 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/15 13:32:47 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/24 13:31:36 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include "vector.h"
 
 // Core Functions
-void		quit_on_escape(mlx_key_data_t keydata, void *param);
 void		init_object_matrices(t_obj *obj);
 void		init_object_transform(t_obj *obj, t_v3f pos, t_v3f dir, t_v3f up);
 void		init_object_renderer(t_obj *obj, t_v3f col, t_texcoord coord);
