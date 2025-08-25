@@ -14,8 +14,6 @@
 #include "perlin_display.h"
 #include "rt_error.h"
 
-extern int	__malloc_count;
-
 bool	valid_file_format(const char *file, const char *ext)
 {
 	const size_t	len = ft_strlen(file);
@@ -64,22 +62,6 @@ static void	init_sample(t_sample *sample)
 	sample->sample_pxl = 2.0f;
 }
 
-void	set_alloc_counter(int *argc, char **argv)
-{
-	const char	*str_alloc = NULL;
-	int			alloc_count;
-
-	if (*argc == 2)
-		str_alloc = argv[1];
-	else if (*argc == 3)
-		str_alloc = argv[2];
-	if (str_alloc != NULL && ft_stoi(str_alloc, &alloc_count))
-	{
-		__malloc_count = alloc_count;
-		--*argc;
-	}
-}
-
 int	main(int argc, char **argv)
 {
 	t_scene		scene;
@@ -87,7 +69,6 @@ int	main(int argc, char **argv)
 	int			exit_status;
 
 	errno = 0;
-	set_alloc_counter(&argc, argv);
 	if (argc == 1)
 		return (perlin_display());
 	ft_bzero(&scene, sizeof(t_scene));

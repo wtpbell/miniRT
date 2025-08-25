@@ -42,21 +42,19 @@ SRCS_MAIN  := main.c vector_init.c vector_helper.c vector_operations.c\
 				thread_data.c ui_progress_bar.c game_hooks.c ui_update_animation.c\
 				rt_exit.c
 SNPRINTF	:= rt_snprintf.c rt_snprintf_str.c rt_snprintf_num.c rt_snprintf_real.c
-SRCS_DEBUG	:= print_var.c ft_wrapper.c
-SRCS		:= $(SRCS_MAIN) $(SRCS_DEBUG) $(PARSER_CORE) $(SNPRINTF)
+SRCS		:= $(SRCS_MAIN) $(PARSER_CORE) $(SNPRINTF)
 OBJS 		:= $(SRCS:%.c=$(BIN_DIR)%.o)
 
 all: $(LIBFT) $(MLX42) $(NAME)
 
 debug: C_FLAGS += -g3 -fsanitize=address,undefined
-debug: C_LINK += -Wl,--wrap=malloc,--wrap=calloc
 debug: all
 	@echo 'use: LSAN_OPTIONS="suppressions=fsan_supp.supp" ./miniRT asset/<scene>.rt'
 	@echo 'use: TSAN_OPTIONS="suppressions=tsan_supp.supp" ./miniRT asset/<scene>.rt'
 
 val: C_FLAGS += -g3
-val: clean all
-	@valgrind --leak-check=full --track-origins=yes --suppressions=mlx42.supp ./$(NAME) $(ARG)
+val: all
+	@valgrind --leak-check=full --track-origins=yes --suppressions=mlx42.supp -q ./$(NAME) $(ARG)
 
 bonus: all
 
