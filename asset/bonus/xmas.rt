@@ -1,0 +1,53 @@
+# Camera: position, direction, FOV
+C   2,2,8   0,0,1   50
+
+# Ambient light
+A   0.2 255,255,255
+
+# Light: position, brightness, color
+L   0,5,5     1.0     255,255,255
+
+# Christmas tree (three cones and a trunk)
+co 0,2.5,0 0,-1,0	1.0		1.0		0,100,0
+co 0,2.0,0 0,-1,0	1.5		1.3		0,100,0
+co 0,1.5,0 0,-1,0	2.0		1.5		0,100,0
+co 0,0.5,0 0,-1,0	1.0		1.5		0,80,0
+cy 0,-0.5,0 0,1,0	0.4		1.0		139,69,19
+# Floor (snow)
+pl 0,-1,0 0,1,0 255,255,255
+
+# Back wall (sky)
+pl 0,0,-5 0,0,1 135,206,235
+# Snowman (three spheres)
+sp 3.5,-0.5,0.5      1.0	255,255,255
+sp 3.5,0.2,0.5      0.5	255,255,255
+
+# Snowman details (eyes, nose, buttons, arms)
+# Eyes
+sp 3.35,0.33,0.7      0.07	0,0,0
+sp 3.55,0.33,0.7      0.07	0,0,0
+
+# Nose (carrot)
+co 3.4,0.3,1 0,0,-1 0.05 0.15 255,165,0
+
+# Buttons
+sp 3.4,-0.1,0.86      0.08  0,0,0
+sp 3.4,-0.3,0.94      0.08  0,0,0
+sp 3.4,-0.5,0.98     0.08  0,0,0
+
+# scarf
+co 3.5,0.4,0.5	0,-1,0	1.0		1.0		100,0,0
+
+# hat
+co 3.5,0.8,0.5	0,-1,0	0.4		0.4		255,100,0
+
+# Arms (position, axis, diameter, height, color)
+# Left arm (pointing down and slightly forward)
+cy 3.05,-0.3,0.6  -0.5,-0.5,0.3  0.03 0.5 139,69,19
+# Right arm (pointing out to the side and slightly down)
+cy 3.9,-0.3,0.6  0.5,-0.3,0.2   0.03 0.5 139,69,19
+
+# Tree decorations
+sp -0.4,0.5,0.7      0.1  255,0,0
+sp -0.3,0.8,0.5     0.1  0,0,255
+sp 0.2,0.3,1.0      0.1  255,255,0

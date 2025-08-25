@@ -1,0 +1,31 @@
+# Camera
+C    0,0,50    0,0,1    50
+
+# Lighting
+L 0,15,30   0.5    255,255,255
+A              0.1    255,255,255
+
+# Materials
+m_metal    type:metal    ir:1.7    tr:.99
+m_floor     type:lambertian    col:180,180,180
+m_wall      type:lambertian    col:200,200,220
+
+# Animal models
+
+obj    22,0,10    0,1,0    255,25,0    asset/models/dog.obj
+obj    7.5,0,10    0,1,0    0,0,255    asset/models/wolf.obj
+obj    -7.5,-1,10    0,1,0    25,255,25    asset/models/cat.obj
+obj    -22,4,10    0,1,0    255,0,255    asset/models/deer.obj
+
+# Floor
+pl    0,-8,0    0,1,0    255,255,255    m_floor
+
+# # Walls
+pl    0,0,-7    0,0,1    255,255,255    m_wall
+
+cy    22,-7,8    0,1,0  7  2  243, 227, 125 m_metal
+cy    7.5,-7,8    0,1,0   7  2 243, 227, 125 m_metal
+cy    -7.5,-7,8    0,1,0  7  2  243, 227, 125 m_metal
+cy    -22,-7,8    0,1,0  7  2  243, 227, 125 m_metal
+
+

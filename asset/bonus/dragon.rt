@@ -1,0 +1,25 @@
+# Camera
+C    0,20,110    0,0,1    100
+
+# Light
+A              0.1    255,255,255
+L   0.0,30.0,20.0                                0.6            221,255,246
+l   6.0,20.0,15.0                                0.6            212,249,211
+l   0.0,2.0,20.0                                 0.2            255,255,255
+
+# Materials
+m_glass_f    type:dielectric    ir:1.7    tr:.99
+m_metal_d     type:metal   ir:1.7    tr:.99  mt_rough: 0.02 
+m_lamb_f      type:lambertian    col:0,0,255
+
+# Dragon model
+obj    -25,20,0    0,1,0    172, 250, 192    asset/models/dragon.obj m_metal_d
+
+# Floor
+pl    0,-8,0    0,1,0    255,255,255    m_glass_f
+pl    0,-10,0    0,1,0    0,0,255    m_lamb_f
+
+# Walls
+pl    0,0,-7    0,0,1    255,0,0
+
+
