@@ -54,20 +54,28 @@ t_v2f	cone_texcoord(t_obj *obj, t_v3f point, t_result *res)
 static int	check_cone_body(t_v3f coeff, t_ray *ray, float h, t_v2f *t)
 {
 	t_v3f	p;
-	float	t0;
-	float	t1;
-	float	min_y;
-	float	max_y;
+	t_v2f	roots;
+	t_v2f	y_bounds;
+	float	tmp_roots[2];
+	int		i;
 
-	if (!solve_quadratic(&coeff, &t0, &t1))
+	if (!solve_quadratic(&coeff, &roots.x, &roots.y))
 		return (0);
-	min_y = fminf(0.0f, h);
-	max_y = fmaxf(0.0f, h);
-	if (t0 > t->x && t0 < t->y)
+	tmp_roots[0] = roots.x;
+	tmp_roots[1] = roots.y;
+	y_bounds = init_v2f(fminf(0.0f, h), fmaxf(0.0f, h));
+	i = -1;
+	while (++i < 2)
 	{
-		p = v3f_add(ray->origin, v3f_scale(ray->direction, t0));
-		if (p.y >= min_y && p.y <= max_y)
-			return (t->y = t0, 1);
+		if (tmp_roots[i] > t->x && tmp_roots[i] < t->y)
+		{
+			p = v3f_add(ray->origin, v3f_scale(ray->direction, tmp_roots[i]));
+			if (p.y >= y_bounds.x && p.y <= y_bounds.y)
+			{
+				t->y = tmp_roots[i];
+				return (1);
+			}
+		}
 	}
 	return (0);
 }
