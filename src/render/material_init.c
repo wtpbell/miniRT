@@ -51,9 +51,9 @@ t_mat	*init_material(t_mat_type type, const char *name)
 	init_texture(mat);
 	if (type == MAT_LAMBERTIAN)
 	{
-		mat->lamb.specular = 0.1f;
+		mat->lamb.specular = 0.8f;
 		mat->lamb.shininess = 32.0f;
-		mat->lamb.roughness = 1.0f;
+		mat->lamb.roughness = 0.0f;
 	}
 	else if (type == MAT_METAL)
 		mat->metal.roughness = 0.1f;

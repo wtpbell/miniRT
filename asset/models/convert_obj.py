@@ -51,8 +51,10 @@ def convert_custom_to_rt(input_file, output_file):
 	if size == 0:
 		size = 1.0
 	
-	scale = 2.0 / size  # Normalize to fit in [-1, 1] range
-	
+	normalize_scale = 2.0 / size
+	user_scale = 100.0
+	scale = normalize_scale * user_scale
+
 	print(f"Model bounds: x[{min_x:.2f}, {max_x:.2f}], y[{min_y:.2f}, {max_y:.2f}], z[{min_z:.2f}, {max_z:.2f}]")
 	print(f"Center: ({center_x:.2f}, {center_y:.2f}, {center_z:.2f})")
 	print(f"Scale factor: {scale:.6f}")
@@ -117,8 +119,8 @@ def convert_custom_to_rt(input_file, output_file):
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Set input and output file paths
-input_file = os.path.join(script_dir, "deer.obj")
-output_file = os.path.join(script_dir, "deer_converted.obj")
+input_file = os.path.join(script_dir, "dragon_modify.obj")
+output_file = os.path.join(script_dir, "dragon_big.obj")
 
 # Convert the file
 convert_custom_to_rt(input_file, output_file)
