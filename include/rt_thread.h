@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/03 17:35:16 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/24 13:42:03 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/26 15:53:08 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include "scene.h"
 # include "game.h"
 
-# define THRD_CNT	15
+# define THRD_CNT	20
 
 typedef enum e_thread_state
 {
