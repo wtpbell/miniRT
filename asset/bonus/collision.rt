@@ -1,0 +1,11 @@
+C	0,0,10	0,0,1		30
+L	0,0,8	0.75		255,255,255
+A				0.25	255,255,255
+
+m_wall		type:lambertian	su:2 sv:2		pat:pink	p_rate:1.016 p_gain:1.400 p_freq:10.016 p_ampt:1.116 p_layers:5 col:60, 18, 97
+m_ball		type:lambertian	su:6 sv:3		pat:pink	p_rate:1.016 p_gain:.65 p_freq:3.116 p_ampt:5.000 p_layers:3 col:127,29,212 bump_pat:turb bump_scale:0.05
+m_torus		type:lambertian	su:18	sv:8	pat:marble	p_rate:2.700 p_gain:0.500 p_freq:0.300 p_ampt:2.300 p_layers:5 p_dist:1.916 p_scale:4.400 col:255,255,255
+
+sp	1.4,0,0				3.0	183,142,20								m_ball
+obj	-1.4,0,0	0,1,.4		0,0,0			asset/models/torus.obj	m_torus
+pl	0,0,-5		0,0,1		208, 234, 240							m_wall
