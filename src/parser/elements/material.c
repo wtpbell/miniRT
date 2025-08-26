@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/05 14:04:02 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/23 17:26:29 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/26 15:25:40 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ static void	set_texture_pattern(t_mat *mat)
 		mat->get_texcol = solid_pattern;
 	if ((mat->bump_map.type & TEX_IS_PERLIN) != 0)
 	{
+		mat->bump_map.p_data = mat->texture.p_data;
 		set_perlin_pattern(&mat->bump_map.type, &mat->bump_map.p_data,
 			&mat->bump_map.fp_perlin);
 	}

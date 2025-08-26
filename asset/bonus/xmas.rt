@@ -6,11 +6,12 @@ A   0.2 255,255,255
 
 # Light: position, brightness, color
 L   0,5,5     1.0     255,255,255
+# p_rate:5.500 p_gain:1.016 p_freq:8.750 p_ampt:3.016
+m_floor	type:lambertian spc:1.0	shi:200.0	pat:pink	su:4	sv:4	col:248, 236, 236 p_rate:1.8	p_gain:.5 p_freq:1.01 p_ampt:2.216 bump_pat: pink bump_scale:0.1
+m_snow	type:lambertian spc:1.0	shi:200.0	pat:pink	su:16	sv:8	col:248, 236, 236 p_rate:1.8	p_gain:.5 p_freq:1.01 p_ampt:2.216 bump_pat: pink bump_scale:0.02 rot: 65
 
-m_floor	type:lambertian spc:1.0	shi:200.0	pat:pink	su:4	sv:4	col:248, 236, 236 p_rate:5.500 p_gain:1.016 p_freq:8.750 p_ampt:3.016 bump_pat: pink bump_scale:0.1
-m_snow	type:lambertian spc:1.0	shi:200.0	pat:pink	su:32	sv:16	col:248, 236, 236 p_rate:5.500 p_gain:1.016 p_freq:8.750 p_ampt:3.016  bump_pat: pink bump_scale:0.02 rot: 45
 m_wood	type:lambertian spc:1.0	shi:200.0	pat:wood	su:32	sv:16	col:87, 37, 37 p_rate:4.000 p_gain:0.016 p_freq:0.266 p_ampt:6.141 bump_pat: wood bump_scale:0.02
-m_leaf	type:lambertian spc:1.0	shi:200.0	pat:marble	su:32	sv:16	col:0,100,0 p_rate:2.016 p_gain:0.016 p_freq:0.766 p_ampt:3.016 p_layers:5 p_dist:0.500 p_scale:1 bump_pat: marble bump_scale:0.02
+m_leaf	type:lambertian spc:1.0	shi:200.0	pat:marble	su:32	sv:16	col:0,100,0 p_rate:2.016 p_gain:0.016 p_freq:0.766 p_ampt:3.016 p_layers:5 p_dist:0.500 p_scale:1 bump_pat: marble bump_scale:0.1
 m_wall	type:lambertian spc:1.0	shi:200.0	pat:turb	su:0.1	sv:0.1	col:135,206,235  p_rate:0.391 p_gain:0.141 p_freq:0.141 p_ampt:1.000 rot: 90
 m_glass	type:dielectric	ir:1.5	tr:.8
 
