@@ -24,7 +24,7 @@ static void	add_light_pos_controls(t_ui_context *ctx, t_light *light,
 	{
 		cfg.ctx = ctx;
 		cfg.value = &light->pos._axis[i];
-		cfg.range = init_v2f(-1000.0f, 1000.0f);
+		cfg.range = init_v2f(MIN_POS, MAX_POS);
 		cfg.step = 0.1f;
 		cfg.pos = init_v2f(UI_PADDING, UI_HEADER_HEIGHT + UI_PADDING + i
 				* (UI_ROW_HEIGHT + UI_PADDING));
@@ -68,7 +68,7 @@ static void	add_light_intensity_control(t_ui_context *ctx, t_light *light,
 
 	cfg.ctx = ctx;
 	cfg.value = &light->intensity;
-	cfg.range = init_v2f(0.0f, 1.0f);
+	cfg.range = init_v2f(MIN_LIGHT_RATIO, MAX_LIGHT_RATIO);
 	cfg.step = 0.1f;
 	cfg.pos = init_v2f(UI_PADDING, UI_HEADER_HEIGHT + UI_PADDING + 6.1
 			* (UI_ROW_HEIGHT + UI_PADDING));

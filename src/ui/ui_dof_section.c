@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_dof_section.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/07 17:28:06 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/14 22:11:53 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_dof_section.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/08/07 17:28:06 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/26 12:04:31 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	add_dof_control(t_ui_context *ctx, t_cam *camera,
 
 	cfg.ctx = ctx;
 	cfg.value = &camera->focus_dist;
-	cfg.range = init_v2f(0.1f, FLT_MAX);
+	cfg.range = init_v2f(0.1f, MAX_POS);
 	cfg.step = 0.5f;
 	cfg.pos = init_v2f(UI_PADDING, 0);
 	cfg.size = g_v2f_zero;

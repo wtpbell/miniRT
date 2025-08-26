@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ui_sample_section.c                                :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bewong <bewong@student.codam.nl>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/07 18:24:31 by bewong            #+#    #+#             */
-/*   Updated: 2025/08/20 17:55:09 by bewong           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ui_sample_section.c                                :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/08/07 18:24:31 by bewong        #+#    #+#                 */
+/*   Updated: 2025/08/26 12:06:21 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	add_max_depth_control(t_ui_context *ctx, t_sample *sample,
 
 	cfg.ctx = ctx;
 	cfg.value = &sample->max_depth;
-	cfg.range = init_v2f(1.0f, FLT_MAX);
+	cfg.range = init_v2f(1.0f, 128.0f);
 	cfg.step = 1.0f;
 	cfg.pos = init_v2f(UI_PADDING, UI_ROW_HEIGHT + UI_PADDING);
 	cfg.size = g_v2f_zero;

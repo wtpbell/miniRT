@@ -1,0 +1,74 @@
+
+A					.2	255,255,255
+
+
+pl 0,0,40	0,0,-1	255,255,255	m_mirror
+pl 0,0,-40	0,0,1	255,255,255	m_mirror
+cy 0,0,35	0,0,1	80 1	255,255,255
+
+sp -16,-12,-6 1.5 255,51,51 m_metal
+sp -8,-12,-6 2.2 255,75,51 m_dielectric
+sp 0,-12,-6 2.9 255,100,51 m_lambertian
+
+
+m_mirror	type:metal	mt_rough:0.001	shi:25	spc:1.0	col:255,255,255
+
+
+
+sp 8,-12,-6 3.6 255,124,51 m_dielectric
+sp 16,-12,-6 1.5 255,149,51 m_metal
+sp -16,-6,-6 2.2 255,173,51 m_lambertian
+sp -8,-6,-6 2.9 255,198,51 m_dielectric
+sp 0,-6,-6 3.6 255,222,51 m_metal
+sp 8,-6,-6 1.5 231,255,51 m_lambertian
+sp 16,-6,-6 2.2 206,255,51 m_dielectric
+sp -16,0,-6 2.9 182,255,51 m_metal
+sp -8,0,-6 3.6 157,255,51 m_lambertian
+sp 0,0,-6 1.5 133,255,51 m_dielectric
+sp 8,0,-6 2.2 108,255,51 m_metal
+sp 16,0,-6 2.9 84,255,51 m_lambertian
+sp -16,6,-6 3.6 60,255,51 m_dielectric
+sp -8,6,-6 1.5 51,255,68 m_metal
+sp 0,6,-6 2.2 51,255,92 m_lambertian
+sp 8,6,-6 2.9 51,255,117 m_dielectric
+sp 16,6,-6 3.6 51,255,141 m_lambertian
+sp -16,12,-6 1.5 51,255,166 m_dielectric
+sp -8,12,-6 2.2 51,255,190 m_metal
+sp 0,12,-6 2.9 51,255,214 m_lambertian
+sp 8,12,-6 3.6 51,239,255 m_dielectric
+sp 16,12,-6 1.5 51,214,255 m_metal
+		C	0,0,30	0,0,1	60
+sp -16,-12,6 2.2 51,190,255 m_lambertian
+sp -8,-12,6 2.9 51,166,255 m_dielectric
+sp 0,-12,6 3.6 51,141,255 m_metal
+sp 8,-12,6 1.5 51,117,255 m_dielectric
+sp 16,-12,6 2.2 51,92,255 m_lambertian
+sp -16,-6,6 2.9 60,51,255 m_metal
+sp -8,-6,6 3.6 84,51,255 m_dielectric
+sp 0,-6,6 1.5 108,51,255 m_lambertian
+sp 8,-6,6 2.2 133,51,255 m_metal
+sp 16,-6,6 2.9 157,51,255 m_dielectric
+sp -16,0,6 3.6 182,51,255 m_lambertian
+sp -8,0,6 1.5 206,51,255 m_metal
+sp 0,0,6 2.2 231,51,255 m_dielectric
+sp 8,0,6 2.9 255,51,239 m_lambertian
+sp 16,0,6 3.6 255,51,214 m_metal
+sp -16,6,6 1.5 255,51,190 m_dielectric
+sp -8,6,6 2.2 255,51,166 m_lambertian
+sp 0,6,6 2.9 255,51,141 m_metal
+sp 8,6,6 3.6 255,51,117 m_dielectric
+sp 16,6,6 1.5 255,51,92 m_lambertian
+sp -16,12,6 2.2 255,51,173 m_metal
+sp -8,12,6 2.9 255,51,149 m_dielectric
+sp 0,12,6 3.6 255,51,124 m_lambertian
+sp 8,12,6 1.5 255,51,100 m_dielectric
+L	-3,6,0			.6	255,255,255
+sp 16,12,6 2.2 255,51,75 m_metal
+
+
+
+
+
+
+
+C	0,0,30	0,0,1	60

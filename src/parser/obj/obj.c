@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 15:58:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/23 17:29:12 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/25 17:33:12 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ t_mesh	*load_obj_into_mesh(const char *obj_path, t_obj_file *obj_file)
 	t_mesh		*mesh;
 
 	if (obj_file->f.size == 0)
-		return (rt_error(ERR_OBJ_FACE, NULL, NULL), NULL);
+		return (rt_error(ERR_OBJ_FACE, "load_obj_into_mesh", obj_path), NULL);
 	mesh = init_mesh(obj_path, obj_file);
 	if (mesh == NULL)
 		return (sys_error("load_obj_into_mesh"), NULL);

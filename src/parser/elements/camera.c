@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/23 17:26:29 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/26 10:59:42 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ static bool	parse_camera_fields(t_cam *cam, char **tokens)
 {
 	const t_field	fields[] = {
 	{"ap", &cam->aperture, FIELD_FLT,
-		(t_v2f){.x = 0.0f, .y = FLT_MAX}, FILLED, {0}},
+		(t_v2f){.x = 0.0f, .y = MAX_AP}, FILLED, {0}},
 	{"fc", &cam->focus_dist, FIELD_FLT,
-		(t_v2f){.x = 0.1f, .y = FLT_MAX}, FILLED, {0}},
+		(t_v2f){.x = 0.1f, .y = MAX_POS}, FILLED, {0}},
 	{NULL, NULL, 0, g_v2f_zero, 0, {0}}
 	};
 
@@ -77,8 +77,5 @@ bool	parse_camera(char **tokens, t_scene *scene)
 	camera_init(&scene->camera, pos, dir, fov);
 	if (!parse_camera_fields(&scene->camera, tokens))
 		return (false);
-	if (scene->camera.focus_dist <= 0.0f)
-		return (rt_error(
-				ERR_RANGE, "Focus distance must be > 0.0", tokens[2]), false);
 	return (true);
 }

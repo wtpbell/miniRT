@@ -24,7 +24,7 @@ static void	add_ambient_color_controls(t_ui_context *ctx, t_light *ambient,
 	{
 		cfg.ctx = ctx;
 		cfg.value = &ambient->color._axis[i];
-		cfg.range = init_v2f(0, 1.0f);
+		cfg.range = init_v2f(MIN_LIGHT_RATIO, MAX_LIGHT_RATIO);
 		cfg.step = 10.0f / 255.0f;
 		cfg.pos = init_v2f(UI_PADDING, UI_HEADER_HEIGHT + UI_PADDING + i
 				* (UI_ROW_HEIGHT + UI_PADDING));

@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/22 11:46:08 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/22 19:36:48 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/26 12:15:16 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ static void	fdectos(t_str *str, int decimal, int prec)
 
 static void	handle_real(t_str *str, double numeric, const double prec)
 {
-	float	fract;
+	double	fract;
 
 	numeric = fabs(numeric);
 	fract = (numeric - floor(numeric));
-	if ((1.0f - fract) < pow(10.0, -(prec + 1)))
+	if ((1.0 - fract) < pow(10.0, -(prec + (prec == 1.0))))
 	{
 		numeric = round(numeric);
 		fract = 0.0;

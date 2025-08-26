@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/08 22:20:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/23 17:35:03 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/26 11:49:56 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,15 @@
 # define MAX_POS			10000.0f
 # define MIN_POS			-10000.0f
 # define MAX_RADIUS			1000.0f
-# define MIN_RADIUS			0.0f
+# define MIN_RADIUS			0.01f
 # define MAX_HEIGHT			1000.0f
-# define MIN_HEIGHT			0.0f
+# define MIN_HEIGHT			0.01f
 # define MAX_BRIGHTNESS		1000.0f
 # define MAX_COLOR			255
 # define MIN_COLOR			0
 # define MAX_FOV			180.0f
-# define MIN_FOV			0.0f
+# define MIN_FOV			0.01f
+# define MAX_AP				2.0f
 # define MAX_LIGHT_RATIO	1.0f
 # define MIN_LIGHT_RATIO	0.0f
 # define MAX_DIR			1.0f

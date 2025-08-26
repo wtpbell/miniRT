@@ -24,7 +24,7 @@ static void	add_camera_pos_controls(t_ui_context *ctx, t_cam *camera,
 	{
 		cfg.ctx = ctx;
 		cfg.value = &camera->t.pos._axis[i];
-		cfg.range = init_v2f(-1000000, 1000000);
+		cfg.range = init_v2f(MIN_POS, MAX_POS);
 		cfg.step = 0.1f;
 		cfg.pos = init_v2f(UI_PADDING, UI_HEADER_HEIGHT + UI_PADDING + i
 				* (UI_ROW_HEIGHT + UI_PADDING));
