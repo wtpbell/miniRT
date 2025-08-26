@@ -47,7 +47,7 @@ t_v2f	cone_texcoord(t_obj *obj, t_v3f point, t_result *res)
 	(void)res;
 	local_point = mul_v3_m4x4(point, obj->t.to_obj);
 	theta = atan2f(local_point.z, local_point.x) / TAU;
-	y = (local_point.y / obj->cone.height);
+	y = (local_point.y / (obj->cone.height * PI));
 	return (init_v2f(1.0f - (theta + 0.5f), ft_clampf01(y)));
 }
 

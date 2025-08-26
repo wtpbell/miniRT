@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/02 18:34:31 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/04 18:08:13 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/26 18:52:36 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,6 @@ t_v2f	cylinder_texcoord(t_obj *obj, t_v3f point, t_result *res)
 	(void)res;
 	local_point = mul_v3_m4x4(point, obj->t.to_obj);
 	theta = atan2f(local_point.z, local_point.x) / TAU;
-	y = (local_point.y / obj->cy.height);
+	y = (local_point.y / (obj->cy.height * 2.0f));
 	return (init_v2f(1.0f - (theta + 0.5f), ft_clampf01(y + 0.5f)));
 }
