@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/02 17:01:40 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/10 14:28:59 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/26 16:28:01 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ static bool	parse_path(char **obj_path, const char *token)
 	*obj_path = NULL;
 	if (valid_file_format(token, ".obj"))
 		*obj_path = ft_strdup(token);
+	else
+		rt_error(ERR_FILE_FORMAT, "obj", token);
 	return (*obj_path != NULL);
 }
 
