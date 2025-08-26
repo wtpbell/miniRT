@@ -26,12 +26,10 @@ pl 0,10,0 0,-1,0 100,100,100   m_yellow
 pl 0,-1,0 0,1,0 80,80,80
 
 # Red sphere with custom material for better color
-m_red	type:lambertian	shi:32.0	spc:0.5	alb:255,0,0
+m_green	type:metal	shi:32.0	spc:0.5	alb:0,255,0
 m_diel_r0 type:dielectric  ir:1.5 tr:1.0 d_rough:0.0 alb:255,0,0
-# sp 0,1.5,0 3.0 255,0,0 m_default
 
 # Other objects
 sp 1,0,0 3.0 255,0,0 m_mirror
 sp -1.0,0,0 3.0 0,0,255 m_dielectric
-sp 0,2,0 3.0 0,255,0 m_red
-
+sp 0,2,0 3.0 255,255,255 m_green

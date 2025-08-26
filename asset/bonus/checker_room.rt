@@ -12,10 +12,10 @@ m_strip		type:lambertian	spc:1.0	shi:50.0	pat:checker	su:2	sv:0		col:0,0,0
 m_floor		type:metal	spc:1.0	shi:50.0	ir:2.0    tr:1.0	pat:checker	su:2	sv:2	col:0,0,255
 m_ceiling	type:lambertian	spc:.4 shi:200.0	pat:checker	su:2	sv:2		rot:0	col:185,0,0
 m_sp_checker	type:metal	spc:1.0	shi:50.0	pat:checker	su:32	sv:16	col:0,0,0
-m_cy_checker	type:dielectric spc:1.0 shi:500.0	ir:2.0    tr:1.0 
+m_cy_checker	type:dielectric spc:1.0 shi:500.0	ir:2.0    tr:1.0
 m_co_checker	type:lambertian spc:1.0	shi:200.0	pat:checker	su:10	sv:10			col:0,0,255
 m_glass    type:dielectric    ir:2.0    tr:1.0    col:255,255,255 pat:checker	su:10	sv:10			col:0,0,255
-m_mirror	type:metal		mt_rough:0.0	
+m_mirror	type:metal		mt_rough:0.0
 
 # Camera, Ambient light, and Lights
 C	0,2,5	0,0,1	77
@@ -35,6 +35,6 @@ tri  -5,-6,-50  5,10,-50  -5,10,-50  0,200,255  m_mirror
 # # Triangle 2 (bottom-left to top-right diagonal, other half)
 tri  -5,-6,-50  5,-6,-50  5,10,-50  200,0,255  m_mirror
 
-sp    -0.5, 2,1    1.0    255,255,255    m_sp_checke
+sp    -0.5, 2,1    1.0    255,255,255    m_sp_checker
 cy	3,1,-2	0,1,0	1.0	2.0	255,50,50	m_cy_checker
 co		3,2,-2	0,-1,0		2 2	0,255,255 m_co_checker
