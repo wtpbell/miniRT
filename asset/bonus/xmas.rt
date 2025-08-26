@@ -1,5 +1,5 @@
 # Camera: position, direction, FOV
-C   2,2,8   0,0,1   50
+C   2,1,8   0,0,1   40
 
 # Ambient light
 A   0.2 255,255,255
@@ -7,25 +7,34 @@ A   0.2 255,255,255
 # Light: position, brightness, color
 L   0,5,5     1.0     255,255,255
 
+m_floor	type:lambertian spc:1.0	shi:200.0	pat:pink	su:4	sv:4	col:248, 236, 236 p_rate:5.500 p_gain:1.016 p_freq:8.750 p_ampt:3.016 bump_pat: pink bump_scale:0.1
+m_snow	type:lambertian spc:1.0	shi:200.0	pat:pink	su:32	sv:16	col:248, 236, 236 p_rate:5.500 p_gain:1.016 p_freq:8.750 p_ampt:3.016  bump_pat: pink bump_scale:0.02 rot: 45
+m_wood	type:lambertian spc:1.0	shi:200.0	pat:wood	su:32	sv:16	col:87, 37, 37 p_rate:4.000 p_gain:0.016 p_freq:0.266 p_ampt:6.141 bump_pat: wood bump_scale:0.02 
+m_leaf	type:lambertian spc:1.0	shi:200.0	pat:marble	su:32	sv:16	col:0,100,0 p_rate:2.016 p_gain:0.016 p_freq:0.766 p_ampt:3.016 p_layers:5 p_dist:0.500 p_scale:1 bump_pat: marble bump_scale:0.02 
+m_wall	type:lambertian spc:1.0	shi:200.0	pat:turb	su:0.1	sv:0.1	col:135,206,235  p_rate:0.391 p_gain:0.141 p_freq:0.141 p_ampt:1.000 rot: 90
+m_glass    type:dielectric    ir:2.0    tr:1.0    col:255,255,255 pat:checker	su:10	sv:10			col:0,0,255
+m_mirror	type:metal		mt_rough:0.0	
+
 # Christmas tree (three cones and a trunk)
-co 0,2.5,0 0,-1,0	1.0		1.0		0,100,0
-co 0,2.0,0 0,-1,0	1.5		1.3		0,100,0
-co 0,1.5,0 0,-1,0	2.0		1.5		0,100,0
-co 0,0.5,0 0,-1,0	1.0		1.5		0,80,0
-cy 0,-0.5,0 0,1,0	0.4		1.0		139,69,19
+co 0,2.5,0 0,-1,0	1.0		1.0		22, 51, 3 m_leaf
+co 0,2.0,0 0,-1,0	1.5		1.3		22, 51, 3 m_leaf
+co 0,1.5,0 0,-1,0	2.0		1.5		22, 51, 3 m_leaf
+co 0,0.5,0 0,-1,0	1.0		1.5		0,80,0 
+cy 0,-0.5,0 0,1,0	0.4		1.0		139,69,19 m_wood
 # Floor (snow)
-pl 0,-1,0 0,1,0 255,255,255
+pl 0,-1,0 0,1,0 255,255,255 m_floor
 
 # Back wall (sky)
-pl 0,0,-5 0,0,1 135,206,235
+pl 0,0,-200 0,0,1 0,0,255 m_wall
+
 # Snowman (three spheres)
-sp 3.5,-0.5,0.5      1.0	255,255,255
-sp 3.5,0.2,0.5      0.5	255,255,255
+sp 3.5,-0.5,0.5      1.0	255,255,255 m_snow
+sp 3.5,0.2,0.5      0.5	255,255,255 m_snow
 
 # Snowman details (eyes, nose, buttons, arms)
 # Eyes
-sp 3.35,0.33,0.7      0.07	0,0,0
-sp 3.55,0.33,0.7      0.07	0,0,0
+sp 3.35,0.33,0.7      0.07	0,0,0  
+sp 3.55,0.33,0.7      0.07	0,0,0 
 
 # Nose (carrot)
 co 3.4,0.3,1 0,0,-1 0.05 0.15 255,165,0
@@ -48,6 +57,8 @@ cy 3.05,-0.3,0.6  -0.5,-0.5,0.3  0.03 0.5 139,69,19
 cy 3.9,-0.3,0.6  0.5,-0.3,0.2   0.03 0.5 139,69,19
 
 # Tree decorations
-sp -0.4,0.5,0.7      0.1  255,0,0
-sp -0.3,0.8,0.5     0.1  0,0,255
-sp 0.2,0.3,1.0      0.1  255,255,0
+sp -0.4,0.5,0.7      0.1  255,0,0 m_glass
+sp -0.3,0.8,0.5     0.1  0,0,255 m_glass
+sp 0.2,0.3,1.0      0.1  255,255,0 m_glass
+
+# rgba(22, 51, 3, 1)
