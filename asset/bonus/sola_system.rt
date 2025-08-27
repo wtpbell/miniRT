@@ -1,62 +1,61 @@
 # Camera and lighting - positioned to see all planets
-C	2,0,20	0,0,1		40
+C	2.5,0,20	0,0,1		55
 A					0.3		20,20,40
 L 0,20,60 0.1 255,255,200
 
 m_dielectric type:dielectric tr:0.9 ir: 1.03
 # Main light - sun
-spl	-7,1,0		0,-0.2,-1		1.0	100	150	255,0,0
-spl	-7,1,0		0,-0.2,-1		1.0	100	150	255,0, 0
-spl	-7,1,0		0,-0.2,-1		1.0	100	150	228, 0 ,0
+spl	-14.5,1,0		0,-0.2,-1		1.0	100	150	255,0,0
+spl	-14.5,1,0		0,-0.2,-1		1.0	100	150	255,0, 0
+spl	-14.5,1,0		0,-0.2,-1		1.0	100	150	228, 0 ,0
 
-spl	-15,0,-5		1,0,0		1.0	65	120	228, 0 ,0
+spl	-23,0,-7		1,0,0		1.0	80	120	228, 0 ,0
 
 
-m_sun type:dielectric spc:1.0	tr:0.9 ir: 1.03 shi:200.0	pat:pink	su:4	sv:4	col:248, 236, 236 p_rate:1.8	p_gain:.5 p_freq:1.01 p_ampt:2.216 bump_pat: pink bump_scale:0.1
-sp	-6,0.5,0	4  241, 243, 154 m_sun
-
+m_sun type:dielectric spc:1.0	tr:0.9 ir: 1.03 shi:200.0	pat:pink	su:4	sv:4	col:248, 236, 236 pat:image tex:textures/sun.png  bump_pat: pink
+sp	-13,0.5,0	4  241, 243, 154 m_sun
 
 # # Floor with bump map
-pl  0.0,-4.0,0.0  0.0,1.0,0.0  100,100,100
+# pl  0.0,-4.0,0.0  0.0,1.0,0.0  100,100,100
 
 # # Back wall with bump map
-pl	0,0,-8	0,0,1				150,150,150
+m_galaxy type:lambertian spc:0.8 shi:200.0 pat:image tex:textures/galaxy.png su:0.04 sv:0.02 rot: 90
+pl	0,0,-8	0,0,1				150,150,150 m_galaxy
 
 # Mercury (smallest planet, closest to sun)
-m_mercury type:lambertian spc:0.8 shi:80.0 pat:image tex:textures/2k_mercury.png
-sp	-2.5,0,0	1		255,255,255 m_mercury
+m_mercury type:lambertian spc:0.8 shi:200.0 pat:image tex:textures/2k_mercury.png
+sp  -10.0,0,0  0.4  255,255,255 m_mercury
 
 # # Venus (similar size to Earth, thick atmosphere)
-m_venus type:lambertian spc:0.5 shi:100.0 pat:image tex:textures/2k_venus_surface.png
-sp	-1,0,0	1.1		255,255,255 m_venus
+m_venus type:lambertian spc:0.8  shi:200.0 pat:image tex:textures/2k_venus_surface.png
+sp  -9.0,0,0  0.9  255,255,255 m_venus
 
 # # Earth (our home planet)
-m_earth type:lambertian shi:150.0 pat:image tex:textures/earth.png bump:textures/earth_bump.png bump_scale: 50.0
-sp	0.8,0,0	1.0		255,255,255 m_earth
+m_earth type:lambertian spc:0.8  shi:200.0 pat:image tex:textures/earth.png
+sp  -7.5,0,0  1.0  255,255,255 m_earth
 
 # # Mars (the red planet)
-m_mars type:lambertian spc:0.3 shi:50.0 pat:image tex:textures/2k_mars.png
-sp	1.8,0,0	0.6		255,255,255 m_mar
+m_mars type:lambertian spc:0.8  shi:50.0 pat:image tex:textures/2k_mars.png
+sp  -5.5,0,0  0.5  255,255,255 m_mars
 
 # # Jupiter (largest planet, gas giant with great red spot)
-m_jupiter type:lambertian spc:0.7 shi:120.0 pat:image tex:textures/2k_jupiter.png
-sp	2.4,0,0	2.0		255,255,255 m_jupiter
+m_jupiter type:lambertian spc:0.8  shi:200.0 pat:image tex:textures/2k_jupiter.png
+sp	0,0,0	2.0		255,255,255 m_jupiter
 
 # # Saturn (with rings, which we'll represent with a disk)
-m_saturn type:lambertian spc:0.8 shi:100.0 pat:image tex:textures/2k_saturn.png
+m_saturn type:lambertian spc:0.8 shi:200.0 pat:image tex:textures/2k_saturn.png
 m_saturn_ring type:lambertian spc:0.8 shi:100.0 l_rough:1.0 pat:image tex:textures/2k_saturn.png
-sp	6.5,0,0	1.7		255,255,255 m_saturn
-# Saturn's rings (as a thin disk)
-cy	6.5,0,0	-.4,1,0	2.5	0.02	200,200,180 m_saturn_ring 
+sp  5.0,0,0  1.9  255,255,255 m_saturn
+cy  5.0,0,0  -.4,1,0  3.0  0.02  200,200,180 m_saturn_ring
 
 # # Uranus (icy giant)
-m_uranus type:lambertian spc:0.9 shi:150.0 pat:image tex:textures/2k_uranus.png
-sp	10,0,0	0.8		255,255,255 m_uranus
+m_uranus type:lambertian spc:0.9 shi:200.0 pat:image tex:textures/2k_uranus.png
+sp  10.0,0,0  0.9  255,255,255 m_uranus
 
 # # Neptune (windy blue planet)
-m_neptune type:lambertian spc:0.9 shi:150.0 pat:image tex:textures/2k_neptune.png
-sp	11,0,0	0.8		255,255,255 m_neptune
+m_neptune type:lambertian spc:0.9 shi:200.0 pat:image tex:textures/2k_neptune.png
+sp  15.0,0,0  0.9  255,255,255 m_neptune
 
 # # Pluto (dwarf planet) - using a generic texture since we don't have a Pluto texture
-m_pluto type:lambertian spc:0.2 shi:30.0 col:220,180,160
-sp	12,0,0	0.2		220,180,160 m_pluto
+m_pluto type:lambertian spc:0.8 shi:200.0 col:220,180,160 pat:image tex:textures/2k_pluto.png
+sp  20.0,0,0  0.15  220,180,160 m_pluto
