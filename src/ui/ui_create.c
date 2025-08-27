@@ -20,7 +20,7 @@ static void	init_ui_context(t_ui_context *ctx, mlx_t *mlx,
 	ctx->mlx = mlx;
 	ctx->scene = scene;
 	ctx->game = game_ptr;
-	ctx->is_visible = true;
+	ctx->is_visible = SHOW_UI;
 	ctx->needs_redraw = true;
 }
 

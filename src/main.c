@@ -58,8 +58,8 @@ static bool	init_scene_and_vector(t_scene *scene)
 
 static void	init_sample(t_sample *sample)
 {
-	sample->max_depth = 1.0f;
-	sample->sample_pxl = 2.0f;
+	sample->max_depth = DEPTH;
+	sample->sample_pxl = SAMPLE;
 }
 
 int	main(int argc, char **argv)
