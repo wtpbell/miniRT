@@ -1,13 +1,13 @@
 # Scene file format:
-#
-# Camera:      C  x,y,z  dx,dy,dz  fov
-# Ambient:     A  ratio  r,g,b
-# Light:       L  x,y,z  ratio  r,g,b
-# Sphere:      sp  x,y,z  diameter  r,g,b  [material]
-# Plane:       pl  x,y,z  dx,dy,dz  r,g,b  [material]
-# Cylinder:    cy  x,y,z  dx,dy,dz  diameter  height  r,g,b  [material]
-# Triangle:    tri  x1,y1,z1  x2,y2,z2  x3,y3,z3  r,g,b  [material]
-# Cone:        co  x,y,z  dx,dy,dz  diameter  height  r,g,b  [material]
+
+# Ambient:		A [ratio (float 0.0–1.0)] [color (R,G,B in 0–255)]
+# Camera:		C [position (x,y,z float)] [direction (x,y,z float)] [FOV (float 0–180)]
+# Point Light:	L [position (x,y,z float)] [brightness ratio (float 0.0–1.0)] [color (R,G,B in 0–255)]
+# Sphere:		sp [position (x,y,z float)] [diameter (float)] [color (R,G,B in 0–255)]
+# Plane:		pl [position (x,y,z float)] [normal (x,y,z float)] [color (R,G,B in 0–255)]
+# Cylinder:		cy [position (x,y,z float)] [axis (x,y,z float)] [diameter (float)] [height (float)] [color (R,G,B in 0–255)]
+# Triangle:		tri [v0 (x,y,z float)] [v1 (x,y,z float)] [v2 (x,y,z float)] [color (R,G,B in 0–255)]
+# Cone:			co [position (x,y,z float)] [axis (x,y,z float)] [diameter (float)] [height (float)] [color (R,G,B in 0–255)]
 
 C	0,0,0	0,0,-1	60
 L	0,10,0			0.5	255,255,255

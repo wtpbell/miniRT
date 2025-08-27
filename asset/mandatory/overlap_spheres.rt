@@ -1,10 +1,3 @@
-# A [ratio (float 0.0–1.0)] [color (R,G,B in 0–255)]
-# C [position (x,y,z float)] [direction (x,y,z float)] [FOV (float 0–180)]
-# L [position (x,y,z float)] [brightness ratio (float 0.0–1.0)] [color (R,G,B in 0–255)]
-# sp [position (x,y,z float)] [diameter (float)] [color (R,G,B in 0–255)]
-# pl [position (x,y,z float)] [normal (x,y,z float)] [color (R,G,B in 0–255)]
-# cy [position (x,y,z float)] [axis (x,y,z float)] [diameter (float)] [height (float)] [color (R,G,B in 0–255)]
-# tri [v0 (x,y,z float)] [v1 (x,y,z float)] [v2 (x,y,z float)] [color (R,G,B in 0–255)]
 m_yellow	type:lambertian	shi:32.0	spc:0.5	alb:255,255,0
 m_mirror  type:metal  alb:255,50,0  mt_rough:0.0
 
