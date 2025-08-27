@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/07/27 15:01:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/24 14:53:03 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/27 09:35:33 by jboon         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,16 @@
 # include "rt_types.h"
 # include "ui.h"
 # include "rt_thread.h"
+
+# ifdef RT_HIGH
+# define SAMPLE		64
+# define DEPTH		8
+# define SHOW_UI	false
+# else
+# define SAMPLE		2
+# define DEPTH		1
+# define SHOW_UI	true
+# endif
 
 typedef enum e_game_state
 {
