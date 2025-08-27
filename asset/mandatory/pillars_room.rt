@@ -1,3 +1,21 @@
+# Material Definition Format:
+# m_name type:<type> [properties...] [texture] [bump_map] [bump_scale:float] [alt_col:r,g,b]
+
+# Material Types:
+# - lambertian: Diffuse material (default)
+# - metal: Reflective material
+# - dielectric: Transparent/refractive material
+
+# Material Properties:
+# - spc: Specular reflection coefficient (0.0-1.0)
+# - shi: Shininess coefficient (0.0-1000.0)
+# - alb: Albedo (color) of the material
+# - ir: Index of refraction (for dielectric)
+# - tr: Transmission coefficient (for dielectric)
+# - d_rough: Dielectric roughness (for dielectric)
+# - mt_rough: Metal roughness (for metal)
+# - l_rough: Lambertian roughness (for lambertian)
+
 m_mirror  type:metal  alb:255,50,0  mt_rough:0.1
 m_yellow	type:lambertian	shi:32.0	spc:0.5	alb:255,10,10
 m_dielectric type:dielectric  ir:0.9  tr:0.98  alb:255,255,255  d_rough:0.02

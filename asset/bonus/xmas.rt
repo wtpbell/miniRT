@@ -1,3 +1,28 @@
+# Texture Types:
+#   pat:solid        - Solid color (default)
+#   pat:checker      - Checkerboard pattern
+#   pat:image        - Image texture
+#   pat:pink         - Pink noise
+#   pat:wood         - Wood grain
+#   pat:marble       - Marble pattern
+#   pat:turb         - Turbulence noise
+
+# Texture Properties:
+#   tex:path.png     - Path to texture image
+#   su:float         - U scale (tiling)
+#   sv:float         - V scale (tiling)
+#   off:x,y          - Texture offset
+#   rot:degrees      - Rotation angle
+
+# Perlin Noise Parameters:
+#   p_rate:float    - Noise frequency (higher = more frequent changes)
+#   p_gain:float    - Persistence (0.0-1.0, lower = smoother transitions)
+#   p_freq:float    - Base frequency (controls noise detail)
+#   p_ampt:float    - Amplitude (intensity/strength of the noise)
+#   p_layers:int    - Octaves (number of noise layers, more = more detail)
+#   p_scale:float   - Overall scale of the noise pattern
+#   p_dist:float    - Distance between noise points
+
 # Camera: position, direction, FOV
 C   2,1,8   0,0,1   40
 

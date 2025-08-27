@@ -5,7 +5,7 @@ C    0,0,10    0,0,1    90
 L    0,0,0    1.0    255,255,255
 A    0.2    255,255,255
 
-# Cylinder (semi-transparent for visibility)
+# Cylinder 
 cy    0,0,0    0,0,1    8.0    20.0    100,100,255 
 
 # Bright red sphere
