@@ -64,7 +64,7 @@ SNPRINTF	:= rt_snprintf.c rt_snprintf_str.c rt_snprintf_num.c rt_snprintf_real.c
 
 SRCS_THRD	:= thread_data.c threads.c
 
-SRCS_MAIN  := game.c scene_cleanup.c rt_exit.c benchmark.c game_hooks.c main.c
+SRCS_MAIN	:= game.c scene_cleanup.c rt_exit.c benchmark.c game_hooks.c main.c
 
 SRCS		:= $(SRCS_MAIN) $(PARSER_CORE) $(SNPRINTF) $(SRCS_BVH) $(SRCS_VEC)\
 				$(SRCS_MATH) $(SRCS_PRL_UI) $(SRCS_RENDER) $(SRCS_UI) $(SRCS_THRD)
