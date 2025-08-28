@@ -19,8 +19,8 @@ sp	-13,0.5,0	4  241, 243, 154 m_sun
 # pl  0.0,-4.0,0.0  0.0,1.0,0.0  100,100,100
 
 # # Back wall with bump map
-m_galaxy type:lambertian spc:0.8 shi:200.0 pat:image tex:asset/textures/galaxy.png su:0.04 sv:0.02 rot: 90
-pl	0,0,-8	0,0,1				150,150,150 m_galaxy
+m_galaxy type:lambertian spc:0.8 shi:200.0 pat:image tex:asset/textures/galaxy.png su:0.018 sv:0.02
+pl	-23.4,-18,-8	0,0,1				150,150,150 m_galaxy
 
 # Mercury (smallest planet, closest to sun)
 m_mercury type:lambertian spc:0.8 shi:200.0 pat:image tex:asset/textures/2k_mercury.png
