@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   obj_utils.c                                        :+:    :+:            */
+/*   object_utils.c                                     :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/10 10:17:07 by jboon         #+#    #+#                 */
-/*   Updated: 2025/08/08 10:39:14 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/28 16:55:06 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	init_object_matrices(t_obj *obj)
 void	init_object_transform(t_obj *obj, t_v3f pos, t_v3f dir, t_v3f up)
 {
 	obj->t.pos = pos;
+	if (v3f_equals(dir, g_v3f_zero, 0.001f))
+		dir = g_v3f_up;
 	obj->t.dir = dir;
 	obj->t.up = up;
 	init_object_matrices(obj);

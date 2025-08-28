@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/08 10:39:14 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/28 16:57:24 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static bool	parse_height(float *out, const char *str)
 static inline void	cylinder_init(t_obj *obj, t_v2f dm)
 {
 	obj->type = OBJ_CYLINDER;
-	obj->cy = (t_cy){.radius = dm.x, .height = dm.y};
+	obj->cy = (t_cy){.radius = dm.x * 0.5f, .height = dm.y};
 	obj->calc_norm = cylinder_normal;
 	obj->intersect = cylinder_intersect;
 }

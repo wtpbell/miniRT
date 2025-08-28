@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/26 10:59:42 by jboon         ########   odam.nl         */
+/*   Updated: 2025/08/28 17:00:20 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,9 @@ static bool	parse_camera_fields(t_cam *cam, char **tokens)
 void	camera_init(t_cam *cam, t_v3f pos, t_v3f dir, float fov)
 {
 	cam->t.pos = pos;
-	dir.z = -dir.z;
+
+	if(v3f_equals(dir, g_v3f_zero, 0.001f))
+		dir = g_v3f_forward;
 	cam->t.dir = v3f_norm(dir);
 	if (fabsf(dir.y) > 0.999f)
 		cam->t.up = v3f_scale(g_v3f_back, ft_signf(dir.y));
@@ -54,8 +56,6 @@ void	camera_init(t_cam *cam, t_v3f pos, t_v3f dir, float fov)
 		cam->t.up = v3f_norm(v3f_cross(v3f_cross(dir, g_v3f_up), dir));
 	id_m4x4(cam->view_matrix);
 	cam->fov = fov;
-	cam->aperture = 0.0f;
-	cam->focus_dist = 10.0f;
 }
 
 bool	parse_camera(char **tokens, t_scene *scene)
@@ -74,7 +74,10 @@ bool	parse_camera(char **tokens, t_scene *scene)
 				ERR_RANGE, "Camera position out of bounds", tokens[1]), false);
 	ft_bzero(&scene->camera, sizeof(t_cam));
 	scene->scene_flags |= SCENE_CAMERA;
+	dir.z = -dir.z;
 	camera_init(&scene->camera, pos, dir, fov);
+	scene->camera.aperture = 0.0f;
+	scene->camera.focus_dist = 10.0f;
 	if (!parse_camera_fields(&scene->camera, tokens))
 		return (false);
 	return (true);

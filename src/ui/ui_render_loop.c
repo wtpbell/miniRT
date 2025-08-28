@@ -38,6 +38,20 @@ static void	handle_render_state(t_game *game)
 		game->state = GS_ERR;
 }
 
+static void	mark_ui_dirty(t_ui_element *ele, t_ui_context *ctx)
+{
+	t_ui_element	*child;
+
+	if(ele->type == UI_VALUE_BUTTON)
+		update_value_label((t_ui_vbtn *)ele->data, ctx);
+	child = ele->first_child;
+	while (child)
+	{
+		mark_ui_dirty(child, ctx);
+		child = child->next_sibling;
+	}
+}
+
 static void	handle_load_state(t_game *game)
 {
 	float	progress;
@@ -52,6 +66,8 @@ static void	handle_load_state(t_game *game)
 	join_threads(game->thread_data->threads, game->thread_data->thread_count);
 	end_time();
 	set_game_state(game, GS_IDLE);
+	mark_ui_dirty(game->ui->root, game->ui->context);
+	ui_mark_dirty(game->ui->context);
 	ft_putchar_fd('\n', STDOUT_FILENO);
 }
 
