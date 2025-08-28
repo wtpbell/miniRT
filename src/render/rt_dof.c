@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/28 16:57:59 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/28 17:02:59 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	update_camera_view(t_cam *cam)
 	float		width;
 	t_v3f		focal_center;
 
-	if(v3f_equals(cam->t.dir, g_v3f_zero, 0.001f))
+	if (v3f_equals(cam->t.dir, g_v3f_zero, 0.001f))
 		camera_init(cam, cam->t.pos, cam->t.dir, cam->fov);
 	view_matrix(cam->view_matrix, cam->t.pos, cam->t.dir, cam->t.up);
 	cam->w = v3f_scale(cam->t.dir, -1.0f);

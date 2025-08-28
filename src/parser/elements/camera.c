@@ -6,7 +6,7 @@
 /*   By: jboon <jboon@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/28 17:00:20 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/28 17:02:38 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,7 @@ static bool	parse_camera_fields(t_cam *cam, char **tokens)
 void	camera_init(t_cam *cam, t_v3f pos, t_v3f dir, float fov)
 {
 	cam->t.pos = pos;
-
-	if(v3f_equals(dir, g_v3f_zero, 0.001f))
+	if (v3f_equals(dir, g_v3f_zero, 0.001f))
 		dir = g_v3f_forward;
 	cam->t.dir = v3f_norm(dir);
 	if (fabsf(dir.y) > 0.999f)

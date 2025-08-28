@@ -42,7 +42,7 @@ static void	mark_ui_dirty(t_ui_element *ele, t_ui_context *ctx)
 {
 	t_ui_element	*child;
 
-	if(ele->type == UI_VALUE_BUTTON)
+	if (ele->type == UI_VALUE_BUTTON)
 		update_value_label((t_ui_vbtn *)ele->data, ctx);
 	child = ele->first_child;
 	while (child)
