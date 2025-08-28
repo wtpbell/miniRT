@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/14 12:05:02 by bewong        #+#    #+#                 */
-/*   Updated: 2025/08/28 17:02:59 by bewong        ########   odam.nl         */
+/*   Updated: 2025/08/28 17:56:43 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@ void	update_camera_view(t_cam *cam)
 
 	if (v3f_equals(cam->t.dir, g_v3f_zero, 0.001f))
 		camera_init(cam, cam->t.pos, cam->t.dir, cam->fov);
+	if (fabsf(cam->t.dir.y) > 0.999f)
+		cam->t.up = v3f_scale(g_v3f_back, ft_signf(cam->t.dir.y));
+	else
+		cam->t.up = v3f_norm(v3f_cross(v3f_cross(
+						cam->t.dir, g_v3f_up), cam->t.dir));
 	view_matrix(cam->view_matrix, cam->t.pos, cam->t.dir, cam->t.up);
 	cam->w = v3f_scale(cam->t.dir, -1.0f);
 	cam->u = v3f_norm(v3f_cross(cam->t.up, cam->w));
