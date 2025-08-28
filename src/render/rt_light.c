@@ -57,8 +57,8 @@ static t_v3f	apply_point(t_scene *scene, t_ray_hit *hit, t_light *light)
 	shadow_dist.t = lt.dist;
 	if (find_intersection(&ray, scene, &shadow_dist) && shadow_dist.t < 1.0f)
 		return (g_v3f_zero);
-	lt.diffuse = calculate_diffuse(&lt);
 	lt.specular = get_specular(&lt, hit);
+	lt.diffuse = calculate_diffuse(&lt);
 	color = v3f_scale(v3f_mul(hit->hit_color, light->color), lt.diffuse);
 	color = v3f_add(color,
 			v3f_scale(v3f_mul(hit->hit_color, light->color), lt.specular));

@@ -33,7 +33,7 @@ t_v3f	handle_dielectric(t_scene *sc, t_ray_hit *hit, uint32_t depth)
 		ior = hit->obj->r.mat->diel.ir;
 	indirect = blend_color(sc, hit, depth, ior);
 	if (hit->obj->r.mat->diel.transmittance < 0.99f)
-		direct_light = v3f_mul(compute_lighting(hit, sc), hit->hit_color);
+		direct_light = compute_lighting(hit, sc);
 	if (hit->obj->r.mat->diel.transmittance >= 0.99f)
 		return (v3f_clampf01(indirect));
 	if (hit->obj->r.mat->diel.transmittance <= 0.01f)
@@ -60,7 +60,7 @@ t_v3f	handle_lambertian(t_scene *scene, t_ray_hit *hit_info)
 	}
 	lighting = compute_lighting(hit_info, scene);
 	hit_info->normal = org_norm;
-	return (v3f_clampf01(v3f_mul(hit_info->hit_color, lighting)));
+	return (v3f_clampf01(lighting));
 }
 
 t_v3f	handle_metal(t_scene *sc, t_ray_hit *hit, uint32_t depth)

@@ -20,13 +20,13 @@
 # include "rt_thread.h"
 
 # ifdef RT_HIGH
-# define SAMPLE		64
-# define DEPTH		8
-# define SHOW_UI	false
+#  define SAMPLE	64
+#  define DEPTH		8
+#  define SHOW_UI	false
 # else
-# define SAMPLE		2
-# define DEPTH		1
-# define SHOW_UI	true
+#  define SAMPLE	2
+#  define DEPTH		1
+#  define SHOW_UI	true
 # endif
 
 typedef enum e_game_state
