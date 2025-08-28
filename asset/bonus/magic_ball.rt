@@ -2,9 +2,9 @@ C	50,0,0	-1,0,0		60
 L	9,10,-3	0.75		255,255,255
 A				0.25	255,255,255
 
-m_glass	type:dielectric spc:1.0 shi:512 ir:1.333 tr:0.99 su:3 sv:1.5  bump_pat:wood bump_scale:0.2 p_freq:0.116 p_ampt:0.02
+m_glass	type:dielectric spc:1.0 shi:512 ir:1.333 tr:0.99 su:3 sv:1.5  bump_pat:wood bump_scale:0.4 p_freq:4.116 p_ampt:0.2
 m_wolf	type:lambertian spc:0.4 shi:512
-m_wall	type:lambertian su:3 sv:3  bump_pat:wood bump_scale:0.2 p_freq:0.116 p_ampt:0.02
+m_wall	type:lambertian su:1 sv:1  pat:wood p_freq:.04 p_ampt:4 col:190,209,205
 
 obj    0,0,0    0,1,0    255,0,0    asset/models/wolf.obj m_wolf
 
