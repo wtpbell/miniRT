@@ -170,12 +170,20 @@ make
 
 # Run with a scene file
 ./miniRT assets/mandatory/spheres.rt
+
+# Run interactive Perlin noise visualization (no scene file needed)
+./miniRT
 ```
 
 ### Controls
 - `ESC` or close window: Exit the application
 - `+/-`: click +/- button to increment and decrement values
 - `Render`: click render button to render the scene
+
+### Perlin Noise Controls (when running without a scene file)
+- `↑/↓ Arrow Keys`: Move between parameters
+- `←/→ Arrow Keys`: Decrement/Increment selected parameter
+- `1, 2, 3, 4`: Change Perlin noise type
 
 ## 📝 Scene File Format
 
