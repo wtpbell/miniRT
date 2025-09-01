@@ -12,6 +12,7 @@
 
 ## 📋 Table of Contents
 - [Overview](#-overview)
+- [Demo](#-demo)
 - [Features](#-features)
   - [Mandatory Requirements](#-mandatory-requirements)
   - [Bonus Features](#-bonus-features)
@@ -26,6 +27,32 @@
 
 ## 🚀 Overview
 MiniRT is a feature-rich ray tracing engine that extends beyond the 42 curriculum requirements. Built with MLX42, it offers an interactive interface for real-time 3D scene manipulation and rendering. The project demonstrates advanced computer graphics concepts while maintaining excellent performance through optimization techniques.
+
+## 🎥 Demo
+
+### Interactive Demo
+<div align="center">
+  <img src="asset/demo/perlin_demo.gif" alt="Interactive Perlin Noise Demo" width="800"/>
+  <p><em>Interactive Perlin noise visualization with real-time parameter controls</em></p>
+</div>
+
+### Mandatory Scene Demo
+<div align="center">
+    <img src="asset/demo/mandatory_demo.gif" alt="Mandatory Scene Demo" width="800"/>
+  <p><em>Mandatory scene demonstration showing basic primitives and lighting</em></p>
+</div>
+
+### Sample and Depth Visualization
+<div align="center">
+    <img src="asset/demo/sample_depth_demo.gif" alt="Sample and Depth Visualization Demo" width="800"/>
+    <p><em>Sample and depth visualization showing the scene's depth buffer</em></p>
+</div>
+
+### Bonus Scene Demo
+<div align="center">
+    <img src="asset/demo/dragon_demo.gif" alt="Bonus Scene Demo" width="800"/>
+    <p><em>Bonus scene demonstration showing advanced features and materials</em></p>
+</div>
 
 ## ✨ Features
 
@@ -121,7 +148,6 @@ MiniRT is a feature-rich ray tracing engine that extends beyond the 42 curriculu
 - GCC or Clang
 - Make
 - MLX42 graphics library
-- GLFW3
 - libft (included)
 
 ### Compilation
